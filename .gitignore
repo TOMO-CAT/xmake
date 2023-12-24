@@ -10,7 +10,7 @@ makefile
 gcm.cache
 
 # for VS Code
-.vscode/
+# .vscode/
 
 # for vim
 *.swp
