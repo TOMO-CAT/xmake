@@ -86,7 +86,9 @@ end
 --
 function _parse_require(require_str)
 
-    -- split package and version info
+    -- split package and version 
+    -- 将 require_str 拆分成 packageinfo 和 version
+    -- eg. add_requires("zlib master") --> packageinfo(zlib) + version(branch)
     local splitinfo = require_str:split('%s+')
     assert(splitinfo and #splitinfo > 0, "require(\"%s\"): invalid!", require_str)
 
@@ -110,6 +112,7 @@ function _parse_require(require_str)
     assert(version, "require(\"%s\"): unknown version!", require_str)
 
     -- require third-party packages? e.g. brew::pcre2/libpcre2-8
+    -- 判断是否是 third-party 包, 会带上 :: 分隔符
     local reponame    = nil
     local packagename = nil
     if require_str:find("::", 1, true) then
@@ -138,6 +141,7 @@ function _load_require(require_str, requires_extra, parentinfo)
     local packagename, version, reponame = _parse_require(require_str)
 
     -- get require extra
+    -- 获取 extra 字段比如别名 alias
     local require_extra = {}
     if requires_extra then
         require_extra = requires_extra[require_str] or {}
@@ -385,6 +389,7 @@ function _select_package_version(package, requireinfo, locked_requireinfo)
     end
 
     -- select package version
+    -- @source: version 表示版本号; commit 表示 git commit-id; branch 表示 git 分支
     local source = nil
     local version = nil
     local require_version = requireinfo.version
@@ -401,7 +406,10 @@ function _select_package_version(package, requireinfo, locked_requireinfo)
     elseif #package:versions() > 0 then -- select version?
         version, source = try { function () return semver.select(require_version, package:versions()) end }
     end
+
+    -- 如果 add_requires 里没有带上版本号, 但是有 git 地址, 那么会去查 branch
     if not version and has_giturl then -- select branch?
+        -- 字符串长度是 40 的话说明这是一个 git commit-id
         if require_version and #require_version == 40 and require_version:match("%w+") then
             version, source = require_version, "commit"
         else
@@ -413,6 +421,8 @@ function _select_package_version(package, requireinfo, locked_requireinfo)
         version = "latest"
         source = "version"
     end
+
+    -- 识别不到 version 就报错
     if not version and not package:is_thirdparty() then
         raise("package(%s): version(%s) not found!", package:name(), require_version)
     end
@@ -768,6 +778,7 @@ end
 function _load_package(packagename, requireinfo, opt)
 
     -- check circular dependency
+    -- 检查是否存在环形依赖, 这里通过 requirepath 实现的
     opt = opt or {}
     if opt.requirepath then
         local splitinfo = opt.requirepath:split(".", {plain = true})
@@ -779,6 +790,7 @@ function _load_package(packagename, requireinfo, opt)
     end
 
     -- strip trailng ~tag, e.g. zlib~debug
+    -- 去掉 packagename 的尾巴
     local displayname
     if packagename:find('~', 1, true) then
         displayname = packagename
@@ -796,6 +808,7 @@ function _load_package(packagename, requireinfo, opt)
     local locked_requireinfo = get_locked_requireinfo(requireinfo)
 
     -- load package from project first
+    -- 优先从 project 里面 load package
     local package
     if os.isfile(os.projectfile()) then
         package = _load_package_from_project(packagename)
@@ -907,6 +920,7 @@ function _load_package(packagename, requireinfo, opt)
     end
 
     -- do load
+    -- 调用 package 的 on_load 方法
     local on_load = package:script("load")
     if on_load then
         on_load(package)
@@ -947,6 +961,7 @@ function _load_packages(requires, opt)
         if package then
 
             -- load dependent packages and save them first of this package
+            -- 加载 package 的依赖, 在 package 中 add_deps 的依赖包
             if not package._DEPS then
                 if package:get("deps") and opt.nodeps ~= true then
 
@@ -1253,4 +1268,3 @@ function load_packages(requires, opt)
     end
     return packages
 end
-

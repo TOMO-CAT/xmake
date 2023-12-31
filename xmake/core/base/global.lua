@@ -119,6 +119,7 @@ end
 function global.load()
 
     -- load configure from the file first
+    -- 从 ~/.xmake/xmake.conf 中加载全局配置
     local filepath = global.filepath()
     if os.isfile(filepath) then
 

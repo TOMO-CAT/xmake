@@ -22,6 +22,8 @@
 import("core.base.hashset")
 
 -- get require key from requireinfo
+-- 根据 requireinfo 构造 require key
+-- eg. add_requires("protobuf-cpp 21.7")  -->  "protobuf-cpp/21.7:{}"
 function main(requireinfo, opt)
     opt = opt or {}
     local key = ""
@@ -70,4 +72,3 @@ function main(requireinfo, opt)
         return key
     end
 end
-

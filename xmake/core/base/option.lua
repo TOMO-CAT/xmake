@@ -63,6 +63,7 @@ function option._modenarrow()
 end
 
 -- get the top context
+-- 获取最顶层的 context
 function option._context()
 
     -- the contexts

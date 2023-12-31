@@ -110,6 +110,7 @@ function _instance:set(name, ...)
 end
 
 -- add the value to the package info
+-- package:add_xxs 方法调用的逻辑
 function _instance:add(name, ...)
     self._INFO:apival_add(name, ...)
 end
@@ -1284,6 +1285,7 @@ function _instance:version_str()
 end
 
 -- set the version, source: branch, tag, version
+-- 设置 package 的版本信息, 版本可能包括 tag branch version 或者 commit 等
 function _instance:version_set(version, source)
 
     -- save the semver version
@@ -1783,8 +1785,11 @@ function _instance:fetch(opt)
 
     -- fetch the require version
     local require_ver = opt.version or self:requireinfo().version
+    -- self:is_thirdparty() 指的是第三方库, 比如 brew::pcre2/libpcre2-8, conan::OpenSSL/1.0.2n@conan/stable
+    -- 查找字符串中是否包含点
     if not self:is_thirdparty() and not require_ver:find('.', 1, true) then
         -- strip branch version only system package
+        -- TODO: 这里的将 require_ver 置为 nil 的意义是啥?
         require_ver = nil
     end
 

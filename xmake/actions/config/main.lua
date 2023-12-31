@@ -209,18 +209,20 @@ function _export_configs()
 end
 
 function main(opt)
-
+    cprint("${blue bright}[config] start")
     -- do action for remote?
     if remote_build_action.enabled() then
         return remote_build_action()
     end
 
     -- avoid running this task repeatly
+    -- 避免重入, 只会运行一次
     opt = opt or {}
     if _g.configured then return end
     _g.configured = true
 
     -- scan project and generate it if xmake.lua not exists
+    -- 如果 xmake.lua 文件不存在的话会尝试生成一份
     local autogen = false
     local trybuild = option.get("trybuild")
     if not os.isfile(project.rootfile()) and not trybuild then
@@ -244,6 +246,7 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
     end
 
     -- lock the whole project
+    -- 给整个项目加文件锁, 避免一个项目同时运行两个 xmake?
     project.lock()
 
     -- enter menu config
@@ -437,4 +440,5 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
 
     -- unlock the whole project
     project.unlock()
+    cprint("${blue bright}[config] end")
 end

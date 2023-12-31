@@ -23,11 +23,13 @@ import("core.base.option")
 import("core.project.project")
 
 -- get requires and extra config
+-- 获取项目中 xmake.lua 里的 requires
 function main(requires)
 
     -- init requires
     local requires_extra = nil
     if not requires then
+        -- 获取 requires 的文本信息, 以及它对应的配置
         requires, requires_extra = project.requires_str()
     end
     if not requires or #requires == 0 then

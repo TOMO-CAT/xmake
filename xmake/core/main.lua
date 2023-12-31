@@ -103,6 +103,7 @@ function main._find_root(projectfile)
     return projectfile
 end
 
+-- 解析命令行参数
 function main._basicparse()
 
     -- check command
@@ -157,6 +158,8 @@ function main._init()
     -- e.g. `xmake f -c -P xxx` will be parsed as `-c=-P`, it's incorrect.
     --
     -- maybe we will improve this later
+    -- 
+    -- 解析命令行参数
     local options, errors = main._basicparse()
     if not options then
         return false, errors
@@ -167,6 +170,7 @@ function main._init()
         local opt_projectdir, opt_projectfile = options.project, options.file
 
         -- init the project directory
+        -- 初始化 Project 目录, 不用 -P 指定时默认就是 xmake.lua 所在目录的绝对路径, 写入到 xmake._PROJECT_DIR
         local projectdir = opt_projectdir or main._projectconf("projectdir") or xmake._PROJECT_DIR
         if projectdir and not path.is_absolute(projectdir) then
             projectdir = path.absolute(projectdir)
@@ -177,6 +181,7 @@ function main._init()
         assert(projectdir)
 
         -- init the xmake.lua file path
+        -- 初始化 xmake.lua 文件的绝对路径
         local projectfile = opt_projectfile or main._projectconf("projectfile") or xmake._PROJECT_FILE
         if projectfile and not path.is_absolute(projectfile) then
             projectfile = path.absolute(projectfile, projectdir)
@@ -194,6 +199,7 @@ function main._init()
         xmake._PROJECT_FILE = projectfile
 
         -- enter the project directory
+        -- 进入项目目录
         if os.isdir(os.projectdir()) then
             os.cd(os.projectdir())
         end
@@ -204,6 +210,7 @@ function main._init()
     end
 
     -- add the directory of the program file (xmake) to $PATH environment
+    -- 将 xmake 二进制文件所在的目录加入到 PATH 环境变量, 方便后面直接调用
     local programfile = os.programfile()
     if programfile and os.isfile(programfile) then
         os.addenv("PATH", path.directory(programfile))
@@ -244,6 +251,7 @@ function main._limit_root()
 end
 
 -- the main entry function
+-- xmake main 入口
 function main.entry()
 
     -- init
@@ -253,6 +261,7 @@ function main.entry()
     end
 
     -- load global configuration
+    -- 从 ~/.xmake/xmake.conf 中加载全局配置, 一般默认不配置
     ok, errors = global.load()
     if not ok then
         return main._exit(ok, errors)
@@ -271,6 +280,7 @@ function main.entry()
     end
 
     -- check run command as root
+    -- 限制不能以 root 权限运行
     if main._limit_root() then
         if os.isroot() then
             errors = [[Running xmake as root is extremely dangerous and no longer supported.
@@ -283,11 +293,13 @@ Or you can add `--root` option or XMAKE_ROOT=y to allow run as root temporarily.
     end
 
     -- show help?
+    -- 打印帮助信息
     if main._show_help() then
         return main._exit(true)
     end
 
     -- save command lines to history and we need to make sure that the .xmake directory is not generated everywhere
+    -- 将历史的命令行 (最多存储 64 条) 存储到 $(projectdir)/.xmake/${platform}/${arch}/cache/history 中
     local skip_history = (os.getenv('XMAKE_SKIP_HISTORY') or ''):trim()
     if os.projectfile() and os.isfile(os.projectfile()) and os.isdir(config.directory()) and skip_history == '' then
         local cmdlines = table.wrap(localcache.get("history", "cmdlines"))
@@ -300,6 +312,7 @@ Or you can add `--root` option or XMAKE_ROOT=y to allow run as root temporarily.
     end
 
     -- get task instance
+    -- 根据 taskname 获取对应的 task instance, 默认是 build
     local taskname = option.taskname() or "build"
     local taskinst = task.task(taskname) or project.task(taskname)
     if not taskinst then
@@ -307,13 +320,13 @@ Or you can add `--root` option or XMAKE_ROOT=y to allow run as root temporarily.
     end
 
     -- run task
+    -- 启用调度器并增加一个 xmake ${task} 任务
     scheduler:enable(true)
     scheduler:co_start_named("xmake " .. taskname, function ()
         local ok, errors = taskinst:run()
         if not ok then
             os.raise(errors)
         end
-
     end)
     ok, errors = scheduler:runloop()
     if not ok then

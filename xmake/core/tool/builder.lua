@@ -408,12 +408,14 @@ function builder:_add_items_from_target(items, name, opt)
 end
 
 -- add flags from the language
+-- 包括 -isystem
 function builder:_add_flags_from_language(flags, opt)
     opt = opt or {}
 
     -- get order named items
     local items = {}
     local target = opt.target
+
     for _, flaginfo in ipairs(self:_nameflags()) do
 
         -- get flag info

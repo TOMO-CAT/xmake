@@ -383,6 +383,8 @@ function scheduler:co_start_named(coname, cotask, ...)
 end
 
 -- start a new coroutine task with options
+-- @param opt: 主要是 coroutine-name
+-- @param cotask: 闭包函数, 相当于 go 出去的一个 function
 function scheduler:co_start_withopt(opt, cotask, ...)
 
     -- check coroutine task
@@ -404,14 +406,14 @@ function scheduler:co_start_withopt(opt, cotask, ...)
         cotask(...)
         self:co_tasks()[co:thread()] = nil
         if self:co_count() > 0 then
-            self._CO_COUNT = self:co_count() - 1
+            self._CO_COUNT = self:co_count() - 1  -- 相当于 WaitGroup.Done()
         end
     end))
     if opt.isolate then
         co:isolate(true)
     end
     self:co_tasks()[co:thread()] = co
-    self._CO_COUNT = self:co_count() + 1
+    self._CO_COUNT = self:co_count() + 1  -- 相当于 WaitGroup.Add(1)
     if self._STARTED then
         local ok, errors = self:co_resume(co, ...)
         if not ok then
@@ -888,6 +890,7 @@ function scheduler:poller_cancel(obj)
 end
 
 -- enable or disable to scheduler
+-- 开启 / 禁用调度器
 function scheduler:enable(enabled)
     self._ENABLED = enabled
 end

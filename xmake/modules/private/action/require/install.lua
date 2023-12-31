@@ -61,6 +61,7 @@ end
 function main(requires_raw)
 
     -- get requires and extra config
+    -- requires_extra 包括 alais 等信息
     local requires_extra = nil
     local requires, requires_extra = get_requires(requires_raw)
     if not requires or #requires == 0 then
@@ -76,16 +77,17 @@ function main(requires_raw)
     --
     -- attempt to install git from the builtin-packages first if git not found
     --
+    -- 如果仓库还没 pulled 的话会先拉仓库, 或者收到 upgrade option 时会强制更新仓库
     if git and (not repository.pulled() or option.get("upgrade")) then
         task.run("repo", {update = true})
     end
 
     -- install packages
     environment.enter()
+    -- 根据 requires 信息安装对应的 packages
     local packages = install_packages(requires, {requires_extra = requires_extra})
     if packages then
         _check_missing_packages(packages)
     end
     environment.leave()
 end
-

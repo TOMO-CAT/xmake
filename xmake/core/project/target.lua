@@ -1244,6 +1244,7 @@ function _instance:pkgs(opt)
 end
 
 -- get the required packages with {interface|public = ..}
+-- opt 为 {} 时表示获取 target 的所有 packages
 function _instance:orderpkgs(opt)
     opt = opt or {}
     local cachekey = "orderpkgs"
@@ -2894,4 +2895,3 @@ end
 
 -- return module
 return target
-

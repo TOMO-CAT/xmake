@@ -332,6 +332,7 @@ function compiler:compflags(opt)
     --
     -- @see https://github.com/xmake-io/xmake/issues/978
     --
+    -- 构造编译选项
     local flags = {}
     self:_add_flags_from_compiler(flags, targetkind)
     self:_add_flags_from_toolchains(flags, targetkind, target)
@@ -340,6 +341,7 @@ function compiler:compflags(opt)
     self:_add_flags_from_config(flags)
 
     -- add flags from target
+    -- 根据 target 构造对应的编译选项
     self:_add_flags_from_target(flags, target)
 
     -- add flags from source file configuration
