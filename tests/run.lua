@@ -11,28 +11,38 @@ if option.get("diagnosis") then table.insert(params, "-D") end
 
 function _run_test(script)
     assert(script:endswith("test.lua"))
-    os.execv("xmake", table.join("lua", params, path.join(os.scriptdir(), "runner.lua"), script))
+    os.execv("xmake", table.join("lua", params,
+                                 path.join(os.scriptdir(), "runner.lua"), script))
 end
 
 -- run test with the given name
 function _run_test_filter(name)
     local tests = {}
     local root = path.absolute(os.scriptdir())
-    for _, script in ipairs(os.files(path.join(root, "**", name, "**", "test.lua"))) do
+    -- ${root}/tests/**/${name}/**/test.lua
+    for _, script in ipairs(os.files(path.join(root, "**", name, "**",
+                                               "test.lua"))) do
         if not script:find(".xmake", 1, true) then
             table.insert(tests, path.absolute(script))
         end
     end
+    -- ${root}/tests/${name}/**/test.lua
     for _, script in ipairs(os.files(path.join(root, name, "**", "test.lua"))) do
         if not script:find(".xmake", 1, true) then
             table.insert(tests, path.absolute(script))
         end
     end
+    -- ${root}/tests/**/${name}/test.lua
     for _, script in ipairs(os.files(path.join(root, "**", name, "test.lua"))) do
-        table.insert(tests, path.absolute(script))
+        if not script:find(".xmake", 1, true) then
+            table.insert(tests, path.absolute(script))
+        end
     end
+    -- ${root}/${name}/test.lua
     for _, script in ipairs(os.files(path.join(root, name, "test.lua"))) do
-        table.insert(tests, path.absolute(script))
+        if not script:find(".xmake", 1, true) then
+            table.insert(tests, path.absolute(script))
+        end
     end
 
     tests = table.unique(tests)
@@ -41,18 +51,19 @@ function _run_test_filter(name)
     else
         cprint("> %d test(s) found", #tests)
         if option.get("diagnosis") then
-            for _, v in ipairs(tests) do
-                cprint(">     %s", v)
-            end
+            for _, v in ipairs(tests) do cprint(">     %s", v) end
         end
 
-        for _, v in ipairs(tests) do
-            _run_test(v)
-        end
+        for _, v in ipairs(tests) do _run_test(v) end
         cprint("> %d test(s) succeed", #tests)
     end
 end
 
 function main(name)
+    if name then
+        print('running tests for filter [' .. name .. ']')
+    else
+        print('running all tests')
+    end
     return _run_test_filter(name or "/")
 end

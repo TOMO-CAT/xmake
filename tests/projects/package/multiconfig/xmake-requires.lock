@@ -2,6 +2,32 @@
     __meta__ = {
         version = "1.0"
     },
+    ["linux|x86_64"] = {
+        ["zlib#31fecfc4"] = {
+            repo = {
+                branch = "master",
+                commit = "022fdfd29dc6845f4004d46d5e4ebff626eb1df6",
+                url = "https://user:c91b0446f7a94ef081fd447205f7043e1715238690486@ezone.zelostech.com.cn/ezone/zelos/xmake-repo.git"
+            },
+            version = "v1.3.1"
+        },
+        ["zlib~debug#55833b12"] = {
+            repo = {
+                branch = "master",
+                commit = "022fdfd29dc6845f4004d46d5e4ebff626eb1df6",
+                url = "https://user:c91b0446f7a94ef081fd447205f7043e1715238690486@ezone.zelostech.com.cn/ezone/zelos/xmake-repo.git"
+            },
+            version = "v1.3.1"
+        },
+        ["zlib~shared#b6ab42cb"] = {
+            repo = {
+                branch = "master",
+                commit = "022fdfd29dc6845f4004d46d5e4ebff626eb1df6",
+                url = "https://user:c91b0446f7a94ef081fd447205f7043e1715238690486@ezone.zelostech.com.cn/ezone/zelos/xmake-repo.git"
+            },
+            version = "v1.3.1"
+        }
+    },
     ["macosx|x86_64"] = {
         ["zlib#31fecfc4"] = {
             repo = {
