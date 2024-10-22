@@ -1,16 +1,11 @@
 # README
 
-A cross-platform build utility based on Lua, better suited for large-scale projects.
+🌟 A cross-platform build utility based on Lua, better suited for large-scale projects.
 
 ## build && install
 
 ```bash
-git submodule update --init
-./configure
-make
-sudo make install PREFIX=/usr/local
-
-xmake --version
+bash scripts/install.sh
 ```
 
 ## test
