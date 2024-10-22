@@ -1,3 +1,1 @@
-function main(t)
-    -- t:build()
-end
+function main(t) t:build() end

@@ -57,7 +57,10 @@ jobs:
       - name: Build
         run: |
           cd core
-          xmake f -vD -a ${{ matrix.arch }}
+          xmake f -vD -a ${{ matrix.arch }} --embed=y -c
+          xmake
+          xmake l os.cp build/xmake.exe ../artifacts/${{env.RELEASE_NAME}}/xmake-bundle.exe
+          xmake f -vD -a ${{ matrix.arch }} -c
           xmake -vD
           cd ..
 
@@ -83,18 +86,33 @@ jobs:
           xmake lua -v -D tests/run.lua
 
         # upload artifacts
-      - uses: actions/upload-artifact@v2
+      - name: Upload artifacts (exe)
+        if: matrix.os == 'windows-2022'
+        uses: actions/upload-artifact@v4
         with:
           name: xmake-latest.${{env.RELEASE_NAME}}.exe
           path: artifacts/${{env.RELEASE_NAME}}/xmake.exe
-      - uses: actions/upload-artifact@v2
+
+      - name: Upload artifacts (zip)
+        if: matrix.os == 'windows-2022'
+        uses: actions/upload-artifact@v4
         with:
           name: xmake-latest.${{ env.RELEASE_NAME }}.zip
           path: artifacts/${{env.RELEASE_NAME}}/xmake.zip
-      - uses: actions/upload-artifact@v2
+
+      - name: Upload artifacts (sha256)
+        if: matrix.os == 'windows-2022'
+        uses: actions/upload-artifact@v4
         with:
           name: xmake-latest.${{ env.RELEASE_NAME }}.sha256
           path: artifacts/${{env.RELEASE_NAME}}/shafile
+
+      - name: Upload artifacts (bundle)
+        if: matrix.os == 'windows-2022'
+        uses: actions/upload-artifact@v4
+        with:
+          name: xmake-bundle-latest.${{env.RELEASE_NAME}}.exe
+          path: artifacts/${{env.RELEASE_NAME}}/xmake-bundle.exe
 
         # upload artifacts to latest release
       - name: Inject slug/short variables
@@ -105,7 +123,7 @@ jobs:
         uses: WyriHaximus/github-action-get-previous-tag@master
 
       - name: Upload artifacts to lastest release
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+        if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev') && matrix.os == 'windows-2022'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -115,7 +133,7 @@ jobs:
           overwrite: true
 
       - name: Upload artifacts to lastest release
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && matrix.os == 'windows-2022'
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -158,3 +176,13 @@ jobs:
           asset_name: xmake-${{ steps.tagName.outputs.tag }}.${{ env.RELEASE_NAME }}.sha256
           asset_content_type: application/zip
 
+      - name: Publish
+        if: github.event.action == 'published' && matrix.os == 'windows-2022'
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: artifacts/${{env.RELEASE_NAME}}/xmake-bundle.exe
+          asset_name: xmake-bundle-${{ steps.tagName.outputs.tag }}.${{ env.RELEASE_NAME }}.exe
+          asset_content_type: application/zip

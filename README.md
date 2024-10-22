@@ -2,7 +2,7 @@
 
 A cross-platform build utility based on Lua, better suited for large-scale projects.
 
-## build
+## build && install
 
 ```bash
 git submodule update --init

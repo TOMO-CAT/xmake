@@ -7,7 +7,7 @@
             repo = {
                 branch = "master",
                 commit = "022fdfd29dc6845f4004d46d5e4ebff626eb1df6",
-                url = "https://user:c91b0446f7a94ef081fd447205f7043e1715238690486@ezone.zelostech.com.cn/ezone/zelos/xmake-repo.git"
+                url = "https://github.com/xmake-io/xmake-repo.git"
             },
             version = "v1.3.1"
         },
@@ -15,7 +15,7 @@
             repo = {
                 branch = "master",
                 commit = "022fdfd29dc6845f4004d46d5e4ebff626eb1df6",
-                url = "https://user:c91b0446f7a94ef081fd447205f7043e1715238690486@ezone.zelostech.com.cn/ezone/zelos/xmake-repo.git"
+                url = "https://github.com/xmake-io/xmake-repo.git"
             },
             version = "v1.3.1"
         },
@@ -23,7 +23,7 @@
             repo = {
                 branch = "master",
                 commit = "022fdfd29dc6845f4004d46d5e4ebff626eb1df6",
-                url = "https://user:c91b0446f7a94ef081fd447205f7043e1715238690486@ezone.zelostech.com.cn/ezone/zelos/xmake-repo.git"
+                url = "https://github.com/xmake-io/xmake-repo.git"
             },
             version = "v1.3.1"
         }
