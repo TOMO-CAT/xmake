@@ -52,19 +52,6 @@ address, posting via an official social media account, or acting as an appointed
 representative at an online or offline event. Representation of a project may be
 further defined and clarified by project maintainers.
 
-## Enforcement
-
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the project team at [waruqi@gmail.com]. All
-complaints will be reviewed and investigated and will result in a response that
-is deemed necessary and appropriate to the circumstances. The project team is
-obligated to maintain confidentiality with regard to the reporter of an incident.
-Further details of specific enforcement policies may be posted separately.
-
-Project maintainers who do not follow or enforce the Code of Conduct in good
-faith may face temporary or permanent repercussions as determined by other
-members of the project's leadership.
-
 ## Attribution
 
 This Code of Conduct is adapted from the [Contributor Covenant][homepage], version 1.4,
@@ -104,21 +91,13 @@ available at https://www.contributor-covenant.org/version/1/4/code-of-conduct.ht
 
 项目维护者有权利及责任去删除、编辑、拒绝与本行为标准有所违背的评论 (comments)、提交 (commits)、代码、wiki 编辑、问题 (issues) 和其他贡献，以及项目维护者可暂时或永久性的禁止任何他们认为有不适当、威胁、冒犯、有害行为的贡献者。
 
-## 使用范围
+## 适用范围
 
 当一个人代表该项目或是其社区时，本行为标准适用于其项目平台和公共平台。
 
 代表项目或是社区的情况，举例来说包括使用官方项目的电子邮件地址、通过官方的社区媒体账号发布或线上或线下事件中担任指定代表。
 
 该项目的呈现方式可由其项目维护者进行进一步的定义及解释。
-
-## 强制执行
-
-可以通过[waruqi@gmail.com]，来联系项目团队来举报滥用、骚扰或其他不被接受的行为。
-
-任何维护团队认为有必要且适合的所有投诉都将进行审查及调查，并做出相对应的回应。项目小组有对事件回报者有保密的义务。具体执行的方针近一步细节可能会单独公布。
-
-没有切实地遵守或是执行本行为标准的项目维护人员，可能会因项目领导人或是其他成员的决定，暂时或是永久地取消其参与资格。
 
 ## 来源
 
