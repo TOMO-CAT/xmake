@@ -28,6 +28,8 @@ local localcache    = require("cache/localcache")
 local repository    = require("package/repository")
 local raise         = require("sandbox/modules/raise")
 local import        = require("sandbox/modules/import")
+local option        = require("base/option")
+local utils         = require("base/utils")
 
 -- inherit some builtin interfaces
 sandbox_core_package_repository.directory = repository.directory
@@ -120,9 +122,7 @@ function sandbox_core_package_repository.repositories(is_global)
             if binary_repo then
                 artifacts_urls = {binary_repo}
             else
-                artifacts_urls = {"https://github.com/xmake-mirror/build-artifacts.git",
-                                  "https://gitlab.com/xmake-mirror/build-artifacts.git",
-                                  "https://gitee.com/xmake-mirror/build-artifacts.git"}
+                artifacts_urls = {"https://gitee.com/tomocat/xmake-build-artifacts.git"}
                 if network ~= "private" then
                     import("net.fasturl")
                     fasturl.add(artifacts_urls)
@@ -130,6 +130,12 @@ function sandbox_core_package_repository.repositories(is_global)
                     localcache.cache("repository"):set("artifacts_urls", artifacts_urls)
                     localcache.cache("repository"):save()
                 end
+            end
+        end
+        if option.get("verbose") then
+            utils.cprint("${bright blue}[improvement] ${clear}sorted build-artifacts urls:")
+            for k, v in pairs(artifacts_urls) do
+                print(v)
             end
         end
         if #artifacts_urls > 0 then
@@ -146,9 +152,7 @@ function sandbox_core_package_repository.repositories(is_global)
             if mainrepo then
                 mainurls = {mainrepo}
             else
-                mainurls = {"https://github.com/xmake-io/xmake-repo.git",
-                            "https://gitlab.com/tboox/xmake-repo.git",
-                            "https://gitee.com/tboox/xmake-repo.git"}
+                mainurls = {"https://gitee.com/tomocat/xmake-repo.git"}
                 if network ~= "private" then
                     import("net.fasturl")
                     fasturl.add(mainurls)
@@ -156,6 +160,12 @@ function sandbox_core_package_repository.repositories(is_global)
                     localcache.cache("repository"):set("mainurls", mainurls)
                     localcache.cache("repository"):save()
                 end
+            end
+        end
+        if option.get("verbose") then
+            utils.cprint("${bright blue}[improvement] ${clear}sorted xmake-repo urls:")
+            for k, v in pairs(mainurls) do
+                print(v)
             end
         end
         if #mainurls > 0 then
@@ -180,4 +190,3 @@ end
 
 -- return module
 return sandbox_core_package_repository
-
