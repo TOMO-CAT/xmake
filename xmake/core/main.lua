@@ -45,7 +45,7 @@ local debugger      = require("base/debugger")
 -- init the option menu
 local menu =
 {
-    title = "${bright}xmake v" .. _VERSION .. ", A cross-platform build utility based on " .. (xmake._LUAJIT and "LuaJIT" or "Lua") .. "${clear}"
+    title = "${bright}xmake v" .. _VERSION .. ", An enhanced version better suited for large-scale projects${clear}"
 ,   copyright = "Copyright (C) 2015-present Ruki Wang, ${underline}tboox.org${clear}, ${underline}xmake.io${clear}"
 
     -- the tasks: xmake [task]
