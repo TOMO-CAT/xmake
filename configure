@@ -31,6 +31,27 @@ xmake_sh_copyright="Copyright (C) 2022-present Ruki Wang, tboox.org, xmake.io."
 xmake_sh_makefile="${xmake_sh_projectdir}/makefile"
 
 #-----------------------------------------------------------------------------
+# colorful log
+#
+info() {
+  printf "[\033[34m\033[1mINFO\033[0m] %s\n" "$*" >&2
+}
+
+error() {
+  printf "[\033[31mERROR\033[0m] %s\n" "$*" >&2
+}
+
+warning() {
+  if "${xmake_sh_verbose}"; then
+    printf "[\033[33mWARNING\033[0m] %s\n" "$*" >&2
+  fi
+}
+
+ok() {
+  printf "[\033[32m\033[1m OK \033[0m] %s\n" "$*" >&2
+}
+
+#-----------------------------------------------------------------------------
 # some helper functions
 #
 raise() {
@@ -54,6 +75,7 @@ print() {
     printf "${@}\n"
 }
 
+# FIXME: replace it with warning()
 wprint() {
     if "${xmake_sh_verbose}"; then
         printf "warning: ${@}\n"
@@ -179,8 +201,9 @@ string_startswith() {
 # duplicate characters
 # e.g. string_dupch 10 "." => ...........
 string_dupch() {
-    local count=${1}
-    local ch=${2}
+    local count="${1}"
+    local ch="${2}"
+
     printf %${count}s | tr " " "${ch}"
 }
 
@@ -2846,7 +2869,7 @@ _handle_option() {
 }
 while test $# != 0; do
     if ! _handle_option ${1}; then
-        wprint "unknown option: $1"
+        warning "unknown option: $1"
     fi
     shift
 done
@@ -2908,13 +2931,13 @@ _handle_autoconf_configs() {
         if test_nz "${_ret}"; then
             os_arch="${_ret}"
         else
-            wprint "unknown cpu: ${cpu} in --build=${value}"
+            warning "unknown cpu: ${cpu} in --build=${value}"
         fi
         _get_plat_from_vendor_os "${vendor}" "${os}"
         if test_nz "${_ret}"; then
             os_host="${_ret}"
         else
-            wprint "unknown vendor-os: ${vendor}-${os} in --build=${value}"
+            warning "unknown vendor-os: ${vendor}-${os} in --build=${value}"
         fi
     fi
 
@@ -2924,13 +2947,13 @@ _handle_autoconf_configs() {
         if test_nz "${_ret}"; then
             _target_arch_default="${_ret}"
         else
-            wprint "unknown cpu: ${cpu} in --host=${value}"
+            warning "unknown cpu: ${cpu} in --host=${value}"
         fi
         _get_plat_from_vendor_os "${vendor}" "${os}"
         if test_nz "${_ret}"; then
             _target_plat_default="${_ret}"
         else
-            wprint "unknown vendor-os: ${vendor}-${os} in --build=${value}"
+            warning "unknown vendor-os: ${vendor}-${os} in --build=${value}"
         fi
     fi
 }
@@ -3675,7 +3698,7 @@ kind="${_target_kind}"
 
 # load targets
 _load_targets() {
-    echo "analyzing project configuration .."
+    info "analyzing project configuration .."
     _loading_options=false
     _loading_toolchains=false
     _loading_targets=true
@@ -4339,7 +4362,7 @@ _gmake_add_install() {
 }
 
 _gmake_done() {
-    echo "makefile is generated!"
+    ok "makefile is generated!"
     if "${xmake_sh_diagnosis}"; then
         cat "${xmake_sh_makefile}"
     fi
@@ -4371,7 +4394,6 @@ _generate_for_ninja() {
 #-----------------------------------------------------------------------------
 # generate build file
 #
-
 _generate_build_file() {
     if test_eq "${project_generator}" "gmake"; then
         _generate_for_gmake
@@ -4382,4 +4404,3 @@ _generate_build_file() {
     fi
 }
 _generate_build_file
-
