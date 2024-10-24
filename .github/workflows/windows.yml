@@ -74,6 +74,8 @@ jobs:
           cd ..
 
       - name: Tests
+        env:
+          XMAKE_ROOT: y
         run: |
           Copy-Item ./core/build/xmake.exe ./xmake
           Copy-Item ./scripts/xrepo.bat ./xmake

@@ -45,7 +45,8 @@ local debugger      = require("base/debugger")
 -- init the option menu
 local menu =
 {
-    title = "${bright}xmake v" .. _VERSION .. ", An enhanced version better suited for large-scale projects${clear}"
+    title = "${bright}xmake v" .. _VERSION .. ", A cross-platform build utility based on Lua, better suited for large-scale projects.${clear}"
+    -- title = "${bright}xmake v" .. _VERSION .. ", A cross-platform build utility based on " .. (xmake._LUAJIT and "LuaJIT" or "Lua") .. "${clear}"
 ,   copyright = "Copyright (C) 2015-present Ruki Wang, ${underline}tboox.org${clear}, ${underline}xmake.io${clear}"
 
     -- the tasks: xmake [task]
@@ -69,10 +70,10 @@ function main._show_help()
         if menu.title then
             utils.cprint(menu.title)
         end
-        if menu.copyright then
-            utils.cprint(menu.copyright)
-        end
-        option.show_logo()
+        -- if menu.copyright then
+        --     utils.cprint(menu.copyright)
+        -- end
+        -- option.show_logo()
         return true
     end
 end
@@ -255,7 +256,12 @@ end
 
 -- limit root? @see https://github.com/xmake-io/xmake/pull/4513
 function main._limit_root()
-    return not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
+    -- return not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
+    local limit_root = not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
+    if limit_root then
+        utils.cprint("${bright yellow}[warning]${clear} running xmake as root is extremely dangerous, all build scripts would have unrestricted access to your system.")
+    end
+    return false
 end
 
 -- the main entry function

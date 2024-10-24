@@ -1,0 +1,19 @@
+// config description: https://github.com/LuaLS/lua-language-server/blob/master/doc/zh-cn/config.md
+{
+    // https://github.com/LuaLS/lua-language-server/issues/28
+    // "workspace.ignoreDir": [
+    //     "xmake/templates"
+    // ],
+    "workspace.library": [
+        "xmake/templates"
+    ],
+    // https://github.com/LuaLS/lua-language-server/issues/2548
+    "diagnostics.libraryFiles": "Disable",
+    "diagnostics.disable": [
+        "unknown-symbol",
+        "exp-in-action",
+        "undefined-global",
+        "undefined-field",
+        "need-check-nil"
+    ]
+}

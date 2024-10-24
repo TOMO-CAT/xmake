@@ -24,24 +24,25 @@ import("core.base.option")
 
 -- show version
 function _show_version()
+    cprint("xRepo %s/xmake", xmake.version())
 
-    -- show title
-    cprint("${bright}xRepo %s/xmake, A cross-platform C/C++ package manager based on Xmake.", xmake.version())
+    -- -- show title
+    -- cprint("${bright}xRepo %s/xmake, A cross-platform C/C++ package manager based on Xmake.", xmake.version())
 
-    -- show copyright
-    cprint("Copyright (C) 2015-present Ruki Wang, ${underline}tboox.org${clear}, ${underline}xmake.io${clear}")
-    print("")
+    -- -- show copyright
+    -- cprint("Copyright (C) 2015-present Ruki Wang, ${underline}tboox.org${clear}, ${underline}xmake.io${clear}")
+    -- print("")
 
-    -- show logo
-    local logo = [[
-    __  ___ ___  ______ ____  _____
-    \ \/ / |  _ \| ____|  _ \/  _  |
-     >  <  | |_) |  _| | |_) | |_| |
-    /_/\_\_| \___|_____|_|   |____/
+    -- -- show logo
+    -- local logo = [[
+    -- __  ___ ___  ______ ____  _____
+    -- \ \/ / |  _ \| ____|  _ \/  _  |
+    --  >  <  | |_) |  _| | |_) | |_| |
+    -- /_/\_\_| \___|_____|_|   |____/
 
-                         by ruki, xmake.io
-    ]]
-    option.show_logo(logo, {seed = 680})
+    --                      by ruki, xmake.io
+    -- ]]
+    -- option.show_logo(logo, {seed = 680})
 end
 
 -- get main menu options

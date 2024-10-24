@@ -27,7 +27,7 @@ function can_build()
             return true
         end
         local clang = find_tool("clang", {version = true})
-        if clang and clang.version and semver.compare(clang.version, "14.0") >= 0 then
+        if clang and clang.version and semver.compare(clang.version, "15.0") >= 0 then
             return true
         end
     end
@@ -57,7 +57,7 @@ function main(t)
             _build()
         end
         local clang = find_tool("clang", {version = true})
-        if clang and clang.version and semver.compare(clang.version, "14.0") >= 0 then
+        if clang and clang.version and semver.compare(clang.version, "15.0") >= 0 then
             os.exec("xmake clean -a")
             os.exec("xmake f --toolchain=clang -c --yes")
             _build()
