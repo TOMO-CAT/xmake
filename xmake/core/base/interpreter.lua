@@ -71,12 +71,12 @@ function interpreter._traceback(errors)
         if info.what == "C" then
             results = results .. string.format("    [C]: in function '%s'\n", info.name)
         elseif info.name then
-            results = results .. string.format("    [%s:%d]: in function '%s'\n", info.short_src, info.currentline, info.name)
+            results = results .. string.format("    [%s:%d]: in function '%s'\n", info.source, info.currentline, info.name)
         elseif info.what == "main" then
-            results = results .. string.format("    [%s:%d]: in main chunk\n", info.short_src, info.currentline)
+            results = results .. string.format("    [%s:%d]: in main chunk\n", info.source, info.currentline)
             break
         else
-            results = results .. string.format("    [%s:%d]:\n", info.short_src, info.currentline)
+            results = results .. string.format("    [%s:%d]:\n", info.source, info.currentline)
         end
 
         -- next
