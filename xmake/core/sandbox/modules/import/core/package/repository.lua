@@ -134,9 +134,7 @@ function sandbox_core_package_repository.repositories(is_global)
         end
         if option.get("verbose") then
             utils.cprint("${bright blue}[improvement] ${clear}sorted build-artifacts urls:")
-            for k, v in pairs(artifacts_urls) do
-                print(v)
-            end
+            utils.dump(artifacts_urls)
         end
         if #artifacts_urls > 0 then
             local repo = repository.load("build-artifacts", artifacts_urls[1], "main", true)
@@ -164,9 +162,7 @@ function sandbox_core_package_repository.repositories(is_global)
         end
         if option.get("verbose") then
             utils.cprint("${bright blue}[improvement] ${clear}sorted xmake-repo urls:")
-            for k, v in pairs(mainurls) do
-                print(v)
-            end
+            utils.dump(mainurls)
         end
         if #mainurls > 0 then
             local repo = repository.load("xmake-repo", mainurls[1], "master", true)
