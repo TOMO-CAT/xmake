@@ -1,3 +1,8 @@
 {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": false,
+    "Lua.diagnostics.disable": [
+        "inject-field",
+        "undefined-global",
+        "undefined-field"
+    ]
 }
