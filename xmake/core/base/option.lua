@@ -553,12 +553,12 @@ function option.show_menu(task)
     end
 
     -- print copyright
-    if menu.copyright then
-        io.print(colors.translate(menu.copyright))
-    end
+    -- if menu.copyright then
+    --     io.print(colors.translate(menu.copyright))
+    -- end
 
     -- show logo
-    option.show_logo()
+    -- option.show_logo()
 
     -- print usage
     if taskmenu.usage then
@@ -595,12 +595,12 @@ function option.show_main()
     end
 
     -- print copyright
-    if menu.copyright then
-        io.print(colors.translate(menu.copyright))
-    end
+    -- if menu.copyright then
+    --     io.print(colors.translate(menu.copyright))
+    -- end
 
     -- show logo
-    option.show_logo()
+    -- option.show_logo()
 
     -- print usage
     if main.usage then
