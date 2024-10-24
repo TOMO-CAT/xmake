@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,40 +17,40 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
 -- define rule: xcode application
 rule("xcode.application")
 
-    -- support add_files("Info.plist", "*.storyboard", "*.xcassets", "*.metal")
-    add_deps("xcode.info_plist", "xcode.storyboard", "xcode.xcassets", "xcode.metal")
+-- support add_files("Info.plist", "*.storyboard", "*.xcassets", "*.metal")
+add_deps("xcode.info_plist", "xcode.storyboard", "xcode.xcassets", "xcode.metal")
 
-    -- we must set kind before target.on_load(), may we will use target in on_load()
-    on_load("load")
+-- we must set kind before target.on_load(), may we will use target in on_load()
+on_load("load")
 
-    -- depend xcode.framework? we need to disable `build.across_targets_in_parallel` policy
-    after_load(function (target)
-        local across_targets_in_parallel
-        for _, dep in ipairs(target:orderdeps()) do
-            if dep:rule("xcode.framework") then
-                across_targets_in_parallel = false
-            end
+-- depend xcode.framework? we need to disable `build.across_targets_in_parallel` policy
+after_load(function(target)
+    local across_targets_in_parallel
+    for _, dep in ipairs(target:orderdeps()) do
+        if dep:rule("xcode.framework") then
+            across_targets_in_parallel = false
         end
-        if across_targets_in_parallel ~= nil then
-            target:set("policy", "build.across_targets_in_parallel", across_targets_in_parallel)
-        end
-    end)
+    end
+    if across_targets_in_parallel ~= nil then
+        target:set("policy", "build.across_targets_in_parallel",
+                   across_targets_in_parallel)
+    end
+end)
 
-    -- build *.app
-    after_build("build")
+-- build *.app
+after_build("build")
 
-    -- package *.app to *.ipa (iphoneos) or *.dmg (macosx)
-    on_package("package")
+-- package *.app to *.ipa (iphoneos) or *.dmg (macosx)
+on_package("package")
 
-    -- install application
-    on_install("install")
+-- install application
+on_install("install")
 
-    -- uninstall application
-    on_uninstall("uninstall")
+-- uninstall application
+on_uninstall("uninstall")
 
-    -- run application
-    on_run("run")
+-- run application
+on_run("run")
