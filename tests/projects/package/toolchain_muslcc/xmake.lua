@@ -5,7 +5,7 @@ set_plat("cross")
 set_arch("arm")
 
 -- lock requires
-set_policy("package.requires_lock", true)
+-- set_policy("package.requires_lock", true)
 
 -- custom toolchain
 toolchain("my_muslcc")

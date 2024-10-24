@@ -12,6 +12,8 @@
     "diagnostics.disable": [
         "unknown-symbol",
         "exp-in-action",
-        "undefined-global"
+        "undefined-global",
+        "undefined-field",
+        "need-check-nil"
     ]
 }
