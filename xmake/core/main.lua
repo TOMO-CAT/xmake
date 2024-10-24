@@ -256,7 +256,12 @@ end
 
 -- limit root? @see https://github.com/xmake-io/xmake/pull/4513
 function main._limit_root()
-    return not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
+    -- return not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
+    local limit_root = not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
+    if limit_root then
+        utils.cprint("${bright yellow}[warning]${clear} running xmake as root is extremely dangerous, all build scripts would have unrestricted access to your system.")
+    end
+    return false
 end
 
 -- the main entry function
