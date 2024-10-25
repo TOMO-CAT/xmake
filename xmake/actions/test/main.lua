@@ -66,9 +66,11 @@ function _do_test_target(target, opt)
     local errdata = os.isfile(errfile) and io.readfile(errfile) or ""
     if outdata and #outdata > 0 then
         opt.stdout = outdata
+        vprint(outdata)
     end
     if errdata and #errdata > 0 then
         opt.stderr = errdata
+        vprint(errdata)
     end
     if opt.trim_output then
         outdata = outdata:trim()
@@ -161,11 +163,17 @@ function _do_test_target(target, opt)
         end
         if errors and #errors > 0 then
             opt.errors = errors
+            if option.get("verbose") or option.get("diagnosis") then
+                cprint(errors)
+            end
         end
         return passed
     end
     if errors and #errors > 0 then
         opt.errors = errors
+        if option.get("verbose") or option.get("diagnosis") then
+            cprint(errors)
+        end
     end
     return false
 end
@@ -254,15 +262,25 @@ end
 function _show_output(testinfo, kind)
     local output = testinfo[kind]
     if output then
-        if option.get("diagnosis") then
-            local target = testinfo.target
-            local logfile = path.join(target:autogendir(), "tests", testinfo.name .. "." .. kind .. ".log")
-            io.writefile(logfile, output)
-            print("%s: %s", kind, logfile)
-        elseif option.get("verbose") then
-            cprint("%s: %s", kind, output)
-        end
+        local target = testinfo.target
+        local logfile = path.join(target:autogendir(), "tests", testinfo.name .. "." .. kind .. ".log")
+        io.writefile(logfile, output)
+        print("%s: %s", kind, logfile)
     end
+end
+
+-- process content for one test
+function _progress_content(passed, opt, maxwidth, spent, testinfo)
+    local status_color = passed and "${color.success}" or "${color.failure}"
+    local progress_format = status_color .. theme.get("text.build.progress_format") .. ":${clear} "
+    if option.get("verbose") then
+        progress_format = progress_format .. "${dim}"
+    end
+    local progress = opt.progress:percent()
+    local padding = maxwidth - #testinfo.name
+    local process_content = format(progress_format .. "%s%s .................................... " .. status_color .. "%s${clear} ${bright}%0.3fs",
+        progress, testinfo.name, (" "):rep(padding), passed and "passed" or "failed", spent / 1000)
+    return process_content
 end
 
 -- run tests
@@ -288,7 +306,7 @@ function _run_tests(tests)
     runjobs("run_tests", function (index, total, opt)
         local testinfo = ordertests[index]
         if testinfo then
-            progress.show(opt.progress, "running.test %s", testinfo.name)
+            -- progress.show(opt.progress, "running.test %s", testinfo.name)
 
             local target = testinfo.target
             testinfo.target = nil
@@ -298,6 +316,8 @@ function _run_tests(tests)
             if passed then
                 report.passed = report.passed + 1
             end
+            local process_content = _progress_content(passed, opt, maxwidth, spent, testinfo)
+            cprint(process_content)
             table.insert(report.tests, {
                 target = target,
                 name = testinfo.name,
@@ -305,7 +325,8 @@ function _run_tests(tests)
                 spent = spent,
                 stdout = testinfo.stdout,
                 stderr = testinfo.stderr,
-                errors = testinfo.errors})
+                errors = testinfo.errors,
+                process_content = process_content})
 
             -- stop it if be failed?
             if not passed then
@@ -328,15 +349,7 @@ function _run_tests(tests)
     print("")
     print("report of tests:")
     for idx, testinfo in ipairs(report.tests) do
-        local status_color = testinfo.passed and "${color.success}" or "${color.failure}"
-        local progress_format = status_color .. theme.get("text.build.progress_format") .. ":${clear} "
-        if option.get("verbose") or option.get("diagnosis") then
-            progress_format = progress_format .. "${dim}"
-        end
-        local padding = maxwidth - #testinfo.name
-        local progress_percent = math.floor(idx * 100 / #report.tests)
-        cprint(progress_format .. "%s%s .................................... " .. status_color .. "%s${clear} ${bright}%0.3fs",
-            progress_percent, testinfo.name, (" "):rep(padding), testinfo.passed and "passed" or "failed", testinfo.spent / 1000)
+        cprint(testinfo.process_content)
         _show_output(testinfo, "stdout")
         _show_output(testinfo, "stderr")
         _show_output(testinfo, "errors")
@@ -488,4 +501,3 @@ function main()
     -- unlock the whole project
     project.unlock()
 end
-
