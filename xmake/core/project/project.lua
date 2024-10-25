@@ -937,6 +937,17 @@ function project.ordertargets()
     if not ordertargets then
         ordertargets = instance_deps.sort(project.targets())
         project._memcache():set("ordertargets", ordertargets)
+
+        -- print the ordered targets
+        if baseoption.get("verbose") then
+            local ordertarget_names = {}
+            for _, t in ipairs(ordertargets) do
+                table.insert(ordertarget_names, t:name())
+            end
+            utils.cprint("${bright blue}[improvement]${clear} ordered targets:")
+            utils.dump(ordertarget_names)
+        end
+
     end
     return ordertargets
 end

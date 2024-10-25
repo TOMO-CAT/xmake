@@ -129,9 +129,7 @@ function build_targets(targetnames, opt)
             check_targets(targetnames, {build = true})
 
             -- dump cache stats
-            if option.get("diagnosis") then
-                build_cache.dump_stats()
-            end
+            build_cache.dump_stats()
         end,
         catch
         {
