@@ -49,6 +49,8 @@ jobs:
         shell: msys2 {0}
         env:
           XMAKE_ROOT: y
+          XMAKE_MAIN_REPO: https://github.com/TOMO-CAT/xmake-repo.git
+          XMAKE_BINARY_REPO: https://github.com/TOMO-CAT/xmake-build-artifacts.git
         run: |
           cd /C/_
           xmake lua -v -D tests/run.lua
