@@ -26,13 +26,14 @@ jobs:
           mem: 4096
           copyback: false
           prepare: pkg install -y git curl unzip gmake llvm gsed bash perl5
+          env:
+            XMAKE_ROOT: y
+            XMAKE_MAIN_REPO: https://github.com/TOMO-CAT/xmake-repo.git
+            XMAKE_BINARY_REPO: https://github.com/TOMO-CAT/xmake-build-artifacts.git
           run: |
             ./configure
             gmake -j4
             gmake install
-            export XMAKE_ROOT=y
             xrepo --version
             xmake l os.meminfo
             xmake lua -v -D tests/run.lua
-
-
