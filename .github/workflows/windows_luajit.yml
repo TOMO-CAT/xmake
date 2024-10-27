@@ -1,3 +1,4 @@
+# Disable this workflow because we don't have windows install script
 name: Windows (Luajit)
 
 on:

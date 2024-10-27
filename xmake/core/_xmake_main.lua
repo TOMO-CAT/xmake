@@ -29,6 +29,7 @@ xmake._SUBARCH          = _SUBARCH
 xmake._XMAKE_ARCH       = _XMAKE_ARCH
 xmake._VERSION          = _VERSION
 xmake._VERSION_SHORT    = _VERSION_SHORT
+xmake._GIT_SOURCE       = _GIT_SOURCE
 xmake._PROGRAM_DIR      = _PROGRAM_DIR
 xmake._PROGRAM_FILE     = _PROGRAM_FILE
 xmake._PROJECT_DIR      = _PROJECT_DIR

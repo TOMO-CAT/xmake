@@ -110,7 +110,8 @@ function _get_builtinvars_git(builtinvars)
         GIT_BRANCH      = {"rev-parse", "--abbrev-ref", "HEAD"},
         GIT_COMMIT      = {"rev-parse", "--short", "HEAD"},
         GIT_COMMIT_LONG = {"rev-parse", "HEAD"},
-        GIT_COMMIT_DATE = {"log", "-1", "--date=format:%Y%m%d%H%M%S", "--format=%ad"}
+        GIT_COMMIT_DATE = {"log", "-1", "--date=format:%Y%m%d%H%M%S", "--format=%ad"},
+        GIT_SOURCE = {"remote", "get-url", "origin"}
     }
     for name, argv in pairs(cmds) do
         builtinvars[name] = function ()
@@ -120,6 +121,13 @@ function _get_builtinvars_git(builtinvars)
                 result = try {function ()
                     return os.iorunv(git.program, argv)
                 end}
+            end
+            if name == "GIT_SOURCE" then
+                if result and string.find(result, "github.com") then
+                    return "github.com"
+                else
+                    return "gitee.com"
+                end
             end
             if not result then
                 result = "none"

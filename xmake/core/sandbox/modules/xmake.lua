@@ -32,6 +32,7 @@ sandbox_xmake.programdir  = xmake.programdir
 sandbox_xmake.programfile = xmake.programfile
 sandbox_xmake.luajit      = xmake.luajit
 sandbox_xmake.argv        = xmake.argv
+sandbox_xmake.gitsource   = xmake.gitsource
 
 -- return module
 return sandbox_xmake

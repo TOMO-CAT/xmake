@@ -1,8 +1,12 @@
 {
     "editor.formatOnSave": false,
-    "Lua.diagnostics.disable": [
-        "inject-field",
-        "undefined-global",
-        "undefined-field"
+    "cSpell.words": [
+        "buildir",
+        "dlang",
+        "Luajit",
+        "tbox",
+        "tmpdir",
+        "TOMO",
+        "xrepo"
     ]
 }

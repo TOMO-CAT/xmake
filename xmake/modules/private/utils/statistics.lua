@@ -82,7 +82,9 @@ function post()
         end
     end
 
-    -- try to post it in background
+    -- try to post it in background (detach = true)
+    --
+    -- xmake lua "/usr/local/share/xmake/modules/private/utils/statistics.lua"
     try
     {
         function ()
@@ -121,7 +123,11 @@ function main()
         {
             function ()
                 import("devel.git.clone")
-                clone("https://github.com/xmake-io/xmake-stats.git", {depth = 1, branch = "master", outputdir = outputdir})
+                if xmake.gitsource() == "github.com" then
+                    clone("https://github.com/TOMO-CAT/cmake-stats.git", {depth = 1, branch = "main", outputdir = outputdir})
+                else
+                    clone("https://gitee.com/tomocat/cmake-stats.git", {depth = 1, branch = "main", outputdir = outputdir})
+                end
                 print("post to traffic ok!")
             end
         }

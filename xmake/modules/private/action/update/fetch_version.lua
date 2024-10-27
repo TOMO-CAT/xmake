@@ -63,7 +63,12 @@ function main(xmakever)
         urls = { git.asgiturl(custom_url) or custom_url }
         vprint("using custom source: %s ..", urls[1] )
     else
-        urls = official_sources
+        if xmake.gitsource() == "github.com" then
+            urls = {"https://github.com/TOMO-CAT/xmake.git"}
+        else
+            urls = {"https://gitee.com/tomocat/xmake.git"}
+        end
+    
     end
     commitish = (commitish and #commitish > 0) and commitish or "latest"
 
@@ -83,6 +88,5 @@ function main(xmakever)
             break
         end
     end
-    return {is_official = (urls == official_sources), urls = urls, version = (version or "master"), tags = tags, branches = branches}
+    return {is_official = true, urls = urls, version = (version or "master"), tags = tags, branches = branches}
 end
-

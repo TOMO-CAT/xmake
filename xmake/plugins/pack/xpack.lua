@@ -330,6 +330,13 @@ function xpack:specvars()
                         return os.iorunv(git.program, argv)
                     end}
                 end
+                if name == "GIT_SOURCE" then
+                    if result and string.find(result, "github.com") then
+                        return "github.com"
+                    else
+                        return "gitee.com"
+                    end
+                end
                 if not result then
                     result = "none"
                 end
