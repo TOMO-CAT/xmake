@@ -3855,9 +3855,20 @@ _generate_configfile() {
         _vprint_configvar_value "GIT_COMMIT_LONG" "${git_commit_long}"
         _replace_configvar_value "GIT_COMMIT_LONG" "${git_commit_long}"; patterns="${_ret};${patterns}"
 
-        _os_iorunv "log" "-1" "--date=format:%Y%m%d%H%M%S" "--format=%ad"; local git_commit_date="${_ret}"
+        _os_iorunv "git" "log" "-1" "--date=format:%Y%m%d%H%M%S" "--format=%ad"; local git_commit_date="${_ret}"
         _vprint_configvar_value "GIT_COMMIT_DATE" "${git_commit_date}"
         _replace_configvar_value "GIT_COMMIT_DATE" "${git_commit_date}"; patterns="${_ret};${patterns}"
+
+        _os_iorunv "git" "remote" "get-url" "origin"; local git_remote_origin="${_ret}"
+        if string_contains "${git_remote_origin}" "github.com"; then
+            info "github project"
+            _vprint_configvar_value "GIT_SOURCE" "github.com"
+            _replace_configvar_value "GIT_SOURCE" "github.com"; patterns="${_ret};${patterns}"
+        else
+            warning "not github project, GIT_SOURCE fallback to gitee.com"
+            _vprint_configvar_value "GIT_SOURCE" "gitee.com"
+            _replace_configvar_value "GIT_SOURCE" "gitee.com"; patterns="${_ret};${patterns}"
+        fi
     fi
 
     # replace configvars in target

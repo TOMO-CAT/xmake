@@ -285,8 +285,8 @@ end
 
 -- run tests
 function _run_tests(tests)
-    local ordertests = {}
-    local maxwidth = 0
+    local ordertests = {}  -- sort all tests by name
+    local maxwidth = 0  -- calculate the max length of the test names
     for name, testinfo in table.orderpairs(tests) do
         table.insert(ordertests, testinfo)
         if #testinfo.name > maxwidth then
@@ -470,7 +470,7 @@ function main()
     -- enter project directory
     local oldir = os.cd(project.directory())
 
-    -- build targets with the given tests first
+    -- build targets with the given tests with `build_should_pass` or `build_should_fail` tags firstly
     local targetnames = {}
     for _, testinfo in table.orderpairs(tests) do
         local targetname = testinfo.target:name()
@@ -488,6 +488,8 @@ function main()
             table.insert(targetnames, targetname)
         end
     end
+
+    -- build the remaining tests
     if #targetnames > 0 then
         build_action.build_targets(targetnames)
     end

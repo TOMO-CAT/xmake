@@ -30,9 +30,10 @@ function _plugin_urls()
     local urls = option.get("plugins")
     if not urls then
         urls = {
-        "https://github.com/xmake-io/xmake-plugins.git",
-        "https://gitlab.com/tboox/xmake-plugins.git",
-        "https://gitee.com/tboox/xmake-plugins.git"}
+            "https://github.com/xmake-io/xmake-plugins.git",
+            "https://gitlab.com/tboox/xmake-plugins.git",
+            "https://gitee.com/tboox/xmake-plugins.git"
+        }
         urls = fasturl.add(urls)
         urls = fasturl.sort(urls)
     end
@@ -170,4 +171,3 @@ function main()
         _clear()
     end
 end
-

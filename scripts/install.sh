@@ -7,7 +7,7 @@ info "start installing xmake ..."
 rm -rf build
 
 git submodule update --init
-./configure
+./configure --verbose
 make
 sudo make install PREFIX=/usr/local
 

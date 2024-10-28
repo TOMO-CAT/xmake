@@ -22,6 +22,9 @@ if is_mode("release") then
     end
 end
 
+-- generate compile_commands.json
+add_rules("plugin.compile_commands.autoupdate", {outputdir = "."})
+
 -- disable some compiler errors
 add_cxflags("-Wno-error=deprecated-declarations", "-fno-strict-aliasing", "-Wno-error=nullability-completeness", "-Wno-error=parentheses-equality")
 

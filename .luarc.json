@@ -14,6 +14,8 @@
         "exp-in-action",
         "undefined-global",
         "undefined-field",
-        "need-check-nil"
+        "need-check-nil",
+        "lowercase-global",
+        "inject-field"
     ]
 }

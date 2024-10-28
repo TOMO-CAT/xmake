@@ -42,6 +42,7 @@ function main()
     cprint("    ${color.dump.string}workingdir${clear}: %s", os.workingdir())
     cprint("    ${color.dump.string}packagedir${clear}: %s", package.installdir())
     cprint("    ${color.dump.string}packagedir(cache)${clear}: %s", package.cachedir())
+    cprint("    ${color.dump.string}gitsource${clear}: %s", xmake.gitsource())
     print("")
 
     local projectfile = os.projectfile()

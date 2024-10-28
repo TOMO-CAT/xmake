@@ -47,6 +47,11 @@ function xmake.branch()
     return xmake.version():build()[1]
 end
 
+-- get the git source, github.com or gitee.com
+function xmake.gitsource()
+    return xmake._GIT_SOURCE
+end
+
 -- get the program directory
 function xmake.programdir()
     return xmake._PROGRAM_DIR

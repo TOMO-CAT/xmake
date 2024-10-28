@@ -122,7 +122,11 @@ function sandbox_core_package_repository.repositories(is_global)
             if binary_repo then
                 artifacts_urls = {binary_repo}
             else
-                artifacts_urls = {"https://gitee.com/tomocat/xmake-build-artifacts.git"}
+                if xmake.gitsource() == "github.com" then
+                    artifacts_urls = {"https://github.com/TOMO-CAT/xmake-build-artifacts.git"}
+                else
+                    artifacts_urls = {"https://gitee.com/tomocat/xmake-build-artifacts.git"}
+                end
                 if network ~= "private" then
                     import("net.fasturl")
                     fasturl.add(artifacts_urls)
@@ -150,7 +154,11 @@ function sandbox_core_package_repository.repositories(is_global)
             if mainrepo then
                 mainurls = {mainrepo}
             else
-                mainurls = {"https://gitee.com/tomocat/xmake-repo.git"}
+                if xmake.gitsource() == "github.com" then
+                    mainurls = {"https://github.com/TOMO-CAT/xmake-repo.git"}
+                else
+                    mainurls = {"https://gitee.com/tomocat/xmake-repo.git"}
+                end
                 if network ~= "private" then
                     import("net.fasturl")
                     fasturl.add(mainurls)

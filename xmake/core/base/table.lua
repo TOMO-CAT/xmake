@@ -188,7 +188,20 @@ function table.copy2(self, copied)
     end
 end
 
--- inherit interfaces and create a new instance
+-- Inherits properties and methods from multiple classes to create a new instance.
+
+-- This function takes any number of class tables as arguments and combines their 
+-- functions into a single instance. If a function name starts with "__", it is 
+-- treated as a meta-method and stored in the metainfo table. Regular methods are 
+-- added to the instance. If a method name conflicts with an existing one in the 
+-- instance, the existing method is stored with a "_super_" prefix, allowing access 
+-- to the parent class method.
+
+-- Parameters:
+--     ... : Class tables from which to inherit properties and methods.
+
+-- Returns:
+--     A new instance with inherited properties and methods.
 function table.inherit(...)
     local classes = {...}
     local instance = {}
@@ -440,7 +453,30 @@ function table.keys(tbl)
     return keyset, n
 end
 
--- get order keys of a table
+-- Sorts the keys of a given table and returns a list of the sorted keys.
+-- The function supports a custom sorting rule via a callback function, or it can use the default sorting behavior.
+--
+-- Parameters:
+--   - tbl (table): The table whose keys will be sorted.
+--   - callback (function, optional): A custom comparison function for sorting the keys. 
+--                                    If not provided or not a function, default sorting is used.
+--
+-- Returns:
+--   - keys (table): A list of the sorted keys from the table.
+--
+-- Notes:
+--   - If the table contains keys of mixed types (e.g., numbers and strings), 
+--     the default sorting may raise an error. In such cases, the function will fall back to sorting 
+--     by converting the keys to strings.
+--
+-- Examples:
+--   local t = {3 = "c", 1 = "a", 2 = "b"}
+--   local sorted_keys = table.orderkeys(t)
+--   -- sorted_keys is {1, 2, 3}
+
+--   -- Sorting keys in descending order using a custom comparator:
+--   local sorted_keys_desc = table.orderkeys(t, function(a, b) return a > b end)
+--   -- sorted_keys_desc is {3, 2, 1}
 function table.orderkeys(tbl, callback)
     local callback = type(callback) == "function" and callback or nil
     local keys = table.keys(tbl)
