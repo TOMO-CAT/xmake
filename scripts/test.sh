@@ -2,6 +2,8 @@
 
 set -e
 
+bash scripts/busted.sh
+
 export XMAKE_ROOT="y"
 
 # export CPP="clang++ -E"
