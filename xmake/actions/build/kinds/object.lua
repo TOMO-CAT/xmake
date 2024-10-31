@@ -121,6 +121,7 @@ function _add_batchjobs_for_rule(batchjobs, rootjob, target, sourcebatch, suffix
     end
 
     -- add batch jobs for xx_buildcmd_files
+    -- https://xmake.io/#/zh-cn/manual/custom_rule?id=ruleon_buildcmd_file
     if not script then
         scriptname = "buildcmd_files" .. (suffix and ("_" .. suffix) or "")
         script = ruleinst:script(scriptname)

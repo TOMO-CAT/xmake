@@ -1872,7 +1872,7 @@ function _instance:sourcefiles()
     local count = 0
     local sourcefiles = {}
     local sourcefiles_removed = {}
-    local sourcefiles_inserted = {}
+    local sourcefiles_inserted = {}  -- hashset of sourcefiles
     local removed_count = 0
     local targetcache = memcache.cache("core.project.target")
     for _, file in ipairs(table.wrap(files)) do
@@ -1892,7 +1892,7 @@ function _instance:sourcefiles()
             if removed then
                 results = {file}
             else
-                results = os.files(file)
+                results = os.files(file)  -- get source files according to the regular expression
                 if #results == 0 then
                     -- attempt to find source directories if maybe compile it as directory with the custom rules
                     if #self:filerules(file) > 0 then
@@ -2938,4 +2938,3 @@ end
 
 -- return module
 return target
-

@@ -208,7 +208,7 @@ end
 
 -- add batch jobs for the given target and deps
 function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, jobrefs, jobrefs_before)
-    local targetjob_ref = jobrefs[target:name()]
+    local targetjob_ref = jobrefs[target:name()]  -- store targets that has been processed
     if targetjob_ref then
         batchjobs:add(targetjob_ref, rootjob)
     else
@@ -232,7 +232,7 @@ end
 -- get batch jobs, @note we need to export it for private.diagnosis.dump_buildjobs
 function get_batchjobs(targetnames, group_pattern)
 
-    -- get root targets
+    -- get root targets (not depended on by any other target)
     local targets_root = {}
     if targetnames then
         for _, targetname in ipairs(table.wrap(targetnames)) do
@@ -274,8 +274,8 @@ function get_batchjobs(targetnames, group_pattern)
     end
 
     -- generate batch jobs for default or all targets
-    local jobrefs = {}
-    local jobrefs_before = {}
+    local jobrefs = {}  -- store target's `build_after` job
+    local jobrefs_before = {}  -- store target's `build_before` job
     local batchjobs = jobpool.new()
     for _, target in ipairs(targets_root) do
         _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(), target, jobrefs, jobrefs_before)
