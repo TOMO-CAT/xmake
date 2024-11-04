@@ -136,7 +136,7 @@ function main(batchjobs, rootjob, target)
     -- add link job
     local job_link = batchjobs:addjob(target:name() .. "/link", function (index, total, opt)
         _link_target(target, {progress = opt.progress})
-    end, {rootjob = rootjob})
+    end, {rootjob = rootjob, high_priority = target:policy("build.high_priority")})
 
     -- we only need to return and depend the link job for each target,
     -- so we can compile the source files for each target in parallel

@@ -121,6 +121,7 @@ function _add_batchjobs_for_rule(batchjobs, rootjob, target, sourcebatch, suffix
     end
 
     -- add batch jobs for xx_buildcmd_files
+    -- https://xmake.io/#/zh-cn/manual/custom_rule?id=ruleon_buildcmd_file
     if not script then
         scriptname = "buildcmd_files" .. (suffix and ("_" .. suffix) or "")
         script = ruleinst:script(scriptname)
@@ -261,7 +262,7 @@ function main(batchjobs, rootjob, target)
 
     -- add a fake link job
     local job_link = batchjobs:addjob(target:name() .. "/fakelink", function (index, total, opt)
-    end, {rootjob = rootjob})
+    end, {rootjob = rootjob, high_priority = target:policy("build.high_priority")})
 
     -- we only need to return and depend the link job for each target,
     -- so we can compile the source files for each target in parallel

@@ -4,9 +4,11 @@
         "buildir",
         "dlang",
         "Luajit",
+        "luarocks",
         "tbox",
         "tmpdir",
         "TOMO",
-        "xrepo"
+        "xrepo",
+        "zxvf"
     ]
 }

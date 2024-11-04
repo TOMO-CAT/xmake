@@ -38,6 +38,7 @@ function _get_rule_max_depth(target, ruleinst, depth)
         local dep = get_rule(target, depname)
         local dep_depth = depth
         if ruleinst:extraconf("deps", depname, "order") then
+            -- add_deps("cppfront.build.h2", {order = true}) means .h2 must compile before .cpp2
             dep_depth = dep_depth + 1
         end
         local cur_depth = _get_rule_max_depth(target, dep, dep_depth)
@@ -91,4 +92,3 @@ function build_sourcebatch_groups(target, sourcebatches)
     end
     return groups
 end
-

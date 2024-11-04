@@ -152,7 +152,7 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
             os.setenvs(newenvs)
         end
 
-    end, {rootjob = rootjob})
+    end, {rootjob = rootjob, high_priority = target:policy("build.high_priority")})
 
     -- add batch jobs for target, @note only on_build script support batch jobs
     local job_build, job_build_leaf = _add_batchjobs(batchjobs, job_build_after, target)
@@ -202,13 +202,13 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
                 end
             end
         end
-    end, {rootjob = job_build_leaf})
+    end, {rootjob = job_build_leaf, high_priority = target:policy("build.high_priority")})
     return job_build_before, job_build, job_build_after
 end
 
 -- add batch jobs for the given target and deps
 function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, jobrefs, jobrefs_before)
-    local targetjob_ref = jobrefs[target:name()]
+    local targetjob_ref = jobrefs[target:name()]  -- store targets that has been processed
     if targetjob_ref then
         batchjobs:add(targetjob_ref, rootjob)
     else
@@ -219,6 +219,12 @@ function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, jobrefs,
             for _, depname in ipairs(target:get("deps")) do
                 local dep = project.target(depname)
                 local targetjob = job_build
+
+                -- fully parallel compilation for object target and it's deps, make it  easy to set `build.high_priority`
+                if target:kind() == "object" then
+                    targetjob = rootjob
+                end
+
                 -- @see https://github.com/xmake-io/xmake/discussions/2500
                 if dep:policy("build.across_targets_in_parallel") == false then
                     targetjob = job_build_before
@@ -232,7 +238,7 @@ end
 -- get batch jobs, @note we need to export it for private.diagnosis.dump_buildjobs
 function get_batchjobs(targetnames, group_pattern)
 
-    -- get root targets
+    -- get root targets (not depended on by any other target)
     local targets_root = {}
     if targetnames then
         for _, targetname in ipairs(table.wrap(targetnames)) do
@@ -274,8 +280,8 @@ function get_batchjobs(targetnames, group_pattern)
     end
 
     -- generate batch jobs for default or all targets
-    local jobrefs = {}
-    local jobrefs_before = {}
+    local jobrefs = {}  -- store target's `build_after` job
+    local jobrefs_before = {}  -- store target's `build_before` job
     local batchjobs = jobpool.new()
     for _, target in ipairs(targets_root) do
         _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(), target, jobrefs, jobrefs_before)

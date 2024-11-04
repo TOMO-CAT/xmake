@@ -42,6 +42,8 @@ function policy.policies()
             ["check.target_package_licenses"]     = {description = "Enable check the compatibility of target and package licenses.", default = true, type = "boolean"},
             -- Generate intermediate build directory
             ["build.intermediate_directory"]      = {description = "Generate intermediate build directory.", default = true, type = "boolean"},
+            -- We can compile this target as early as possible
+            ["build.high_priority"]               = {description = "Enable high priority for the current target.", default = false, type = "boolean"},
             -- Provide a way to block all targets build that depends on self
             ["build.fence"]                       = {description = "Block all targets build that depends on self.", default = false, type = "boolean"},
             -- We can compile the source files for each target in parallel
