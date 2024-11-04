@@ -152,7 +152,7 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
             os.setenvs(newenvs)
         end
 
-    end, {rootjob = rootjob})
+    end, {rootjob = rootjob, high_priority = target:policy("build.high_priority")})
 
     -- add batch jobs for target, @note only on_build script support batch jobs
     local job_build, job_build_leaf = _add_batchjobs(batchjobs, job_build_after, target)
@@ -202,7 +202,7 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
                 end
             end
         end
-    end, {rootjob = job_build_leaf})
+    end, {rootjob = job_build_leaf, high_priority = target:policy("build.high_priority")})
     return job_build_before, job_build, job_build_after
 end
 
@@ -219,6 +219,12 @@ function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, jobrefs,
             for _, depname in ipairs(target:get("deps")) do
                 local dep = project.target(depname)
                 local targetjob = job_build
+
+                -- fully parallel compilation for object target and it's deps, make it  easy to set `build.high_priority`
+                if target:kind() == "object" then
+                    targetjob = rootjob
+                end
+
                 -- @see https://github.com/xmake-io/xmake/discussions/2500
                 if dep:policy("build.across_targets_in_parallel") == false then
                     targetjob = job_build_before

@@ -145,6 +145,6 @@ function main(target, batchjobs, sourcebatch, opt)
         batchjobs:addjob(sourcefile, function (index, total, jobopt)
             local build_opt = table.join({objectfile = objectfile, dependfile = dependfile, sourcekind = sourcekind, progress = jobopt.progress}, opt)
             build_object(target, sourcefile, build_opt)
-        end, {rootjob = rootjob, distcc = opt.distcc})
+        end, {rootjob = rootjob, distcc = opt.distcc, high_priority = target:policy("build.high_priority")})
     end
 end

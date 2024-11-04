@@ -262,7 +262,7 @@ function main(batchjobs, rootjob, target)
 
     -- add a fake link job
     local job_link = batchjobs:addjob(target:name() .. "/fakelink", function (index, total, opt)
-    end, {rootjob = rootjob})
+    end, {rootjob = rootjob, high_priority = target:policy("build.high_priority")})
 
     -- we only need to return and depend the link job for each target,
     -- so we can compile the source files for each target in parallel

@@ -22,6 +22,7 @@
 import("core.base.object")
 import("core.base.list")
 import("core.base.hashset")
+import("core.base.option")
 
 -- define module
 local jobpool = jobpool or object {_init = {"_size", "_rootjob", "_leafjobs"}}
@@ -66,7 +67,7 @@ end
 --
 function jobpool:addjob(name, run, opt)
     opt = opt or {}
-    return self:add({name = name, run = run, distcc = opt.distcc, status = JOB_STATUS_FREE}, opt.rootjob)
+    return self:add({name = name, run = run, distcc = opt.distcc, status = JOB_STATUS_FREE, high_priority = opt.high_priority}, opt.rootjob)
 end
 
 -- add job to the given job node
@@ -178,7 +179,17 @@ function jobpool:remove(job)
                 p._deps:remove(job)
                 if p._deps:empty() and self._size > 0 then
                     p._leaf = true
-                    leafjobs:insert_first(p)
+
+                    -- reorder leafjobs to advance high-priority targets as much as possible
+                    -- the last element of the leafjobs with be executed first
+                    if p.high_priority then
+                        leafjobs:insert_last(p)
+                        if option.get("verbose") then
+                            cprint("${bright blue}[improvement]${clear} insert high priority parent job [" .. p.name .. "]")
+                        end
+                    else
+                        leafjobs:insert_first(p)
+                    end
                 end
             end
         end
@@ -246,7 +257,17 @@ function jobpool:_genleafjobs(job, leafjobs, refs)
         end
     else
         job._leaf = true
-        leafjobs:insert_last(job)
+
+        -- reorder leafjobs to advance high-priority targets as much as possible
+        -- the last element of the leafjobs with be executed first
+        if job.high_priority then
+            leafjobs:insert_last(job)
+            if option.get("verbose") then
+                cprint("${bright blue}[improvement]${clear} insert high priority job [" .. job.name .. "]")
+            end
+        else
+            leafjobs:insert_first(job)
+        end
     end
 end
 
