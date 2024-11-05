@@ -2,7 +2,7 @@
 %define     use_luajit 0
 
 Name:       xmake
-Version:    2.9.3
+Version:    3.0.1
 Release:    1%{?dist}
 Summary:    A cross-platform build utility based on Lua
 
@@ -110,4 +110,3 @@ cp -rp xmake \
 
 * Mon Sep 14 2020 Ruki Wang <waruqi@gmail.com> - 2.3.7-1
 - Initial Commit
-
