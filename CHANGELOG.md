@@ -1,5 +1,11 @@
 # 更新日志
 
+## v3.0.1
+
+### 新特性
+
+* [#12](https://github.com/TOMO-CAT/xmake/pull/12): 支持 build.high_priority policy 高优编译指定的 target
+
 ## v3.0.0
 
 ### 新特性
