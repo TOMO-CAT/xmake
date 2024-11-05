@@ -29,7 +29,12 @@ sudo apt-get install luarocks
 安装 busted 单测工具：
 
 ```bash
+# root
 luarocks install busted
+
+# 非 root
+luarocks install busted --local
+export PATH=$PATH:~/.luarocks/bin
 ```
 
 ## 运行单测
