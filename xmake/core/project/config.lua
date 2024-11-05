@@ -155,6 +155,14 @@ function config.buildir(opt)
     return buildir
 end
 
+-- get the debugdir
+-- we can use `{absolute = true}` to force to get absolute path
+function config.debugdir(opt)
+    local buildir = config.buildir(opt)
+    local debugdir = path.join(buildir, ".debug")
+    return debugdir
+end
+
 -- get the configure file
 function config.filepath()
     return path.join(config.directory(), xmake._NAME .. ".conf")

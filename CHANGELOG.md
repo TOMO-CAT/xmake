@@ -11,6 +11,7 @@
 ### 新特性
 
 * [#12](https://github.com/TOMO-CAT/xmake/pull/12): 支持 build.high_priority policy 高优编译指定的 target
+* 添加 `config.debugdir` 函数并将 build batchjobs 写入到 debugdir 便于排查
 
 ## v3.0.0
 
