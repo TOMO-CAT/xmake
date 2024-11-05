@@ -41,7 +41,7 @@ function debugger:_start_emmylua_debugger()
     if not debugger_inst then
         return false, "cannot get debugger module!"
     end
-    debugger_inst.tcpListen("localhost", 9966)
+    debugger_inst.tcpListen("127.0.0.1", 9966)
     debugger_inst.waitIDE()
     debugger_inst.breakHere()
     return true
@@ -69,4 +69,3 @@ end
 
 -- return module
 return debugger
-
