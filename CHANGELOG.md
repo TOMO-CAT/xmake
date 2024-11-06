@@ -2,16 +2,20 @@
 
 ## master
 
+### 新特性
+
+* [#15](https://github.com/TOMO-CAT/xmake/pull/15): 添加 `config.debugdir` 函数并将 build batchjobs 写入到 debugdir 便于排查
+
 ### Bugs 修复
 
-* 修改 Debugger 监听的 IP
+* [#14](https://github.com/TOMO-CAT/xmake/pull/14): 修改 Debugger 监听的 IP
+* [#16](https://github.com/TOMO-CAT/xmake/pull/16): 修复 object target parallel 引入的 bug (非 object target 在间接依赖未编译完成时 link)
 
 ## v3.0.1
 
 ### 新特性
 
 * [#12](https://github.com/TOMO-CAT/xmake/pull/12): 支持 build.high_priority policy 高优编译指定的 target
-* 添加 `config.debugdir` 函数并将 build batchjobs 写入到 debugdir 便于排查
 
 ## v3.0.0
 
