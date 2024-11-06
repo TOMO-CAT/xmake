@@ -6,8 +6,8 @@ add_includedirs(os.projectdir())
 set_policy("build.across_targets_in_parallel", true)
 set_policy("build.ccache", false)
 
-add_cxxflags("-ftemplate-depth=100000")
-add_cxxflags("-Wno-stack-exhausted")
+-- add_cxxflags("-ftemplate-depth=1000")
+-- add_cxxflags("-Wno-stack-exhausted")
 
 target("1", function()
     set_kind("object")
