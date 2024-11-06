@@ -2,6 +2,7 @@ name: MSYS2 (MingW)
 
 on:
   push:
+    branches: [ master ]
   pull_request:
 
 jobs:
