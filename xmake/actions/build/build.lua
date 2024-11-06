@@ -207,30 +207,45 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
 end
 
 -- add batch jobs for the given target and deps
-function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, jobrefs, jobrefs_before)
-    local targetjob_ref = jobrefs[target:name()]  -- store targets that has been processed
+function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, build_jobs, build_after_jobs, build_before_jobs)
+    local targetjob_ref = build_after_jobs[target:name()]  -- store targets that has been processed
     if targetjob_ref then
         batchjobs:add(targetjob_ref, rootjob)
     else
         local job_build_before, job_build, job_build_after = _add_batchjobs_for_target(batchjobs, rootjob, target)
         if job_build_before and job_build and job_build_after then
-            jobrefs[target:name()] = job_build_after
-            jobrefs_before[target:name()] = job_build_before
+            build_jobs[target:name()] = job_build
+            build_after_jobs[target:name()] = job_build_after
+            build_before_jobs[target:name()] = job_build_before
             for _, depname in ipairs(target:get("deps")) do
                 local dep = project.target(depname)
-                local targetjob = job_build
-
-                -- fully parallel compilation for object target and it's deps, make it  easy to set `build.high_priority`
-                if target:kind() == "object" then
-                    targetjob = rootjob
-                end
+                local targetjob
 
                 -- @see https://github.com/xmake-io/xmake/discussions/2500
                 if dep:policy("build.across_targets_in_parallel") == false then
                     targetjob = job_build_before
+                else
+                    -- fully parallel compilation for object target and it's deps, make it  easy to set `build.high_priority`
+                    targetjob = rootjob
                 end
-                _add_batchjobs_for_target_and_deps(batchjobs, targetjob, dep, jobrefs, jobrefs_before)
+                _add_batchjobs_for_target_and_deps(batchjobs, targetjob, dep, build_jobs, build_after_jobs, build_before_jobs)
             end
+        end
+    end
+end
+
+-- add batch jobs for non-object target to make sure it's build job will wait for all it's direct
+-- and indirect deps' `after_build` jobs are compiled
+function _add_batchjobs_for_non_object_target(batchjobs, target, root_job, build_after_jobs, visited_deps)
+    if visited_deps[target] then
+        return
+    end
+    visited_deps[target] = true
+    for _, dep in ipairs(target:orderdeps()) do
+        local dep_job_after = build_after_jobs[dep:name()]
+        if dep_job_after then
+            batchjobs:add(dep_job_after, root_job)
+            _add_batchjobs_for_non_object_target(batchjobs, dep, root_job, build_after_jobs, visited_deps)
         end
     end
 end
@@ -280,20 +295,35 @@ function get_batchjobs(targetnames, group_pattern)
     end
 
     -- generate batch jobs for default or all targets
-    local jobrefs = {}  -- store target's `build_after` job
-    local jobrefs_before = {}  -- store target's `build_before` job
+    local build_jobs = {}
+    local build_after_jobs = {}  -- store target's `build_after` job
+    local build_before_jobs = {}  -- store target's `build_before` job
     local batchjobs = jobpool.new()
     for _, target in ipairs(targets_root) do
-        _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(), target, jobrefs, jobrefs_before)
+        _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(), target, build_jobs, build_after_jobs, build_before_jobs)
+    end
+
+    -- make sure static/shared/binary target waits until all of it's direct and indirect
+    -- dependent `afrer_build` tasks are compiled
+    for _, target in ipairs(project.ordertargets()) do
+        local target_kind = target:kind()
+        local non_object_kind = target_kind == "static" or target_kind == "shared" or target_kind == "binary"
+        local visited_deps = {}
+        if non_object_kind then
+            local root_job = build_jobs[target:name()]
+            if root_job then
+                _add_batchjobs_for_non_object_target(batchjobs, target, root_job, build_after_jobs, visited_deps)
+            end
+        end
     end
 
     -- add fence jobs, @see https://github.com/xmake-io/xmake/issues/5003
     for _, target in ipairs(project.ordertargets()) do
-        local target_job_before = jobrefs_before[target:name()]
+        local target_job_before = build_before_jobs[target:name()]
         if target_job_before then
             for _, dep in ipairs(target:orderdeps()) do
                 if dep:policy("build.fence") then
-                    local fence_job = jobrefs[dep:name()]
+                    local fence_job = build_after_jobs[dep:name()]
                     if fence_job then
                         batchjobs:add(fence_job, target_job_before)
                     end
