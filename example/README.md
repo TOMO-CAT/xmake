@@ -26,3 +26,9 @@ The information of xmake:
     packagedir(cache): /home/cat/.xmake/cache/packages/2411
     gitsource: github.com
 ```
+
+## 调试命令
+
+```bash
+xrepo env -b "emmylua_debugger 1.8.6" -v -- xmake -bvrD
+```
