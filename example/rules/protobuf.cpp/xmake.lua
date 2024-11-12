@@ -9,7 +9,11 @@ target("proto", function()
     set_kind("static")
     -- proto_public = true 用于导出 proto 的头文件搜索目录, 开放给其他父 target 继承使用
     -- 在这个例子中是添加了 -Ibuild/.gens/proto/linux/x86_64/release/rules/protobuf/proto 编译参数
-    add_files("proto/*.proto", { proto_public = true })
+    --
+    -- https://github.com/xmake-io/xmake/issues/828
+    -- https://github.com/xmake-io/xmake/issues/1844
+    -- proto_rootdir = "." 用于以 proto 的目录结构来生成对应的头文件目录结构
+    add_files("proto/*.proto", { proto_public = true, proto_rootdir = "."})
     add_rules("protobuf.cpp")
     add_packages("protobuf-cpp", { public = true })
     -- 保证 target main 在 target proto link 完后才开始编译, 避免出现找不到 proto 头文件的 bug
@@ -22,8 +26,9 @@ target("proto", function()
             "protobuf", "(**.h)"))
 
         -- 支持按照 proto 文件所在的目录树 include *.pb.h 文件
-        target:add("includedirs", path.join(target:autogendir(), "rules",
-            "protobuf"), { public = true })
+        -- target:add("includedirs", path.join(target:autogendir(), "rules",
+        --     "protobuf"), { public = true })
+        -- 添加 `proto_rootdir = "proto"` 来适配这个问题
     end)
 end)
 
