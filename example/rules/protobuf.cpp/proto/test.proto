@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package github.tomocat.proto;
+
+message Version {
+  int32 major_version = 1;
+  int32 minor_version = 2;
+  int32 patch_version = 3;
+}
