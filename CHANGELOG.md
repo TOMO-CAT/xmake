@@ -14,6 +14,7 @@
 
 * [#14](https://github.com/TOMO-CAT/xmake/pull/14): 修改 Debugger 监听的 IP
 * [#16](https://github.com/TOMO-CAT/xmake/pull/16): 修复 object target parallel 引入的 bug (非 object target 在间接依赖未编译完成时 link)
+* [#4760](https://github.com/xmake-io/xmake/issues/4760): 修复 distcc 分布式编译问题
 
 ## v3.0.1
 
