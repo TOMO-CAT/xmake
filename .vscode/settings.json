@@ -2,7 +2,9 @@
     "editor.formatOnSave": false,
     "cSpell.words": [
         "buildir",
+        "ccache",
         "dlang",
+        "Emmylua",
         "Luajit",
         "luarocks",
         "tbox",
