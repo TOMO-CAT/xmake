@@ -7,6 +7,7 @@
 * [#15](https://github.com/TOMO-CAT/xmake/pull/15): 添加 `config.debugdir` 函数并将 build batchjobs 写入到 debugdir 便于排查
 * [#17](https://github.com/TOMO-CAT/xmake/pull/17): 设置 test target 的默认超时时间 `run_timeout` 为 60 秒
 * [#18](https://github.com/TOMO-CAT/xmake/pull/18): 默认展示 brief build cache stats
+* [#20](https://github.com/TOMO-CAT/xmake/pull/20): `build.ccache.global_storage` policy 默认打开方便多目录复用 ccache
 
 ### Bugs 修复
 
