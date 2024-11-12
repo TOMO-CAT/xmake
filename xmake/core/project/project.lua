@@ -939,7 +939,7 @@ function project.ordertargets()
         project._memcache():set("ordertargets", ordertargets)
 
         -- print the ordered targets
-        if baseoption.get("verbose") then
+        if baseoption.get("verbose") and baseoption.get("diagnosis") then
             local ordertarget_names = {}
             for _, t in ipairs(ordertargets) do
                 table.insert(ordertarget_names, t:name())
