@@ -1,0 +1,41 @@
+# Debug
+
+## VSCode 调试
+
+安装 VSCode 的 EmmyLua 扩展：
+
+> <https://github.com/EmmyLua/VSCode-EmmyLua>
+
+正常情况下 xmake 的 Lua 脚本是在 `/usr/local/share/xmake` 下，而我们需要在该目录打断点。为了方便开发，我们希望在源码目录打断点，可以通过设置 `programdir` 实现：
+
+```bash
+# 设置 xmake 脚本目录为源码目录, 方便开发时调试
+export XMAKE_PROGRAM_DIR="${XMAKE_SOURCE_DIR}/xmake"
+
+# 此时查看 programdir 已经变化
+$ xmake show
+The information of xmake:
+    version: 3.0.1+dev.51131a198
+    host: linux/x86_64
+    programdir: /home/cat/Documents/github/xmake/xmake
+    programfile: /usr/local/bin/xmake
+    globaldir: /home/cat/.xmake
+    tmpdir: /tmp/.xmake1000/241111
+    workingdir: /home/cat/Documents/github/xmake
+    packagedir: /home/cat/.xmake/packages
+    packagedir(cache): /home/cat/.xmake/cache/packages/2411
+    gitsource: github.com
+```
+
+找个项目运行调试命令：
+
+```bash
+# 1.8.4 版本修复了 Lua 版本不匹配的问题
+xrepo env -b "emmylua_debugger 1.8.4" -v -- xmake -bvrD
+```
+
+执行完上面的命令后脚本不会立即退出，而是会一直处于等待调试的状态，此时我们回到 xmake 源码仓库并切到 VSCode 的调试 Tab 页，点击 `RunDebug` （运行和调试） -> `Emmylua New Debugger` 就能连接到我们的 `lua` 命令调试器，开启调试。
+
+![VSCode Debug Tag](image/vscode-debugger-tab.png)
+
+![VSCode Emmylua New Debugger](image/vscode-emmylua-new-debugger.png)
