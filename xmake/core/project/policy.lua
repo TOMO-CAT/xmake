@@ -53,7 +53,7 @@ function policy.policies()
             -- C/C++ build cache
             ["build.ccache"]                      = {description = "Enable C/C++ build cache.", type = "boolean"},
             -- Use global storage if build.ccache is enabled
-            ["build.ccache.global_storage"]       = {description = "Use global storge if build.ccache is enabled.", type = "boolean"},
+            ["build.ccache.global_storage"]       = {description = "Use global storge if build.ccache is enabled.", default = true, type = "boolean"},
             -- Always update configfiles when building
             ["build.always_update_configfiles"]   = {description = "Always update configfiles when building.", type = "boolean"},
             -- Enable build warning output, it's enabled by default.
