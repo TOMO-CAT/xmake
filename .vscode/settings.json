@@ -3,14 +3,27 @@
     "cSpell.words": [
         "buildir",
         "ccache",
+        "cosmocc",
+        "cppfront",
+        "cuda",
         "dlang",
         "Emmylua",
+        "libstdc",
         "Luajit",
         "luarocks",
+        "NSIS",
+        "soname",
+        "srpm",
         "tbox",
         "tmpdir",
         "TOMO",
+        "vsxmake",
+        "wasi",
+        "xpack",
         "xrepo",
         "zxvf"
+    ],
+    "cSpell.enableFiletypes": [
+        "!markdown"
     ]
 }

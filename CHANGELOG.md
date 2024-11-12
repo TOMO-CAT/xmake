@@ -8,6 +8,7 @@
 * [#17](https://github.com/TOMO-CAT/xmake/pull/17): 设置 test target 的默认超时时间 `run_timeout` 为 60 秒
 * [#18](https://github.com/TOMO-CAT/xmake/pull/18): 默认展示 brief build cache stats
 * [#20](https://github.com/TOMO-CAT/xmake/pull/20): `build.ccache.global_storage` policy 默认打开方便多目录复用 ccache
+* [#21](https://github.com/TOMO-CAT/xmake/pull/21): 打印文件编译时长 top3 统计报告
 
 ### Bugs 修复
 
@@ -864,7 +865,6 @@
 
 * [#489](https://github.com/xmake-io/xmake-repo/pull/489): 修复 run os.execv 带有过长环境变量值出现的一些问题
 
-
 ## v2.5.5
 
 ### 新特性
@@ -1670,7 +1670,7 @@
 ### 新特性
 
 * 添加aur打包脚本，并支持用`yaourt`包管理器进行安装。
-* 添加[set_basename](#http://xmake.io/#/zh/manual?id=targetset_basename)接口，便于定制化修改生成后的目标文件名
+* 添加[set_basename](http://xmake.io/#/zh/manual?id=targetset_basename)接口，便于定制化修改生成后的目标文件名
 
 ### 改进
 
