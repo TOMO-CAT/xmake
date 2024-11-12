@@ -16,6 +16,11 @@
         "undefined-field",
         "need-check-nil",
         "lowercase-global",
-        "inject-field"
+        "inject-field",
+        "redundant-parameter",
+        "param-type-mismatch",
+        "discard-returns",
+        "deprecated",
+        "duplicate-index"
     ]
 }

@@ -864,7 +864,6 @@
 
 * [#489](https://github.com/xmake-io/xmake-repo/pull/489): 修复 run os.execv 带有过长环境变量值出现的一些问题
 
-
 ## v2.5.5
 
 ### 新特性
@@ -1670,7 +1669,7 @@
 ### 新特性
 
 * 添加aur打包脚本，并支持用`yaourt`包管理器进行安装。
-* 添加[set_basename](#http://xmake.io/#/zh/manual?id=targetset_basename)接口，便于定制化修改生成后的目标文件名
+* 添加[set_basename](http://xmake.io/#/zh/manual?id=targetset_basename)接口，便于定制化修改生成后的目标文件名
 
 ### 改进
 
