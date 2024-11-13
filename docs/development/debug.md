@@ -30,8 +30,8 @@ The information of xmake:
 找个项目运行调试命令：
 
 ```bash
-# 1.8.4 版本修复了 Lua 版本不匹配的问题
-xrepo env -b "emmylua_debugger 1.8.4" -v -- xmake -bvrD
+# 1.8.6 版本修复了 Lua 版本不匹配的问题
+xrepo env -b "emmylua_debugger 1.8.6" -v -- xmake -bvrD
 ```
 
 执行完上面的命令后脚本不会立即退出，而是会一直处于等待调试的状态，此时我们回到 xmake 源码仓库并切到 VSCode 的调试 Tab 页，点击 `RunDebug` （运行和调试） -> `Emmylua New Debugger` 就能连接到我们的 `lua` 命令调试器，开启调试。
