@@ -24,6 +24,7 @@
         "zxvf"
     ],
     "cSpell.enableFiletypes": [
+        "!jsonc",
         "!markdown"
     ],
     "files.associations": {
@@ -121,5 +122,6 @@
         "queue": "cpp",
         "stack": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "debug.inlineValues": "off"
 }
