@@ -105,6 +105,7 @@ function buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
     local autogendir
     local public
     local grpc_cpp_plugin
+    local extra_flags
     local fileconfig = target:fileconfig(sourcefile_proto)
     if fileconfig then
         public = fileconfig.proto_public
@@ -113,6 +114,9 @@ function buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
         -- @see https://github.com/xmake-io/xmake/issues/3678
         autogendir = fileconfig.proto_autogendir
         grpc_cpp_plugin = fileconfig.proto_grpc_cpp_plugin
+        -- extra flags for protoc
+        -- @see https://github.com/TOMO-CAT/xmake/issues/23
+        extra_flags = fileconfig.extra_flags
     end
     local rootdir = autogendir and autogendir or path.join(target:autogendir(), "rules", "protobuf")
     local filename = path.basename(sourcefile_proto) .. ".pb" .. (sourcekind == "cxx" and ".cc" or "-c.c")
@@ -133,6 +137,11 @@ function buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
         path(prefixdir and prefixdir or path.directory(sourcefile_proto), function (p) return "-I" .. p end),
         path(sourcefile_dir, function (p) return (sourcekind == "cxx" and "--cpp_out=" or "--c_out=") .. p end)
     }
+
+    -- insert the custom extra-flags into protoc_args
+    for _, v in pairs(table.wrap(extra_flags)) do
+        table.insert(protoc_args, v)
+    end
 
     if grpc_cpp_plugin then
         local extension = target:is_plat("windows") and ".exe" or ""
@@ -174,6 +183,10 @@ function buildcmd_cxfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
     local fileconfig = target:fileconfig(sourcefile_proto)
     if fileconfig then
         public = fileconfig.proto_public
+        -- include *.pb.h according to it's relative path to fileconfig.proto_rootdir
+        -- @see https://github.com/xmake-io/xmake/issues/828
+        -- https://github.com/xmake-io/xmake/issues/1844
+        -- https://github.com/TOMO-CAT/xmake/issues/22
         prefixdir = fileconfig.proto_rootdir
         -- custom autogen directory to access the generated header files
         -- @see https://github.com/xmake-io/xmake/issues/3678

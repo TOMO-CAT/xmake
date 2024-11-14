@@ -225,7 +225,7 @@ function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, build_jo
                 if dep:policy("build.across_targets_in_parallel") == false then
                     targetjob = job_build_before
                 else
-                    -- fully parallel compilation for object target and it's deps, make it  easy to set `build.high_priority`
+                    -- fully parallel compilation for object target and it's deps, make it easy to set `build.high_priority`
                     targetjob = rootjob
                 end
                 _add_batchjobs_for_target_and_deps(batchjobs, targetjob, dep, build_jobs, build_after_jobs, build_before_jobs)
