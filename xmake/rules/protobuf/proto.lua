@@ -160,6 +160,10 @@ function buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
     batchcmds:vrunv(protoc, protoc_args, {colored_output = true})
 
     -- add deps
+    --
+    -- FIXME: if we use `extra_flags` parameter, some dependency information may be lost here,
+    -- which could lead to issues with incremental compilation
+    -- @see https://github.com/TOMO-CAT/xmake/issues/30
     local depmtime = os.mtime(sourcefile_cx)
     batchcmds:add_depfiles(sourcefile_proto)
     batchcmds:set_depcache(target:dependfile(sourcefile_cx))
@@ -227,6 +231,10 @@ function buildcmd_cxfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
     end
 
     -- add deps
+    --
+    -- FIXME: if we use `extra_flags` parameter, some dependency information may be lost here,
+    -- which could lead to issues with incremental compilation
+    -- @see https://github.com/TOMO-CAT/xmake/issues/30
     local depmtime = os.mtime(objectfile)
     batchcmds:add_depfiles(sourcefile_proto)
     batchcmds:set_depcache(target:dependfile(objectfile))
