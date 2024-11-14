@@ -11,7 +11,7 @@ target("foo.proto", function()
     -- 优化 protobuf.cpp 规则报错信息, 展示成深红色
     -- @see https://github.com/TOMO-CAT/xmake/issues/24
     -- 这里增加一个不存在的 -I protoc 参数来模拟报错
-    add_files("foo/proto/*.proto", { public = true, proto_rootdir = "foo", extra_flags = "-Ino-exist-folder" })
+    add_files("foo/proto/*.proto", { proto_public = true, proto_rootdir = "foo", extra_flags = "-Ino-exist-folder" })
     add_rules("protobuf.cpp")
     add_packages("protobuf-cpp")
     set_policy('build.fence', true)
@@ -38,9 +38,6 @@ target("test.proto", function()
     -- 保证 target main 在 target proto link 完后才开始编译, 避免出现找不到 proto 头文件的 bug
     set_policy('build.fence', true)
     add_deps("foo.proto")
-
-    -- FIXME: 没继承 foo.proto 的 public includedir
-    add_includedirs("build/.gens/foo.proto/linux/x86_64/release/rules/protobuf/foo", {public = true})
 
     on_load(function(target)
         -- 支持导出 *.pb.h 头文件, 这样 xmake install 时可以导出到 include 目录
