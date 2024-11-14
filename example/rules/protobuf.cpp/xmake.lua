@@ -7,7 +7,11 @@ add_requires("protobuf-cpp 3.19.4")
 
 target("foo.proto", function()
     set_kind("object")
-    add_files("foo/proto/*.proto", { public = true, proto_rootdir = "foo" })
+
+    -- 优化 protobuf.cpp 规则报错信息, 展示成深红色
+    -- @see https://github.com/TOMO-CAT/xmake/issues/24
+    -- 这里增加一个不存在的 -I protoc 参数来模拟报错
+    add_files("foo/proto/*.proto", { public = true, proto_rootdir = "foo", extra_flags = "-Ino-exist-folder" })
     add_rules("protobuf.cpp")
     add_packages("protobuf-cpp")
     set_policy('build.fence', true)

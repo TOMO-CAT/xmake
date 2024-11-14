@@ -9,6 +9,8 @@
 * [#18](https://github.com/TOMO-CAT/xmake/pull/18): 默认展示 brief build cache stats
 * [#20](https://github.com/TOMO-CAT/xmake/pull/20): `build.ccache.global_storage` policy 默认打开方便多目录复用 ccache
 * [#21](https://github.com/TOMO-CAT/xmake/pull/21): 打印文件编译时长 top3 统计报告
+* [#23](https://github.com/TOMO-CAT/xmake/issues/23): 支持 protoc 自定义参数
+* [#24](https://github.com/TOMO-CAT/xmake/issues/24): 为 `batchcmds:vrunv` 新增 `colored_output` 参数，增强报错的可读性
 
 ### Bugs 修复
 

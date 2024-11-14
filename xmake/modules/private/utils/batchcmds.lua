@@ -94,7 +94,18 @@ function _runcmd_vrunv(cmd, opt)
         if opt.dryrun then
             vprint(os.args(table.join(cmd.program, cmd.argv)))
         else
-            os.vrunv(cmd.program, cmd.argv, cmd.opt)
+            if cmd.opt and cmd.opt.colored_output then
+                local logfile = os.tmpfile()
+                table.join2(cmd.opt, {stdout = logfile, stderr = logfile})
+                os.vrunv(cmd.program, cmd.argv, cmd.opt)
+                local errmsg = string.trim(io.readfile(logfile))
+                if errmsg and #errmsg > 0 then
+                    cprint("${color.error}%s${clear}", errmsg)
+                end
+                os.rm(logfile)
+            else
+                os.vrunv(cmd.program, cmd.argv, cmd.opt)
+            end
         end
     end
 end
@@ -514,4 +525,3 @@ function new(opt)
     opt = opt or {}
     return batchcmds {_TARGET = opt.target, _CMDS = {}}
 end
-

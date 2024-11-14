@@ -157,7 +157,7 @@ function buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
         (sourcekind == "cxx" and "c++" or "c"),
         sourcefile_proto
     )
-    batchcmds:vrunv(protoc, protoc_args)
+    batchcmds:vrunv(protoc, protoc_args, {colored_output = true})
 
     -- add deps
     local depmtime = os.mtime(sourcefile_cx)
