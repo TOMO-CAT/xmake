@@ -19,3 +19,13 @@
 ## 优化一下 utils.dump 打印 table 的逻辑
 
 可以设置打印的 table 深度，免得打印出来的递归 table 太大。
+
+## test.sh 增加运行全部 example 的命令
+
+增强代码稳健性。
+
+## xmake f 支持增量添加配置
+
+> <https://github.com/xmake-io/xmake/issues/5767>
+
+一种简单的方案是将 plugin 内置到 xmake 里。
