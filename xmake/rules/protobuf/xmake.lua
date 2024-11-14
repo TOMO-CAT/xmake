@@ -22,11 +22,32 @@
 rule("protobuf.cpp")
     add_deps("c++")
     set_extensions(".proto")
-    on_load(function(target)
+
+    -- use rule:on_config instead of rule:on_load to fix the situation that we add proto files at
+    -- target's on_load function, otherwise we cannot get the value of `target:sourcebatches()`
+    --
+    -- eg.
+    --
+    -- target("foo.proto", function()
+    --     set_kind("static")
+    --     add_packages("protobuf")
+    --     add_packages("bat.proto")
+    --     add_rules("protobuf.cpp")
+    --     on_load(function(target)
+    --         local bar_proto_installdir = target:pkg("bat.proto"):installdir()
+    --         target:add("files", "foo/**.proto", {
+    --             proto_public = true,
+    --             proto_rootdir = ".",
+    --             extra_flags = { "-I" .. bar_proto_installdir }
+    --         })
+    --     end)
+    --     set_policy('build.fence', true)
+    -- end)
+    on_config(function(target)
         import("proto").load(target, "cxx")
     end)
     -- generate build commands
-    before_buildcmd_file(function(target, batchcmds, sourcefile_proto, opt)
+    before_buildcmd_file(function(target, batchcmds, sourcefile_proto, opt)  -- FIXME: before_buildcmd_file is override by before_build_files?
         import("proto").buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, "cxx")
     end)
     on_buildcmd_file(function(target, batchcmds, sourcefile_proto, opt)
