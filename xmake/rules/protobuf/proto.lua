@@ -296,6 +296,49 @@ function build_cxfile_objects(target, batchjobs, opt, sourcekind)
     build_objectfiles(target, batchjobs, sourcebatch_cx, opt)
 end
 
+function build_cxfile(target, sourcefile_proto, opt, sourcekind)
+    -- get c/c++ sourcefile
+    local prefixdir
+    local autogendir
+    local public
+    local grpc_cpp_plugin
+    local fileconfig = target:fileconfig(sourcefile_proto)
+    if fileconfig then
+        public = fileconfig.proto_public
+        prefixdir = fileconfig.proto_rootdir
+        -- custom autogen directory to access the generated header files
+        -- @see https://github.com/xmake-io/xmake/issues/3678
+        autogendir = fileconfig.proto_autogendir
+        grpc_cpp_plugin = fileconfig.proto_grpc_cpp_plugin
+    end
+    local rootdir = autogendir and autogendir or path.join(target:autogendir(), "rules", "protobuf")
+    local filename = path.basename(sourcefile_proto) .. ".pb" .. (sourcekind == "cxx" and ".cc" or "-c.c")
+    local sourcefile_cx = target:autogenfile(sourcefile_proto, {rootdir = rootdir, filename = filename})
+    local sourcefile_dir = prefixdir and path.join(rootdir, prefixdir) or path.directory(sourcefile_cx)
+    if grpc_cpp_plugin then
+        grpc_cpp_plugin_bin = _get_grpc_cpp_plugin(target, sourcekind)
+        filename_grpc = path.basename(sourcefile_proto) .. ".grpc.pb.cc"
+        sourcefile_cx_grpc = target:autogenfile(sourcefile_proto, {rootdir = rootdir, filename = filename_grpc})
+    end
+
+    -- add includedirs
+    target:add("includedirs", sourcefile_dir, {public = public})
+
+    -- add objectfile
+    local objectfile = target:objectfile(sourcefile_cx)
+    local dependfile = target:dependfile(sourcefile_proto)
+    table.insert(target:objectfiles(), objectfile)
+
+    local objectfile_grpc
+    if grpc_cpp_plugin then
+        objectfile_grpc = target:objectfile(sourcefile_cx_grpc)
+        table.insert(target:objectfiles(), objectfile_grpc)
+    end
+
+    local build_opt = table.join({objectfile = objectfile, dependfile = dependfile, sourcekind = sourcekind}, opt)
+    import("private.action.build.object").build_object(target, sourcefile_cx, build_opt)
+end
+
 -- build batch jobs
 function build_cxfiles(target, batchjobs, sourcebatch, opt, sourcekind)
     opt = opt or {}
@@ -309,19 +352,23 @@ function build_cxfiles(target, batchjobs, sourcebatch, opt, sourcekind)
             name = nodename,
             job = batchjobs:addjob(nodename, function(index, total, jobopt)
                 local batchcmds_ = batchcmds.new({target = target})
+                -- *.proto file ==> *.pb.h and *.pb.cc file
                 buildcmd_pfiles(target, batchcmds_, sourcefile_proto, {progress = jobopt.progress}, sourcekind)
                 batchcmds_:runcmds({changed = target:is_rebuilt(), dryrun = option.get("dry-run")})
             end)
         }
         table.insert(nodenames, nodename)
+
+        local cxfile_nodename = nodename .. "/" .. sourcekind
+        nodes[cxfile_nodename] = {
+            name = cxfile_nodename,
+            deps = {nodename},
+            job = batchjobs:addjob(cxfile_nodename, function(index, total, jobopt)
+                -- *.pb.cc file ==> object file
+                build_cxfile(target, sourcefile_proto, {progress = jobopt.progress}, sourcekind)
+            end)
+        }
+        table.insert(nodenames, cxfile_nodename)
     end
-    local rootname = "rules/" .. sourcebatch.rulename .. "/root"
-    nodes[rootname] = {
-        name = rootname,
-        deps = nodenames,
-        job = batchjobs:addjob(rootname, function(_index, _total)
-            build_cxfile_objects(target, batchjobs, opt, sourcekind)
-        end)
-    }
     buildjobs(nodes, batchjobs, opt.rootjob)
 end
