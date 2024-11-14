@@ -36,7 +36,12 @@ export LLVM_PROFDATA="/usr/lib/llvm-14/bin/llvm-profdata"
 # sudo apt-get install libc++abi-dev
 
 # unset CPLUS_INCLUDE_PATH && C_INCLUDE_PATH envs for cross build situation
-export CPLUS_INCLUDE_PATH=""
-export C_INCLUDE_PATH=""
+unset CPLUS_INCLUDE_PATH
+unset C_INCLUDE_PATH
+unset CPP
+unset CC
+unset CXX
+unset LD
+
 
 xmake l -vD tests/run.lua "$@"
