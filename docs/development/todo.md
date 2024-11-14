@@ -15,3 +15,7 @@
 ## 优化一下 jobpool 的 __tostring() 方法
 
 当前打印出来的依赖树阅读起来还是比较费劲，争取打印成 json 格式。
+
+## 优化一下 utils.dump 打印 table 的逻辑
+
+可以设置打印的 table 深度，免得打印出来的递归 table 太大。
