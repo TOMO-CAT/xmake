@@ -11,6 +11,7 @@
 * [#21](https://github.com/TOMO-CAT/xmake/pull/21): 打印文件编译时长 top3 统计报告
 * [#23](https://github.com/TOMO-CAT/xmake/issues/23): 支持 protoc 自定义参数
 * [#24](https://github.com/TOMO-CAT/xmake/issues/24): 为 `batchcmds:vrunv` 新增 `colored_output` 参数，增强报错的可读性
+* [#32](https://github.com/TOMO-CAT/xmake/issues/32): 用 object target 的 builtin function 来编译 proto target, 解决 cache 丢失的问题
 
 ### Bugs 修复
 
