@@ -9,3 +9,13 @@
 当前假设 target A 依赖 target B，而 target B 是一个 proto / codegen target 导致 target A 必须依赖 target B 产出的 .h 文件才能编译。那么我们往往要给 target B 设置 `build.fence` policy 为 true，当前这个策略会导致 target A 的 `before_build` job 需要等待 target B 的 `link` job 运行完才能开始运行。
 
 尽管这没什么必要，但是当前的 batchjobs 不太好修改。
+
+一种考虑是对于 target B 增加一个 `after_build_file` job，然后让 target A 的 `before_build` job 依赖 target B 的 `link` job。
+
+## 优化一下 jobpool 的 __tostring() 方法
+
+当前打印出来的依赖树阅读起来还是比较费劲，争取打印成 json 格式。
+
+## 优化一下 utils.dump 打印 table 的逻辑
+
+可以设置打印的 table 深度，免得打印出来的递归 table 太大。
