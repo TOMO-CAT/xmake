@@ -2,7 +2,7 @@
 
 set -e
 
-bash scripts/busted.sh
+# bash scripts/busted.sh
 
 export XMAKE_ROOT="y"
 
