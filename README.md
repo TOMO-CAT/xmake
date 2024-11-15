@@ -19,6 +19,9 @@ bash scripts/test.sh actions/test
 
 # run specific test
 xmake l tests/modules/scheduler/runjobs.lua
+
+# run all examples
+bash scripts/example.sh
 ```
 
 ## development

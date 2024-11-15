@@ -42,3 +42,15 @@ export PATH=$PATH:~/.luarocks/bin
 ```bash
 busted xmake
 ```
+
+## 运行所有的 example
+
+```bash
+bash scripts/example.sh
+```
+
+## 运行所有的 example busted tests
+
+```bash
+bash scripts/busted.sh
+```
