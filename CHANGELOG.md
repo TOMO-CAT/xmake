@@ -2,7 +2,13 @@
 
 ## master
 
+### 新特性
+
+* [#36](https://github.com/TOMO-CAT/xmake/issues/36): 内置 `config-update` plugin, 支持增量添加配置
+
 ### v3.0.2
+
+### 新特性
 
 * [#15](https://github.com/TOMO-CAT/xmake/pull/15): 添加 `config.debugdir` 函数并将 build batchjobs 写入到 debugdir 便于排查
 * [#17](https://github.com/TOMO-CAT/xmake/pull/17): 设置 test target 的默认超时时间 `run_timeout` 为 60 秒

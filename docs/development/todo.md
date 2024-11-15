@@ -30,8 +30,20 @@
 bash scripts/example.sh
 ```
 
-## xmake f 支持增量添加配置
+## ✅ xmake f 支持增量添加配置
+
+相关 Issue：
 
 > <https://github.com/xmake-io/xmake/issues/5767>
+> <https://github.com/xmake-io/xmake/issues/5041>
 
-一种简单的方案是将 plugin 内置到 xmake 里。
+一种简单的方案是将这个第三方 plugin 内置到 xmake 里。
+
+> <https://github.com/SirLynix/xmake-plugins>
+
+通过 `config-update` 插件来支持增量配置：
+
+```bash
+xmake cu -m coverage
+xmake cu --cxxflags="-DTEST -O3 -Wall"
+```

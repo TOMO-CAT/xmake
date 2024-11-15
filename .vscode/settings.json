@@ -17,6 +17,7 @@
         "NSIS",
         "soname",
         "srpm",
+        "stdcxx",
         "tbox",
         "tmpdir",
         "TOMO",
