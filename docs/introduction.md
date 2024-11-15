@@ -93,18 +93,18 @@ hdk           Harmony SDK
 
 ## 分布式编译和缓存
 
-- [x] 跨平台支持
-- [x] 支持 msvc, clang, gcc 和交叉编译工具链
-- [x] 支持构建 android, ios, linux, win, macOS 程序
-- [x] 除了编译工具链，无任何其他依赖
-- [x] 支持编译服务器负载均衡调度
-- [x] 支持大文件实时压缩传输 (lz4)
-- [x] 几乎零配置成本，无需共享文件系统，更加方便和安全
+* [x] 跨平台支持
+* [x] 支持 msvc, clang, gcc 和交叉编译工具链
+* [x] 支持构建 android, ios, linux, win, macOS 程序
+* [x] 除了编译工具链，无任何其他依赖
+* [x] 支持编译服务器负载均衡调度
+* [x] 支持大文件实时压缩传输 (lz4)
+* [x] 几乎零配置成本，无需共享文件系统，更加方便和安全
 
 关于分布式编译和缓存，可以见下面的文档。
 
-- [分布式编译](https://xmake.io/#/zh-cn/features/distcc_build)
-- [编译缓存](https://xmake.io/#/zh-cn/features/build_cache)
+* [分布式编译](https://xmake.io/#/zh-cn/features/distcc_build)
+* [编译缓存](https://xmake.io/#/zh-cn/features/build_cache)
 
 ## 远程编译
 
@@ -136,7 +136,7 @@ hdk           Harmony SDK
 
 我们可以使用 [github-action-setup-xmake](https://github.com/xmake-io/github-action-setup-xmake) 在 Github Action 上实现跨平台安装集成 Xmake。
 
-```
+```bash
 uses: xmake-io/github-action-setup-xmake@v1
 with:
   xmake-version: latest
