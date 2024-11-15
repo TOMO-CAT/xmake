@@ -20,9 +20,15 @@
 
 可以设置打印的 table 深度，免得打印出来的递归 table 太大。
 
-## test.sh 增加运行全部 example 的命令
+## ✅ test.sh 增加运行全部 example 的命令
 
 增强代码稳健性。
+
+直接运行：
+
+```bash
+bash scripts/example.sh
+```
 
 ## xmake f 支持增量添加配置
 

@@ -24,51 +24,50 @@ add_requires("tbox 1.6.*", "zlib", "libpng ~1.6")
 
 <img src="https://github.com/xmake-io/xmake-docs/raw/master/assets/img/index/package.gif" width="650px" />
 
-
 ## 命令行使用
 
 ### 1. 创建工程
 
 ```bash
-$ xmake create hello
-$ cd hello
+xmake create hello
+cd hello
 ```
 
 ### 2. 构建工程
 
 ```bash
-$ xmake
+xmake
 ```
 
 ### 3. 运行目标
 
 ```bash
-$ xmake run console
+xmake run console
 ```
 
 ### 4. 调试程序
 
 ```bash
-$ xmake run -d console
+xmake run -d console
 ```
 
 ### 5. 运行测试
 
 ```bash
-$ xmake test
+xmake test
 ```
 
 ### 6. 配置平台
 
 ```bash
-$ xmake f -p [windows|linux|macosx|android|iphoneos ..] -a [x86|arm64 ..] -m [debug|release]
-$ xmake
+xmake f -p [windows|linux|macosx|android|iphoneos ..] -a [x86|arm64 ..] -m [debug|release]
+xmake
 ```
 
 ### 7. 图形化菜单配置
 
 ```bash
-$ xmake f --menu
+xmake f --menu
 ```
 
 <img src="https://xmake.io/assets/img/index/menuconf.png" width="650px" />
@@ -234,11 +233,11 @@ target("test")
 ### 1. 生成IDE工程文件插件（makefile, vs2002 - vs2022, ...）
 
 ```bash
-$ xmake project -k vsxmake -m "debug,release" # 新版vs工程生成插件（推荐）
-$ xmake project -k vs -m "debug,release"
-$ xmake project -k cmake
-$ xmake project -k ninja
-$ xmake project -k compile_commands
+xmake project -k vsxmake -m "debug,release" # 新版vs工程生成插件（推荐）
+xmake project -k vs -m "debug,release"
+xmake project -k cmake
+xmake project -k ninja
+xmake project -k compile_commands
 ```
 
 ### 2. 加载自定义lua脚本插件
