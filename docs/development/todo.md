@@ -10,7 +10,7 @@
 
 尽管这没什么必要，但是当前的 batchjobs 不太好修改。
 
-一种考虑是对于 target B 增加一个 `after_build_file` job，然后让 target A 的 `before_build` job 依赖 target B 的 `link` job。
+一种考虑是对于 target B 增加一个 `after_build_file` job，然后让 target A 的 `before_build` job 依赖 target B 的 `after_build_file` job。
 
 ## 优化一下 jobpool 的 __tostring() 方法
 
