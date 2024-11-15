@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 function info() {
   (>&2 printf "[\e[34m\e[1mINFO\e[0m] $*\n")
 }
