@@ -46,12 +46,21 @@ rule("protobuf.cpp")
     on_config(function(target)
         import("proto").load(target, "cxx")
     end)
-    -- generate build commands
-    before_buildcmd_file(function(target, batchcmds, sourcefile_proto, opt)  -- FIXME: before_buildcmd_file is override by before_build_files?
+
+    -- before_buildcmd_file is override by before_build_files at build action
+    -- and it has some problems such as loss of dependent information
+    -- @see https://github.com/TOMO-CAT/xmake/issues/30
+    -- so we disable `before_buildcmd_file` and `on_buildcmd_file` for now
+    --
+    -- but we need `before_buildcmd_file` and `on_buildcmd_file` to generate compile_commands.json
+    -- so we use `before_build_files` and `on_build_file` to override them
+    before_buildcmd_file(function(target, batchcmds, sourcefile_proto, opt)
         import("proto").buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, "cxx")
     end)
     on_buildcmd_file(function(target, batchcmds, sourcefile_proto, opt)
         import("proto").buildcmd_cxfiles(target, batchcmds, sourcefile_proto, opt, "cxx")
+    end)
+    on_build_file(function (target, sourcefile, opt)
     end)
     before_build_files(function (target, batchjobs, sourcebatch, opt)
         import("proto").build_cxfiles(target, batchjobs, sourcebatch, opt, "cxx")
