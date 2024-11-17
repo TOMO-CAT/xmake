@@ -56,11 +56,13 @@ groups 大致的格式如下：
 
 遍历所有的 groups，添加如下 batchjobs：
 
-* "${target_name}/after_build_files${group_idx}"
-* "${target_name}/build_files${group_idx}"
-* "${target_name}/before_build_files${group_idx}"
+* `"${target_name}/after_build_files${group_idx}"`
+* `"${target_name}/build_files${group_idx}"`
+* `"${target_name}/before_build_files${group_idx}"`
 
 对于我们这个具体的 target 它会先添加 `foo.proto/build_files1` group，具体逻辑是遍历所有的 proto 文件，添加一个以 proto 文件名命名的 batchjob（此场景是 `foo/proto/header.proto`）：
+
+> 我们特地用 `on_build_file` 来 override 掉 `on_buildcmd_file`，因为这样可以复用 ccache 以及更多 object target 的编译逻辑。
 
 ```lua
 -- add batch jobs for the custom rule
@@ -68,17 +70,15 @@ function _add_batchjobs_for_rule(batchjobs, rootjob, target, sourcebatch, suffix
 
     ...
 
-    -- add batch jobs for xx_buildcmd_file
+    -- add batch jobs for xx_build_file
     if not script then
-        scriptname = "buildcmd_file" .. (suffix and ("_" .. suffix) or "")
+        scriptname = "build_file" .. (suffix and ("_" .. suffix) or "")
         script = ruleinst:script(scriptname)
         if script then
             local sourcekind = sourcebatch.sourcekind
             for _, sourcefile in ipairs(sourcebatch.sourcefiles) do
                 batchjobs:addjob(sourcefile, function (index, total, opt)
-                    local batchcmds_ = batchcmds.new({target = target})
-                    script(target, batchcmds_, sourcefile, {sourcekind = sourcekind, progress = opt.progress})
-                    batchcmds_:runcmds({changed = target:is_rebuilt(), dryrun = option.get("dry-run")})
+                    script(target, sourcefile, {sourcekind = sourcekind, progress = opt.progress})
                 end, {rootjob = rootjob, distcc = ruleinst:extraconf(scriptname, "distcc")})
             end
         end
@@ -147,20 +147,24 @@ function build_cxfiles(target, batchjobs, sourcebatch, opt, sourcekind)
             name = nodename,
             job = batchjobs:addjob(nodename, function(index, total, jobopt)
                 local batchcmds_ = batchcmds.new({target = target})
+                -- *.proto file ==> *.pb.h and *.pb.cc file
                 buildcmd_pfiles(target, batchcmds_, sourcefile_proto, {progress = jobopt.progress}, sourcekind)
                 batchcmds_:runcmds({changed = target:is_rebuilt(), dryrun = option.get("dry-run")})
             end)
         }
         table.insert(nodenames, nodename)
+
+        local cxfile_nodename = nodename .. "/" .. sourcekind
+        nodes[cxfile_nodename] = {
+            name = cxfile_nodename,
+            deps = {nodename},
+            job = batchjobs:addjob(cxfile_nodename, function(index, total, jobopt)
+                -- *.pb.cc file ==> object file
+                build_cxfile(target, sourcefile_proto, {progress = jobopt.progress}, sourcekind)
+            end)
+        }
+        table.insert(nodenames, cxfile_nodename)
     end
-    local rootname = "rules/" .. sourcebatch.rulename .. "/root"
-    nodes[rootname] = {
-        name = rootname,
-        deps = nodenames,
-        job = batchjobs:addjob(rootname, function(_index, _total)
-            build_cxfile_objects(target, batchjobs, opt, sourcekind)
-        end)
-    }
     buildjobs(nodes, batchjobs, opt.rootjob)
 end
 ```
