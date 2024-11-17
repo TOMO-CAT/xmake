@@ -300,10 +300,35 @@ function jobpool:_gentree(job, refs)
     return smalltree:to_array()
 end
 
+function jobpool:_gentree2(tree, job, refs)
+    local jobkey = tostring(job)
+    local jobname = job.group and ("group(" .. job.name .. ")") or job.name
+    if refs[jobkey] then
+        jobname = "ref(" .. jobname .. ")"
+        tree[jobname] = {}
+        return
+    else
+        refs[jobkey] = true
+        tree[jobname] = {}
+    end
+
+    local deps = job._deps
+    if deps and not deps:empty() then
+        for _, dep in deps:keys() do
+            self:_gentree2(tree[jobname], dep, refs)
+        end
+    end
+end
+
 -- tostring
 function jobpool:__tostring()
     local refs = {}
-    return string.serialize(self:_gentree(self:rootjob(), refs), {indent = 2, orderkeys = true})
+
+    -- return string.serialize(self:_gentree(self:rootjob(), refs), {indent = 2, orderkeys = true})
+
+    local jobpool_tree = {}
+    self:_gentree2(jobpool_tree, self:rootjob(), refs)
+    return string.serialize(jobpool_tree, {indent = 2, orderkeys = true})
 end
 
 -- new a jobpool

@@ -21,27 +21,25 @@ function main()
     local job_e = batchjobs:addjob("E", fake_run_func("E"), { rootjob = job_f })
     local job_d = batchjobs:addjob("D", fake_run_func("D"), { rootjob = job_e })
 
-[[
+    local expected = [[
 {
-  "root",
-  {
-    {
-      "F",
-      {
-        "D",
-        "E"
-      }
-    },
-    {
-      {
-        "B",
-        "A"
+  root = {
+    G = {
+      C = {
+        B = {
+          A = { }
+        }
       },
-      "C"
-    },
-    "G"
+      F = {
+        E = {
+          D = { }
+        }
+      }
+    }
   }
 }
 ]]
-    print(tostring(batchjobs))
+    if string.trim(tostring(batchjobs)) ~= string.trim(expected) then
+        raise("Expected: " .. expected .. "\nGot: " .. tostring(batchjobs))
+    end
 end
