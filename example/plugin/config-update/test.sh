@@ -52,6 +52,13 @@ xmake f --export=build/config.txt
 assert_contains_string "build/config.txt" "package.precompiled:n"
 assert_contains_string "build/config.txt" "-DTEST -O3 -Wall"
 
+# xmake f --debug=y
+xmake cu --debug=y
+xmake f --export=build/config.txt
+assert_contains_string "build/config.txt" "package.precompiled:n"
+assert_contains_string "build/config.txt" "-DTEST -O3 -Wall"
+assert_contains_string "build/config.txt" "debug = true"
+
 # xmake f -m coverage
 xmake cu -m coverage
 xmake f --export=build/config.txt

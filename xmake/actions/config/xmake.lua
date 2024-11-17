@@ -227,6 +227,7 @@ task("config")
                     {category = "Other Configuration"},
                     {nil, "debugger",   "kv", "auto"    , "Set debugger"},
                     {nil, "ccache",     "kv", true      , "Enable or disable the c/c++ compiler cache."},
+                    {nil, "debug",      "kv", false     , "Enable or disable to print debug information."},
                     {nil, "ccachedir",  "kv", nil       , "Set the ccache directory."},
                     {nil, "trybuild",   "kv", nil       , "Enable try-build mode and set the third-party buildsystem tool.",
                                                             "e.g.",
@@ -242,6 +243,3 @@ task("config")
                     {},
                     {category = "Project Configuration"},
                     _project_menu_options}}
-
-
-
