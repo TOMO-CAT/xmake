@@ -47,3 +47,18 @@ bash scripts/example.sh
 xmake cu -m coverage
 xmake cu --cxxflags="-DTEST -O3 -Wall"
 ```
+
+## 本地 local 无法复用 ccache 缓存
+
+假设我们通过 `set_sourcedir` 的方式构造本地 package，但是编译完后发现 cache 命中率为零。
+
+```lua
+package("my-package", function()
+    set_sourcedir("../my-package")
+    on_install(function(package)
+        import("package.tools.xmake").install(package)
+    end)
+end)
+```
+
+这是因为在编译命令中有大量相对于当前 `os.projectdir()` 的相对路径，导致编译的时候计算 cache-key 没对上。
