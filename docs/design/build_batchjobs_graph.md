@@ -4,7 +4,7 @@
 
 ### 1. build.fence
 
-对于 proto target / codgen target 而言，它们会通过代码生成 *.h 头文件，而依赖它们的 target 启动编译需要这些头文件。假设 target A 依赖一个 proto target B，那么我们会在 proto target B 上将 `build.fence` 设置为 true，从而令 target A 的 `before_build` job 等待 proto target B 的 `link` job 运行完后再执行。
+对于 proto target / codgen target 而言，它们会通过代码生成 *.h 头文件，而依赖它们的 target 启动编译需要这些头文件。假设 target A 依赖一个 proto target B，那么我们会在 proto target B 上将 `build.fence` 设置为 true，从而令 target A 的 `before_build` job 等待 proto target B 的 `after_build` job 运行完后再执行。
 
 ### 2. build.across_targets_in_parallel
 
