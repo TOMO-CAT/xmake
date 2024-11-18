@@ -307,7 +307,7 @@ function get_batchjobs(targetnames, group_pattern)
         _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(), target, all_target_jobs)
     end
 
-    -- make sure static/shared/binary target waits until all of it's direct and indirect
+    -- make sure static/shared/binary target's `build_root` job waits until all of it's direct and indirect
     -- dependent `afrer_build` tasks are compiled
     for _, target in ipairs(project.ordertargets()) do
         local target_kind = target:kind()

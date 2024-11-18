@@ -9,6 +9,10 @@
 * [#40](https://github.com/TOMO-CAT/xmake/issues/40): 增加 debug option 在一般情况下禁用一些调试信息的打印
 * [#43](https://github.com/TOMO-CAT/xmake/pull/15): 重构 build bacthjobs 的构建逻辑, 支持更灵活的依赖关系
 
+### Bugs 修复
+
+* [#30](https://github.com/TOMO-CAT/xmake/issues/30): 修复 protobuf rule 丢失导致未触发增量编译的问题
+
 ### v3.0.2
 
 ### 新特性
