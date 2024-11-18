@@ -346,7 +346,9 @@ function main(targetnames, group_pattern)
 
     -- build all jobs
     local batchjobs = get_batchjobs(targetnames, group_pattern)
-    io.writefile(path.join(config.debugdir(), "build-batchjobs.txt"), tostring(batchjobs))
+    if config.get("debug") then
+        io.writefile(path.join(config.debugdir(), "build-batchjobs.txt"), tostring(batchjobs))
+    end
     if batchjobs and batchjobs:size() > 0 then
         local curdir = os.curdir()
         runjobs("build", batchjobs, {on_exit = function (errors)
