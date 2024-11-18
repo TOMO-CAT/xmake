@@ -43,5 +43,5 @@ unset CC
 unset CXX
 unset LD
 
-
+export XMAKE_PROGRAM_DIR="${PWD}/xmake"
 xmake l -vD tests/run.lua "$@"
