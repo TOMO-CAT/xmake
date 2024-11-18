@@ -4,6 +4,8 @@ source "scripts/common.sh"
 
 original_dir=$(pwd)
 
+export XMAKE_PROGRAM_DIR="${PWD}/xmake"
+
 mapfile -t test_scripts < <(find example -type f -name "test.sh")
 
 for test_script in "${test_scripts[@]}"; do

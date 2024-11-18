@@ -16,10 +16,23 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
-
+xmake f --debug=y
 xmake -br
 
-diff build/.debug/build-batchjobs.txt expected-build-batchjobs.txt > /dev/null
+is_wsl() {
+    if grep -qEi "(Microsoft|WSL)" /proc/version; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+expected_output_file="non-wsl-expected-build-batchjobs.txt"
+if is_wsl; then
+  expected_output_file="expected-build-batchjobs.txt"
+fi
+
+diff build/.debug/build-batchjobs.txt "$expected_output_file" > /dev/null
 if [ $? -eq 0 ]; then
     info "The jobpool graph string is the same."
 else

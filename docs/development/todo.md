@@ -12,7 +12,7 @@
 
 一种考虑是对于 target B 增加一个 `after_build_file` job，然后让 target A 的 `before_build` job 依赖 target B 的 `after_build_file` job。
 
-## 优化一下 jobpool 的 __tostring() 方法
+## ✅ 优化一下 jobpool 的 __tostring() 方法
 
 当前打印出来的依赖树阅读起来还是比较费劲，争取打印成 json 格式。
 
@@ -48,7 +48,7 @@ xmake cu -m coverage
 xmake cu --cxxflags="-DTEST -O3 -Wall"
 ```
 
-## 本地 local 无法复用 ccache 缓存
+## 本地 local package 无法复用 ccache 缓存
 
 假设我们通过 `set_sourcedir` 的方式构造本地 package，但是编译完后发现 cache 命中率为零。
 

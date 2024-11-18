@@ -7,6 +7,7 @@
 * [#36](https://github.com/TOMO-CAT/xmake/issues/36): 内置 `config-update` plugin, 支持增量添加配置
 * [#38](https://github.com/TOMO-CAT/xmake/issues/38): 增强 `jobpool` tostring 方法输出的字符串可读性, 同时通过 orderkey 保证一致性
 * [#40](https://github.com/TOMO-CAT/xmake/issues/40): 增加 debug option 在一般情况下禁用一些调试信息的打印
+* [#43](https://github.com/TOMO-CAT/xmake/pull/15): 重构 build bacthjobs 的构建逻辑, 支持更灵活的依赖关系
 
 ### v3.0.2
 
