@@ -43,5 +43,16 @@ unset CC
 unset CXX
 unset LD
 
-export XMAKE_PROGRAM_DIR="${PWD}/xmake"
-xmake l -vD tests/run.lua "$@"
+path="$1"
+
+# Remove 'tests/' from the beginning of the path
+if [[ "$path" == tests/* ]]; then
+    path="${path#tests/}"
+fi
+
+# Remove '/test.lua' from the end of the path
+if [[ "$path" == */test.lua ]]; then
+    path="${path%/test.lua}"
+fi
+
+xmake l -vD tests/run.lua "$path"
