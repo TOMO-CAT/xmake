@@ -9,6 +9,7 @@
 * [#40](https://github.com/TOMO-CAT/xmake/issues/40): 增加 debug option 在一般情况下禁用一些调试信息的打印
 * [#43](https://github.com/TOMO-CAT/xmake/pull/15): 重构 build bacthjobs 的构建逻辑, 支持更灵活的依赖关系
 * [#49](https://github.com/TOMO-CAT/xmake/issues/49): 支持同时 debug 多个 xmake 实例
+* [#46](https://github.com/TOMO-CAT/xmake/issues/46): local package 用 package 的 buildir 以最大程度复用 ccache
 
 ### Bugs 修复
 

@@ -747,7 +747,9 @@ end
 function _instance:buildir()
     local buildir = self._BUILDIR
     if not buildir then
-        if self:is_local() then
+        if self:sourcedir() then
+            buildir = path.join(self:sourcedir(), "build")
+        elseif self:is_local() then
             local name = self:name():lower():gsub("::", "_")
             local rootdir = path.join(config.buildir({absolute = true}), ".packages", name:sub(1, 1):lower(), name, self:version_str())
             buildir = path.join(rootdir, "cache", "build_" .. self:buildhash():sub(1, 8))
