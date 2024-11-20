@@ -903,6 +903,7 @@ function _load_package(packagename, requireinfo, opt)
     end
 
     -- load base package
+    -- https://xmake.io/#/zh-cn/manual/package_dependencies?id=packageset_base
     if package and package:get("base") then
         _load_package_from_base(package, package:get("base", {
             name = requireinfo.reponame, locked_repo = locked_requireinfo and locked_requireinfo.repo}))
@@ -1352,4 +1353,3 @@ function load_packages(requires, opt)
     end
     return packages
 end
-

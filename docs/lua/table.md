@@ -37,3 +37,13 @@ print(table.orderkeys(data))
 --   "fig" 
 -- }
 ```
+
+## setmetatable
+
+### 1. `__index` 元方法
+
+`__index` 用于当访问表中不存在的键时被调用。
+
+### 2. `__newindex` 元方法
+
+`__newindex` 用于当对表中不存在的键赋值时被调用。

@@ -58,3 +58,33 @@ The information of target(main):
     linkflags (ld):
       -> -m64 -L/root/.xmake/packages/p/protobuf-cpp/3.19.4/e71494ae9d544ed7a5ad809df77e8cf2/lib -lprotobuf -lprotoc -lpthread
 ```
+
+## Environments
+
+```bash
+$ xmake show -l envs
+XMAKE_PROGRAM_DIR       Set the program scripts directory of xmake.
+                        /usr/local/share/xmake
+XMAKE_RCFILES           Set the runtime configuration files.
+                        
+XMAKE_RAMDIR            Set the ramdisk directory.
+                        <empty>
+XMAKE_PKG_INSTALLDIR    Set the install directory of packages.
+                        ~/.xmake/packages
+XMAKE_PKG_CACHEDIR      Set the cache directory of packages.
+                        ~/.xmake/cache
+XMAKE_ROOT              Allow xmake to run under root.
+                        y
+XMAKE_PROFILE           Start profiler, e.g. perf:call, perf:tag, trace, stuck.
+                        <empty>
+XMAKE_GLOBALDIR         Set the global config directory of xmake.
+                        /root/.xmake
+XMAKE_LOGFILE           Set the log output file path.
+                        <empty>
+XMAKE_CONFIGDIR         Set the local config directory of project.
+                        /root/zelos/xmake/.xmake/linux/x86_64
+XMAKE_TMPDIR            Set the temporary directory.
+                        /tmp/.xmake0/241120
+XMAKE_COLORTERM         Set the color terminal environment.
+                        truecolor
+```

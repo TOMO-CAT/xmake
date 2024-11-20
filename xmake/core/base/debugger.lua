@@ -22,8 +22,9 @@
 local debugger = {}
 
 -- load modules
-local os        = require("base/os")
-local path      = require("base/path")
+local utils    = require("base/utils")
+local os       = require("base/os")
+local path     = require("base/path")
 
 -- start emmylua debugger
 --
@@ -41,7 +42,17 @@ function debugger:_start_emmylua_debugger()
     if not debugger_inst then
         return false, "cannot get debugger module!"
     end
-    debugger_inst.tcpListen("127.0.0.1", 9966)
+
+    local listen_port = os.getenv("EMMYLUA_DEBUGGER_PORT")
+    if not listen_port or #listen_port == 0 then
+        listen_port = 9966
+    else
+        listen_port = listen_port + 1
+    end
+    os.setenv("EMMYLUA_DEBUGGER_PORT", tostring(listen_port))
+    utils.cprint("${bright blue}[improvement]${clear} Emmylua debugger listen on port [" .. listen_port .. "]")
+
+    debugger_inst.tcpListen("127.0.0.1", listen_port)
     debugger_inst.waitIDE()
     debugger_inst.breakHere()
     return true
