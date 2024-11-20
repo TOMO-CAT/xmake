@@ -70,7 +70,7 @@ function interpreter._traceback(errors)
             results = results .. string.format("    [C]: in function '%s'\n", info.name)
         elseif info.name then
             results = results ..
-            string.format("    [%s:%d]: in function '%s'\n", info.source, info.currentline, info.name)
+                string.format("    [%s:%d]: in function '%s'\n", info.source, info.currentline, info.name)
         elseif info.what == "main" then
             results = results .. string.format("    [%s:%d]: in main chunk\n", info.source, info.currentline)
             break
@@ -986,7 +986,7 @@ function interpreter:api_register_scope(...)
         if scope_info and table.is_dictionary(scope_info) then
             for name, values in pairs(scope_info) do
                 local apifunc = self:api_func("set_" .. name) or self:api_func("add_" .. name) or
-                self:api_func("on_" .. name) or self:api_func(name)
+                    self:api_func("on_" .. name) or self:api_func(name)
                 if apifunc then
                     apifunc(table.unpack(table.wrap(values)))
                 else
@@ -1007,7 +1007,10 @@ function interpreter:api_register_scope(...)
             --  end)
             --
         elseif scope_info and type(scope_info) == "function" then
-            -- configure scope info
+            -- register scope info for scope_kind (package, target, rule ...)
+            --
+            -- utils.cprint(string.format("${bright yellow}[warning]${clear} register srcipt [%s/%s] scope in [%s]",
+            --     scope_kind, scope_name, self:scriptdir()))
             scope_info()
 
             -- enter root scope
