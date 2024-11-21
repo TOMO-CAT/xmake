@@ -864,6 +864,13 @@ function os.execv(program, argv, opt)
         end
     end
 
+    local logfile
+    if opt.colored_output then
+        logfile = os.tmpfile()
+        opt.stdout = logfile
+        opt.stderr = logfile
+    end
+
     -- init open options
     local openopt = {
         envs = envs,
@@ -906,8 +913,22 @@ function os.execv(program, argv, opt)
         -- close process
         proc:close()
     else
+        if opt.colored_output then
+            os.rm(logfile)
+        end
         -- cannot execute process
         return nil, os.strerror()
+    end
+    if opt.colored_output then
+        local log_content = string.trim(io.readfile(logfile))
+        if log_content and #log_content > 0 then
+            if ok == 0 then
+                utils.cprint("${color.warning}%s${clear}", log_content)
+            else
+                utils.cprint("${color.error}%s${clear}", log_content)
+            end
+        end
+        os.rm(logfile)
     end
     return ok, errors
 end
@@ -1458,4 +1479,3 @@ end
 
 -- return module
 return os
-
