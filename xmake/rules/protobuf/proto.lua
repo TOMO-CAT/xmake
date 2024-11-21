@@ -376,6 +376,11 @@ function get_proto_dep_files(target, sourcefile_proto, proto_dep_files_cache, pr
             if proto_rootdir and os.exists(path.join(proto_rootdir, imported_file)) then
                 -- try to find the imported file from proto_rootdir first
                 local imported_file_path = path.join(proto_rootdir, imported_file)
+                if proto_rootdir == "." then
+                    -- beautify proto's imported-file path
+                    -- @see https://github.com/TOMO-CAT/xmake/issues/59
+                    imported_file_path = imported_file
+                end
                 table.insert(proto_dep_files_cache[sourcefile_proto], imported_file_path)
                 get_proto_dep_files(target, imported_file_path, proto_dep_files_cache, proto_includedirs, visited)
             else

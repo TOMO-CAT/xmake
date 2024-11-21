@@ -490,7 +490,7 @@ function _instance:_checktool(toolkind, toolpath)
     local description = self:_description(toolkind) or ("unknown toolkind " .. toolkind)
 
     -- trace
-    if option.get("verbose") then
+    if option.get("verbose") and option.get("diagnosis") then
         if program then
             utils.cprint("${dim}checking for %s (%s) ... ${color.success}%s", description, toolkind, path.filename(program))
         else
