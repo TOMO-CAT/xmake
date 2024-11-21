@@ -15,6 +15,7 @@
 ### Bugs 修复
 
 * [#30](https://github.com/TOMO-CAT/xmake/issues/30): 修复 protobuf rule 丢失导致未触发增量编译的问题
+* [#55](https://github.com/TOMO-CAT/xmake/issues/55): 修复 protobuf target objectfiles 列表顺序不一致导致的重复编译问题
 
 ### v3.0.2
 

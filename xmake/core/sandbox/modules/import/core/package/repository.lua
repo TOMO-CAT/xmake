@@ -136,7 +136,7 @@ function sandbox_core_package_repository.repositories(is_global)
                 end
             end
         end
-        if option.get("verbose") then
+        if option.get("verbose") and option.get("diagnosis") then
             utils.cprint("${bright blue}[improvement] ${clear}sorted build-artifacts urls:")
             utils.dump(artifacts_urls)
         end
@@ -168,7 +168,7 @@ function sandbox_core_package_repository.repositories(is_global)
                 end
             end
         end
-        if option.get("verbose") then
+        if option.get("verbose") and option.get("diagnosis") then
             utils.cprint("${bright blue}[improvement] ${clear}sorted xmake-repo urls:")
             utils.dump(mainurls)
         end

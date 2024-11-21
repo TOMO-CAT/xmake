@@ -197,6 +197,9 @@ function dump_stats()
             table.insert(sorted_file2compile_time, {key = key, value = value})
         end
         table.sort(sorted_file2compile_time, function(a, b) return a.value > b.value end)
+        if config.get("debug") then
+            io.save(path.join(config.debugdir(), "file-compile-time.txt"), sorted_file2compile_time)
+        end
         -- print top 3 files with longest compile time
         for i = 1, math.min(3, #sorted_file2compile_time) do
             print("%s: %0.3fs", sorted_file2compile_time[i].key, sorted_file2compile_time[i].value / 1000.0)

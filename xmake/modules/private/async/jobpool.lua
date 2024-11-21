@@ -184,7 +184,7 @@ function jobpool:remove(job)
                     -- the last element of the leafjobs with be executed first
                     if p.high_priority then
                         leafjobs:insert_last(p)
-                        if option.get("verbose") then
+                        if option.get("verbose") and option.get("diagnosis") then
                             cprint("${bright blue}[improvement]${clear} insert high priority parent job [" .. p.name .. "]")
                         end
                     else
@@ -262,7 +262,7 @@ function jobpool:_genleafjobs(job, leafjobs, refs)
         -- the last element of the leafjobs with be executed first
         if job.high_priority then
             leafjobs:insert_last(job)
-            if option.get("verbose") then
+            if option.get("verbose") and option.get("diagnosis") then
                 cprint("${bright blue}[improvement]${clear} insert high priority job [" .. job.name .. "]")
             end
         else
