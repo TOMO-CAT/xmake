@@ -11,6 +11,7 @@
 * [#49](https://github.com/TOMO-CAT/xmake/issues/49): 支持同时 debug 多个 xmake 实例
 * [#46](https://github.com/TOMO-CAT/xmake/issues/46): local package 用 package 的 buildir 以最大程度复用 ccache
 * [#48](https://github.com/TOMO-CAT/xmake/issues/48): 支持 execv 配置 `colored_output` 参数实现彩色化输出
+* [#50](https://github.com/TOMO-CAT/xmake/issues/50): 优化堆栈打印, 方便调试的时候通过 IDE 跳转
 
 ### Bugs 修复
 

@@ -66,16 +66,37 @@ function sandbox_try._traceback(errors)
             break
         end
 
+        local src_file = info.short_src
+        if info.short_src and info.short_src:startswith("...") then
+            if info.source and info.currentline then
+                -- extract the last 100 characters from the info.source
+                -- to avoid dealing with overly long strings
+                if #info.source <= 100 then
+                    src_file = info.source
+                else
+                    src_file = "..." ..  string.sub(info.source, #info.source - 99)
+                end
+            end
+        end
+
+        -- if the source file is from a specific file (indicated by "[@] [filename:line]")
+        -- @see https://github.com/TOMO-CAT/xmake/issues/50
+        if src_file:startswith("@") then
+            if not src_file:startswith("@programdir") and not src_file:startswith("@projectdir") then
+                src_file = string.format("@] [%s", string.sub(src_file, 2))
+            end
+        end
+
         -- function?
         if info.what == "C" then
             results = results .. string.format("    [C]: in function '%s'\n", info.name)
         elseif info.name then
-            results = results .. string.format("    [%s:%d]: in function '%s'\n", info.source, info.currentline, info.name)
+            results = results .. string.format("    [%s:%d]: in function '%s'\n", src_file, info.currentline, info.name)
         elseif info.what == "main" then
-            results = results .. string.format("    [%s:%d]: in main chunk\n", info.source, info.currentline)
+            results = results .. string.format("    [%s:%d]: in main chunk\n", src_file, info.currentline)
             break
         else
-            results = results .. string.format("    [%s:%d]:\n", info.source, info.currentline)
+            results = results .. string.format("    [%s:%d]:\n", src_file, info.currentline)
         end
         level = level + 1
     end
