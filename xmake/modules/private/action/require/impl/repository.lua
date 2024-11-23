@@ -152,7 +152,7 @@ end
 -- get package directory from repositories
 function packagedir(packagename, opt)
 
-    -- strip trailng ~tag, e.g. zlib~debug
+    -- strip tailing ~tag, e.g. zlib~debug
     opt = opt or {}
     packagename = packagename:lower()
     if packagename:find('~', 1, true) then
@@ -181,7 +181,9 @@ function packagedir(packagename, opt)
             foundir = _get_packagedir_from_locked_repo(packagename, locked_repo)
         end
 
-        -- find the package directory from repositories
+        -- find the package directory from add_repositories
+        --
+        -- search for packages in the order of repositories, meaning that local repositories will override global repositories.
         if not foundir then
             for _, repo in ipairs(repositories()) do
                 local dir = path.join(repo:directory(), "packages", packagename:sub(1, 1), packagename)
@@ -241,4 +243,3 @@ function searchdirs(name)
     end
     return packageinfos
 end
-
