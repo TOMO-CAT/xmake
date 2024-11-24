@@ -48,7 +48,7 @@ xmake cu -m coverage
 xmake cu --cxxflags="-DTEST -O3 -Wall"
 ```
 
-## 本地 local package 无法复用 ccache 缓存
+## ✅ local package 无法复用 ccache 缓存
 
 假设我们通过 `set_sourcedir` 的方式构造本地 package，但是编译完后发现 cache 命中率为零。
 
@@ -62,3 +62,15 @@ end)
 ```
 
 这是因为在编译命令中有大量相对于当前 `os.projectdir()` 的相对路径，导致编译的时候计算 cache-key 没对上。
+
+我们将 local package 的 builddir 迁移到它项目里的 `build` 目录下，这样就可以保证相对路径统一从而可以复用缓存。
+
+## 清理 xmake 多余的逻辑
+
+* 清理标记 deprecated 的历史版本包袱
+* 清理 windows 的逻辑
+
+## 重写 core 下的 C++ 代码，力求精简
+
+* 考虑先替换掉 Lua 成 5.4.6
+* 需要足够多的测试用例

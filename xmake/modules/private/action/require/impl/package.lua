@@ -160,7 +160,7 @@ function _load_require(require_str, requires_extra, parentinfo)
         wprint("add_requires(%s): vs_runtime is deprecated, please use runtimes!", require_str)
     end
 
-    -- require packge in the current host platform
+    -- require package in the current host platform
     if require_extra.host then
         if is_subhost(core_package.targetplat()) and os.subarch() == core_package.targetarch() then
             -- we need to pass plat/arch to avoid repeat installation
@@ -856,6 +856,9 @@ end
 function _load_package(packagename, requireinfo, opt)
 
     -- check circular dependency
+    --
+    -- if package A requires package B, and package B requires package A, it is a circular dependency
+    -- requirepath would be A.B.A.B
     opt = opt or {}
     if opt.requirepath then
         local splitinfo = opt.requirepath:split(".", {plain = true})
@@ -866,7 +869,7 @@ function _load_package(packagename, requireinfo, opt)
         end
     end
 
-    -- strip trailng ~tag, e.g. zlib~debug
+    -- strip tailing ~tag, e.g. zlib~debug
     local displayname
     if packagename:find('~', 1, true) then
         displayname = packagename

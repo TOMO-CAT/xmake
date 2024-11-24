@@ -1030,7 +1030,7 @@ function interpreter:api_register_scope(...)
         elseif scope_info and type(scope_info) == "function" then
             -- register scope info for scope_kind (package, target, rule ...)
             --
-            -- utils.cprint(string.format("${bright yellow}[warning]${clear} register srcipt [%s/%s] scope in [%s]",
+            -- utils.cprint(string.format("${bright yellow}[warning]${clear} register script [%s/%s] scope in [%s]",
             --     scope_kind, scope_name, self:scriptdir()))
             scope_info()
 
