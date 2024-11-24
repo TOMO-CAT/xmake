@@ -143,7 +143,7 @@ function main(packages)
     end
 
     -- register references for `xrepo clean`
-    -- and we use glocal memory cache to save all packages from multiple arch/mode, e.g. `xmake project -m "debug,release" -k vsxmake`
+    -- and we use global memory cache to save all packages from multiple arch/mode, e.g. `xmake project -m "debug,release" -k vsxmake`
     -- @see https://github.com/xmake-io/xmake/issues/3679
     local references = _g.references or {}
     _g.references = references
@@ -158,4 +158,3 @@ function main(packages)
     localcache.set("references", "packages", table.unique(references))
     localcache.save("references")
 end
-

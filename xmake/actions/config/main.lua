@@ -220,7 +220,7 @@ function main(opt)
         return remote_build_action()
     end
 
-    -- avoid running this task repeatly
+    -- avoid running this task repeatedly
     opt = opt or {}
     if _g.configured then return end
     _g.configured = true
@@ -288,6 +288,9 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
     end
 
     -- override configuration from the options or cache
+    --
+    -- retrieve the history option from `.xmake/${plat}/${arch}/cache/config` and then
+    -- determine if the option has been changed
     local options_history = {}
     if not option.get("clean") and not autogen then
         options_history = localcache.get("config", "options") or {}
