@@ -518,6 +518,12 @@ function project._load_requires()
             instance = project_package.load_withinfo(name, info)
         end
 
+        -- mkdir a softlink to installdir to avoid using absolute paths with the __FILE__ macro
+        -- @see https://github.com/TOMO-CAT/xmake/issues/62
+        -- local pkg_softlink_installdir = path.join(config.buildir(), ".packages", name)
+        -- os.rm(pkg_softlink_installdir)
+        -- os.ln(instance:installdir(), pkg_softlink_installdir)
+
         -- add require info
         requires[alias or packagename] = instance
     end

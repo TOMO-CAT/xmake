@@ -4,6 +4,8 @@ set -e
 
 # bash scripts/busted.sh
 
+export XMAKE_PROGRAM_DIR="${PWD}/xmake"
+
 export XMAKE_ROOT="y"
 
 # export CPP="clang++ -E"
@@ -53,6 +55,11 @@ fi
 # Remove '/test.lua' from the end of the path
 if [[ "$path" == */test.lua ]]; then
     path="${path%/test.lua}"
+fi
+
+# Remove '/xmake.lua' from the end of the path
+if [[ "$path" == */xmake.lua ]]; then
+    path="${path%/xmake.lua}"
 fi
 
 xmake l -vD tests/run.lua "$path"
