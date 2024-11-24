@@ -340,7 +340,7 @@ function _instance:__tostring()
     return "<package: " .. self:name() .. ">"
 end
 
--- get cache
+-- get cache from `.xmake/${plat}/${arch}/cache/package`
 function package._cache()
     return localcache.cache("package")
 end
