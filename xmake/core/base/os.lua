@@ -617,6 +617,15 @@ function os.rmdir(dir)
     -- remove directories
     local dirs = table.wrap(os._match_wildcard_pathes(dir))
     for _, _dir in ipairs(dirs) do
+
+        -- FIXME:
+        -- delete softlink, or it will delete the target file when we delete the softlink
+        for _, d in ipairs(os.dirs(path.join(_dir, "**"))) do
+            if os.islink(d) then
+                os.rm(d)
+            end
+        end
+
         if not os._rmdir(_dir) then
             return false, string.format("cannot remove directory: %s, %s", _dir, os.strerror())
         end

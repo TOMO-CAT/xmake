@@ -21,6 +21,7 @@ matching_lines=$(echo "$xmake_build_output" | grep "cache compiling.release")
 
 if [[ -z "$matching_lines" ]]; then
     error "No lines found containing 'cache compiling.release'."
+    echo "${xmake_build_output}"
     exit 1
 fi
 
