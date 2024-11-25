@@ -35,6 +35,7 @@
         "linkdirs",
         "Luajit",
         "luarocks",
+        "msys",
         "mtimes",
         "nocolor",
         "nodeps",
