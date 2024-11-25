@@ -12,6 +12,8 @@
 * [#46](https://github.com/TOMO-CAT/xmake/issues/46): local package 用 package 的 buildir 以最大程度复用 ccache
 * [#48](https://github.com/TOMO-CAT/xmake/issues/48): 支持 execv 配置 `colored_output` 参数实现彩色化输出
 * [#50](https://github.com/TOMO-CAT/xmake/issues/50): 优化堆栈打印, 方便调试的时候通过 IDE 跳转
+* [#62](https://github.com/TOMO-CAT/xmake/issues/62): 在 build 文件夹中创建 `require:installdir()` 软链
+* [#67](https://github.com/TOMO-CAT/xmake/issues/67): 在流水线中禁用 `plugin.compile_commands.autoupdate` rule
 
 ### Bugs 修复
 

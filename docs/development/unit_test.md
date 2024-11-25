@@ -54,3 +54,19 @@ bash scripts/example.sh
 ```bash
 bash scripts/busted.sh
 ```
+
+## 运行单侧
+
+```bash
+# 运行所有测试
+bash scripts/test.sh
+
+# 运行某个单测 (以下写法都等价)
+bash scripts/test.sh tests/projects/c++/shared_library/xmake.lua
+bash scripts/test.sh projects/c++/shared_library/xmake.lua
+bash scripts/test.sh projects/c++/shared_library/test.lua
+bash scripts/test.sh projects/c++/shared_library
+
+# 调试单个单测
+xmake lua -v -D tests/runner.lua tests/projects/c++/shared_library
+```

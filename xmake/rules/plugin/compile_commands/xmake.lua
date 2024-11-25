@@ -36,9 +36,10 @@ rule("plugin.compile_commands.autoupdate")
         import("core.project.depend")
         import("core.project.project")
         import("core.base.task")
+        import("utils.ci.is_running", {alias = "ci_is_running"})
 
         -- we should not update it if we are installing xmake package
-        if os.getenv("XMAKE_IN_XREPO") then
+        if os.getenv("XMAKE_IN_XREPO") or ci_is_running() then
             return
         end
 

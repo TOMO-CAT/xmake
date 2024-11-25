@@ -28,9 +28,6 @@ is_wsl() {
 }
 
 expected_output_file="expected-build-batchjobs.txt"
-if is_wsl; then
-  expected_output_file="wsl-expected-build-batchjobs.txt"
-fi
 
 diff build/.debug/build-batchjobs.txt "$expected_output_file" > /dev/null
 if [ $? -eq 0 ]; then

@@ -884,6 +884,7 @@ function _load_package(packagename, requireinfo, opt)
     requireinfo.requirekey = requirekey
 
     -- get locked requireinfo
+    -- https://xmake.io/#/package/remote_package?id=dependent-package-lock-and-upgrade
     local locked_requireinfo = get_locked_requireinfo(requireinfo)
 
     -- load package from project first
