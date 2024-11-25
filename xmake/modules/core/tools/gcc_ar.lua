@@ -43,11 +43,7 @@ function _get_gcc_liblto_plugin_path(self, program)
         if outdata then
             local lto_plugindir = path.directory(outdata:trim())
             if os.isdir(lto_plugindir) then
-                if is_host("windows") then
-                    plugin_path = find_file("liblto_plugin*.dll", lto_plugindir)
-                else
-                    plugin_path = find_file("liblto_plugin.so", lto_plugindir)
-                end
+                plugin_path = find_file("liblto_plugin.so", lto_plugindir)
             end
         end
         plugin_path = plugin_path or false
@@ -66,24 +62,7 @@ function link(self, objectfiles, targetkind, targetfile, flags, opt)
 
     -- generate link arguments
     local program, argv = linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
-    if is_host("windows") and argv and #argv > 0 and argv[1]:startswith("@") then
-        -- gcc-ar.exe does not support `@file`, so we need use ar.exe to instead of it.
-        -- @see https://github.com/xmake-io/xmake/issues/5051
-        --
-        -- but ar.exe does not support lto, we need also add lto_plugin-0.dll path in `@file` for gcc
-        -- @see https://github.com/xmake-io/xmake/issues/5015
-        --
-        -- gcc-ar is the wrapper of `ar --plugin lto_plugin.so ...`
-        --
-        local _, rawargv = linkargv(self, objectfiles, targetkind, targetfile, flags, table.join(opt, {rawargs = true}))
-        local plugin_path = _get_gcc_liblto_plugin_path(self, program)
-        if plugin_path then
-            argv = winos.cmdargv(table.join({"--plugin", plugin_path}, rawargv), {escape = true})
-        end
-        program = _replace_gcc_ar(program, "ar")
-    end
 
     -- link it
     os.runv(program, argv, {envs = self:runenvs(), shell = opt.shell})
 end
-

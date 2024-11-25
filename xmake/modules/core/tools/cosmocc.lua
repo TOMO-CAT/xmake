@@ -33,27 +33,11 @@ end
 -- link the target file
 function link(self, objectfiles, targetkind, targetfile, flags, opt)
     opt = opt or {}
-    if is_host("windows") then
-        targetfile = targetfile:gsub("\\", "/")
-        local objectfiles_new = {}
-        for idx, objectfile in ipairs(objectfiles) do
-            objectfiles_new[idx] = objectfiles[idx]:gsub("\\", "/")
-        end
-        objectfiles = objectfiles_new
-    end
     return _super.link(self, objectfiles, targetkind, targetfile, flags, table.join(opt, {shell = true}))
 end
 
 -- compile the source file
 function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
     opt = opt or {}
-    if is_host("windows") then
-        sourcefile = sourcefile:gsub("\\", "/")
-        objectfile = objectfile:gsub("\\", "/")
-        local target = opt.target
-        if target then
-            target:set("policy", "build.ccache", false)
-        end
-    end
     return _super.compile(self, sourcefile, objectfile, dependinfo, flags, table.join(opt, {shell = true}))
 end

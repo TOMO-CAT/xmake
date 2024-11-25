@@ -39,16 +39,6 @@ function main(opt)
 
     -- init options
     opt = opt or {}
-    if is_host("windows") then
-        opt.paths = opt.paths or {}
-        local keys = winos.registry_keys("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\3.*\\InstallPath")
-        for _, key in ipairs(keys) do
-            local value = try {function () return winos.registry_query(key .. ";ExecutablePath") end}
-            if value and os.isfile(value) then
-                table.insert(opt.paths, value)
-            end
-        end
-    end
 
     -- find program
     local program = find_program(opt.program or "python3", opt)

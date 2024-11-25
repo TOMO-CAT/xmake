@@ -40,17 +40,6 @@ end
 
 -- translate paths
 function _translate_paths(paths)
-    if is_host("windows") then
-        if type(paths) == "string" then
-            return (paths:gsub("\\", "/"))
-        elseif type(paths) == "table" then
-            local result = {}
-            for _, p in ipairs(paths) do
-                table.insert(result, (p:gsub("\\", "/")))
-            end
-            return result
-        end
-    end
     return paths
 end
 

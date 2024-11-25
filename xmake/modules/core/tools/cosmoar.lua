@@ -26,13 +26,5 @@ end
 
 function link(self, objectfiles, targetkind, targetfile, flags, opt)
     opt = opt or {}
-    if is_host("windows") then
-        targetfile = targetfile:gsub("\\", "/")
-        local objectfiles_new = {}
-        for idx, objectfile in ipairs(objectfiles) do
-            objectfiles_new[idx] = objectfiles[idx]:gsub("\\", "/")
-        end
-        objectfiles = objectfiles_new
-    end
     return _super.link(self, objectfiles, targetkind, targetfile, flags, table.join(opt, {shell = true}))
 end

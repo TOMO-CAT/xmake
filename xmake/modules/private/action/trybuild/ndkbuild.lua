@@ -61,9 +61,6 @@ function build()
         table.insert(argv, "V=1")
     end
     local ndkbuild = path.join(ndk, "ndk-build")
-    if is_host("windows") then
-        ndkbuild = ndkbuild .. ".cmd"
-    end
     os.vexecv(ndkbuild, argv, {envs = {NDK_ROOT = ndk}})
     cprint("${color.success}build ok!")
 end

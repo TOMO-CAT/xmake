@@ -122,11 +122,7 @@ end
 
 -- make the link flag
 function nf_link(self, lib)
-    if self:is_plat("windows") then
-        return "-L" .. lib .. ".lib"
-    else
-        return "-L-l" .. lib
-    end
+    return "-L-l" .. lib
 end
 
 -- make the syslink flag
@@ -136,11 +132,7 @@ end
 
 -- make the linkdir flag
 function nf_linkdir(self, dir)
-    if self:is_plat("windows") then
-        return {"-L-libpath:" .. dir}
-    else
-        return {"-L-L" .. dir}
-    end
+    return {"-L-L" .. dir}
 end
 
 -- make the framework flag
@@ -185,9 +177,6 @@ function linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
 
     -- init arguments
     local argv = table.join(flags, flags_extra, "-of" .. targetfile, objectfiles)
-    if is_host("windows") and not opt.rawargs then
-        argv = winos.cmdargv(argv, {escape = true})
-    end
     return self:program(), argv
 end
 
