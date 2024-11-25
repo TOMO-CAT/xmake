@@ -14,6 +14,7 @@
 * [#50](https://github.com/TOMO-CAT/xmake/issues/50): 优化堆栈打印, 方便调试的时候通过 IDE 跳转
 * [#62](https://github.com/TOMO-CAT/xmake/issues/62): 在 build 文件夹中创建 `require:installdir()` 软链
 * [#67](https://github.com/TOMO-CAT/xmake/issues/67): 在流水线中禁用 `plugin.compile_commands.autoupdate` rule
+* [#68](https://github.com/TOMO-CAT/xmake/issues/68): 在流水线中启用 build-cache
 
 ### Bugs 修复
 

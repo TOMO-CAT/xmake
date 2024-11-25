@@ -65,8 +65,7 @@ function is_enabled(target)
                 result = policy
             end
         end
-        -- disable ccache on ci
-        if result == nil and ci_is_running() then
+        if result == nil then
             result = false
         end
         -- disable ccache for msvc, because cl.exe preprocessor is too slower
