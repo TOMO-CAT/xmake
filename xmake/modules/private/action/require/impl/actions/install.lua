@@ -280,18 +280,6 @@ function _enter_workdir(package)
         oldir = os.cd(workdir)
     end
 
-    -- we need to copy source codes to the working directory with short path on windows
-    --
-    -- Because the target name and source file path of this project are too long,
-    -- it's absolute path exceeds the windows path length limit.
-    --
-    if is_host("windows") and package:policy("platform.longpaths") then
-        local sourcedir_tmp = os.tmpdir() .. ".dir"
-        os.tryrm(sourcedir_tmp)
-        os.cp(os.curdir(), sourcedir_tmp)
-        os.cd(sourcedir_tmp)
-    end
-
     return oldir
 end
 

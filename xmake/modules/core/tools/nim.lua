@@ -104,43 +104,17 @@ end
 
 -- make the link flag
 function nf_link(self, lib)
-    if self:is_plat("windows") then
-        return "--passL:" .. lib .. ".lib"
-    else
-        return "--passL:-l" .. lib
-    end
+    return "--passL:-l" .. lib
 end
 
 -- make the linkdir flag
 function nf_linkdir(self, dir)
-    if self:is_plat("windows") then
-        return {"--passL:-libpath:" .. path.translate(dir)}
-    else
-        return {"--passL:-L" .. path.translate(dir)}
-    end
+    return {"--passL:-L" .. path.translate(dir)}
 end
 
 -- make the build arguments list
 function buildargv(self, sourcefiles, targetkind, targetfile, flags)
     local flags_extra = {}
-    if targetkind ~= "static" and self:is_plat("windows") then
-        -- fix link flags for windows
-        -- @see https://github.com/nim-lang/Nim/issues/19033
-        local flags_new = {}
-        local flags_link = {}
-        for _, flag in ipairs(flags) do
-            if flag:find("passL:", 1, true) then
-                table.insert(flags_link, flag)
-            else
-                table.insert(flags_new, flag)
-            end
-        end
-        if #flags_link > 0 then
-            table.insert(flags_new, "--passL:-link")
-            table.join2(flags_new, flags_link)
-        end
-        flags = flags_new
-    end
     return self:program(), table.join("c", flags, flags_extra, "-o:" .. targetfile, sourcefiles)
 end
 
@@ -150,5 +124,3 @@ function build(self, sourcefiles, targetkind, targetfile, flags)
     local program, argv = buildargv(self, sourcefiles, targetkind, targetfile, flags)
     os.runv(program, argv, {envs = self:runenvs()})
 end
-
-

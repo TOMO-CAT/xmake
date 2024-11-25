@@ -40,9 +40,6 @@ function linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
     assert(targetkind == "static")
     opt = opt or {}
     local argv = table.join(flags, targetfile, objectfiles)
-    if is_host("windows") and not opt.rawargs then
-        argv = winos.cmdargv(argv, {escape = true})
-    end
     return self:program(), argv
 end
 
@@ -54,4 +51,3 @@ function link(self, objectfiles, targetkind, targetfile, flags)
     os.tryrm(targetfile)
     os.runv(linkargv(self, objectfiles, targetkind, targetfile, flags))
 end
-

@@ -226,12 +226,8 @@ function _archive_using_tar(archivefile, inputfiles, extension, opt)
     local compress = false
     local archivefile_tar
     if extension ~= ".tar" then
-        if is_host("windows") then
-            return false
-        else
-            compress = true
-            archivefile_tar = path.join(path.directory(archivefile), path.basename(archivefile))
-        end
+        compress = true
+        archivefile_tar = path.join(path.directory(archivefile), path.basename(archivefile))
     end
 
     -- init argv

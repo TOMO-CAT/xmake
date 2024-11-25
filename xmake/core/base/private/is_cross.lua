@@ -25,21 +25,7 @@ local os = require("base/os")
 function is_cross(plat, arch)
     plat = plat or os.subhost()
     arch = arch or os.subarch()
-    if os.host() == "windows" then
-        local host_arch = os.arch()
-        if plat == "windows" then
-            -- maybe cross-compilation for arm64 on x86/x64
-            if (host_arch == "x86" or host_arch == "x64") and arch == "arm64" then
-                return true
-            -- maybe cross-compilation for x86/64 on arm64
-            elseif host_arch == "arm64" and arch ~= "arm64" then
-                return true
-            end
-            return false
-        elseif plat == "mingw" then
-            return false
-        end
-    end
+
     if plat ~= os.host() and plat ~= os.subhost() then
         return true
     end

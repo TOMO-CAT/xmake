@@ -74,30 +74,11 @@ end
 
 -- translate paths
 function _translate_paths(paths)
-    if is_host("windows") then
-        if type(paths) == "string" then
-            return (paths:gsub("\\", "/"))
-        elseif type(paths) == "table" then
-            local result = {}
-            for _, p in ipairs(paths) do
-                table.insert(result, (p:gsub("\\", "/")))
-            end
-            return result
-        end
-    end
     return paths
 end
 
 -- translate bin path
 function _translate_bin_path(bin_path)
-    if is_host("windows") and bin_path then
-        bin_path = bin_path:gsub("\\", "/")
-        if not bin_path:find(string.ipattern("%.exe$")) and
-           not bin_path:find(string.ipattern("%.cmd$")) and
-           not bin_path:find(string.ipattern("%.bat$")) then
-            bin_path = bin_path .. ".exe"
-        end
-    end
     return bin_path
 end
 

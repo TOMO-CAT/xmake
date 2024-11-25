@@ -25,9 +25,6 @@ import("lib.detect.find_tool")
 
 -- translate bin path
 function _translate_bin_path(bin_path)
-    if is_host("windows") and bin_path then
-        return bin_path:gsub("\\", "/") .. ".exe"
-    end
     return bin_path
 end
 

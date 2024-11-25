@@ -33,8 +33,6 @@ function _find_hdkdir(sdkdir)
         if not sdkdir then
             if is_host("macosx") then
                 sdkdir = find_directory("native", "~/Library/Huawei/Sdk/*/*")
-            elseif is_host("windows") then
-                sdkdir = find_directory("native", "~/Huawei/Sdk/*/*")
             end
         end
     end

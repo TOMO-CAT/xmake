@@ -164,9 +164,5 @@ end
 
 -- find intel c/c++ environment
 function main(opt)
-    if is_host("windows") then
-        return _find_intel_on_windows(opt)
-    else
-        return _find_intel_on_linux(opt)
-    end
+    return _find_intel_on_linux(opt)
 end

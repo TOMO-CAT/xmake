@@ -69,9 +69,6 @@ end
 function linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
     opt = opt or {}
     local argv = table.join("-o", targetfile, objectfiles, flags)
-    if is_host("windows") and not opt.rawargs then
-        argv = winos.cmdargv(argv, {escape = true})
-    end
     return self:program(), argv
 end
 
@@ -80,4 +77,3 @@ function link(self, objectfiles, targetkind, targetfile, flags)
     os.mkdir(path.directory(targetfile))
     os.runv(linkargv(self, objectfiles, targetkind, targetfile, flags))
 end
-

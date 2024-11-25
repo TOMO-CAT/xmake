@@ -45,22 +45,6 @@ function _extract_using_tar(archivefile, outputdir, extension, opt)
 
     -- init argv
     local argv = {}
-    if is_host("windows") then
-        -- force "x:\\xx" as local file
-        local force_local = _g.force_local
-        if force_local == nil then
-            force_local = try {function ()
-                local result = os.iorunv(program, {"--help"})
-                if result and result:find("--force-local", 1, true) then
-                    return true
-                end
-            end}
-            _g.force_local = force_local or false
-        end
-        if force_local then
-            table.insert(argv, "--force-local")
-        end
-    end
     table.insert(argv, "-xf")
     table.insert(argv, archivefile)
 
@@ -84,11 +68,7 @@ function _extract_using_tar(archivefile, outputdir, extension, opt)
     end
 
     -- extract it
-    if is_host("windows") then
-        os.vrunv(program, argv, {curdir = outputdir})
-    else
-        os.vrunv(program, argv)
-    end
+    os.vrunv(program, argv)
     return true
 end
 

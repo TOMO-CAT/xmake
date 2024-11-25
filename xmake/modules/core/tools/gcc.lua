@@ -561,9 +561,6 @@ function linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
     -- init arguments
     opt = opt or {}
     local argv = table.join("-o", targetfile, objectfiles, flags, flags_extra)
-    if is_host("windows") and not opt.rawargs then
-        argv = winos.cmdargv(argv, {escape = true})
-    end
     return self:program(), argv
 end
 
@@ -739,9 +736,6 @@ function _preprocess(program, argv, opt)
 
     -- do preprocess
     local cppinfo = try {function ()
-        if is_host("windows") then
-            cppflags = winos.cmdargv(cppflags, {escape = true})
-        end
         local outdata, errdata = os.iorunv(program, cppflags, opt)
         return {outdata = outdata, errdata = errdata,
                 sourcefile = sourcefile, objectfile = objectfile, cppfile = cppfile, cppflags = flags}
@@ -758,9 +752,6 @@ end
 -- compile preprocessed file
 function _compile_preprocessed_file(program, cppinfo, opt)
     local argv = table.join(cppinfo.cppflags, "-o", cppinfo.objectfile, cppinfo.cppfile)
-    if is_host("windows") then
-        argv = winos.cmdargv(argv, {escape = true})
-    end
     local outdata, errdata = os.iorunv(program, argv, opt)
     -- we need to get warning information from output
     cppinfo.outdata = outdata
@@ -773,9 +764,6 @@ function _compile(self, sourcefile, objectfile, compflags, opt)
     local program, argv = compargv(self, sourcefile, objectfile, compflags, opt)
     local function _compile_fallback()
         local runargv = argv
-        if is_host("windows") then
-            runargv = winos.cmdargv(argv, {escape = true})
-        end
         return os.iorunv(program, runargv, {envs = self:runenvs(), shell = opt.shell})
     end
     local cppinfo

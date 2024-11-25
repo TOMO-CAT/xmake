@@ -117,15 +117,6 @@ function _get_buildenvs()
                     envs.LD = path.join(path.directory(ld), is_host("windows") and "ld" or "i686-w64-mingw32-ld")
                 end
             end
-            if is_host("windows") then
-                envs.CC       = _translate_windows_bin_path(envs.CC)
-                envs.AS       = _translate_windows_bin_path(envs.AS)
-                envs.AR       = _translate_windows_bin_path(envs.AR)
-                envs.LD       = _translate_windows_bin_path(envs.LD)
-                envs.LDSHARED = _translate_windows_bin_path(envs.LDSHARED)
-                envs.CPP      = _translate_windows_bin_path(envs.CPP)
-                envs.RANLIB   = _translate_windows_bin_path(envs.RANLIB)
-            end
         elseif is_plat("cross") or (ar and ar:find("ar")) then
             -- only for cross-toolchain
             envs.CXX = _get_buildenv("cxx")
