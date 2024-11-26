@@ -133,7 +133,6 @@ end
 -- @see https://github.com/xmake-io/xmake/issues/3106
 function _instance:installdir()
     return self:get("installdir")
-        or self:get("__installdir") -- deprecated
 end
 
 -- get library files

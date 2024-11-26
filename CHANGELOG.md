@@ -15,6 +15,7 @@
 * [#62](https://github.com/TOMO-CAT/xmake/issues/62): 在 build 文件夹中创建 `require:installdir()` 软链
 * [#67](https://github.com/TOMO-CAT/xmake/issues/67): 在流水线中禁用 `plugin.compile_commands.autoupdate` rule
 * [#68](https://github.com/TOMO-CAT/xmake/issues/68): 在流水线中启用 build-cache
+* [#71](https://github.com/TOMO-CAT/xmake/issues/71): 默认开启 `run.autobuild` policy, 提高 xmake run 的用户体验
 
 ### Bugs 修复
 
