@@ -2017,6 +2017,33 @@ function _instance:fetch(opt)
         end
     end
 
+    -- use softlink installdir?
+    -- https://github.com/TOMO-CAT/xmake/issues/62
+    local function _transform_softlink_installdir(paths, installdir, softlink_installdir)
+        if not paths then
+            return
+        end
+        for i, path in ipairs(paths) do
+            if path:startswith(installdir) then
+                paths[i] = path:replace(installdir, softlink_installdir, {plain = true})
+            end
+        end
+    end
+
+    -- using a relative path with a softlink will definitely cause errors when we're not in os.projectdir,
+    -- therefore, we need to exclude scenarios like package:on_test() with opt.softlink_installdir
+    if opt.softlink_installdir ~= false then
+        if not self:is_local() and fetchinfo and not os.getenv("XMAKE_IN_XREPO") then
+            local installdir = self:installdir()
+            if installdir and project and project.required_package(self:name()) then
+                local softlink_installdir = path.join(config.buildir(), ".pkg", self:name())
+                _transform_softlink_installdir(fetchinfo.includedirs, installdir, softlink_installdir)
+                _transform_softlink_installdir(fetchinfo.sysincludedirs, installdir, softlink_installdir)
+                _transform_softlink_installdir(fetchinfo.linkdirs, installdir, softlink_installdir)
+            end
+        end
+    end
+
     -- save to cache
     self._FETCHINFO = fetchinfo
 
