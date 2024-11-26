@@ -99,7 +99,7 @@ function policy.policies()
             -- Enable ui access for windows UAC
             ["windows.manifest.uac.ui"]           = {description = "Enable windows manifest UAC.", type = "boolean"},
             -- Automatically build before running
-            ["run.autobuild"]                     = {description = "Automatically build before running.", type = "boolean"},
+            ["run.autobuild"]                     = {description = "Automatically build before running.", default = true, type = "boolean"},
             -- Enable install rpath
             ["install.rpath"]                     = {description = "Enable install rpath.", default = true, type = "boolean"},
             -- Preprocessor configuration for ccache/distcc, we can disable linemarkers to speed up preprocess
