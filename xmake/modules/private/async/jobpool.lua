@@ -82,6 +82,13 @@ function jobpool:add(job, rootjob)
     rootjob._deps = rootjob._deps or hashset.new()
     rootjob._deps:insert(job)
 
+    -- -- store all direct dependencies
+    -- self._direct_dependencies = self._direct_dependencies or {}
+    -- self._direct_dependencies[rootjob] = self._direct_dependencies[rootjob] or {}
+    -- table.insert(self._direct_dependencies[rootjob], job)
+
+
+
     -- attach parents node
     local parents = job._parents
     if not parents then
@@ -320,15 +327,87 @@ function jobpool:_gentree2(tree, job, refs)
     end
 end
 
+function jobpool:prune_redundant_edges()
+
+    local visited = {}
+    local job_set = {}
+    local function dfs(node, ancestors)
+        if visited[node] then
+            return
+        end
+
+        table.insert(job_set, node)
+        -- node._parents = node._parents or {}
+        node._ancestors = node._ancestors or {}
+        -- table.insert(node._parents, parent)
+        table.join2(node._ancestors, ancestors)
+        local deps = node._deps
+        if deps then
+            for _, dep in deps:keys() do
+                print("local process " .. dep.name)
+                dfs(dep, table.join(node._parents, node._ancestors))
+            end
+        end
+        visited[node] = true
+    end
+
+    dfs(self._rootjob, {})
+    print("done")
+    print("job set number: " .. #job_set)
+    table.unique(job_set)
+    print("job set number: " .. #job_set)
+
+    for _, job in ipairs(job_set) do
+        local direct_parents = table.unique(job._parents)
+        local indirect_parents = table.unique(job._ancestors)
+        for _, direct_p in ipairs(direct_parents) do
+            if table.contains(indirect_parents, direct_p) then
+                for idx, dep in ipairs(direct_p._deps) do
+                    if dep == job then
+                        table.remove(direct_p._deps, idx)
+                    end
+                end
+                for idx, parent in ipairs(job._parents) do
+                    if parent == direct_p then
+                        table.remove(job._parents, idx)
+                        print("delete " .. parent.name)
+                    end
+                end
+                print(format("redudant edges [%s -> %s]", direct_p, job))
+            end
+        end
+    end
+end
+
 -- tostring
 function jobpool:__tostring()
+    local build_time = os.mclock()
+
+    self:prune_redundant_edges(job_set)
+    build_time = os.mclock() - build_time
+    print(format("prune redundant edges cost %ss", build_time / 1000))
+
+
+
+    local job = self:getfree()
+    for _, parents in ipairs(table.unique(job._parents)) do
+        print(parents.name)
+    end
+    for _, ancestor in ipairs(table.unique(job._parents)) do
+        print(ancestor.name)
+    end
+    print(job.name)
+
+    -- raise("fck")
+
     local refs = {}
 
     -- return string.serialize(self:_gentree(self:rootjob(), refs), {indent = 2, orderkeys = true})
 
     local jobpool_tree = {}
     self:_gentree2(jobpool_tree, self:rootjob(), refs)
-    return string.serialize(jobpool_tree, {indent = 2, orderkeys = true})
+    -- print(#self._direct_dependencies)
+    return import("core.base.json").encode(jobpool_tree)
 end
 
 -- new a jobpool

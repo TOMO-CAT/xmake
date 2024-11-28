@@ -349,7 +349,11 @@ function main(targetnames, group_pattern)
     end
 
     -- build all jobs
+    local build_time = os.mclock()
     local batchjobs = get_batchjobs(targetnames, group_pattern)
+    build_time = os.mclock() - build_time
+    print(format("construct batchjobs graph cost %ss", build_time / 1000))
+
     if config.get("debug") then
         io.writefile(path.join(config.debugdir(), "build-batchjobs.txt"), tostring(batchjobs))
     end
