@@ -328,27 +328,24 @@ function jobpool:_gentree2(tree, job, refs)
 end
 
 function jobpool:prune_redundant_edges()
-
-    local visited = {}
     local job_set = {}
     local function dfs(node, ancestors)
-        if visited[node] then
+        print("visit " .. node.name)
+        if node.finish == true then
             return
         end
 
         table.insert(job_set, node)
-        -- node._parents = node._parents or {}
         node._ancestors = node._ancestors or {}
-        -- table.insert(node._parents, parent)
         table.join2(node._ancestors, ancestors)
         local deps = node._deps
         if deps then
             for _, dep in deps:keys() do
-                print("local process " .. dep.name)
                 dfs(dep, table.join(node._parents, node._ancestors))
             end
         end
-        visited[node] = true
+        node.finish = true
+        print(node.name .. "finish")
     end
 
     dfs(self._rootjob, {})
@@ -357,26 +354,24 @@ function jobpool:prune_redundant_edges()
     table.unique(job_set)
     print("job set number: " .. #job_set)
 
+    cut_edge_count = 0
     for _, job in ipairs(job_set) do
         local direct_parents = table.unique(job._parents)
         local indirect_parents = table.unique(job._ancestors)
         for _, direct_p in ipairs(direct_parents) do
             if table.contains(indirect_parents, direct_p) then
-                for idx, dep in ipairs(direct_p._deps) do
-                    if dep == job then
-                        table.remove(direct_p._deps, idx)
-                    end
-                end
+                cut_edge_count = cut_edge_count + 1
+                direct_p._deps:remove(job)
                 for idx, parent in ipairs(job._parents) do
                     if parent == direct_p then
                         table.remove(job._parents, idx)
-                        print("delete " .. parent.name)
                     end
                 end
-                print(format("redudant edges [%s -> %s]", direct_p, job))
+                print(format("redudant edges [%s -> %s]", direct_p.name, job.name))
             end
         end
     end
+    print(format("cut edges=%d",cut_edge_count))
 end
 
 -- tostring
@@ -386,19 +381,6 @@ function jobpool:__tostring()
     self:prune_redundant_edges(job_set)
     build_time = os.mclock() - build_time
     print(format("prune redundant edges cost %ss", build_time / 1000))
-
-
-
-    local job = self:getfree()
-    for _, parents in ipairs(table.unique(job._parents)) do
-        print(parents.name)
-    end
-    for _, ancestor in ipairs(table.unique(job._parents)) do
-        print(ancestor.name)
-    end
-    print(job.name)
-
-    -- raise("fck")
 
     local refs = {}
 
