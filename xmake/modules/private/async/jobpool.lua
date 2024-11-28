@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        jobpool.lua
 --
-
 -- imports
 import("core.base.object")
 import("core.base.list")
@@ -28,19 +27,15 @@ import("core.base.option")
 local jobpool = jobpool or object {_init = {"_size", "_rootjob", "_leafjobs"}}
 
 -- the job status
-local JOB_STATUS_FREE     = 1
-local JOB_STATUS_PENDING  = 2
+local JOB_STATUS_FREE = 1
+local JOB_STATUS_PENDING = 2
 local JOB_STATUS_FINISHED = 3
 
 -- get jobs size
-function jobpool:size()
-    return self._size
-end
+function jobpool:size() return self._size end
 
 -- get root job
-function jobpool:rootjob()
-    return self._rootjob
-end
+function jobpool:rootjob() return self._rootjob end
 
 -- new run job
 --
@@ -52,7 +47,12 @@ end
 --
 function jobpool:newjob(name, run, opt)
     opt = opt or {}
-    return {name = name, run = run, distcc = opt.distcc, status = JOB_STATUS_FREE}
+    return {
+        name = name,
+        run = run,
+        distcc = opt.distcc,
+        status = JOB_STATUS_FREE
+    }
 end
 
 -- add run job to the given job node
@@ -67,7 +67,13 @@ end
 --
 function jobpool:addjob(name, run, opt)
     opt = opt or {}
-    return self:add({name = name, run = run, distcc = opt.distcc, status = JOB_STATUS_FREE, high_priority = opt.high_priority}, opt.rootjob)
+    return self:add({
+        name = name,
+        run = run,
+        distcc = opt.distcc,
+        status = JOB_STATUS_FREE,
+        high_priority = opt.high_priority
+    }, opt.rootjob)
 end
 
 -- add job to the given job node
@@ -104,9 +110,7 @@ end
 
 -- get a free job from the leaf jobs
 function jobpool:getfree()
-    if self:size() == 0 then
-        return
-    end
+    if self:size() == 0 then return end
 
     -- get a free job from the leaf jobs
     local leafjobs = self:_getleafjobs()
@@ -140,9 +144,7 @@ function jobpool:getfree()
         -- not found? if remove group and referenced node exist,
         -- we try to remove them and find the next free job again
         if #removed_jobs > 0 then
-            for _, job in ipairs(removed_jobs) do
-                self:remove(job)
-            end
+            for _, job in ipairs(removed_jobs) do self:remove(job) end
             for job in leafjobs:ritems() do
                 if self:_isfree(job) then
                     local nextfree = leafjobs:prev(job)
@@ -169,11 +171,12 @@ function jobpool:remove(job)
         leafjobs:remove(job)
 
         -- get parents node
-        local parents = assert(job._parents, "invalid job without parents node!")
+        local parents =
+            assert(job._parents, "invalid job without parents node!")
 
         -- update all parents nodes
         for _, p in ipairs(parents) do
-            -- we need to avoid adding it to leafjobs repeatly, it will cause dead-loop when poping group job
+            -- we need to avoid adding it to leafjobs repeatedly, it will cause dead-loop when poping group job
             -- @see https://github.com/xmake-io/xmake/issues/2740
             if not p._leaf then
                 p._deps:remove(job)
@@ -185,7 +188,9 @@ function jobpool:remove(job)
                     if p.high_priority then
                         leafjobs:insert_last(p)
                         if option.get("verbose") and option.get("diagnosis") then
-                            cprint("${bright blue}[improvement]${clear} insert high priority parent job [" .. p.name .. "]")
+                            cprint(
+                                "${bright blue}[improvement]${clear} insert high priority parent job [" ..
+                                    p.name .. "]")
                         end
                     else
                         leafjobs:insert_first(p)
@@ -263,7 +268,9 @@ function jobpool:_genleafjobs(job, leafjobs, refs)
         if job.high_priority then
             leafjobs:insert_last(job)
             if option.get("verbose") and option.get("diagnosis") then
-                cprint("${bright blue}[improvement]${clear} insert high priority job [" .. job.name .. "]")
+                cprint(
+                    "${bright blue}[improvement]${clear} insert high priority job [" ..
+                        job.name .. "]")
             end
         else
             leafjobs:insert_first(job)
@@ -279,7 +286,8 @@ function jobpool:_gentree(job, refs)
         for _, dep in deps:keys() do
             local depkey = tostring(dep)
             if refs[depkey] then
-                local depname = dep.group and ("group(" .. dep.name .. ")") or dep.name
+                local depname = dep.group and ("group(" .. dep.name .. ")") or
+                                    dep.name
                 table.insert(tree, "ref(" .. depname .. ")")
             else
                 refs[depkey] = true
@@ -320,18 +328,57 @@ function jobpool:_gentree2(tree, job, refs)
     end
 end
 
+function jobpool:prune_redundant_edges()
+    local visited = {}
+    local function dfs(node, ancestors)
+        if visited[node] then return end
+
+        node._ancestors = node._ancestors or {} -- node._ancestors are the indirect-parents of NODE
+        table.join2(node._ancestors, ancestors)
+        local deps = node._deps
+        if deps then
+            for _, dep in deps:keys() do
+                dfs(dep, table.join(node._parents, node._ancestors))
+            end
+        end
+        visited[node] = true
+    end
+
+    dfs(self._rootjob, {})
+
+    local cut_edge_count = 0
+    local job_count = 0
+    for job, _ in pairs(visited) do
+        job_count = job_count + 1
+        job._parents = table.unique(job._parents)
+        job._ancestors = table.unique(job._ancestors)
+        for _, direct_parent in ipairs(job._parents) do
+            if table.contains(job._ancestors, direct_parent) then
+                direct_parent._deps:remove(job)
+                for parent_idx, parent in ipairs(job._parents) do
+                    if parent == direct_parent then
+                        table.remove(job._parents, parent_idx)
+                        cut_edge_count = cut_edge_count + 1
+                    end
+                end
+            end
+        end
+    end
+    if option.get("verbose") or option.get("diagnosis") then
+        utils.cprint("${bright blue}[improvement]${clear} cut [" ..
+                         tostring(cut_edge_count) .. "] redundant edges for [" ..
+                         #table.keys(visited) .. "] jobs")
+    end
+end
+
 -- tostring
 function jobpool:__tostring()
     local refs = {}
-
     -- return string.serialize(self:_gentree(self:rootjob(), refs), {indent = 2, orderkeys = true})
-
     local jobpool_tree = {}
     self:_gentree2(jobpool_tree, self:rootjob(), refs)
     return string.serialize(jobpool_tree, {indent = 2, orderkeys = true})
 end
 
 -- new a jobpool
-function new()
-    return jobpool {0, {name = "root"}, nil}
-end
+function new() return jobpool {0, {name = "root"}, nil} end
