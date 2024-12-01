@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        build.lua
 --
-
 -- imports
 import("core.base.option")
 import("core.project.config")
@@ -46,27 +45,38 @@ function _add_batchjobs_builtin(batchjobs, rootjob, target)
         local script = r:script("build")
         if script then
             if r:extraconf("build", "batch") then
-                job, job_leaf = assert(script(target, batchjobs, {rootjob = job or rootjob}), "rule(%s):on_build(): no returned job!", r:name())
+                job, job_leaf = assert(script(target, batchjobs,
+                                              {rootjob = job or rootjob}),
+                                       "rule(%s):on_build(): no returned job!",
+                                       r:name())
             else
-                job = batchjobs:addjob("rule/" .. r:name() .. "/build", function (index, total, opt)
+                job = batchjobs:addjob("rule/" .. r:name() .. "/build",
+                                       function(index, total, opt)
                     script(target, {progress = opt.progress})
                 end, {rootjob = job or rootjob})
             end
         else
             local buildcmd = r:script("buildcmd")
             if buildcmd then
-                job = batchjobs:addjob("rule/" .. r:name() .. "/build", function (index, total, opt)
+                job = batchjobs:addjob("rule/" .. r:name() .. "/build",
+                                       function(index, total, opt)
                     local batchcmds_ = batchcmds.new({target = target})
                     buildcmd(target, batchcmds_, {progress = opt.progress})
-                    batchcmds_:runcmds({changed = target:is_rebuilt(), dryrun = option.get("dry-run")})
+                    batchcmds_:runcmds({
+                        changed = target:is_rebuilt(),
+                        dryrun = option.get("dry-run")
+                    })
                 end, {rootjob = job or rootjob})
             end
         end
     end
 
     -- uses the builtin target script
-    if not job and (target:is_static() or target:is_binary() or target:is_shared() or target:is_object() or target:is_moduleonly()) then
-        job, job_leaf = import("kinds." .. target:kind(), {anonymous = true})(batchjobs, rootjob, target)
+    if not job and
+        (target:is_static() or target:is_binary() or target:is_shared() or
+            target:is_object() or target:is_moduleonly()) then
+        job, job_leaf = import("kinds." .. target:kind(), {anonymous = true})(
+                            batchjobs, rootjob, target)
     end
     job = job or rootjob
     return job, job_leaf or job
@@ -90,7 +100,9 @@ function _add_batchjobs(batchjobs, rootjob, target)
         --         end, {rootjob = opt.rootjob})
         --     end, {batch = true})
         --
-        job, job_leaf = assert(script(target, batchjobs, {rootjob = rootjob}), "target(%s):on_build(): no returned job!", target:name())
+        job, job_leaf = assert(script(target, batchjobs, {rootjob = rootjob}),
+                               "target(%s):on_build(): no returned job!",
+                               target:name())
     else
         -- do custom script directly
         -- e.g.
@@ -100,7 +112,8 @@ function _add_batchjobs(batchjobs, rootjob, target)
         --         print("build it")
         --     end)
         --
-        job = batchjobs:addjob(target:name() .. "/build", function (index, total, opt)
+        job = batchjobs:addjob(target:name() .. "/build",
+                               function(index, total, opt)
             script(target, {progress = opt.progress})
         end, {rootjob = rootjob})
     end
@@ -111,21 +124,18 @@ end
 function _add_batchjobs_for_target(batchjobs, rootjob, target)
 
     -- has been disabled?
-    if not target:is_enabled() then
-        return
-    end
+    if not target:is_enabled() then return end
 
     -- add after_build job for target
     local pkgenvs = _g.pkgenvs or {}
     _g.pkgenvs = pkgenvs
-    local job_build_after = batchjobs:addjob(target:name() .. "/after_build", function (index, total, opt)
+    local job_build_after = batchjobs:addjob(target:name() .. "/after_build",
+                                             function(index, total, opt)
 
         -- do after_build
         local progress = opt.progress
         local after_build = target:script("build_after")
-        if after_build then
-            after_build(target, {progress = progress})
-        end
+        if after_build then after_build(target, {progress = progress}) end
         for _, r in ipairs(target:orderules()) do
             local after_build = r:script("build_after")
             if after_build then
@@ -135,7 +145,10 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
                 if after_buildcmd then
                     local batchcmds_ = batchcmds.new({target = target})
                     after_buildcmd(target, batchcmds_, {progress = progress})
-                    batchcmds_:runcmds({changed = target:is_rebuilt(), dryrun = option.get("dry-run")})
+                    batchcmds_:runcmds({
+                        changed = target:is_rebuilt(),
+                        dryrun = option.get("dry-run")
+                    })
                 end
             end
         end
@@ -152,13 +165,18 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
             os.setenvs(newenvs)
         end
 
-    end, {rootjob = rootjob, high_priority = target:policy("build.high_priority")})
+    end, {
+        rootjob = rootjob,
+        high_priority = target:policy("build.high_priority")
+    })
 
     -- add batch jobs for target, @note only on_build script support batch jobs
-    local job_build, job_build_leaf = _add_batchjobs(batchjobs, job_build_after, target)
+    local job_build, job_build_leaf = _add_batchjobs(batchjobs, job_build_after,
+                                                     target)
 
     -- add before_build job for target
-    local job_build_before = batchjobs:addjob(target:name() .. "/before_build", function (index, total, opt)
+    local job_build_before = batchjobs:addjob(target:name() .. "/before_build",
+                                              function(index, total, opt)
 
         -- enter package environments
         -- https://github.com/xmake-io/xmake/issues/4033
@@ -186,9 +204,7 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
         -- we cannot add batchjobs for this rule scripts, @see https://github.com/xmake-io/xmake/issues/2684
         local progress = opt.progress
         local before_build = target:script("build_before")
-        if before_build then
-            before_build(target, {progress = progress})
-        end
+        if before_build then before_build(target, {progress = progress}) end
         for _, r in ipairs(target:orderules()) do
             local before_build = r:script("build_before")
             if before_build then
@@ -198,21 +214,29 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
                 if before_buildcmd then
                     local batchcmds_ = batchcmds.new({target = target})
                     before_buildcmd(target, batchcmds_, {progress = progress})
-                    batchcmds_:runcmds({changed = target:is_rebuilt(), dryrun = option.get("dry-run")})
+                    batchcmds_:runcmds({
+                        changed = target:is_rebuilt(),
+                        dryrun = option.get("dry-run")
+                    })
                 end
             end
         end
-    end, {rootjob = job_build_leaf, high_priority = target:policy("build.high_priority")})
+    end, {
+        rootjob = job_build_leaf,
+        high_priority = target:policy("build.high_priority")
+    })
     return job_build_before, job_build, job_build_after
 end
 
 -- add batch jobs for the given target and deps
-function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, all_target_jobs)
-    local targetjob_ref = all_target_jobs.after_build[target:name()]  -- store targets that has been processed
+function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target,
+                                            all_target_jobs)
+    local targetjob_ref = all_target_jobs.after_build[target:name()] -- store targets that has been processed
     if targetjob_ref then
         batchjobs:add(targetjob_ref, rootjob)
     else
-        local job_build_before, job_build, job_build_after = _add_batchjobs_for_target(batchjobs, rootjob, target)
+        local job_build_before, job_build, job_build_after =
+            _add_batchjobs_for_target(batchjobs, rootjob, target)
         if job_build_before and job_build and job_build_after then
             all_target_jobs.build_root[target:name()] = job_build
             all_target_jobs.after_build[target:name()] = job_build_after
@@ -228,7 +252,8 @@ function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target, all_targ
                     -- fully parallel compilation for object target and it's deps, make it easy to set `build.high_priority`
                     targetjob = rootjob
                 end
-                _add_batchjobs_for_target_and_deps(batchjobs, targetjob, dep, all_target_jobs)
+                _add_batchjobs_for_target_and_deps(batchjobs, targetjob, dep,
+                                                   all_target_jobs)
             end
         end
     end
@@ -236,16 +261,16 @@ end
 
 -- add batch jobs for non-object target to make sure it's build job will wait for all it's direct
 -- and indirect deps' `after_build` jobs are compiled
-function _add_batchjobs_for_non_object_target(batchjobs, target, root_job, build_after_jobs, visited_deps)
-    if visited_deps[target] then
-        return
-    end
+function _add_batchjobs_for_non_object_target(batchjobs, target, root_job,
+                                              build_after_jobs, visited_deps)
+    if visited_deps[target] then return end
     visited_deps[target] = true
     for _, dep in ipairs(target:orderdeps()) do
         local dep_job_after = build_after_jobs[dep:name()]
         if dep_job_after then
             batchjobs:add(dep_job_after, root_job)
-            _add_batchjobs_for_non_object_target(batchjobs, dep, root_job, build_after_jobs, visited_deps)
+            _add_batchjobs_for_non_object_target(batchjobs, dep, root_job,
+                                                 build_after_jobs, visited_deps)
         end
     end
 end
@@ -276,7 +301,9 @@ function get_batchjobs(targetnames, group_pattern)
         for _, target in ipairs(project.ordertargets()) do
             if target:is_enabled() then
                 local group = target:get("group")
-                if (target:is_default() and not group_pattern) or option.get("all") or (group_pattern and group and group:match(group_pattern)) then
+                if (target:is_default() and not group_pattern) or
+                    option.get("all") or
+                    (group_pattern and group and group:match(group_pattern)) then
                     for _, depname in ipairs(target:get("deps")) do
                         depset:insert(depname)
                     end
@@ -296,27 +323,32 @@ function get_batchjobs(targetnames, group_pattern)
 
     -- contains serveral tables, each table's key is target_name and the value is a job function
     local all_target_jobs = {
-        after_build = {},   -- each target's `after_build` job
-        before_build = {},  -- each target's `before_build` job
-        build_root = {}     -- each target's build-root job, it may be `link` job in most cases
+        after_build = {}, -- each target's `after_build` job
+        before_build = {}, -- each target's `before_build` job
+        build_root = {} -- each target's build-root job, it may be `link` job in most cases
     }
 
     -- generate batch jobs for default or all targets
     local batchjobs = jobpool.new()
     for _, target in ipairs(targets_root) do
-        _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(), target, all_target_jobs)
+        _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(),
+                                           target, all_target_jobs)
     end
 
     -- make sure static/shared/binary target's `build_root` job waits until all of it's direct and indirect
     -- dependent `afrer_build` tasks are compiled
     for _, target in ipairs(project.ordertargets()) do
         local target_kind = target:kind()
-        local non_object_kind = target_kind == "static" or target_kind == "shared" or target_kind == "binary"
+        local non_object_kind = target_kind == "static" or target_kind ==
+                                    "shared" or target_kind == "binary"
         local visited_deps = {}
         if non_object_kind then
             local root_job = all_target_jobs.build_root[target:name()]
             if root_job then
-                _add_batchjobs_for_non_object_target(batchjobs, target, root_job, all_target_jobs.after_build, visited_deps)
+                _add_batchjobs_for_non_object_target(batchjobs, target,
+                                                     root_job,
+                                                     all_target_jobs.after_build,
+                                                     visited_deps)
             end
         end
     end
@@ -349,18 +381,50 @@ function main(targetnames, group_pattern)
     end
 
     -- build all jobs
+    local build_time = os.mclock()
     local batchjobs = get_batchjobs(targetnames, group_pattern)
+    build_time = os.mclock() - build_time
     if config.get("debug") then
-        io.writefile(path.join(config.debugdir(), "build-batchjobs.txt"), tostring(batchjobs))
+        io.writefile(path.join(config.debugdir(), "build-batchjobs.txt"),
+                     tostring(batchjobs))
     end
+    if option.get("verbose") or option.get("diagnosis") then
+        utils.cprint(
+            "${bright blue}[improvement]${clear} construct batchjobs graph cost [" ..
+                tostring(build_time / 1000) .. "s]")
+    end
+
+    -- prune redundant edges
+    build_time = os.mclock()
+    batchjobs:prune_redundant_edges()
+    build_time = os.mclock() - build_time
+    if option.get("verbose") or option.get("diagnosis") then
+        utils.cprint(
+            "${bright blue}[improvement]${clear} prune redundant edges cost [" ..
+                tostring(build_time / 1000) .. "s]")
+    end
+
+    -- run batchjobs graph
+    build_time = os.mclock()
     if batchjobs and batchjobs:size() > 0 then
         local curdir = os.curdir()
-        runjobs("build", batchjobs, {on_exit = function (errors)
-            import("utils.progress")
-            if errors and progress.showing_without_scroll() then
-                print("")
-            end
-        end, comax = option.get("jobs") or 1, curdir = curdir, distcc = distcc})
+        runjobs("build", batchjobs, {
+            on_exit = function(errors)
+                import("utils.progress")
+                if errors and progress.showing_without_scroll() then
+                    print("")
+                end
+            end,
+            comax = option.get("jobs") or 1,
+            curdir = curdir,
+            distcc = distcc
+        })
         os.cd(curdir)
+    end
+    build_time = os.mclock() - build_time
+    if option.get("verbose") or option.get("diagnosis") then
+        utils.cprint(
+            "${bright blue}[improvement]${clear} run batchjobs graph cost [" ..
+                tostring(build_time / 1000) .. "s]")
     end
 end
