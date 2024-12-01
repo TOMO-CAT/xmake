@@ -85,6 +85,8 @@ function _coroutine:thread()
 end
 
 -- get the coroutine status
+--
+-- running / suspended / normal / dead
 function _coroutine:status()
     return coroutine.status(self:thread())
 end
@@ -611,7 +613,6 @@ end
 
 -- begin coroutine group
 function scheduler:co_group_begin(name, scopefunc)
-
     -- enter groups
     self._CO_GROUPS = self._CO_GROUPS or {}
     self._CO_GROUPS_PENDING = self._CO_GROUPS_PENDING or {}

@@ -381,31 +381,31 @@ function main(targetnames, group_pattern)
     end
 
     -- build all jobs
-    local build_time = os.mclock()
+    local t_start = os.mclock()
     local batchjobs = get_batchjobs(targetnames, group_pattern)
-    build_time = os.mclock() - build_time
+    local t_cost = os.mclock() - t_start
+    if option.get("verbose") or option.get("diagnosis") then
+        utils.cprint(
+            "${bright blue}[improvement]${clear} construct batchjobs graph cost [" ..
+                tostring(t_cost / 1000) .. "s]")
+    end
     if config.get("debug") then
         io.writefile(path.join(config.debugdir(), "build-batchjobs.txt"),
                      tostring(batchjobs))
     end
-    if option.get("verbose") or option.get("diagnosis") then
-        utils.cprint(
-            "${bright blue}[improvement]${clear} construct batchjobs graph cost [" ..
-                tostring(build_time / 1000) .. "s]")
-    end
 
     -- prune redundant edges
-    build_time = os.mclock()
+    t_start = os.mclock()
     batchjobs:prune_redundant_edges()
-    build_time = os.mclock() - build_time
+    t_cost = os.mclock() - t_start
     if option.get("verbose") or option.get("diagnosis") then
         utils.cprint(
             "${bright blue}[improvement]${clear} prune redundant edges cost [" ..
-                tostring(build_time / 1000) .. "s]")
+                tostring(t_cost / 1000) .. "s]")
     end
 
     -- run batchjobs graph
-    build_time = os.mclock()
+    t_start = os.mclock()
     if batchjobs and batchjobs:size() > 0 then
         local curdir = os.curdir()
         runjobs("build", batchjobs, {
@@ -421,10 +421,10 @@ function main(targetnames, group_pattern)
         })
         os.cd(curdir)
     end
-    build_time = os.mclock() - build_time
+    t_cost = os.mclock() - t_start
     if option.get("verbose") or option.get("diagnosis") then
         utils.cprint(
             "${bright blue}[improvement]${clear} run batchjobs graph cost [" ..
-                tostring(build_time / 1000) .. "s]")
+                tostring(t_cost / 1000) .. "s]")
     end
 end
