@@ -16,7 +16,8 @@
 * [#67](https://github.com/TOMO-CAT/xmake/issues/67): 在流水线中禁用 `plugin.compile_commands.autoupdate` rule
 * [#68](https://github.com/TOMO-CAT/xmake/issues/68): 在流水线中启用 build-cache
 * [#71](https://github.com/TOMO-CAT/xmake/issues/71): 默认开启 `run.autobuild` policy, 提高 xmake run 的用户体验
-* [#77](https://github.com/TOMO-CAT/xmake/issues/77): 对依赖图 batchjobs 进行剪枝, 提高 dry-run 运行速度
+* [#77](https://github.com/TOMO-CAT/xmake/issues/77): 对依赖图 batchjobs 进行剪枝, 提高 dry-run 运行速度 (暂时禁用因为每次剪枝的数量都不确定)
+* [#75](https://github.com/TOMO-CAT/xmake/issues/75): 重构 runbatchjobs 方法, 优化 xmake dry-run 的运行速度
 
 ### Bugs 修复
 

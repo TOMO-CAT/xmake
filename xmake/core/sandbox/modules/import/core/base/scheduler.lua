@@ -113,6 +113,21 @@ function sandbox_core_base_scheduler.co_group_begin(name, scopefunc)
     end
 end
 
+-- enter coroutine group with the given name
+function sandbox_core_base_scheduler.enter_co_group(name)
+    return scheduler:enter_co_group(name)
+end
+
+-- leave coroutine group with the given name
+function sandbox_core_base_scheduler.leave_co_group(name)
+    return scheduler:leave_co_group(name)
+end
+
+-- add a coroutine to coroutine group with the given name
+function sandbox_core_base_scheduler.add_to_co_group(name, co)
+    return scheduler:add_to_co_group(name, co)
+end
+
 -- wait for finishing the given coroutine group
 function sandbox_core_base_scheduler.co_group_wait(name, opt)
     local ok, errors = scheduler:co_group_wait(name, opt)

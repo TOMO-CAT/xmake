@@ -348,8 +348,14 @@ function jobpool:prune_redundant_edges()
 
     local cut_edge_count = 0
     local job_count = 0
+    local group_count = 0
     for job, _ in pairs(visited) do
-        job_count = job_count + 1
+        if job.group then
+            group_count = group_count + 1
+        elseif job.name ~= "root" then
+            job_count = job_count + 1
+        end
+
         job._parents = table.unique(job._parents)
         job._ancestors = table.unique(job._ancestors)
         for _, direct_parent in ipairs(job._parents) do
@@ -367,7 +373,8 @@ function jobpool:prune_redundant_edges()
     if option.get("verbose") or option.get("diagnosis") then
         utils.cprint("${bright blue}[improvement]${clear} cut [" ..
                          tostring(cut_edge_count) .. "] redundant edges for [" ..
-                         #table.keys(visited) .. "] jobs")
+                         tostring(job_count) .. "] jobs and [" ..
+                         tostring(group_count) .. "] groups")
     end
 end
 
