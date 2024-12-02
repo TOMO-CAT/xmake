@@ -635,9 +635,36 @@ function scheduler:co_group_begin(name, scopefunc)
     return true
 end
 
+-- enter coroutine group, all coroutines in this group will be executed in parallel
+function scheduler:enter_co_group(name)
+    self._CO_GROUPS = self._CO_GROUPS or {}
+    if self._CO_GROUPS[name] then
+        return false, string.format("co_group(%s): already exists!", name)
+    end
+    self._CO_GROUPS[name] = self._CO_GROUPS[name] or {}
+    self._ENTER_CO_GROUP = true
+end
+
+-- leave a co-group
+function scheduler:leave_co_group(name)
+    -- make sure that we finish all jobs in this co-group
+    assert(self._CO_GROUPS[name] and #self._CO_GROUPS[name] == 0)
+    self._CO_GROUPS[name] = nil
+    self._ENTER_CO_GROUP = nil
+end
+
+-- add a coroutine to a co-group
+function scheduler:add_to_co_group(name, co)
+    assert(self._CO_GROUPS and self._CO_GROUPS[name])
+
+    -- -- FIXME: self._CO_GROUPS[name] may be nil in `co_group_wait` function
+    -- self._CO_GROUPS[name] = self._CO_GROUPS[name] or {}
+
+    table.insert(self._CO_GROUPS[name], co)
+end
+
 -- wait for finishing the given coroutine group
 function scheduler:co_group_wait(name, opt)
-
     -- get coroutine group
     local co_group = self:co_group(name)
     if not co_group or #co_group == 0 then
@@ -680,7 +707,9 @@ function scheduler:co_group_wait(name, opt)
     until count >= limit
 
     -- remove all dead coroutines in group
-    if limit == #co_group and count == limit then
+    --
+    -- we cannot delete `self._CO_GROUPS[name]` when we enter a co-group (self._ENTER_CO_GROUP == true)
+    if limit == #co_group and count == limit and not self._ENTER_CO_GROUP then
         self._CO_GROUPS[name] = nil
     else
         for i = #co_group, 1, -1 do
@@ -996,6 +1025,11 @@ end
 -- enable or disable to scheduler
 function scheduler:enable(enabled)
     self._ENABLED = enabled
+end
+
+-- is scheduler start?
+function scheduler:is_start()
+    return self._STARTED
 end
 
 -- stop the scheduler loop

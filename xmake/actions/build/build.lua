@@ -23,6 +23,7 @@ import("core.project.config")
 import("core.project.project")
 import("private.async.jobpool")
 import("async.runjobs")
+import("async.runbatchjobs")
 import("private.utils.batchcmds")
 import("core.base.hashset")
 import("private.service.remote_cache.client", {alias = "remote_cache_client"})
@@ -408,7 +409,7 @@ function main(targetnames, group_pattern)
     t_start = os.mclock()
     if batchjobs and batchjobs:size() > 0 then
         local curdir = os.curdir()
-        runjobs("build", batchjobs, {
+        runbatchjobs("build", batchjobs, {
             on_exit = function(errors)
                 import("utils.progress")
                 if errors and progress.showing_without_scroll() then
