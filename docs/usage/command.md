@@ -1,5 +1,13 @@
 # 命令
 
+## Create
+
+可以创建临时项目：
+
+```bash
+xmake create ${ProjectName}
+```
+
 ## Build
 
 ```bash
