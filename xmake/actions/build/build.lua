@@ -395,14 +395,14 @@ function main(targetnames, group_pattern)
     end
 
     -- prune redundant edges
-    t_start = os.mclock()
-    batchjobs:prune_redundant_edges()
-    t_cost = os.mclock() - t_start
-    if option.get("verbose") or option.get("diagnosis") then
-        utils.cprint(
-            "${bright blue}[improvement]${clear} prune redundant edges cost [" ..
-                tostring(t_cost / 1000) .. "s]")
-    end
+    -- t_start = os.mclock()
+    -- batchjobs:prune_redundant_edges()
+    -- t_cost = os.mclock() - t_start
+    -- if option.get("verbose") or option.get("diagnosis") then
+    --     utils.cprint(
+    --         "${bright blue}[improvement]${clear} prune redundant edges cost [" ..
+    --             tostring(t_cost / 1000) .. "s]")
+    -- end
 
     -- run batchjobs graph
     t_start = os.mclock()
