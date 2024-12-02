@@ -1,6 +1,7 @@
 {
     "editor.formatOnSave": false,
     "cSpell.words": [
+        "addenv",
         "archs",
         "armv",
         "asan",
@@ -11,6 +12,7 @@
         "buildenvs",
         "buildir",
         "ccache",
+        "CFLAGS",
         "cfuncs",
         "cjson",
         "comax",
@@ -71,6 +73,7 @@
         "parentpkgs",
         "pfiles",
         "plaindeps",
+        "programver",
         "projname",
         "protoc",
         "pwsh",
@@ -109,6 +112,8 @@
         "vsxmake",
         "vtansi",
         "wasi",
+        "Werror",
+        "Wextra",
         "wprint",
         "xmake",
         "xmakerc",

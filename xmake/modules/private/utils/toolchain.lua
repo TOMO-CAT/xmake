@@ -25,10 +25,6 @@ function is_compatible_with_host(name)
         if name:startswith("clang") or name:startswith("gcc") or name == "llvm" then
             return true
         end
-    elseif is_host("windows") then
-        if name == "msvc" or name == "llvm" or name == "clang-cl" then
-            return true
-        end
     end
 end
 
@@ -46,4 +42,3 @@ function get_vs_toolset_ver(vs_toolset)
     end
     return toolset_ver
 end
-

@@ -42,9 +42,6 @@ function main(opt)
 
     -- init the search directories
     local paths = {}
-    if is_host("windows") then
-        table.insert(paths, "$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\GitForWindows;InstallPath)\\usr\\bin")
-    end
     opt.paths = paths
 
     -- find program

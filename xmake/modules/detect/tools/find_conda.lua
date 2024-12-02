@@ -41,11 +41,7 @@ function main(opt)
     opt = opt or {}
 
     -- find program
-    if is_host("windows") then
-        opt.paths = {"$(env CONDA_BAT)",
-                     "$(env USERPROFILE)/miniconda3/condabin"}
-    end
-    local program = find_program(opt.program or (is_host("windows") and "conda.bat" or "conda"), opt)
+    local program = find_program(opt.program or "conda", opt)
 
     -- find program version
     local version = nil

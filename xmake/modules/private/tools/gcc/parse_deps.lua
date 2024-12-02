@@ -92,11 +92,6 @@ function main(depsdata, opt)
     local plain = {plain = true}
     line = line:replace("\\ ", space_placeholder, plain)
     for _, includefile in ipairs(line:split(' ', plain)) do -- it will trim all internal spaces without `{strict = true}`
-        -- some gcc toolchains will some invalid paths (e.g. `d\:\xxx`), we need to fix it
-        -- https://github.com/xmake-io/xmake/issues/1196
-        if is_host("windows") and includefile:match("^%w\\:") then
-            includefile = includefile:replace("\\:", ":", plain)
-        end
         if includefile:endswith(":") then -- ignore "xxx.o:" prefix
             block = block + 1
             if block > 1 then

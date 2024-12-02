@@ -32,7 +32,7 @@ function main(target, opt)
     local android_sdkdir = path.translate(assert(get_config("android_sdk"), "please run `xmake f --android_sdk=xxx` to set the android sdk directory!"))
 
     -- get adb
-    local adb = path.join(android_sdkdir, "platform-tools", "adb" .. (is_host("windows") and ".exe" or ""))
+    local adb = path.join(android_sdkdir, "platform-tools", "adb")
     if not os.isexec(adb) then
         adb = "adb"
     end

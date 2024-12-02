@@ -46,9 +46,6 @@ function main(opt)
     if bindir and os.isdir(bindir) then
         table.insert(paths, bindir)
     end
-    if is_host("windows") then
-        table.insert(paths, "$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\SDCC)\\bin")
-    end
     if #paths > 0 then
         opt.paths = paths
     end

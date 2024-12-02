@@ -93,28 +93,6 @@ function _load_ifxvars(ifxvars_bat, arch, opt)
     return variables
 end
 
--- find intel llvm fortran envirnoment on windows
-function _find_intel_on_windows(opt)
-    opt = opt or {}
-
-    -- find ifxvars_bat.bat
-    local paths = {"$(env ONEAPI_ROOT)"}
-    local ifxvars_bat = find_file("setvars.bat", paths)
-    if not ifxvars_bat then
-        paths = {}
-        local keys = winos.registry_keys("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Intel\\Compilers\\Fortran\\**")
-        for _, key in ipairs(keys) do
-            table.insert(paths, format("$(reg %s;ProductDir)", key))
-        end
-        ifxvars_bat = find_file("../../setvars.bat", paths)
-    end
-    if ifxvars_bat then
-        local ifxvars_x86 = _load_ifxvars(ifxvars_bat, "ia32", opt)
-        local ifxvars_x64 = _load_ifxvars(ifxvars_bat, "intel64", opt)
-        return {ifxvars_bat = ifxvars_bat, ifxvars = {x86 = ifxvars_x86, x64 = ifxvars_x64}}
-     end
-end
-
 -- find intel llvm fortran envirnoment on linux
 function _find_intel_on_linux(opt)
 
@@ -137,10 +115,5 @@ end
 
 -- find intel fortran environment
 function main(opt)
-    if is_host("windows") then
-        return _find_intel_on_windows(opt)
-    else
-        return _find_intel_on_linux(opt)
-    end
+    return _find_intel_on_linux(opt)
 end
-

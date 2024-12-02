@@ -62,9 +62,7 @@ function main(target, opt)
 
     -- get ndk host
     local ndk_host = os.host() .. "-" .. os.arch()
-    if is_host("windows") then
-        ndk_host = os.arch() == "x64" and "windows-x86_64" or "windows-x86"
-    elseif is_host("macosx") then
+    if is_host("macosx") then
         ndk_host = "darwin-x86_64"
     elseif is_host("linux") then
         ndk_host = "linux-x86_64"
@@ -235,4 +233,3 @@ function main(target, opt)
     dependinfo.files = {targetfile}
     depend.save(dependinfo, dependfile)
 end
-

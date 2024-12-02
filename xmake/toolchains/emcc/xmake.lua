@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,24 +17,22 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-toolchain("emcc")
+toolchain("emcc", function()
 
     set_homepage("http://emscripten.org")
     set_description("A toolchain for compiling to asm.js and WebAssembly")
 
     set_kind("standalone")
 
-    local suffix = is_host("windows") and ".bat" or ""
-    set_toolset("cc", "emcc" .. suffix)
-    set_toolset("cxx", "emcc" .. suffix, "em++" .. suffix)
-    set_toolset("ld", "em++" .. suffix, "emcc" .. suffix)
-    set_toolset("sh", "em++" .. suffix, "emcc" .. suffix)
-    set_toolset("ar", "emar" .. suffix)
-    set_toolset("as", "emcc" .. suffix)
-    set_toolset("ranlib", "emranlib" .. suffix)
+    set_toolset("cc", "emcc")
+    set_toolset("cxx", "emcc", "em++")
+    set_toolset("ld", "em++", "emcc")
+    set_toolset("sh", "em++", "emcc")
+    set_toolset("ar", "emar")
+    set_toolset("as", "emcc")
+    set_toolset("ranlib", "emranlib")
 
-    on_check(function (toolchain)
+    on_check(function(toolchain)
         import("lib.detect.find_tool")
         import("detect.sdks.find_emsdk")
         for _, package in ipairs(toolchain:packages()) do
@@ -52,7 +50,7 @@ toolchain("emcc")
         return find_tool("emcc")
     end)
 
-    on_load(function (toolchain)
+    on_load(function(toolchain)
         toolchain:add("cxflags", "")
         toolchain:add("asflags", "")
         toolchain:add("ldflags", "")
@@ -60,7 +58,9 @@ toolchain("emcc")
         for _, package in ipairs(toolchain:packages()) do
             local envs = package:get("envs")
             if envs then
-                for _, name in ipairs({"EMSDK", "EMSDK_NODE", "EMSDK_PYTHON", "JAVA_HOME"}) do
+                for _, name in ipairs({
+                    "EMSDK", "EMSDK_NODE", "EMSDK_PYTHON", "JAVA_HOME"
+                }) do
                     local values = envs[name]
                     if values then
                         toolchain:add("runenvs", name, table.unwrap(values))
@@ -69,4 +69,4 @@ toolchain("emcc")
             end
         end
     end)
-
+end)

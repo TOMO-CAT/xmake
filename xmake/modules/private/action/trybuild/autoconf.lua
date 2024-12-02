@@ -27,9 +27,6 @@ import("lib.detect.find_tool")
 
 -- translate path
 function _translate_path(p)
-    if p and is_host("windows") and is_plat("mingw") then
-        p = p:gsub("\\", "/")
-    end
     return p
 end
 

@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        find_iverilog.lua
 --
-
 -- imports
 import("lib.detect.find_program")
 import("lib.detect.find_programver")
@@ -35,19 +34,10 @@ import("lib.detect.find_programver")
 -- @endcode
 --
 function main(opt)
-
     -- init options
-    opt         = opt or {}
-    opt.check   = opt.check or "-V"
+    opt = opt or {}
+    opt.check = opt.check or "-V"
     opt.command = opt.command or "-V"
-
-    -- find it from some logical drives paths
-    if is_host("windows") then
-        opt.paths = opt.paths or {}
-        for _, logical_drive in ipairs(winos.logical_drives()) do
-            table.insert(opt.paths, path.join(logical_drive, "iverilog", "bin"))
-        end
-    end
 
     -- find program
     local program = find_program(opt.program or "iverilog", opt)
@@ -59,4 +49,3 @@ function main(opt)
     end
     return program, version
 end
-

@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
 -- define rule: *.mc
-rule("wdk.mc")
+rule("wdk.mc", function()
 
     -- add rule: wdk environment
     add_deps("wdk.env")
@@ -28,7 +27,7 @@ rule("wdk.mc")
     set_extensions(".mc")
 
     -- before load
-    on_load(function (target)
+    on_load(function(target)
 
         -- imports
         import("core.project.config")
@@ -40,9 +39,9 @@ rule("wdk.mc")
         local wdk = target:data("wdk")
 
         -- get mc
-        local mc = path.join(wdk.bindir, arch, is_host("windows") and "mc.exe" or "mc")
+        local mc = path.join(wdk.bindir, arch, "mc")
         if not os.isexec(mc) then
-            mc = path.join(wdk.bindir, wdk.sdkver, arch, is_host("windows") and "mc.exe" or "mc")
+            mc = path.join(wdk.bindir, wdk.sdkver, arch, "mc")
         end
         assert(os.isexec(mc), "mc not found!")
 
@@ -51,7 +50,7 @@ rule("wdk.mc")
     end)
 
     -- before build file
-    before_build_file(function (target, sourcefile, opt)
+    before_build_file(function(target, sourcefile, opt)
 
         -- imports
         import("core.base.option")
@@ -92,13 +91,18 @@ rule("wdk.mc")
 
         -- need build this object?
         local dependfile = target:dependfile(headerfile)
-        local dependinfo = target:is_rebuilt() and {} or (depend.load(dependfile) or {})
-        if not depend.is_changed(dependinfo, {lastmtime = os.mtime(headerfile), values = args}) then
+        local dependinfo = target:is_rebuilt() and {} or
+                               (depend.load(dependfile) or {})
+        if not depend.is_changed(dependinfo, {
+            lastmtime = os.mtime(headerfile),
+            values = args
+        }) then
             return
         end
 
         -- trace progress info
-        progress.show(opt.progress, "${color.build.object}compiling.wdk.mc %s", sourcefile)
+        progress.show(opt.progress, "${color.build.object}compiling.wdk.mc %s",
+                      sourcefile)
 
         -- do message compile
         if not os.isdir(outputdir) then
@@ -107,8 +111,8 @@ rule("wdk.mc")
         os.vrunv(mc, args)
 
         -- update files and values to the dependent file
-        dependinfo.files  = {sourcefile}
+        dependinfo.files = {sourcefile}
         dependinfo.values = args
         depend.save(dependinfo, dependfile)
     end)
-
+end)

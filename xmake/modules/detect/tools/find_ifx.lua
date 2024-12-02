@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        find_ifx.lua
 --
-
 -- imports
 import("lib.detect.find_program")
 import("lib.detect.find_programver")
@@ -37,29 +36,12 @@ import("lib.detect.find_programver")
 --
 function main(opt)
     opt = opt or {}
-    if is_host("windows") then
-        -- find program
-        opt.check = opt.check or function (program) os.runv(program, {"/help"}, {envs = opt.envs}) end
-        local program = find_program(opt.program or "ifx.exe", opt)
 
-        -- find program version
-        local version = nil
-        if program and opt and opt.version then
-            opt.command = opt.command or function () local _, info = os.iorunv(program, {"/help"}, {envs = opt.envs}); return info end
-            opt.parse   = opt.parse or function (output) return output:match("Version (%d+%.?%d*%.?%d*.-)%s") end
-            version     = find_programver(program, opt)
-        end
-        return program, version
-    else
-        -- find program
-        local program = find_program(opt.program or "ifx", opt)
+    -- find program
+    local program = find_program(opt.program or "ifx", opt)
 
-        -- find program version
-        local version = nil
-        if program and opt.version then
-            version = find_programver(program, opt)
-        end
-        return program, version
-    end
+    -- find program version
+    local version = nil
+    if program and opt.version then version = find_programver(program, opt) end
+    return program, version
 end
-

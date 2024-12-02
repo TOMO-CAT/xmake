@@ -39,27 +39,6 @@ function main(opt)
 
     -- init options
     opt = opt or {}
-    if is_host("windows") then
-        opt.paths = opt.paths or {}
-
-        -- add paths from registry
-        local regs =
-        {
-            "HKEY_CLASSES_ROOT\\Applications\\qrenderdoc.exe\\shell\\Open\\Command",
-            "HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Applications\\qrenderdoc.exe\\shell\\Open\\Command",
-        }
-        for _, reg in ipairs(regs) do
-            table.insert(opt.paths, function ()
-                local value = val("reg " .. reg)
-                if value then
-                    local p = value:split("\"") 
-                    if p and p[1] then
-                        return path.translate(p[1])
-                    end
-                end
-            end)
-        end
-    end
 
     -- find program
     local program = find_program(opt.program or "qrenderdoc", opt)

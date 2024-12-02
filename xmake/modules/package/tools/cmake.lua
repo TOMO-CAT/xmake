@@ -45,14 +45,6 @@ end
 
 -- translate bin path
 function _translate_bin_path(bin_path)
-    if is_host("windows") and bin_path then
-        bin_path = bin_path:gsub("\\", "/")
-        if not bin_path:find(string.ipattern("%.exe$")) and
-           not bin_path:find(string.ipattern("%.cmd$")) and
-           not bin_path:find(string.ipattern("%.bat$")) then
-            bin_path = bin_path .. ".exe"
-        end
-    end
     return bin_path
 end
 
@@ -394,12 +386,6 @@ function _get_configs_for_android(package, configs, opt)
         local runtime = package:runtimes()
         if runtime then
             table.insert(configs, "-DCMAKE_ANDROID_STL_TYPE=" .. runtime)
-        end
-        if is_host("windows") and opt.cmake_generator ~= "Ninja" then
-            local make = path.join(ndk, "prebuilt", "windows-x86_64", "bin", "make.exe")
-            if os.isfile(make) then
-                table.insert(configs, "-DCMAKE_MAKE_PROGRAM=" .. make)
-            end
         end
 
         -- avoid find and add system include/library path

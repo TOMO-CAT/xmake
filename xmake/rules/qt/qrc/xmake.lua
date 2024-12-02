@@ -25,12 +25,12 @@ rule("qt.qrc")
 
         -- get rcc
         local qt = assert(target:data("qt"), "Qt not found!")
-        local rcc = path.join(qt.bindir, is_host("windows") and "rcc.exe" or "rcc")
+        local rcc = path.join(qt.bindir, "rcc")
         if not os.isexec(rcc) and qt.libexecdir then
-            rcc = path.join(qt.libexecdir, is_host("windows") and "rcc.exe" or "rcc")
+            rcc = path.join(qt.libexecdir, "rcc")
         end
         if not os.isexec(rcc) and qt.libexecdir_host then
-            rcc = path.join(qt.libexecdir_host, is_host("windows") and "rcc.exe" or "rcc")
+            rcc = path.join(qt.libexecdir_host, "rcc")
         end
         assert(os.isexec(rcc), "rcc not found!")
 
@@ -70,4 +70,3 @@ rule("qt.qrc")
         batchcmds:set_depmtime(os.mtime(objectfile))
         batchcmds:set_depcache(target:dependfile(objectfile))
     end)
-

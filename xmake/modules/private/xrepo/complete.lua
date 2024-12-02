@@ -33,11 +33,6 @@ function main(pos, config, ...)
     local argv = os.argv(word)
 
     if argv[1] then
-
-        -- normailize word to remove "xrepo"
-        if is_host("windows") and argv[1]:lower() == "xrepo.exe" then
-            argv[1] = "xrepo"
-        end
         if argv[1] == "xrepo" then
             table.remove(argv, 1)
         end

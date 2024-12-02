@@ -464,33 +464,4 @@ function main(opt)
     if not is_host("windows") then
         return
     end
-
-    local key = "vstudio"
-    if opt.vcvars_ver then
-        key = key .. opt.vcvars_ver
-    end
-    if opt.sdkver then
-        key = key .. opt.sdkver
-    end
-
-    -- attempt to get it from the global cache first
-    local vstudio = global_detectcache:get2(key, "msvc")
-    if vstudio then
-        local mtime = _get_last_mtime(vstudio)
-        local mtimeprev = global_detectcache:get2(key, "mtime")
-        if mtime and mtimeprev and mtime > 0 and mtimeprev > 0 and mtime == mtimeprev then
-            return vstudio
-        end
-    end
-
-    -- find and cache result
-    vstudio = _find_vstudio(opt)
-    if vstudio then
-        local mtime = _get_last_mtime(vstudio)
-        global_detectcache:set2(key, "msvc", vstudio)
-        global_detectcache:set2(key, "mtime", mtime)
-        global_detectcache:save()
-    end
-    return vstudio
 end
-

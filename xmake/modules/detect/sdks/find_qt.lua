@@ -78,75 +78,23 @@ function _find_sdkdir(sdkdir, sdkver)
     if sdkdir then
         table.insert(paths, sdkdir)
     end
-    if is_host("windows") then
 
-        -- we find it from /mingw64 first
-        if is_subhost("msys") then
-            local mingw_prefix = os.getenv("MINGW_PREFIX")
-            if mingw_prefix and os.isdir(mingw_prefix) then
-                table.insert(paths, mingw_prefix)
-            end
-        end
-
-        -- add paths from registry
-        local regs =
-        {
-            "HKEY_CLASSES_ROOT\\Applications\\QtProject.QtCreator.c\\shell\\Open\\Command",
-            "HKEY_CLASSES_ROOT\\Applications\\QtProject.QtCreator.cpp\\shell\\Open\\Command",
-            "HKEY_CLASSES_ROOT\\Applications\\QtProject.QtCreator.pro\\shell\\Open\\Command",
-            "HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Applications\\QtProject.QtCreator.c\\shell\\Open\\Command",
-            "HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Applications\\QtProject.QtCreator.cpp\\shell\\Open\\Command",
-            "HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Applications\\QtProject.QtCreator.pro\\shell\\Open\\Command"
-        }
-        for _, reg in ipairs(regs) do
-            table.insert(paths, function ()
-                local value = val("reg " .. reg)
-                if value then
-                    local p = value:find("\\Tools\\QtCreator", 1, true)
-                    if p then
-                        return path.translate(value:sub(1, p - 1))
-                    end
-                end
-            end)
-        end
-
-        -- add root logical drive pates, e.g. C:/Qt/Qtx.x.x, D:/Qtx.x.x ..
-        for idx, drive in ipairs(winos.logical_drives()) do
-            if idx < 5 then
-                table.insert(paths, path.join(drive, "Qt", "Qt*"))
-            else
-                break
-            end
-        end
-    else
-        for _, dir in ipairs(os.dirs("~/Qt*")) do
-            table.insert(paths, dir)
-        end
-    end
-
-    -- special case for android on windows, where qmake is a .bat from version 6.3
-    -- this case also applys to wasm
-    if is_host("windows") and is_plat("android", "wasm") then
-        local qmake = find_file("qmake.bat", paths, {suffixes = subdirs})
-        if qmake then
-            return path.directory(path.directory(qmake)), qmake
-        end
+    for _, dir in ipairs(os.dirs("~/Qt*")) do
+        table.insert(paths, dir)
     end
 
     -- attempt to find qmake
     local qmake
-    if is_host("windows") then
-        qmake = find_file("qmake.exe", paths, {suffixes = subdirs})
-    else
-        -- @see https://github.com/xmake-io/xmake/issues/4881
-        if sdkver then
-            local major = sdkver:sub(1, 1)
-            qmake = find_file("qmake" .. major, paths, {suffixes = subdirs})
-        end
-        if not qmake then
-            qmake = find_file("qmake", paths, {suffixes = subdirs})
-        end
+
+    -- @see https://github.com/xmake-io/xmake/issues/4881
+    if sdkver then
+        local major = sdkver:sub(1, 1)
+        qmake = find_file("qmake" .. major, paths, {suffixes = subdirs})
     end
+    if not qmake then
+        qmake = find_file("qmake", paths, {suffixes = subdirs})
+    end
+
     if qmake then
         return path.directory(path.directory(qmake)), qmake
     end

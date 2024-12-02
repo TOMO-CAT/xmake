@@ -19,9 +19,4 @@
 --
 
 -- imports
-if is_host("windows") then
-    inherit("detect.tools.cl.has_flags")
-else
-    inherit("detect.tools.gfortran.has_flags")
-end
-
+inherit("detect.tools.gfortran.has_flags")

@@ -42,20 +42,7 @@ toolchain("mingw")
             cross = toolchain:cross() or ""
         end
 
-        -- add bin search library for loading some dependent .dll files windows
-        local bindir = toolchain:bindir()
-        if bindir and is_host("windows") then
-            toolchain:add("runenvs", "PATH", bindir)
-        end
-
         -- set toolset
-        if is_host("windows") and bindir then
-            -- @note we uses bin/ar.exe instead of bin/cross-gcc-ar.exe, @see https://github.com/xmake-io/xmake/issues/807#issuecomment-635779210
-            toolchain:add("toolset", "ar", path.join(bindir, "ar"))
-            toolchain:add("toolset", "strip", path.join(bindir, "strip"))
-            toolchain:add("toolset", "ranlib", path.join(bindir, "ranlib"))
-            toolchain:add("toolset", "objcopy", path.join(bindir, "objcopy"))
-        end
         toolchain:add("toolset", "cc", cross .. "gcc")
         toolchain:add("toolset", "cxx", cross .. "g++", cross .. "gcc")
         toolchain:add("toolset", "cpp", cross .. "gcc -E")
@@ -67,17 +54,6 @@ toolchain("mingw")
         toolchain:add("toolset", "ranlib", cross .. "ranlib")
         toolchain:add("toolset", "objcopy", cross .. "objcopy")
         toolchain:add("toolset", "mrc", cross .. "windres")
-        if is_host("windows") and bindir then
-            -- we use bin/gcc.exe if cross not found
-            -- @see https://github.com/xmake-io/xmake/issues/977#issuecomment-704863677
-            toolchain:add("toolset", "cc", path.join(bindir, "gcc"))
-            toolchain:add("toolset", "cxx", path.join(bindir, "g++"), path.join(bindir, "gcc"))
-            toolchain:add("toolset", "cpp", path.join(bindir, "gcc -E"))
-            toolchain:add("toolset", "as", path.join(bindir, "gcc"))
-            toolchain:add("toolset", "ld", path.join(bindir, "g++"), path.join(bindir, "gcc"))
-            toolchain:add("toolset", "sh", path.join(bindir, "g++"), path.join(bindir, "gcc"))
-            toolchain:add("toolset", "mrc", path.join(bindir, "windres"))
-        end
 
         -- init flags for architecture
         local archflags = nil

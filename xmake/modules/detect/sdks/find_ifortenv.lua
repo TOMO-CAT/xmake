@@ -93,48 +93,6 @@ function _load_ifortvars(ifortvars_bat, arch, opt)
     return variables
 end
 
--- find intel fortran envirnoment on windows
-function _find_intel_on_windows(opt)
-
-    -- init options
-    opt = opt or {}
-
-    -- find ifortvars_bat.bat
-    local paths = {"$(env IFORT_COMPILER20)"}
-    local ifortvars_bat = find_file("bin/ifortvars.bat", paths)
-    -- look for setvars.bat which is new in 2021
-    if not ifortvars_bat then
-        -- find setvars.bat in intel oneapi toolkits rootdir
-        paths = {"$(env ONEAPI_ROOT)"}
-        ifortvars_bat = find_file("setvars.bat", paths)
-    end
-    if not ifortvars_bat then
-        -- find setvars.bat use IFORT_COMPILER.*
-        paths = {
-            "$(env IFORT_COMPILER21)",
-            "$(env IFORT_COMPILER22)",
-            "$(env IFORT_COMPILER23)"
-        }
-        ifortvars_bat = find_file("../../../setvars.bat", paths)
-        if not ifortvars_bat then
-            paths = {
-                "$(env IFORT_COMPILER24)"
-            }
-            ifortvars_bat = find_file("../../setvars.bat", paths)
-        end
-    end
-
-    if ifortvars_bat then
-
-        -- load ifortvars_bat
-        local ifortvars_x86 = _load_ifortvars(ifortvars_bat, "ia32", opt)
-        local ifortvars_x64 = _load_ifortvars(ifortvars_bat, "intel64", opt)
-
-        -- save results
-        return {ifortvars_bat = ifortvars_bat, ifortvars = {x86 = ifortvars_x86, x64 = ifortvars_x64}}
-     end
-end
-
 -- find intel fortran envirnoment on linux
 function _find_intel_on_linux(opt)
 
@@ -165,9 +123,5 @@ end
 
 -- find intel fortran environment
 function main(opt)
-    if is_host("windows") then
-        return _find_intel_on_windows(opt)
-    else
-        return _find_intel_on_linux(opt)
-    end
+    return _find_intel_on_linux(opt)
 end

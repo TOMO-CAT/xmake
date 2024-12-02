@@ -97,15 +97,9 @@ function _check_try_running(flags, opt, islinker)
     if not os.isfile(sourcefile) then
         io.writefile(sourcefile, snippet)
     end
-    if is_host("windows") then
-        sourcefile = sourcefile:gsub("\\", "/")
-    end
 
     -- check flags for linker
     local tmpfile = os.tmpfile()
-    if is_host("windows") then
-        tmpfile = tmpfile:gsub("\\", "/")
-    end
     if islinker then
         return _try_running(opt.program, table.join(flags, "-o", tmpfile, sourcefile), opt)
     end
@@ -140,4 +134,3 @@ function main(flags, opt)
     -- try running to check it
     return _check_try_running(flags, opt, islinker)
 end
-

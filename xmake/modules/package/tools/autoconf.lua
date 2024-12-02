@@ -29,17 +29,6 @@ import("lib.detect.find_tool")
 
 -- translate paths
 function _translate_paths(paths)
-    if paths and is_host("windows") then
-        if type(paths) == "string" then
-            return path.unix(paths)
-        elseif type(paths) == "table" then
-            local result = {}
-            for _, p in ipairs(paths) do
-                table.insert(result, path.unix(p))
-            end
-            return result
-        end
-    end
     return paths
 end
 
@@ -407,15 +396,6 @@ function buildenvs(package, opt)
     elseif package:is_plat("windows") and not package:config("toolchains") then
         envs.PATH = os.getenv("PATH") -- we need to reserve PATH on msys2
         envs = os.joinenvs(envs, _get_msvc(package):runenvs())
-    end
-    if is_host("windows") then
-        envs.CC       = _translate_windows_bin_path(envs.CC)
-        envs.AS       = _translate_windows_bin_path(envs.AS)
-        envs.AR       = _translate_windows_bin_path(envs.AR)
-        envs.LD       = _translate_windows_bin_path(envs.LD)
-        envs.LDSHARED = _translate_windows_bin_path(envs.LDSHARED)
-        envs.CPP      = _translate_windows_bin_path(envs.CPP)
-        envs.RANLIB   = _translate_windows_bin_path(envs.RANLIB)
     end
     local ACLOCAL_PATH = {}
     local PKG_CONFIG_PATH = {}

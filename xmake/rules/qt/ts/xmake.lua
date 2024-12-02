@@ -20,19 +20,19 @@ rule("qt.ts")
         if sourcefile_ts then
             -- get lupdate and lrelease
             local qt = assert(target:data("qt"), "qt not found!")
-            local lupdate = path.join(qt.bindir, is_host("windows") and "lupdate.exe" or "lupdate")
-            local lrelease = path.join(qt.bindir, is_host("windows") and "lrelease.exe" or "lrelease")
+            local lupdate = path.join(qt.bindir, "lupdate")
+            local lrelease = path.join(qt.bindir, "lrelease")
             if not os.isexec(lupdate) and qt.libexecdir then
-                lupdate = path.join(qt.libexecdir, is_host("windows") and "lupdate.exe" or "lupdate")
+                lupdate = path.join(qt.libexecdir, "lupdate")
             end
             if not os.isexec(lrelease) and qt.libexecdir then
-                lrelease = path.join(qt.libexecdir, is_host("windows") and "lrelease.exe" or "lrelease")
+                lrelease = path.join(qt.libexecdir, "lrelease")
             end
             if not os.isexec(lupdate) and qt.libexecdir_host then
-                lupdate = path.join(qt.libexecdir_host, is_host("windows") and "lupdate.exe" or "lupdate")
+                lupdate = path.join(qt.libexecdir_host, "lupdate")
             end
             if not os.isexec(lrelease) and qt.libexecdir_host then
-                lrelease = path.join(qt.libexecdir_host, is_host("windows") and "lrelease.exe" or "lrelease")
+                lrelease = path.join(qt.libexecdir_host, "lrelease")
             end
             assert(os.isexec(lupdate), "lupdate not found!")
             assert(os.isexec(lrelease), "lrelease not found!")

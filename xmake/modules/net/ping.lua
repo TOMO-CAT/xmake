@@ -26,9 +26,7 @@ import("async.runjobs")
 -- ping host
 function _ping(ping, host)
     local data = nil
-    if is_host("windows") then
-        data = try { function () return os.iorun("%s -n 1 -w 1000 %s", ping.program, host) end }
-    elseif is_host("macosx") then
+    if is_host("macosx") then
         data = try { function () return os.iorun("%s -c 1 -t 1 %s", ping.program, host) end }
     else
         -- https://github.com/xmake-io/xmake/issues/4470#issuecomment-1840338777
@@ -95,4 +93,3 @@ function main(hosts, opt)
     end
     return results
 end
-
