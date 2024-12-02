@@ -92,4 +92,117 @@ while index < total do
 end
 ```
 
-> 改进：启动 comax 对应的 coroutine，然后每个 coroutine 的逻辑都是不停从 batchjobs 中获取 freejob 运行，直到消费完整棵依赖树。
+> Q：为什么不启动 comax 对应的 coroutine，然后每个 coroutine 的逻辑都是不停从 batchjobs 中获取 freejob 运行，直到消费完整棵依赖树。
+>
+> A: 实测不行，因为 Lua 是单线程的，应该尽可能让 io / sleep 并发（比如 clang 编译），如果是纯 CPU 计算的开再多 coroutine 也没用。
+
+我们尝试使用的一般例子如下，实测速度更慢（和单线程速度差不多）：
+
+```lua
+import("core.base.scheduler")
+
+function main(name, jobs, opt)
+    local total = opt.total or (type(jobs) == "table" and jobs:size()) or 1
+    local comax = opt.comax or math.min(total, 4)
+    local group_name = name
+    assert(jobs, "runbatchjobs: no jobs!")
+
+    -- run batchjobs
+    local index = 0
+    local count = 0
+    local stop = false
+    local abort = false
+    local abort_errors
+    local progress_wrapper = {}
+    progress_wrapper.current = function() return count end
+    progress_wrapper.total = function() return total end
+    progress_wrapper.percent = function()
+        if total and total > 0 then
+            return math.floor((count * 100) / total)
+        else
+            return 0
+        end
+    end
+    debug.setmetatable(progress_wrapper, {
+        __tostring = function()
+            return string.format("%d%%", progress_wrapper.percent())
+        end
+    })
+
+    scheduler.co_group_begin(group_name, function(co_group)
+        -- start `comax` coroutines to consume the batchjobs
+        for i = 1, 80 do
+            scheduler.co_start_withopt(
+                {name = group_name .. '/' .. tostring(i)}, function(i)
+                    try {
+                        function()
+                            while index < total do
+                                -- check if stop
+                                if stop then
+                                    return
+                                end
+
+                                -- get a free job from the jobpool
+                                local job = jobs:getfree()
+                                if job and job.run then
+                                    local jobfunc = job.run
+                                    local jobname = job.name
+                                    -- start this job
+                                    index = index + 1
+                                    if opt.curdir then
+                                        os.cd(opt.curdir)
+                                    end
+                                    count = count + 1
+                                    jobfunc(i, total,
+                                            {progress = progress_wrapper})
+                                    jobs:remove(job)
+                                else
+                                    print("sleep 20 ms")
+                                    os.sleep(20)
+                                end
+                            end
+                        end, catch {
+                            function(errors)
+                                stop = true
+
+                                -- we need re-throw this errors outside scheduler
+                                abort = true
+                                if abort_errors == nil then
+                                    abort_errors = errors
+                                end
+
+                                -- kill all waited objects in this group
+                                local waitobjs =
+                                    scheduler.co_group_waitobjs(group_name)
+                                if waitobjs:size() > 0 then
+                                    for _, obj in waitobjs:keys() do
+                                        -- TODO: kill pipe is not supported now
+                                        if obj.kill then
+                                            obj:kill()
+                                        end
+                                    end
+                                end
+                            end
+                        }, finally {}
+                    }
+                end, index)
+        end
+    end)
+
+    -- wait all jobs exited
+    scheduler.co_group_wait(group_name)
+
+    -- do exit callback
+    if opt.on_exit then opt.on_exit(abort_errors) end
+
+    -- re-throw abort errors
+    --
+    -- @note we cannot throw it in coroutine,
+    -- because his causes a direct exit from the entire runloop and
+    -- a quick escape from nested try-catch blocks and coroutines groups.
+    -- so we can not catch runjobs errors, e.g. build fails
+    if abort then raise(abort_errors) end
+end
+```
+
+最终我们将 io 任务尽可能并行化，将所有 cpu 任务集中到主 coroutine 运行，最终逻辑在 `xmake/modules/async/runbatchjobs.lua` 中。
