@@ -25,7 +25,6 @@ import("core.base.global")
 import("core.project.config")
 import("core.tool.toolchain")
 import("core.cache.detectcache")
-import("detect.sdks.find_vstudio")
 
 -- find WDK directory
 function _find_sdkdir(sdkdir)

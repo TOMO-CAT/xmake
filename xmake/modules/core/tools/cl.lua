@@ -483,15 +483,6 @@ function _has_source_dependencies(self)
     return has_source_dependencies
 end
 
-function _is_in_vstudio()
-    local is_in_vstudio = _g._IS_IN_VSTUDIO
-    if is_in_vstudio == nil then
-        is_in_vstudio = os.getenv("XMAKE_IN_VSTUDIO") or false
-        _g._IS_IN_VSTUDIO = is_in_vstudio
-    end
-    return is_in_vstudio
-end
-
 -- get preprocess file path
 function _get_cppfile(sourcefile, objectfile)
     return path.join(path.directory(objectfile), "__cpp_" .. path.basename(objectfile) .. path.extension(sourcefile))
@@ -676,16 +667,6 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
                     compflags = table.join(flags, "/sourceDependencies", depfile)
                 else
                     compflags = table.join(flags, "-showIncludes")
-                end
-            end
-
-            -- we need to show full file path to goto error position if xmake is called in vstudio
-            -- https://github.com/xmake-io/xmake/issues/1049
-            if _is_in_vstudio() then
-                if compflags == flags then
-                    compflags = table.join(flags, "-FC")
-                else
-                    table.join2(compflags, "-FC")
                 end
             end
 

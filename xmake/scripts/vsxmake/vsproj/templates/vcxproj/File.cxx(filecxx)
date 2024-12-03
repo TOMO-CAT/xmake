@@ -1,3 +1,0 @@
-    <ClCompile Include="#path#">
-      <CompileAs>CompileAsCpp</CompileAs>
-    </ClCompile>

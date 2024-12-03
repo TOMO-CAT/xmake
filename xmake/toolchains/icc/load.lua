@@ -21,7 +21,6 @@
 -- imports
 import("core.base.option")
 import("core.project.config")
-import("detect.sdks.find_vstudio")
 
 -- load intel on linux
 function _load_intel_on_linux(toolchain)

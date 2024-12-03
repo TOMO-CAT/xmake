@@ -17,12 +17,6 @@
 -- @author      ruki
 -- @file        check.lua
 --
--- imports
-import("core.base.option")
-import("core.project.config")
-import("detect.sdks.find_vstudio")
-import("lib.detect.find_tool")
-
 -- main entry
 function main(toolchain)
     -- only for windows

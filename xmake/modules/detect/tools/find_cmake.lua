@@ -43,15 +43,6 @@ function main(opt)
 
     -- find program
     local program = find_program(opt.program or "cmake", opt)
-    if not program and is_host("windows") then
-        -- we always use host/arch to avoid windows/arm64, because we are building packages for cross-compilation
-        local msvc = toolchain.load("msvc", {plat = os.host(), arch = os.arch()})
-        if msvc:check() then
-            opt.envs = msvc:runenvs() -- we attempt to find it from vstudio environments
-            opt.force = true
-            program = find_program(opt.program or "cmake", opt)
-        end
-    end
 
     -- find program version
     local version = nil

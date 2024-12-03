@@ -22,7 +22,6 @@
 import("core.base.option")
 import("core.project.config")
 import("detect.sdks.find_iccenv")
-import("detect.sdks.find_vstudio")
 import("lib.detect.find_tool")
 
 -- check intel on linux

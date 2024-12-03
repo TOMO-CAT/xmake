@@ -1,3 +1,0 @@
-    <ClCompile Include="#path#">
-      <CompileAs>CompileAsC</CompileAs>
-    </ClCompile>

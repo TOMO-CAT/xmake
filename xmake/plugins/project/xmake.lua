@@ -47,7 +47,6 @@ task("project")
                                                         ,   "    - compile_flags"
                                                         ,   "    - compile_commands (clang compilation database with json format)"
                                                         ,   "    - vs (auto detect), vs2002 - vs2022"
-                                                        ,   "    - vsxmake (auto detect), vsxmake2010 ~ vsxmake2022"
                                                         ,   values = function (complete, opt)
                                                                 if not complete then return end
 
@@ -57,10 +56,10 @@ task("project")
                                                             end                                                                             }
                 ,   {'m', "modes",     "kv" , nil       ,   "Set the project modes."
                                                         ,   "    e.g. "
-                                                        ,   "    - xmake project -k vsxmake -m \"release,debug\""                           }
+                                                        ,   "    - xmake project -k ninja -m \"release,debug\""                           }
                 ,   {'a', "archs",     "kv" , nil       ,   "Set the project archs."
                                                         ,   "    e.g. "
-                                                        ,   "    - xmake project -k vsxmake -a \"x86,x64\""                                 }
+                                                        ,   "    - xmake project -k ninja -a \"x86,x64\""                                 }
                 ,   {nil, "lsp",       "kv" , nil       ,   "Set the LSP backend for compile_commands."
                                                         ,   "    e.g. "
                                                         ,   "    - xmake project -k compile_commands --lsp=clangd"
@@ -68,6 +67,3 @@ task("project")
                 ,   {nil, "outputdir", "v"  , "."       ,   "Set the output directory."                                                     }
                 }
             }
-
-
-

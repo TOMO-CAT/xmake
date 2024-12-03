@@ -23,7 +23,6 @@ import("core.base.option")
 import("core.project.project")
 import("core.tool.toolchain")
 import("lib.detect.find_tool")
-import("private.utils.upgrade_vsproj")
 
 -- get the number of parallel jobs
 function _get_parallel_njobs(opt)
@@ -94,15 +93,6 @@ function build(package, configs, opt)
             else
                 table.insert(argv, name .. "=" .. value)
             end
-        end
-    end
-
-    -- upgrade vs solution file?
-    -- @see https://github.com/xmake-io/xmake/issues/3871
-    if opt.upgrade then
-        local msvc = _get_msvc(package)
-        for _, value in ipairs(opt.upgrade) do
-            upgrade_vsproj.upgrade(value, table.join(opt, {msvc = msvc}))
         end
     end
 

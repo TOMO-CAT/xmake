@@ -181,7 +181,6 @@
 * [#4774](https://github.com/xmake-io/xmake/issues/4774): 修复 Android NDK r26b 上的 strip 支持
 * [#4769](https://github.com/xmake-io/xmake/issues/4769): 修复交叉编译工具链问题
 * [#4776](https://github.com/xmake-io/xmake/issues/4776): 修复 soname
-* [#4638](https://github.com/xmake-io/xmake/issues/4638): 修复 vsxmake generator
 
 ## v2.8.7
 
@@ -247,10 +246,6 @@
 
 * [#4284](https://github.com/xmake-io/xmake/issues/4284): 改进内置 includes 模块
 
-### Bugs 修复
-
-* [#4256](https://github.com/xmake-io/xmake/issues/4256): 为 vsxmake 生成器修复 c++ modules intellisense
-
 ## v2.8.3
 
 ### 新特性
@@ -290,7 +285,6 @@
 * [#2471](https://github.com/xmake-io/xmake/issues/2471): 添加 set_encodings API 去设置源文件和目标文件的编码
 * [#4071](https://github.com/xmake-io/xmake/pull/4071): 支持 sdcc 的 stm8 汇编器
 * [#4101](https://github.com/xmake-io/xmake/issues/4101): 为 c/c++ 添加 force includes
-* [#2384](https://github.com/xmake-io/xmake/issues/2384): 为 vs/vsxmake 生成器添加 add_extrafiles 接口
 
 ### 改进
 
@@ -498,7 +492,6 @@
 * [#2925](https://github.com/xmake-io/xmake/issues/2925): 改进 doxygen 插件
 * [#2948](https://github.com/xmake-io/xmake/issues/2948): 支持 OpenBSD
 * 添加 `xmake g --insecure-ssl=y` 配置选项去禁用 ssl 证书检测
-* [#2971](https://github.com/xmake-io/xmake/pull/2971): 使 vs/vsxmake 工程生成的结果每次保持一致
 * [#3000](https://github.com/xmake-io/xmake/issues/3000): 改进 C++ 模块构建支持，实现增量编译支持
 * [#3016](https://github.com/xmake-io/xmake/pull/3016): 改进 clang/msvc 去更好地支持 std 模块
 
@@ -613,7 +606,6 @@
 * [#2389](https://github.com/xmake-io/xmake/issues/2389): 改进 `xmake run` 支持并行运行目标程序
 * [#2417](https://github.com/xmake-io/xmake/issues/2417): 切换 option/showmenu 的默认值，默认开启
 * [#2440](https://github.com/xmake-io/xmake/pull/2440): 改进安装包的失败错误信息
-* [#2438](https://github.com/xmake-io/xmake/pull/2438): 确保生成的 vsxmake 工程不会随机变动
 * [#2434](https://github.com/xmake-io/xmake/issues/2434): 改进插件管理器，允许多插件管理
 * [#2421](https://github.com/xmake-io/xmake/issues/2421): 改进配置选项菜单
 * [#2425](https://github.com/xmake-io/xmake/issues/2425): 添加 `preprocessor.gcc.directives_only` 策略
@@ -676,7 +668,6 @@
 * [#2227](https://github.com/xmake-io/xmake/issues/2227): 改进 cargo 包，支持指定 Cargo.toml 文件
 * 改进 `add_requires` 支持 git command 作为版本
 * [#622](https://github.com/xmake-io/xmake/issues/622): 支持远程编译
-* [#2282](https://github.com/xmake-io/xmake/issues/2282): 添加 `add_filegroups` 接口为 vs/vsxmake/cmake generator 增加文件组支持
 
 ### 改进
 
@@ -738,7 +729,6 @@
 
 * [#1923](https://github.com/xmake-io/xmake/issues/1923): 改进构建 linux 驱动，支持设置自定义 linux-headers 路径
 * [#1962](https://github.com/xmake-io/xmake/issues/1962): 改进 armclang 工具链去支持构建 asm
-* [#1959](https://github.com/xmake-io/xmake/pull/1959): 改进 vstudio 工程生成器
 * [#1969](https://github.com/xmake-io/xmake/issues/1969): 添加默认的 option 描述
 
 ### Bugs 修复
@@ -758,7 +748,6 @@
 
 * [#1872](https://github.com/xmake-io/xmake/issues/1872): 支持转义 set_configvar 中字符串值
 * [#1888](https://github.com/xmake-io/xmake/issues/1888): 改进 windows 安装器，避免错误删除其他安装目录下的文件
-* [#1895](https://github.com/xmake-io/xmake/issues/1895): 改进 `plugin.vsxmake.autoupdate` 规则
 * [#1893](https://github.com/xmake-io/xmake/issues/1893): 改进探测 icc 和 ifort 工具链
 * [#1905](https://github.com/xmake-io/xmake/pull/1905): 改进 msvc 对 external 头文件搜索探测支持
 * [#1904](https://github.com/xmake-io/xmake/pull/1904): 改进 vs201x 工程生成器
@@ -851,7 +840,6 @@
 ### Bugs 修复
 
 * [#1671](https://github.com/xmake-io/xmake/issues/1671): 修复安装预编译包后，*.cmake 里面的一些不正确的绝对路径
-* [#1689](https://github.com/xmake-io/xmake/issues/1689): 修复 vsxmake 插件的 unicode 字符显示和加载问题
 
 ## v2.5.7
 
@@ -883,7 +871,6 @@
 
 ### 改进
 
-* 改进 vs/vsxmake 工程插件支持 vs2022
 * [#1513](https://github.com/xmake-io/xmake/issues/1513): 改进 windows 预编译包的兼容性问题
 * 改进 vcpkg 包在 windows 上的查找
 * 改进对 Qt6 的支持
@@ -967,14 +954,11 @@
 
 ### 改进
 
-* [#1275](https://github.com/xmake-io/xmake/issues/1275): 改进 vsxmake 生成器，支持条件化编译 targets
 * [#1290](https://github.com/xmake-io/xmake/pull/1290): 增加对 Android ndk r22 以上版本支持
-* [#1311](https://github.com/xmake-io/xmake/issues/1311): 为 vsxmake 工程添加包 dll 路径，确保调试运行加载正常
 
 ### Bugs 修复
 
 * [#1266](https://github.com/xmake-io/xmake/issues/1266): 修复在 `add_repositories` 中的 repo 相对路径
-* [#1288](https://github.com/xmake-io/xmake/issues/1288): 修复 vsxmake 插件处理 option 配置问题
 
 ## v2.5.2
 
@@ -998,11 +982,8 @@
 
 * [#1226](https://github.com/xmake-io/xmake/issues/1226): 添加缺失的 Qt 头文件搜索路径
 * [#1183](https://github.com/xmake-io/xmake/issues/1183): 改进 C++ 语言标准，以便支持 Qt6
-* [#1237](https://github.com/xmake-io/xmake/issues/1237): 为 vsxmake 插件添加 qt.ui 文件
-* 改进 vs/vsxmake 插件去支持预编译头文件和智能提示
 * [#1090](https://github.com/xmake-io/xmake/issues/1090): 简化自定义规则
 * [#1065](https://github.com/xmake-io/xmake/issues/1065): 改进 protobuf 规则，支持 compile_commands 生成器
-* [#1249](https://github.com/xmake-io/xmake/issues/1249): 改进 vs/vsxmake 生成器去支持启动工程设置
 * [#605](https://github.com/xmake-io/xmake/issues/605): 改进 add_deps 和 add_packages 直接的导出 links 顺序
 * 移除废弃的 `add_defines_h_if_ok` and `add_defines_h` 接口
 
@@ -1032,16 +1013,11 @@
 * 改进 zig 语言在 macOS 上的支持
 * [#1135](https://github.com/xmake-io/xmake/issues/1135): 针对特定 target 改进多平台多工具链同时配置支持
 * [#1153](https://github.com/xmake-io/xmake/issues/1153): 改进 llvm 工具链，针对 macos 上编译增加 isysroot 支持
-* [#1071](https://github.com/xmake-io/xmake/issues/1071): 改进 vs/vsxmake 生成插件去支持远程依赖包
-* 改进 vs/vsxmake 工程生成插件去支持全局的 `set_arch()` 设置
-* [#1164](https://github.com/xmake-io/xmake/issues/1164): 改进 vsxmake 插件调试加载 console 程序
 * [#1179](https://github.com/xmake-io/xmake/issues/1179): 改进 llvm 工具链，添加 isysroot
 
 ### Bugs 修复
 
 * [#1091](https://github.com/xmake-io/xmake/issues/1091): 修复不正确的继承链接依赖
-* [#1105](https://github.com/xmake-io/xmake/issues/1105): 修复 vsxmake 插件 c++ 语言标准智能提示错误
-* [#1132](https://github.com/xmake-io/xmake/issues/1132): 修复 vsxmake 插件中配置路径被截断问题
 * [#1142](https://github.com/xmake-io/xmake/issues/1142): 修复安装包的时候，出现git找不到问题
 * 修复在 macOS Big Sur 上 macos.version 问题
 * [#1084](https://github.com/xmake-io/xmake/issues/1084): 修复 `add_defines()` 中带有双引号和空格导致无法正确处理宏定义的问题
@@ -1292,7 +1268,6 @@
 
 * 添加protobuf c/c++构建规则
 * [#468](https://github.com/xmake-io/xmake/pull/468): 添加对 Windows 的 UTF-8 支持
-* [#472](https://github.com/xmake-io/xmake/pull/472): 添加`xmake project -k vsxmake`去更好的支持vs工程的生成，内部直接调用xmake来编译
 * [#487](https://github.com/xmake-io/xmake/issues/487): 通过`xmake --files="src/*.c"`支持指定一批文件进行编译。
 * 针对io模块增加文件锁接口
 * [#513](https://github.com/xmake-io/xmake/issues/513): 增加对android/termux终端的支持，可在android设备上执行xmake来构建项目

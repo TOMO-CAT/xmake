@@ -1,3 +1,0 @@
-    <ResourceCompile Include="#path#">
-      <Filter>#dir#</Filter>
-    </ResourceCompile>
