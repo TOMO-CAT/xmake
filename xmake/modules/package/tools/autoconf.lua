@@ -393,9 +393,6 @@ function buildenvs(package, opt)
             name = name:gsub("gcc%-", "g++-")
             envs.CXX = dir and path.join(dir, name) or name
         end
-    elseif package:is_plat("windows") and not package:config("toolchains") then
-        envs.PATH = os.getenv("PATH") -- we need to reserve PATH on msys2
-        envs = os.joinenvs(envs, _get_msvc(package):runenvs())
     end
     local ACLOCAL_PATH = {}
     local PKG_CONFIG_PATH = {}
@@ -417,15 +414,7 @@ function buildenvs(package, opt)
         end
     end
     envs.ACLOCAL_PATH = path.joinenv(ACLOCAL_PATH)
-    -- fix PKG_CONFIG_PATH for windows/msys2
-    -- @see https://github.com/xmake-io/xmake-repo/issues/3442
-    if package:is_plat("windows") then
-        -- pkg-config can only support for unix path and env seperator on msys/cygwin
-        PKG_CONFIG_PATH = _translate_cygwin_paths(PKG_CONFIG_PATH)
-        envs.PKG_CONFIG_PATH = path.joinenv(PKG_CONFIG_PATH, ":")
-    else
-        envs.PKG_CONFIG_PATH = path.joinenv(PKG_CONFIG_PATH)
-    end
+    envs.PKG_CONFIG_PATH = path.joinenv(PKG_CONFIG_PATH)
     return envs
 end
 
@@ -508,13 +497,7 @@ function make(package, argv, opt)
         end
     end
     assert(program, "make not found!")
-
-    if package:is_plat("windows") then
-        local envs = opt.envs or buildenvs(package, opt)
-        os.vrunv(program, argv, {envs = envs})
-    else
-        os.vrunv(program, argv)
-    end
+    os.vrunv(program, argv)
 end
 
 -- build package

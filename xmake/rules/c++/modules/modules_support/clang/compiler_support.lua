@@ -74,8 +74,6 @@ function _get_cpplibrary_name(target)
         return "c++"
     elseif target:is_plat("linux") then
         return "stdc++"
-    elseif target:is_plat("windows") then
-        return "msstl"
     end
 end
 
@@ -488,4 +486,3 @@ function get_print_library_module_manifest_path_flag(target)
     end
     return print_library_module_manifest_path_flag or nil
 end
-

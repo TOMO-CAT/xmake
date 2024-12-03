@@ -32,16 +32,8 @@ rule("qt.env")
         end
 
         local qmlimportpath = target:values("qt.env.qmlimportpath") or {}
-        if target:is_plat("windows") or (target:is_plat("mingw") and is_host("windows")) then
-            target:add("runenvs", "PATH", qt.bindir)
-            table.insert(qmlimportpath, qt.qmldir)
-            -- add targetdir in QML2_IMPORT_PATH in case of the user have qml plugins
-            table.insert(qmlimportpath, target:targetdir())
-            target:set("runenv", "QML_IMPORT_TRACE", "1")
-        elseif target:is_plat("msys", "cygwin") then
+        if target:is_plat("msys", "cygwin") then
             raise("please run `xmake f -p mingw --mingw=/mingw64` to support Qt/Mingw64 on Msys!")
         end
         target:set("runenv", "QML2_IMPORT_PATH", qmlimportpath)
     end)
-
-

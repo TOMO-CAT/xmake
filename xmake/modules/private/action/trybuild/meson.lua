@@ -48,12 +48,6 @@ end
 
 -- get pkg-config
 function _get_pkgconfig()
-    if is_plat("windows") then
-        local pkgconf = find_tool("pkgconf")
-        if pkgconf then
-            return pkgconf.program
-        end
-    end
     local pkgconfig = find_tool("pkg-config")
     if pkgconfig then
         return pkgconfig.program

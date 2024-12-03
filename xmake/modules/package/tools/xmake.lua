@@ -68,29 +68,6 @@ function _get_configs_for_vcpkg(package, configs, opt)
     end
 end
 
--- get configs for windows
-function _get_configs_for_windows(package, configs, opt)
-    local names = {"vs", "vs_toolset"}
-    for _, name in ipairs(names) do
-        local value = get_config(name)
-        if value ~= nil then
-            table.insert(configs, "--" .. name .. "=" .. tostring(value))
-        end
-    end
-    -- pass runtimes from package configs
-    local runtimes = package:config("runtimes")
-    if runtimes then
-        table.insert(configs, "--runtimes=" .. runtimes)
-    end
-    _get_configs_for_qt(package, configs, opt)
-    _get_configs_for_vcpkg(package, configs, opt)
-
-    -- we can switch some toolchains, e.g. llvm/clang
-    if package:config("toolchains") and _is_toolchain_compatible_with_host(package) then
-        _get_configs_for_host_toolchain(package, configs, opt)
-    end
-end
-
 -- get configs for appleos
 function _get_configs_for_appleos(package, configs, opt)
     local xcode = get_config("xcode")
@@ -238,9 +215,7 @@ function _get_configs(package, configs, opt)
     if configs.kind == nil then
         table.insert(configs, "--kind=" .. (package:config("shared") and "shared" or "static"))
     end
-    if package:is_plat("windows") then
-        _get_configs_for_windows(package, configs, opt)
-    elseif package:is_plat("android") then
+    if package:is_plat("android") then
         _get_configs_for_android(package, configs, opt)
     elseif package:is_plat("iphoneos", "watchos", "appletvos") or
         -- for cross-compilation on macOS, @see https://github.com/xmake-io/xmake/issues/2804

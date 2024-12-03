@@ -19,7 +19,7 @@
 --
 
 -- define toolchain
-toolchain("zig")
+toolchain("zig", function()
 
     -- set homepage
     set_homepage("https://ziglang.org/")
@@ -108,8 +108,6 @@ toolchain("zig")
             else
                 target = arch .. "-linux-gnu"
             end
-        elseif toolchain:is_plat("windows") then
-            target = arch .. "-windows-msvc"
         elseif toolchain:is_plat("mingw") then
             target = arch .. "-windows-gnu"
         end
@@ -124,10 +122,5 @@ toolchain("zig")
             toolchain:add("zcldflags", "-target", target)
             toolchain:add("zcshflags", "-target", target)
         end
-
-        -- @see https://github.com/ziglang/zig/issues/5825
-        if toolchain:is_plat("windows") then
-            toolchain:add("zcldflags", "--subsystem console")
-            toolchain:add("zcldflags", "-lkernel32", "-lntdll")
-        end
     end)
+end)

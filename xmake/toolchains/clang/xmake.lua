@@ -61,9 +61,6 @@ toolchain("clang" .. suffix)
             toolchain:add("ldflags", march)
             toolchain:add("shflags", march)
         end
-        if toolchain:is_plat("windows") then
-            toolchain:add("runtimes", "MT", "MTd", "MD", "MDd")
-        end
     end)
 end
 toolchain_clang()

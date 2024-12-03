@@ -1,23 +1,21 @@
 add_rules("mode.debug", "mode.release")
 
-target("add")
+target("add", function()
     set_kind("static")
     add_files("src/add.c")
     set_targetdir("$(buildir)/merge_archive")
+end)
 
-target("sub")
+target("sub", function()
     set_kind("static")
     add_files("src/sub.c")
     set_targetdir("$(buildir)/merge_archive")
+end)
 
-target("mul")
+target("mul", function()
     set_kind("static")
     add_deps("add", "sub")
     add_files("src/mul.c")
     set_policy("build.across_targets_in_parallel", false)
-    if is_plat("windows") then
-        add_files("$(buildir)/merge_archive/*.lib")
-    else
-        add_files("$(buildir)/merge_archive/*.a")
-    end
-
+    add_files("$(buildir)/merge_archive/*.a")
+end)

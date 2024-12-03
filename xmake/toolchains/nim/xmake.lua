@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,12 +17,11 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-toolchain("nim")
+toolchain("nim", function()
     set_homepage("https://nim-lang.org/")
     set_description("Nim Programming Language Compiler")
 
-    on_check(function (toolchain)
+    on_check(function(toolchain)
         import("lib.detect.find_tool")
         local paths = {}
         for _, package in ipairs(toolchain:packages()) do
@@ -45,21 +44,14 @@ toolchain("nim")
         end
     end)
 
-    on_load(function (toolchain)
+    on_load(function(toolchain)
         local nim = toolchain:config("nim") or "nim"
-        toolchain:set("toolset", "nc",   "$(env NC)", nim)
+        toolchain:set("toolset", "nc", "$(env NC)", nim)
         toolchain:set("toolset", "ncld", "$(env NC)", nim)
         toolchain:set("toolset", "ncsh", "$(env NC)", nim)
         toolchain:set("toolset", "ncar", "$(env NC)", nim)
 
-        if toolchain:is_plat("windows") then
-            toolchain:set("ncflags", "--cc:vcc")
-            local msvc = import("core.tool.toolchain", {anonymous = true}).load("msvc", {plat = toolchain:plat(), arch = toolchain:arch()})
-            for name, value in pairs(msvc:get("runenvs")) do
-                 toolchain:add("runenvs", name, value)
-            end
-        end
         toolchain:set("ncshflags", "")
         toolchain:set("ncldflags", "")
     end)
-
+end)

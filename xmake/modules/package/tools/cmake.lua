@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        cmake.lua
 --
-
 -- imports
 import("core.base.option")
 import("core.base.semver")
@@ -55,7 +54,8 @@ end
 
 -- map linker flags
 function _map_linkflags(package, targetkind, sourcekinds, name, values)
-    return linker.map_flags(targetkind, sourcekinds, name, values, {target = package})
+    return linker.map_flags(targetkind, sourcekinds, name, values,
+                            {target = package})
 end
 
 -- is the toolchain compatible with the host?
@@ -74,22 +74,25 @@ function _get_msvc(package)
     return msvc
 end
 
--- get msvc run environments
-function _get_msvc_runenvs(package)
-    return os.joinenvs(_get_msvc(package):runenvs())
-end
-
 -- get cflags from package deps
 function _get_cflags_from_packagedeps(package, opt)
     local result = {}
     for _, depname in ipairs(opt.packagedeps) do
-        local dep = type(depname) ~= "string" and depname or package:dep(depname)
+        local dep = type(depname) ~= "string" and depname or
+                        package:dep(depname)
         if dep then
             local fetchinfo = dep:fetch({external = false})
             if fetchinfo then
-                table.join2(result, _map_compflags(package, "cxx", "define", fetchinfo.defines))
-                table.join2(result, _translate_paths(_map_compflags(package, "cxx", "includedir", fetchinfo.includedirs)))
-                table.join2(result, _translate_paths(_map_compflags(package, "cxx", "sysincludedir", fetchinfo.sysincludedirs)))
+                table.join2(result, _map_compflags(package, "cxx", "define",
+                                                   fetchinfo.defines))
+                table.join2(result,
+                            _translate_paths(
+                                _map_compflags(package, "cxx", "includedir",
+                                               fetchinfo.includedirs)))
+                table.join2(result,
+                            _translate_paths(
+                                _map_compflags(package, "cxx", "sysincludedir",
+                                               fetchinfo.sysincludedirs)))
             end
         end
     end
@@ -100,14 +103,24 @@ end
 function _get_ldflags_from_packagedeps(package, opt)
     local result = {}
     for _, depname in ipairs(opt.packagedeps) do
-        local dep = type(depname) ~= "string" and depname or package:dep(depname)
+        local dep = type(depname) ~= "string" and depname or
+                        package:dep(depname)
         if dep then
             local fetchinfo = dep:fetch({external = false})
             if fetchinfo then
-                table.join2(result, _translate_paths(_map_linkflags(package, "binary", {"cxx"}, "linkdir", fetchinfo.linkdirs)))
-                table.join2(result, _map_linkflags(package, "binary", {"cxx"}, "link", fetchinfo.links))
-                table.join2(result, _translate_paths(_map_linkflags(package, "binary", {"cxx"}, "syslink", fetchinfo.syslinks)))
-                table.join2(result, _map_linkflags(package, "binary", {"cxx"}, "framework", fetchinfo.frameworks))
+                table.join2(result,
+                            _translate_paths(
+                                _map_linkflags(package, "binary", {"cxx"},
+                                               "linkdir", fetchinfo.linkdirs)))
+                table.join2(result, _map_linkflags(package, "binary", {"cxx"},
+                                                   "link", fetchinfo.links))
+                table.join2(result,
+                            _translate_paths(
+                                _map_linkflags(package, "binary", {"cxx"},
+                                               "syslink", fetchinfo.syslinks)))
+                table.join2(result, _map_linkflags(package, "binary", {"cxx"},
+                                                   "framework",
+                                                   fetchinfo.frameworks))
             end
         end
     end
@@ -121,9 +134,12 @@ function _get_cflags(package, opt)
     if opt.cross then
         table.join2(result, package:build_getenv("cflags"))
         table.join2(result, package:build_getenv("cxflags"))
-        table.join2(result, _map_compflags(package, "c", "define", package:build_getenv("defines")))
-        table.join2(result, _map_compflags(package, "c", "includedir", package:build_getenv("includedirs")))
-        table.join2(result, _map_compflags(package, "c", "sysincludedir", package:build_getenv("sysincludedirs")))
+        table.join2(result, _map_compflags(package, "c", "define",
+                                           package:build_getenv("defines")))
+        table.join2(result, _map_compflags(package, "c", "includedir",
+                                           package:build_getenv("includedirs")))
+        table.join2(result, _map_compflags(package, "c", "sysincludedir",
+                                           package:build_getenv("sysincludedirs")))
     end
     table.join2(result, package:config("cflags"))
     table.join2(result, package:config("cxflags"))
@@ -137,7 +153,8 @@ function _get_cflags(package, opt)
         table.join2(result, package:_generate_lto_configs("cc").cflags)
     end
     if package:config("asan") then
-        table.join2(result, package:_generate_sanitizer_configs("address", "cc").cflags)
+        table.join2(result,
+                    package:_generate_sanitizer_configs("address", "cc").cflags)
     end
     table.join2(result, _get_cflags_from_packagedeps(package, opt))
     if #result > 0 then
@@ -152,9 +169,12 @@ function _get_cxxflags(package, opt)
     if opt.cross then
         table.join2(result, package:build_getenv("cxxflags"))
         table.join2(result, package:build_getenv("cxflags"))
-        table.join2(result, _map_compflags(package, "cxx", "define", package:build_getenv("defines")))
-        table.join2(result, _map_compflags(package, "cxx", "includedir", package:build_getenv("includedirs")))
-        table.join2(result, _map_compflags(package, "cxx", "sysincludedir", package:build_getenv("sysincludedirs")))
+        table.join2(result, _map_compflags(package, "cxx", "define",
+                                           package:build_getenv("defines")))
+        table.join2(result, _map_compflags(package, "cxx", "includedir",
+                                           package:build_getenv("includedirs")))
+        table.join2(result, _map_compflags(package, "cxx", "sysincludedir",
+                                           package:build_getenv("sysincludedirs")))
     end
     table.join2(result, package:config("cxxflags"))
     table.join2(result, package:config("cxflags"))
@@ -168,7 +188,8 @@ function _get_cxxflags(package, opt)
         table.join2(result, package:_generate_lto_configs("cxx").cxxflags)
     end
     if package:config("asan") then
-        table.join2(result, package:_generate_sanitizer_configs("address", "cxx").cxxflags)
+        table.join2(result,
+                    package:_generate_sanitizer_configs("address", "cxx").cxxflags)
     end
     table.join2(result, _get_cflags_from_packagedeps(package, opt))
     if #result > 0 then
@@ -182,9 +203,12 @@ function _get_asflags(package, opt)
     local result = {}
     if opt.cross then
         table.join2(result, package:build_getenv("asflags"))
-        table.join2(result, _map_compflags(package, "as", "define", package:build_getenv("defines")))
-        table.join2(result, _map_compflags(package, "as", "includedir", package:build_getenv("includedirs")))
-        table.join2(result, _map_compflags(package, "as", "sysincludedir", package:build_getenv("sysincludedirs")))
+        table.join2(result, _map_compflags(package, "as", "define",
+                                           package:build_getenv("defines")))
+        table.join2(result, _map_compflags(package, "as", "includedir",
+                                           package:build_getenv("includedirs")))
+        table.join2(result, _map_compflags(package, "as", "sysincludedir",
+                                           package:build_getenv("sysincludedirs")))
     end
     table.join2(result, package:config("asflags"))
     if opt.asflags then
@@ -201,16 +225,22 @@ function _get_ldflags(package, opt)
     local result = {}
     if opt.cross then
         table.join2(result, package:build_getenv("ldflags"))
-        table.join2(result, _map_linkflags(package, "binary", {"cxx"}, "link", package:build_getenv("links")))
-        table.join2(result, _map_linkflags(package, "binary", {"cxx"}, "syslink", package:build_getenv("syslinks")))
-        table.join2(result, _map_linkflags(package, "binary", {"cxx"}, "linkdir", package:build_getenv("linkdirs")))
+        table.join2(result, _map_linkflags(package, "binary", {"cxx"}, "link",
+                                           package:build_getenv("links")))
+        table.join2(result,
+                    _map_linkflags(package, "binary", {"cxx"}, "syslink",
+                                   package:build_getenv("syslinks")))
+        table.join2(result,
+                    _map_linkflags(package, "binary", {"cxx"}, "linkdir",
+                                   package:build_getenv("linkdirs")))
     end
     table.join2(result, package:config("ldflags"))
     if package:config("lto") then
         table.join2(result, package:_generate_lto_configs().ldflags)
     end
     if package:config("asan") then
-        table.join2(result, package:_generate_sanitizer_configs("address").ldflags)
+        table.join2(result,
+                    package:_generate_sanitizer_configs("address").ldflags)
     end
     table.join2(result, _get_ldflags_from_packagedeps(package, opt))
     if opt.ldflags then
@@ -227,16 +257,22 @@ function _get_shflags(package, opt)
     local result = {}
     if opt.cross then
         table.join2(result, package:build_getenv("shflags"))
-        table.join2(result, _map_linkflags(package, "shared", {"cxx"}, "link", package:build_getenv("links")))
-        table.join2(result, _map_linkflags(package, "shared", {"cxx"}, "syslink", package:build_getenv("syslinks")))
-        table.join2(result, _map_linkflags(package, "shared", {"cxx"}, "linkdir", package:build_getenv("linkdirs")))
+        table.join2(result, _map_linkflags(package, "shared", {"cxx"}, "link",
+                                           package:build_getenv("links")))
+        table.join2(result,
+                    _map_linkflags(package, "shared", {"cxx"}, "syslink",
+                                   package:build_getenv("syslinks")))
+        table.join2(result,
+                    _map_linkflags(package, "shared", {"cxx"}, "linkdir",
+                                   package:build_getenv("linkdirs")))
     end
     table.join2(result, package:config("shflags"))
     if package:config("lto") then
         table.join2(result, package:_generate_lto_configs().shflags)
     end
     if package:config("asan") then
-        table.join2(result, package:_generate_sanitizer_configs("address").shflags)
+        table.join2(result,
+                    package:_generate_sanitizer_configs("address").shflags)
     end
     table.join2(result, _get_ldflags_from_packagedeps(package, opt))
     if opt.shflags then
@@ -261,19 +297,6 @@ function _get_cmake_version()
 end
 
 function _get_cmake_system_processor(package)
-    -- on Windows, CMAKE_SYSTEM_PROCESSOR comes from PROCESSOR_ARCHITECTURE
-    -- on other systems it's the output of uname -m
-    if package:is_plat("windows") then
-        local archs = {
-            x86 = "x86",
-            x64 = "AMD64",
-            x86_64 = "AMD64",
-            arm = "ARM",
-            arm64 = "ARM64",
-            arm64ec = "ARM64EC"
-        }
-        return archs[package:arch()] or package:arch()
-    end
     return package:arch()
 end
 
@@ -336,7 +359,9 @@ function _get_configs_for_windows(package, configs, opt)
         else
             table.insert(configs, "x64")
         end
-        local vs_toolset = toolchain_utils.get_vs_toolset_ver(_get_msvc(package):config("vs_toolset") or config.get("vs_toolset"))
+        local vs_toolset = toolchain_utils.get_vs_toolset_ver(
+                               _get_msvc(package):config("vs_toolset") or
+                                   config.get("vs_toolset"))
         if vs_toolset then
             table.insert(configs, "-DCMAKE_GENERATOR_TOOLSET=" .. vs_toolset)
         end
@@ -344,10 +369,12 @@ function _get_configs_for_windows(package, configs, opt)
 
     -- use clang-cl
     if package:has_tool("cc", "clang_cl") then
-        table.insert(configs, "-DCMAKE_C_COMPILER=" .. _translate_bin_path(package:build_getenv("cc")))
+        table.insert(configs, "-DCMAKE_C_COMPILER=" ..
+                         _translate_bin_path(package:build_getenv("cc")))
     end
     if package:has_tool("cxx", "clang_cl") then
-        table.insert(configs, "-DCMAKE_CXX_COMPILER=" .. _translate_bin_path(package:build_getenv("cxx")))
+        table.insert(configs, "-DCMAKE_CXX_COMPILER=" ..
+                         _translate_bin_path(package:build_getenv("cxx")))
     end
 
     -- we maybe need patch `cmake_policy(SET CMP0091 NEW)` to enable this argument for some packages
@@ -360,7 +387,8 @@ function _get_configs_for_windows(package, configs, opt)
     elseif package:has_runtime("MD") then
         table.insert(configs, "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDLL")
     elseif package:has_runtime("MDd") then
-        table.insert(configs, "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDebugDLL")
+        table.insert(configs,
+                     "-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDebugDLL")
     end
     if not opt._configs_str:find("CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY") then
         table.insert(configs, "-DCMAKE_COMPILE_PDB_OUTPUT_DIRECTORY=pdb")
@@ -375,7 +403,8 @@ function _get_configs_for_android(package, configs, opt)
     local ndk = get_config("ndk")
     if ndk and os.isdir(ndk) then
         local ndk_sdkver = get_config("ndk_sdkver")
-        table.insert(configs, "-DCMAKE_TOOLCHAIN_FILE=" .. path.join(ndk, "build/cmake/android.toolchain.cmake"))
+        table.insert(configs, "-DCMAKE_TOOLCHAIN_FILE=" ..
+                         path.join(ndk, "build/cmake/android.toolchain.cmake"))
         table.insert(configs, "-DANDROID_USE_LEGACY_TOOLCHAIN_FILE=OFF")
         table.insert(configs, "-DANDROID_ABI=" .. package:arch())
         if ndk_sdkver then
@@ -401,13 +430,15 @@ end
 -- get configs for appleos
 function _get_configs_for_appleos(package, configs, opt)
     opt = opt or {}
-    local envs                     = {}
-    opt.cross                      = true
-    envs.CMAKE_C_FLAGS             = _get_cflags(package, opt)
-    envs.CMAKE_CXX_FLAGS           = _get_cxxflags(package, opt)
-    envs.CMAKE_ASM_FLAGS           = _get_asflags(package, opt)
-    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(package:build_getenv("arflags")), ' ')
-    envs.CMAKE_EXE_LINKER_FLAGS    = _get_ldflags(package, opt)
+    local envs = {}
+    opt.cross = true
+    envs.CMAKE_C_FLAGS = _get_cflags(package, opt)
+    envs.CMAKE_CXX_FLAGS = _get_cxxflags(package, opt)
+    envs.CMAKE_ASM_FLAGS = _get_asflags(package, opt)
+    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(
+                                                      package:build_getenv(
+                                                          "arflags")), ' ')
+    envs.CMAKE_EXE_LINKER_FLAGS = _get_ldflags(package, opt)
     envs.CMAKE_SHARED_LINKER_FLAGS = _get_shflags(package, opt)
     -- https://cmake.org/cmake/help/v3.17/manual/cmake-toolchains.7.html#id25
     if package:is_plat("watchos") then
@@ -425,39 +456,41 @@ function _get_configs_for_appleos(package, configs, opt)
         envs.CMAKE_SYSTEM_PROCESSOR = _get_cmake_system_processor(package)
     end
     envs.CMAKE_OSX_ARCHITECTURES = package:arch()
-    envs.CMAKE_FIND_ROOT_PATH_MODE_PACKAGE   = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_LIBRARY   = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_INCLUDE   = "BOTH"
+    envs.CMAKE_FIND_ROOT_PATH_MODE_PACKAGE = "BOTH"
+    envs.CMAKE_FIND_ROOT_PATH_MODE_LIBRARY = "BOTH"
+    envs.CMAKE_FIND_ROOT_PATH_MODE_INCLUDE = "BOTH"
     envs.CMAKE_FIND_ROOT_PATH_MODE_FRAMEWORK = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_PROGRAM   = "NEVER"
+    envs.CMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "NEVER"
     -- avoid install bundle targets
-    envs.CMAKE_MACOSX_BUNDLE       = "NO"
+    envs.CMAKE_MACOSX_BUNDLE = "NO"
     _insert_configs_from_envs(configs, envs, opt)
 end
 
 -- get configs for mingw
 function _get_configs_for_mingw(package, configs, opt)
     opt = opt or {}
-    opt.cross                      = true
-    local envs                     = {}
-    local sdkdir                   = package:build_getenv("mingw") or package:build_getenv("sdk")
-    envs.CMAKE_C_COMPILER          = _translate_bin_path(package:build_getenv("cc"))
-    envs.CMAKE_CXX_COMPILER        = _translate_bin_path(package:build_getenv("cxx"))
-    envs.CMAKE_ASM_COMPILER        = _translate_bin_path(package:build_getenv("as"))
-    envs.CMAKE_AR                  = _translate_bin_path(package:build_getenv("ar"))
-    envs.CMAKE_RANLIB              = _translate_bin_path(package:build_getenv("ranlib"))
-    envs.CMAKE_RC_COMPILER         = _translate_bin_path(package:build_getenv("mrc"))
-    envs.CMAKE_C_FLAGS             = _get_cflags(package, opt)
-    envs.CMAKE_CXX_FLAGS           = _get_cxxflags(package, opt)
-    envs.CMAKE_ASM_FLAGS           = _get_asflags(package, opt)
-    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(package:build_getenv("arflags")), ' ')
-    envs.CMAKE_EXE_LINKER_FLAGS    = _get_ldflags(package, opt)
+    opt.cross = true
+    local envs = {}
+    local sdkdir = package:build_getenv("mingw") or package:build_getenv("sdk")
+    envs.CMAKE_C_COMPILER = _translate_bin_path(package:build_getenv("cc"))
+    envs.CMAKE_CXX_COMPILER = _translate_bin_path(package:build_getenv("cxx"))
+    envs.CMAKE_ASM_COMPILER = _translate_bin_path(package:build_getenv("as"))
+    envs.CMAKE_AR = _translate_bin_path(package:build_getenv("ar"))
+    envs.CMAKE_RANLIB = _translate_bin_path(package:build_getenv("ranlib"))
+    envs.CMAKE_RC_COMPILER = _translate_bin_path(package:build_getenv("mrc"))
+    envs.CMAKE_C_FLAGS = _get_cflags(package, opt)
+    envs.CMAKE_CXX_FLAGS = _get_cxxflags(package, opt)
+    envs.CMAKE_ASM_FLAGS = _get_asflags(package, opt)
+    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(
+                                                      package:build_getenv(
+                                                          "arflags")), ' ')
+    envs.CMAKE_EXE_LINKER_FLAGS = _get_ldflags(package, opt)
     envs.CMAKE_SHARED_LINKER_FLAGS = _get_shflags(package, opt)
-    envs.CMAKE_SYSTEM_NAME         = "Windows"
-    envs.CMAKE_SYSTEM_PROCESSOR    = _get_cmake_system_processor(package)
+    envs.CMAKE_SYSTEM_NAME = "Windows"
+    envs.CMAKE_SYSTEM_PROCESSOR = _get_cmake_system_processor(package)
     -- avoid find and add system include/library path
     -- @see https://github.com/xmake-io/xmake/issues/2037
-    envs.CMAKE_FIND_ROOT_PATH      = sdkdir
+    envs.CMAKE_FIND_ROOT_PATH = sdkdir
     envs.CMAKE_FIND_ROOT_PATH_MODE_PACKAGE = "BOTH"
     envs.CMAKE_FIND_ROOT_PATH_MODE_LIBRARY = "BOTH"
     envs.CMAKE_FIND_ROOT_PATH_MODE_INCLUDE = "BOTH"
@@ -468,8 +501,10 @@ function _get_configs_for_mingw(package, configs, opt)
     envs.HAVE_FLAG_SEARCH_PATHS_FIRST = "0"
     -- CMAKE_MAKE_PROGRAM may be required for some CMakeLists.txt (libcurl)
     if is_subhost("windows") and opt.cmake_generator ~= "Ninja" then
-        local mingw = assert(package:build_getenv("mingw") or package:build_getenv("sdk"), "mingw not found!")
-        envs.CMAKE_MAKE_PROGRAM = _translate_bin_path(path.join(mingw, "bin", "mingw32-make.exe"))
+        local mingw = assert(package:build_getenv("mingw") or
+                                 package:build_getenv("sdk"), "mingw not found!")
+        envs.CMAKE_MAKE_PROGRAM = _translate_bin_path(
+                                      path.join(mingw, "bin", "mingw32-make.exe"))
     end
     if opt.cmake_generator == "Ninja" then
         envs.CMAKE_MAKE_PROGRAM = "ninja"
@@ -482,12 +517,18 @@ function _get_configs_for_wasm(package, configs, opt)
     opt = opt or {}
     local emsdk = find_emsdk()
     assert(emsdk and emsdk.emscripten, "emscripten not found!")
-    local emscripten_cmakefile = find_file("Emscripten.cmake", path.join(emsdk.emscripten, "cmake/Modules/Platform"))
+    local emscripten_cmakefile = find_file("Emscripten.cmake", path.join(
+                                               emsdk.emscripten,
+                                               "cmake/Modules/Platform"))
     assert(emscripten_cmakefile, "Emscripten.cmake not found!")
     table.insert(configs, "-DCMAKE_TOOLCHAIN_FILE=" .. emscripten_cmakefile)
     if is_subhost("windows") and opt.cmake_generator ~= "Ninja" then
-        local mingw = assert(package:build_getenv("mingw") or package:build_getenv("sdk"), "mingw32-make not found!")
-        table.insert(configs, "-DCMAKE_MAKE_PROGRAM=" .. _translate_paths(path.join(mingw, "bin", "mingw32-make.exe")))
+        local mingw = assert(package:build_getenv("mingw") or
+                                 package:build_getenv("sdk"),
+                             "mingw32-make not found!")
+        table.insert(configs, "-DCMAKE_MAKE_PROGRAM=" ..
+                         _translate_paths(
+                             path.join(mingw, "bin", "mingw32-make.exe")))
     end
     _get_configs_for_generic(package, configs, opt)
 end
@@ -495,13 +536,13 @@ end
 -- get configs for cross
 function _get_configs_for_cross(package, configs, opt)
     opt = opt or {}
-    opt.cross                      = true
-    local envs                     = {}
-    local sdkdir                   = _translate_paths(package:build_getenv("sdk"))
-    envs.CMAKE_C_COMPILER          = _translate_bin_path(package:build_getenv("cc"))
-    envs.CMAKE_CXX_COMPILER        = _translate_bin_path(package:build_getenv("cxx"))
-    envs.CMAKE_ASM_COMPILER        = _translate_bin_path(package:build_getenv("as"))
-    envs.CMAKE_AR                  = _translate_bin_path(package:build_getenv("ar"))
+    opt.cross = true
+    local envs = {}
+    local sdkdir = _translate_paths(package:build_getenv("sdk"))
+    envs.CMAKE_C_COMPILER = _translate_bin_path(package:build_getenv("cc"))
+    envs.CMAKE_CXX_COMPILER = _translate_bin_path(package:build_getenv("cxx"))
+    envs.CMAKE_ASM_COMPILER = _translate_bin_path(package:build_getenv("as"))
+    envs.CMAKE_AR = _translate_bin_path(package:build_getenv("ar"))
     -- https://github.com/xmake-io/xmake-repo/pull/1096
     local cxx = envs.CMAKE_CXX_COMPILER
     if cxx and package:has_tool("cxx", "clang", "gcc") then
@@ -528,14 +569,17 @@ function _get_configs_for_cross(package, configs, opt)
     -- https://github.com/xmake-io/xmake-repo/pull/2134#issuecomment-1573195810
     local ld = _translate_bin_path(package:build_getenv("ld"))
     if package:has_tool("ld", "gxx", "clangxx") then
-        envs.CMAKE_CXX_LINK_EXECUTABLE = ld .. " <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>"
+        envs.CMAKE_CXX_LINK_EXECUTABLE = ld ..
+                                             " <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>"
     end
-    envs.CMAKE_RANLIB              = _translate_bin_path(package:build_getenv("ranlib"))
-    envs.CMAKE_C_FLAGS             = _get_cflags(package, opt)
-    envs.CMAKE_CXX_FLAGS           = _get_cxxflags(package, opt)
-    envs.CMAKE_ASM_FLAGS           = _get_asflags(package, opt)
-    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(package:build_getenv("arflags")), ' ')
-    envs.CMAKE_EXE_LINKER_FLAGS    = _get_ldflags(package, opt)
+    envs.CMAKE_RANLIB = _translate_bin_path(package:build_getenv("ranlib"))
+    envs.CMAKE_C_FLAGS = _get_cflags(package, opt)
+    envs.CMAKE_CXX_FLAGS = _get_cxxflags(package, opt)
+    envs.CMAKE_ASM_FLAGS = _get_asflags(package, opt)
+    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(
+                                                      package:build_getenv(
+                                                          "arflags")), ' ')
+    envs.CMAKE_EXE_LINKER_FLAGS = _get_ldflags(package, opt)
     envs.CMAKE_SHARED_LINKER_FLAGS = _get_shflags(package, opt)
     -- we don't need to set it as cross compilation if we just pass toolchain
     -- https://github.com/xmake-io/xmake/issues/2170
@@ -552,7 +596,7 @@ function _get_configs_for_cross(package, configs, opt)
     end
     -- avoid find and add system include/library path
     -- @see https://github.com/xmake-io/xmake/issues/2037
-    envs.CMAKE_FIND_ROOT_PATH              = sdkdir
+    envs.CMAKE_FIND_ROOT_PATH = sdkdir
     envs.CMAKE_FIND_ROOT_PATH_MODE_PACKAGE = "BOTH"
     envs.CMAKE_FIND_ROOT_PATH_MODE_LIBRARY = "BOTH"
     envs.CMAKE_FIND_ROOT_PATH_MODE_INCLUDE = "BOTH"
@@ -570,14 +614,14 @@ end
 -- get configs for host toolchain
 function _get_configs_for_host_toolchain(package, configs, opt)
     opt = opt or {}
-    opt.cross                      = true
-    local envs                     = {}
-    local sdkdir                   = _translate_paths(package:build_getenv("sdk"))
-    envs.CMAKE_C_COMPILER          = _translate_bin_path(package:build_getenv("cc"))
-    envs.CMAKE_CXX_COMPILER        = _translate_bin_path(package:build_getenv("cxx"))
-    envs.CMAKE_ASM_COMPILER        = _translate_bin_path(package:build_getenv("as"))
-    envs.CMAKE_RC_COMPILER         = _translate_bin_path(package:build_getenv("mrc"))
-    envs.CMAKE_AR                  = _translate_bin_path(package:build_getenv("ar"))
+    opt.cross = true
+    local envs = {}
+    local sdkdir = _translate_paths(package:build_getenv("sdk"))
+    envs.CMAKE_C_COMPILER = _translate_bin_path(package:build_getenv("cc"))
+    envs.CMAKE_CXX_COMPILER = _translate_bin_path(package:build_getenv("cxx"))
+    envs.CMAKE_ASM_COMPILER = _translate_bin_path(package:build_getenv("as"))
+    envs.CMAKE_RC_COMPILER = _translate_bin_path(package:build_getenv("mrc"))
+    envs.CMAKE_AR = _translate_bin_path(package:build_getenv("ar"))
     -- https://github.com/xmake-io/xmake-repo/pull/1096
     local cxx = envs.CMAKE_CXX_COMPILER
     if cxx and package:has_tool("cxx", "clang", "gcc") then
@@ -604,19 +648,22 @@ function _get_configs_for_host_toolchain(package, configs, opt)
     -- https://github.com/xmake-io/xmake-repo/pull/2134#issuecomment-1573195810
     local ld = _translate_bin_path(package:build_getenv("ld"))
     if package:has_tool("ld", "gxx", "clangxx") then
-        envs.CMAKE_CXX_LINK_EXECUTABLE = ld .. " <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>"
+        envs.CMAKE_CXX_LINK_EXECUTABLE = ld ..
+                                             " <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>"
     end
-    envs.CMAKE_RANLIB              = _translate_bin_path(package:build_getenv("ranlib"))
-    envs.CMAKE_C_FLAGS             = _get_cflags(package, opt)
-    envs.CMAKE_CXX_FLAGS           = _get_cxxflags(package, opt)
-    envs.CMAKE_ASM_FLAGS           = _get_asflags(package, opt)
-    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(package:build_getenv("arflags")), ' ')
-    envs.CMAKE_EXE_LINKER_FLAGS    = _get_ldflags(package, opt)
+    envs.CMAKE_RANLIB = _translate_bin_path(package:build_getenv("ranlib"))
+    envs.CMAKE_C_FLAGS = _get_cflags(package, opt)
+    envs.CMAKE_CXX_FLAGS = _get_cxxflags(package, opt)
+    envs.CMAKE_ASM_FLAGS = _get_asflags(package, opt)
+    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(
+                                                      package:build_getenv(
+                                                          "arflags")), ' ')
+    envs.CMAKE_EXE_LINKER_FLAGS = _get_ldflags(package, opt)
     envs.CMAKE_SHARED_LINKER_FLAGS = _get_shflags(package, opt)
     -- we don't need to set it as cross compilation if we just pass toolchain
     -- https://github.com/xmake-io/xmake/issues/2170
     if package:is_cross() then
-        envs.CMAKE_SYSTEM_NAME     = "Linux"
+        envs.CMAKE_SYSTEM_NAME = "Linux"
     else
         if package:config("pic") ~= false then
             table.insert(configs, "-DCMAKE_POSITION_INDEPENDENT_CODE=ON")
@@ -627,8 +674,7 @@ end
 
 -- get cmake generator for msvc
 function _get_cmake_generator_for_msvc(package)
-    local vsvers =
-    {
+    local vsvers = {
         ["2022"] = "17",
         ["2019"] = "16",
         ["2017"] = "15",
@@ -639,13 +685,14 @@ function _get_cmake_generator_for_msvc(package)
         ["2008"] = "9"
     }
     local vs = _get_msvc(package):config("vs") or config.get("vs")
-    assert(vsvers[vs], "Unknown Visual Studio version: '" .. tostring(vs) .. "' set in project.")
+    assert(vsvers[vs], "Unknown Visual Studio version: '" .. tostring(vs) ..
+               "' set in project.")
     return "Visual Studio " .. vsvers[vs] .. " " .. vs
 end
 
 -- get configs for cmake generator
 function _get_configs_for_generator(package, configs, opt)
-    opt     = opt or {}
+    opt = opt or {}
     configs = configs or {}
     local cmake_generator = opt.cmake_generator
     if cmake_generator then
@@ -660,7 +707,9 @@ function _get_configs_for_generator(package, configs, opt)
             if linkjobs then
                 table.insert(configs, "-DCMAKE_JOB_POOL_COMPILE:STRING=compile")
                 table.insert(configs, "-DCMAKE_JOB_POOL_LINK:STRING=link")
-                table.insert(configs, ("-DCMAKE_JOB_POOLS:STRING=compile=%s;link=%s"):format(jobs, linkjobs))
+                table.insert(configs,
+                             ("-DCMAKE_JOB_POOLS:STRING=compile=%s;link=%s"):format(
+                                 jobs, linkjobs))
             end
         end
     elseif package:is_plat("mingw") and is_subhost("msys") then
@@ -669,9 +718,6 @@ function _get_configs_for_generator(package, configs, opt)
     elseif package:is_plat("mingw") and is_subhost("windows") then
         table.insert(configs, "-G")
         table.insert(configs, "MinGW Makefiles")
-    elseif package:is_plat("windows") then
-        table.insert(configs, "-G")
-        table.insert(configs, _get_cmake_generator_for_msvc(package))
     elseif package:is_plat("wasm") and is_subhost("windows") then
         -- we attempt to use ninja if it exist
         -- @see https://github.com/xmake-io/xmake/issues/3771
@@ -703,9 +749,11 @@ function _get_default_flags(package, configs, buildtype, opt)
     -- The default flags are different for different platforms
     -- @see https://github.com/xmake-io/xmake-repo/pull/4038#issuecomment-2116489448
     local cachekey = buildtype .. package:plat() .. package:arch()
-    local cmake_default_flags = _g.cmake_default_flags and _g.cmake_default_flags[cachekey]
+    local cmake_default_flags = _g.cmake_default_flags and
+                                    _g.cmake_default_flags[cachekey]
     if not cmake_default_flags then
-        local tmpdir = path.join(os.tmpdir() .. ".dir", package:name(), package:mode())
+        local tmpdir = path.join(os.tmpdir() .. ".dir", package:name(),
+                                 package:mode())
         local dummy_cmakelist = path.join(tmpdir, "CMakeLists.txt")
 
         io.writefile(dummy_cmakelist, format([[
@@ -723,24 +771,60 @@ function _get_default_flags(package, configs, buildtype, opt)
 
     message(STATUS "CMAKE_STATIC_LINKER_FLAGS is ${CMAKE_STATIC_LINKER_FLAGS}")
     message(STATUS "CMAKE_STATIC_LINKER_FLAGS_%s is ${CMAKE_STATIC_LINKER_FLAGS_%s}")
-        ]], buildtype, buildtype, buildtype, buildtype, buildtype, buildtype, buildtype, buildtype, buildtype, buildtype))
+        ]], buildtype, buildtype, buildtype, buildtype, buildtype, buildtype,
+                                             buildtype, buildtype, buildtype,
+                                             buildtype))
 
         local runenvs = opt.envs or buildenvs(package)
         local cmake = find_tool("cmake")
-        local _configs = table.join(configs, "-S " .. path.directory(dummy_cmakelist), "-B " .. tmpdir)
-        local outdata = try{ function() return os.iorunv(cmake.program, _configs, {envs = runenvs}) end}
+        local _configs = table.join(configs,
+                                    "-S " .. path.directory(dummy_cmakelist),
+                                    "-B " .. tmpdir)
+        local outdata = try {
+            function()
+                return os.iorunv(cmake.program, _configs, {envs = runenvs})
+            end
+        }
         if outdata then
             cmake_default_flags = {}
-            cmake_default_flags.cflags = outdata:match("CMAKE_C_FLAGS is (.-)\n") or " "
-            cmake_default_flags.cflags = cmake_default_flags.cflags .. " " .. outdata:match(format("CMAKE_C_FLAGS_%s is (.-)\n", buildtype)):replace("/MDd", ""):replace("/MD", "")
-            cmake_default_flags.cxxflags = outdata:match("CMAKE_CXX_FLAGS is (.-)\n") or " "
-            cmake_default_flags.cxxflags = cmake_default_flags.cxxflags .. " " .. outdata:match(format("CMAKE_CXX_FLAGS_%s is (.-)\n", buildtype)):replace("/MDd", ""):replace("/MD", "")
-            cmake_default_flags.ldflags = outdata:match("CMAKE_EXE_LINKER_FLAGS is (.-)\n") or " "
-            cmake_default_flags.ldflags = cmake_default_flags.ldflags .. " " .. outdata:match(format("CMAKE_EXE_LINKER_FLAGS_%s is (.-)\n", buildtype))
-            cmake_default_flags.shflags = outdata:match("CMAKE_SHARED_LINKER_FLAGS is (.-)\n") or " "
-            cmake_default_flags.shflags = cmake_default_flags.shflags .. " " .. outdata:match(format("CMAKE_SHARED_LINKER_FLAGS_%s is (.-)\n", buildtype))
-            cmake_default_flags.arflags = outdata:match("CMAKE_STATIC_LINKER_FLAGS is (.-)\n") or " "
-            cmake_default_flags.arflags = cmake_default_flags.arflags .. " " ..outdata:match(format("CMAKE_STATIC_LINKER_FLAGS_%s is (.-)\n", buildtype))
+            cmake_default_flags.cflags =
+                outdata:match("CMAKE_C_FLAGS is (.-)\n") or " "
+            cmake_default_flags.cflags =
+                cmake_default_flags.cflags .. " " ..
+                    outdata:match(
+                        format("CMAKE_C_FLAGS_%s is (.-)\n", buildtype))
+                        :replace("/MDd", ""):replace("/MD", "")
+            cmake_default_flags.cxxflags = outdata:match(
+                                               "CMAKE_CXX_FLAGS is (.-)\n") or
+                                               " "
+            cmake_default_flags.cxxflags =
+                cmake_default_flags.cxxflags .. " " ..
+                    outdata:match(
+                        format("CMAKE_CXX_FLAGS_%s is (.-)\n", buildtype))
+                        :replace("/MDd", ""):replace("/MD", "")
+            cmake_default_flags.ldflags = outdata:match(
+                                              "CMAKE_EXE_LINKER_FLAGS is (.-)\n") or
+                                              " "
+            cmake_default_flags.ldflags =
+                cmake_default_flags.ldflags .. " " ..
+                    outdata:match(
+                        format("CMAKE_EXE_LINKER_FLAGS_%s is (.-)\n", buildtype))
+            cmake_default_flags.shflags = outdata:match(
+                                              "CMAKE_SHARED_LINKER_FLAGS is (.-)\n") or
+                                              " "
+            cmake_default_flags.shflags =
+                cmake_default_flags.shflags .. " " ..
+                    outdata:match(
+                        format("CMAKE_SHARED_LINKER_FLAGS_%s is (.-)\n",
+                               buildtype))
+            cmake_default_flags.arflags = outdata:match(
+                                              "CMAKE_STATIC_LINKER_FLAGS is (.-)\n") or
+                                              " "
+            cmake_default_flags.arflags =
+                cmake_default_flags.arflags .. " " ..
+                    outdata:match(
+                        format("CMAKE_STATIC_LINKER_FLAGS_%s is (.-)\n",
+                               buildtype))
 
             _g.cmake_default_flags = _g.cmake_default_flags or {}
             _g.cmake_default_flags[cachekey] = cmake_default_flags
@@ -766,19 +850,23 @@ function _get_envs_for_default_flags(package, configs, opt)
     local default_flags = _get_default_flags(package, configs, buildtype, opt)
     if default_flags then
         if not opt.cxxflags and not opt.cxflags then
-            envs[format("CMAKE_CXX_FLAGS_%s", buildtype)] = default_flags.cxxflags
+            envs[format("CMAKE_CXX_FLAGS_%s", buildtype)] =
+                default_flags.cxxflags
         end
         if not opt.cflags and not opt.cxflags then
             envs[format("CMAKE_C_FLAGS_%s", buildtype)] = default_flags.cflags
         end
         if not opt.ldflags then
-            envs[format("CMAKE_EXE_LINKER_FLAGS_%s", buildtype)] = default_flags.ldflags
+            envs[format("CMAKE_EXE_LINKER_FLAGS_%s", buildtype)] =
+                default_flags.ldflags
         end
         if not opt.arflags then
-            envs[format("CMAKE_STATIC_LINKER_FLAGS_%s", buildtype)] = default_flags.arflags
+            envs[format("CMAKE_STATIC_LINKER_FLAGS_%s", buildtype)] =
+                default_flags.arflags
         end
         if not opt.shflags then
-            envs[format("CMAKE_SHARED_LINKER_FLAGS_%s", buildtype)] = default_flags.shflags
+            envs[format("CMAKE_SHARED_LINKER_FLAGS_%s", buildtype)] =
+                default_flags.shflags
         end
     end
     return envs
@@ -789,15 +877,36 @@ function _get_envs_for_runtime_flags(package, configs, opt)
     local envs = {}
     local runtimes = package:runtimes()
     if runtimes then
-        local fake_target = {is_shared = function(_) return false end,
-                             sourcekinds = function(_) return "cc" end}
-        envs[format("CMAKE_C_FLAGS_%s", buildtype)]             = _map_compflags(fake_target, "c", "runtime", runtimes)
-        fake_target.sourcekinds = function(_) return "cxx" end
-        envs[format("CMAKE_CXX_FLAGS_%s", buildtype)]           = _map_compflags(fake_target, "cxx", "runtime", runtimes)
-        envs[format("CMAKE_EXE_LINKER_FLAGS_%s", buildtype)]    = _map_linkflags(fake_target, "binary", {"cxx"}, "runtime", runtimes)
-        envs[format("CMAKE_STATIC_LINKER_FLAGS_%s", buildtype)] = _map_linkflags(fake_target, "static", {"cxx"}, "runtime", runtimes)
-        fake_target.is_shared = function(_) return true end
-        envs[format("CMAKE_SHARED_LINKER_FLAGS_%s", buildtype)] = _map_linkflags(fake_target, "shared", {"cxx"}, "runtime", runtimes)
+        local fake_target = {
+            is_shared = function(_)
+                return false
+            end,
+            sourcekinds = function(_)
+                return "cc"
+            end
+        }
+        envs[format("CMAKE_C_FLAGS_%s", buildtype)] = _map_compflags(
+                                                          fake_target, "c",
+                                                          "runtime", runtimes)
+        fake_target.sourcekinds = function(_)
+            return "cxx"
+        end
+        envs[format("CMAKE_CXX_FLAGS_%s", buildtype)] = _map_compflags(
+                                                            fake_target, "cxx",
+                                                            "runtime", runtimes)
+        envs[format("CMAKE_EXE_LINKER_FLAGS_%s", buildtype)] = _map_linkflags(
+                                                                   fake_target,
+                                                                   "binary",
+                                                                   {"cxx"},
+                                                                   "runtime",
+                                                                   runtimes)
+        envs[format("CMAKE_STATIC_LINKER_FLAGS_%s", buildtype)] =
+            _map_linkflags(fake_target, "static", {"cxx"}, "runtime", runtimes)
+        fake_target.is_shared = function(_)
+            return true
+        end
+        envs[format("CMAKE_SHARED_LINKER_FLAGS_%s", buildtype)] =
+            _map_linkflags(fake_target, "shared", {"cxx"}, "runtime", runtimes)
     end
     return envs
 end
@@ -807,13 +916,12 @@ function _get_configs(package, configs, opt)
     opt._configs_str = string.serialize(configs, {indent = false, strip = true})
     _get_configs_for_install(package, configs, opt)
     _get_configs_for_generator(package, configs, opt)
-    if package:is_plat("windows") then
-        _get_configs_for_windows(package, configs, opt)
-    elseif package:is_plat("android") then
+    if package:is_plat("android") then
         _get_configs_for_android(package, configs, opt)
     elseif package:is_plat("iphoneos", "watchos") or
         -- for cross-compilation on macOS, @see https://github.com/xmake-io/xmake/issues/2804
-        (package:is_plat("macosx") and (get_config("appledev") or not package:is_arch(os.subarch()))) then
+        (package:is_plat("macosx") and
+            (get_config("appledev") or not package:is_arch(os.subarch()))) then
         _get_configs_for_appleos(package, configs, opt)
     elseif package:is_plat("mingw") then
         _get_configs_for_mingw(package, configs, opt)
@@ -844,17 +952,6 @@ function _get_configs(package, configs, opt)
     return configs
 end
 
--- Fix pdb issue, if multiple CL.EXE write to the same .PDB file, please use /FS
--- @see https://github.com/xmake-io/xmake/issues/5353
-function _fix_pdbdir_for_ninja(package)
-    if package:is_plat("windows") and package:has_tool("cxx", "cl") then
-        local pdbdir = "pdb"
-        if not os.isdir(pdbdir) then
-            os.mkdir(pdbdir)
-        end
-    end
-end
-
 -- get build environments
 function buildenvs(package, opt)
 
@@ -862,9 +959,6 @@ function buildenvs(package, opt)
     -- @see https://github.com/xmake-io/xmake/issues/1057
     opt = opt or {}
     local envs = {}
-    if package:is_plat("windows") then
-        envs = _get_msvc_runenvs(package)
-    end
 
     -- we need to pass pkgconf for windows/mingw without msys2/cygwin
     if package:is_plat("windows", "mingw") and is_subhost("windows") then
@@ -879,7 +973,7 @@ function buildenvs(package, opt)
     -- @see https://github.com/xmake-io/xmake-repo/pull/2553
     local CMAKE_LIBRARY_PATH = {}
     local CMAKE_INCLUDE_PATH = {}
-    local CMAKE_PREFIX_PATH  = {}
+    local CMAKE_PREFIX_PATH = {}
     local PKG_CONFIG_PATH = {}
     for _, dep in ipairs(package:librarydeps({private = true})) do
         if dep:is_system() then
@@ -903,15 +997,9 @@ function buildenvs(package, opt)
     end
     envs.CMAKE_LIBRARY_PATH = path.joinenv(CMAKE_LIBRARY_PATH)
     envs.CMAKE_INCLUDE_PATH = path.joinenv(CMAKE_INCLUDE_PATH)
-    envs.CMAKE_PREFIX_PATH  = path.joinenv(CMAKE_PREFIX_PATH)
-    envs.PKG_CONFIG_PATH    = path.joinenv(PKG_CONFIG_PATH)
+    envs.CMAKE_PREFIX_PATH = path.joinenv(CMAKE_PREFIX_PATH)
+    envs.PKG_CONFIG_PATH = path.joinenv(PKG_CONFIG_PATH)
     return envs
-end
-
--- do build for msvc
-function _build_for_msvc(package, configs, opt)
-    local slnfile = assert(find_file("*.sln", os.curdir()), "*.sln file not found!")
-    msbuild.build(package, {slnfile, "-t:Rebuild"})
 end
 
 -- do build for make
@@ -928,14 +1016,16 @@ function _build_for_make(package, configs, opt)
     if is_host("bsd") then
         os.vrunv("gmake", argv)
     elseif is_subhost("windows") and package:is_plat("mingw") then
-        local mingw = assert(package:build_getenv("mingw") or package:build_getenv("sdk"), "mingw not found!")
+        local mingw = assert(package:build_getenv("mingw") or
+                                 package:build_getenv("sdk"), "mingw not found!")
         local mingw_make = path.join(mingw, "bin", "mingw32-make.exe")
         os.vrunv(mingw_make, argv)
     elseif package:is_plat("android") and is_host("windows") then
         local make
         local ndk = get_config("ndk")
         if ndk then
-            make = path.join(ndk, "prebuilt", "windows-x86_64", "bin", "make.exe")
+            make = path.join(ndk, "prebuilt", "windows-x86_64", "bin",
+                             "make.exe")
         end
         if not make or not os.isfile(make) then
             make = "make"
@@ -949,10 +1039,11 @@ end
 -- do build for ninja
 function _build_for_ninja(package, configs, opt)
     opt = opt or {}
-    _fix_pdbdir_for_ninja(package)
-    ninja.build(package, {}, {envs = opt.envs or buildenvs(package, opt),
+    ninja.build(package, {}, {
+        envs = opt.envs or buildenvs(package, opt),
         jobs = opt.jobs,
-        target = opt.target})
+        target = opt.target
+    })
 end
 
 -- do build for cmake/build
@@ -970,29 +1061,6 @@ function _build_for_cmakebuild(package, configs, opt)
     os.vrunv(cmake.program, argv, {envs = opt.envs or buildenvs(package)})
 end
 
--- do install for msvc
-function _install_for_msvc(package, configs, opt)
-    local slnfile = assert(find_file("*.sln", os.curdir()), "*.sln file not found!")
-    msbuild.build(package, {slnfile, "-t:Rebuild", "/nr:false"})
-    local projfile = os.isfile("INSTALL.vcxproj") and "INSTALL.vcxproj" or "INSTALL.vcproj"
-    if os.isfile(projfile) then
-        msbuild.build(package, {projfile})
-        os.trycp("install/bin", package:installdir())
-        os.trycp("install/lib", package:installdir()) -- perhaps only headers library
-        os.trycp("install/share", package:installdir())
-        os.trycp("install/include", package:installdir())
-    else
-        os.trycp("**.dll", package:installdir("bin"))
-        os.trycp("**.lib", package:installdir("lib"))
-        os.trycp("**.exp", package:installdir("lib"))
-        if package:config("shared") or not package:is_library() then
-            os.trycp("**.pdb", package:installdir("bin"))
-        else
-            os.trycp("**.pdb", package:installdir("lib"))
-        end
-    end
-end
-
 -- do install for make
 function _install_for_make(package, configs, opt)
     local jobs = _get_parallel_njobs(opt)
@@ -1004,7 +1072,8 @@ function _install_for_make(package, configs, opt)
         os.vrunv("gmake", argv)
         os.vrunv("gmake", {"install"})
     elseif is_subhost("windows") and package:is_plat("mingw", "wasm") then
-        local mingw = assert(package:build_getenv("mingw") or package:build_getenv("sdk"), "mingw not found!")
+        local mingw = assert(package:build_getenv("mingw") or
+                                 package:build_getenv("sdk"), "mingw not found!")
         local mingw_make = path.join(mingw, "bin", "mingw32-make.exe")
         os.vrunv(mingw_make, argv)
         os.vrunv(mingw_make, {"install"})
@@ -1012,7 +1081,8 @@ function _install_for_make(package, configs, opt)
         local make
         local ndk = get_config("ndk")
         if ndk then
-            make = path.join(ndk, "prebuilt", "windows-x86_64", "bin", "make.exe")
+            make = path.join(ndk, "prebuilt", "windows-x86_64", "bin",
+                             "make.exe")
         end
         if not make or not os.isfile(make) then
             make = "make"
@@ -1028,10 +1098,11 @@ end
 -- do install for ninja
 function _install_for_ninja(package, configs, opt)
     opt = opt or {}
-    _fix_pdbdir_for_ninja(package)
-    ninja.install(package, {}, {envs = opt.envs or buildenvs(package, opt),
+    ninja.install(package, {}, {
+        envs = opt.envs or buildenvs(package, opt),
         jobs = opt.jobs,
-        target = opt.target})
+        target = opt.target
+    })
 end
 
 -- do install for cmake/build
@@ -1056,7 +1127,8 @@ function _get_cmake_generator(package, opt)
             cmake_generator = "Ninja"
         end
         if not cmake_generator then
-            if package:has_tool("cc", "clang_cl") or package:has_tool("cxx", "clang_cl") then
+            if package:has_tool("cc", "clang_cl") or
+                package:has_tool("cxx", "clang_cl") then
                 cmake_generator = "Ninja"
             end
         end
@@ -1103,9 +1175,7 @@ function build(package, configs, opt)
     if opt.cmake_build then
         _build_for_cmakebuild(package, configs, opt)
     elseif cmake_generator then
-        if cmake_generator:find("Visual Studio", 1, true) then
-            _build_for_msvc(package, configs, opt)
-        elseif cmake_generator == "Ninja" then
+        if cmake_generator == "Ninja" then
             _build_for_ninja(package, configs, opt)
         elseif cmake_generator:find("Makefiles", 1, true) then
             _build_for_make(package, configs, opt)
@@ -1113,11 +1183,7 @@ function build(package, configs, opt)
             raise("unknown cmake generator(%s)!", cmake_generator)
         end
     else
-        if package:is_plat("windows") then
-            _build_for_msvc(package, configs, opt)
-        else
-            _build_for_make(package, configs, opt)
-        end
+        _build_for_make(package, configs, opt)
     end
     os.cd(oldir)
 end
@@ -1154,9 +1220,7 @@ function install(package, configs, opt)
     if opt.cmake_build then
         _install_for_cmakebuild(package, configs, opt)
     elseif cmake_generator then
-        if cmake_generator:find("Visual Studio", 1, true) then
-            _install_for_msvc(package, configs, opt)
-        elseif cmake_generator == "Ninja" then
+        if cmake_generator == "Ninja" then
             _install_for_ninja(package, configs, opt)
         elseif cmake_generator:find("Makefiles", 1, true) then
             _install_for_make(package, configs, opt)
@@ -1164,18 +1228,7 @@ function install(package, configs, opt)
             raise("unknown cmake generator(%s)!", cmake_generator)
         end
     else
-        if package:is_plat("windows") then
-            _install_for_msvc(package, configs, opt)
-        else
-            _install_for_make(package, configs, opt)
-        end
-    end
-    if package:is_plat("windows") and os.isdir("pdb") then
-        if package:config("shared") or not package:is_library() then
-            os.trycp("pdb/**.pdb", package:installdir("bin"))
-        else
-            os.trycp("pdb/**.pdb", package:installdir("lib"))
-        end
+        _install_for_make(package, configs, opt)
     end
     os.cd(oldir)
 end

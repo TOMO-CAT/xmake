@@ -52,12 +52,6 @@ function main(target)
         if QtPlatformSupport then
             table.insert(frameworks, QtPlatformSupport)
         end
-    elseif target:is_plat("windows") then
-        plugins.QWindowsIntegrationPlugin = {linkdirs = "plugins/platforms", links = {is_mode("debug") and "qwindowsd" or "qwindows"}}
-        table.join2(frameworks, "QtPrintSupport", "QtWidgets")
-        if QtPlatformSupport then
-            table.insert(frameworks, QtPlatformSupport)
-        end
     elseif target:is_plat("wasm") then
         plugins.QWasmIntegrationPlugin = {linkdirs = "plugins/platforms", links = {"qwasm"}}
         if qt_sdkver:ge("6.0") then

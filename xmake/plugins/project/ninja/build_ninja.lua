@@ -182,14 +182,6 @@ end
 -- add rules for complier
 function _add_rules_for_compiler(ninjafile)
     ninjafile:print("# rules for compiler")
-    if is_plat("windows") then
-        -- @see https://github.com/ninja-build/ninja/issues/613
-        local note_include = parse_include.probe_include_note_from_cl()
-        if not note_include then
-            note_include = "Note: including file:"
-        end
-        ninjafile:print("msvc_deps_prefix = %s", note_include:trim())
-    end
     local add_compiler_rules =
     {
         gcc     = _add_rules_for_compiler_gcc,
