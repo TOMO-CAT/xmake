@@ -1,6 +1,5 @@
 import("lib.detect.find_tool")
 import("core.base.semver")
-import("detect.sdks.find_vstudio")
 import("utils.ci.is_running", {alias = "ci_is_running"})
 
 function _build()

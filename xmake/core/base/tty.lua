@@ -187,7 +187,6 @@ end
 -- get terminal name
 --  - xterm
 --  - cmd
---  - vstudio (in visual studio)
 --  - vscode (in vscode)
 --  - msys2
 --  - cygwin
@@ -296,9 +295,7 @@ function tty.has_color8()
         -- detect it from $TERM
         local term = tty.term()
         if has_color8 == nil then
-            if term == "vstudio" then
-                has_color8 = false
-            elseif term == "xterm" or term == "mintty" then
+            if term == "xterm" or term == "mintty" then
                 has_color8 = true
             end
         end
@@ -346,9 +343,7 @@ function tty.has_color256()
         local term = tty.term()
         local term_env = os.getenv("TERM")
         if has_color256 == nil then
-            if term == "vstudio" then
-                has_color256 = false
-            elseif term_env and (term_env:find("256color", 1, true) or term_env:find("color256", 1, true)) then
+            if term_env and (term_env:find("256color", 1, true) or term_env:find("color256", 1, true)) then
                 has_color256 = true
             end
         end
@@ -403,9 +398,7 @@ function tty.has_color24()
         local term = tty.term()
         local term_env = os.getenv("TERM")
         if has_color256 == nil then
-            if term == "vstudio" then
-                has_color256 = false
-            elseif term_env and (term_env:find("truecolor", 1, true) or term_env:find("24bit", 1, true)) then
+            if term_env and (term_env:find("truecolor", 1, true) or term_env:find("24bit", 1, true)) then
                 has_color256 = true
             end
         end

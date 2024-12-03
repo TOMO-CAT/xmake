@@ -1,3 +1,0 @@
-    <ClCompile Include="#path#">
-      <Filter>#dir#</Filter>
-    </ClCompile>

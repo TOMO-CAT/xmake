@@ -21,7 +21,6 @@
 -- imports
 import("core.base.option")
 import("core.project.config")
-import("detect.sdks.find_vstudio")
 
 -- add the given vs environment
 function _add_vsenv(toolchain, name, curenvs)
@@ -69,11 +68,6 @@ function main(toolchain)
     for _, name in ipairs(expect_vars) do
         _add_vsenv(toolchain, name, curenvs)
     end
-    for _, name in ipairs(find_vstudio.get_vcvars()) do
-        if not table.contains(expect_vars, name:upper()) then
-            _add_vsenv(toolchain, name, curenvs)
-        end
-    end
 
     local march
     if toolchain:is_arch("x86_64", "x64") then
@@ -87,4 +81,3 @@ function main(toolchain)
         toolchain:add("asflags", march)
     end
 end
-
