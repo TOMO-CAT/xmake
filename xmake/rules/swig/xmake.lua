@@ -41,10 +41,6 @@ rule("swig.base")
                         target:set("extension", result)
                     end
                 end
-            else
-                if target:is_plat("windows", "mingw") then
-                    target:set("extension", ".pyd")
-                end
             end
         elseif moduletype == "lua" then
             target:set("prefixname", "")
@@ -110,5 +106,3 @@ rule("swig.cpp")
     on_buildcmd_file(function (target, batchcmds, sourcefile, opt)
         import("build_module_file")(target, batchcmds, sourcefile, table.join({sourcekind = "cxx"}, opt))
     end)
-
-

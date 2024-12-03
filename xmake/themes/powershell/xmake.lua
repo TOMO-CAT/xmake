@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
 -- define theme
-theme("powershell")
+theme("powershell", function()
 
     -- the success status
     set_text("success", "$ok")
@@ -53,11 +52,8 @@ theme("powershell")
     set_color("build.target", "cyan bright")
 
     -- the spinner chars
-    if (is_subhost("windows") and winos.version():lt("win10")) or is_subhost("msys", "cygwin") then
-        set_text("spinner.chars", '\\', '-', '/', '|')
-    else
-        set_text("spinner.chars", '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏')
-    end
+    set_text("spinner.chars", '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦',
+             '⠧', '⠇', '⠏')
 
     -- color dump
     set_text("dump.default_format", "%s")
@@ -86,3 +82,4 @@ theme("powershell")
     set_text("interactive.prompt2", "xmake>>")
     set_color("interactive.prompt", "green")
     set_color("interactive.prompt2", "green dim")
+end)

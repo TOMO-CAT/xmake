@@ -178,11 +178,6 @@ function _pack_runself(makeself, package)
 end
 
 function main(package)
-
-    if is_subhost("windows") then
-        return
-    end
-
     cprint("packing %s", package:outputfile())
 
     -- get makeself

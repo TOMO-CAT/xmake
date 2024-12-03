@@ -108,8 +108,6 @@ toolchain("zig", function()
             else
                 target = arch .. "-linux-gnu"
             end
-        elseif toolchain:is_plat("mingw") then
-            target = arch .. "-windows-gnu"
         end
         if target then
             toolchain:add("zig_cc.cxflags", "-target", target)

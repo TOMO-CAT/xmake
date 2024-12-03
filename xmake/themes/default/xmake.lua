@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
 -- define theme
-theme("default")
+theme("default", function()
 
     -- the success status
     set_text("success", "$ok")
@@ -50,18 +49,11 @@ theme("default")
     set_color("build.object", "")
 
     -- the building target file
-    if is_subhost("windows") and (os.term() == "powershell" or os.term() == "pwsh") then
-        set_color("build.target", "cyan bright")
-    else
-        set_color("build.target", "magenta bright")
-    end
+    set_color("build.target", "magenta bright")
 
     -- the spinner chars
-    if (is_subhost("windows") and winos.version():lt("win10")) or is_subhost("msys", "cygwin") then
-        set_text("spinner.chars", '\\', '-', '/', '|')
-    else
-        set_text("spinner.chars", '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏')
-    end
+    set_text("spinner.chars", '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦',
+             '⠧', '⠇', '⠏')
 
     -- color dump
     set_text("dump.default_format", "%s")
@@ -74,25 +66,15 @@ theme("default")
     set_color("dump.default", "red")
     set_color("dump.udata", "yellow")
     set_color("dump.table", "bright")
-    if is_subhost("windows") and (os.term() == "powershell" or os.term() == "pwsh") then
-        set_color("dump.string", "red bright")
-        set_color("dump.string_quote", "red")
-    else
-        set_color("dump.string", "magenta bright")
-        set_color("dump.string_quote", "magenta")
-    end
+    set_color("dump.string", "magenta bright")
+    set_color("dump.string_quote", "magenta")
     set_color("dump.keyword", "blue")
     set_color("dump.number", "green bright")
     set_color("dump.function", "cyan")
 
     -- menu
-    if is_subhost("windows") and (os.term() == "powershell" or os.term() == "pwsh") then
-        set_color("menu.main.task.name", "cyan bright")
-        set_color("menu.option.name", "green bright")
-    else
-        set_color("menu.main.task.name", "magenta")
-        set_color("menu.option.name", "green")
-    end
+    set_color("menu.main.task.name", "magenta")
+    set_color("menu.option.name", "green")
     set_color("menu.usage", "cyan")
 
     -- interactive mode
@@ -100,3 +82,4 @@ theme("default")
     set_text("interactive.prompt2", "xmake>>")
     set_color("interactive.prompt", "green")
     set_color("interactive.prompt2", "green")
+end)

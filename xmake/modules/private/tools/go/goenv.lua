@@ -23,9 +23,7 @@ import("lib.detect.find_tool")
 
 function GOOS(plat)
     local goos
-    if plat == "windows" or plat == "mingw" or plat == "msys" or plat == "cygwin" then
-        goos = "windows"
-    elseif plat == "linux" then
+    if plat == "linux" then
         goos = "linux"
     elseif plat == "macosx" then
         goos = "darwin"

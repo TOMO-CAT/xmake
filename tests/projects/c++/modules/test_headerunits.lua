@@ -18,27 +18,7 @@ function _build()
 end
 
 function main(t)
-    if is_subhost("windows") then
-        local clang = find_tool("clang", { version = true })
-        if clang and clang.version and semver.compare(clang.version, "15.0") >= 0 then
-            -- clang headerunit are bugged
-            -- os.exec("xmake f --toolchain=clang --policies=build.c++.clang.fallbackscanner -c --yes")
-            -- _build()
-            -- if semver.compare(clang.version, "17.0") >= 0 then
-            --     os.exec("xmake clean -a")
-            --     -- clang-scan-deps dependency detection doesn't support header units atm
-            --     os.exec("xmake f --toolchain=clang --policies=build.c++.clang.fallbackscanner --runtimes=c++_shared -c --yes")
-            --     _build()
-            -- end
-        end
-
-        local vs = find_vstudio()
-        if vs and vs["2022"] then
-            os.exec("xmake clean -a")
-            os.exec("xmake f -c --yes")
-            _build()
-        end
-    elseif is_subhost("msys") then
+    if is_subhost("msys") then
         -- on windows, mingw modulemapper doesn't handle headeunit path correctly, but it's working with mingw on macOS / Linux
         -- os.exec("xmake f -c -p mingw --yes")
         -- _build()

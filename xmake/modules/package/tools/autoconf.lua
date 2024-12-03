@@ -46,27 +46,6 @@ function _translate_cygwin_paths(paths)
     return paths
 end
 
--- translate windows bin path
-function _translate_windows_bin_path(bin_path)
-    if bin_path then
-        local argv = os.argv(bin_path)
-        argv[1] = path.unix(argv[1]) .. ".exe"
-        return os.args(argv)
-    end
-end
-
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
--- get msvc run environments
-function _get_msvc_runenvs(package)
-    return os.joinenvs(_get_msvc(package):runenvs())
-end
-
 -- map compiler flags
 function _map_compflags(package, langkind, name, values)
     return compiler.map_flags(langkind, name, values, {target = package})

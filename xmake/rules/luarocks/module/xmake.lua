@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-rule("luarocks.module")
-    on_load(function (target)
+rule("luarocks.module", function()
+    on_load(function(target)
 
         -- imports
         import("core.cache.detectcache")
@@ -28,7 +27,8 @@ rule("luarocks.module")
         -- set kind
         if target:is_plat("macosx") then
             target:set("kind", "binary")
-            target:add("ldflags", "-bundle", "-undefined dynamic_lookup", {force = true})
+            target:add("ldflags", "-bundle", "-undefined dynamic_lookup",
+                       {force = true})
         else
             target:set("kind", "shared")
         end
@@ -36,11 +36,7 @@ rule("luarocks.module")
         -- set library name
         local modulename = target:name():split('.', {plain = true})
         modulename = modulename[#modulename]
-        if target:is_plat("windows", "mingw") then
-            target:set("basename", modulename)
-        else
-            target:set("filename", modulename .. ".so")
-        end
+        target:set("filename", modulename .. ".so")
 
         -- export symbols
         target:set("symbols", "none")
@@ -64,7 +60,11 @@ rule("luarocks.module")
             target:add(find_package("lua"))
         end
     end)
-    on_install(function (target)
+    on_install(function(target)
         local moduledir = path.directory((target:name():gsub('%.', '/')))
-        import('target.action.install')(target, {libdir = path.join('lib', moduledir), bindir = path.join('lib', moduledir)})
+        import('target.action.install')(target, {
+            libdir = path.join('lib', moduledir),
+            bindir = path.join('lib', moduledir)
+        })
     end)
+end)
