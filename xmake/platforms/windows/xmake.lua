@@ -41,8 +41,6 @@ platform("windows")
                                                     , "  e.g. --vs_toolset=14.0"                    }
                 ,   {nil, "vs_sdkver",  "kv", nil,    "The Windows SDK Version of Visual Studio"
                                                     , "  e.g. --vs_sdkver=10.0.15063.0"             }
-                ,   {nil, "vs_runtime", "kv", nil,    "The Runtime library of Visual Studio (deprecated, please use --runtimes)"
-                                                    , values = {"MT", "MTd", "MD", "MDd"}           }
                 ,   {category = "Cuda SDK Configuration"                                            }
                 ,   {nil, "cuda",       "kv", "auto", "The Cuda SDK Directory"                      }
                 ,   {category = "Qt SDK Configuration"                                              }
@@ -77,5 +75,3 @@ platform("windows")
                 ,   {nil, "vcpkg",      "kv", "auto", "The Vcpkg Directory"                         }
                 }
             }
-
-

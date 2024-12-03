@@ -153,13 +153,6 @@ function _load_require(require_str, requires_extra, parentinfo)
         require_build_configs.debug = true
     end
 
-    -- vs_runtime is deprecated, we should use runtimes
-    if require_build_configs and require_build_configs.vs_runtime then
-        require_build_configs.runtimes = require_build_configs.vs_runtime
-        require_build_configs.vs_runtime = nil
-        wprint("add_requires(%s): vs_runtime is deprecated, please use runtimes!", require_str)
-    end
-
     -- require package in the current host platform
     if require_extra.host then
         if is_subhost(core_package.targetplat()) and os.subarch() == core_package.targetarch() then
@@ -372,10 +365,6 @@ function _add_package_configurations(package)
             return true
         end})
     end
-    -- deprecated, please use runtimes
-    if package:extraconf("configs", "vs_runtime", "default") == nil then
-        package:add("configs", "vs_runtime", {builtin = true, description = "Set vs compiler runtime.", values = {"MT", "MTd", "MD", "MDd"}})
-    end
     if package:extraconf("configs", "toolchains", "default") == nil then
         package:add("configs", "toolchains", {builtin = true, description = "Set package toolchains only for cross-compilation."})
     end
@@ -541,7 +530,7 @@ function _init_requireinfo(requireinfo, package, opt)
         end
         requireinfo.configs.runtimes = requireinfo.configs.runtimes or project.get("target.runtimes")
         if project.policy("package.inherit_external_configs") then
-            requireinfo.configs.runtimes = requireinfo.configs.runtimes or get_config("runtimes") or get_config("vs_runtime")
+            requireinfo.configs.runtimes = requireinfo.configs.runtimes or get_config("runtimes")
         end
         if type(requireinfo.configs.runtimes) == "table" then
             requireinfo.configs.runtimes = table.concat(requireinfo.configs.runtimes, ",")
@@ -590,18 +579,6 @@ function _finish_requireinfo(requireinfo, package)
         local current = requireinfo.configs[name]
         local default = package:extraconf("configs", name, "default")
         local readonly = package:extraconf("configs", name, "readonly")
-        if name == "runtimes" then
-            -- vs_runtime is deprecated, but we need also support it now.
-            if default == nil then
-                default = package:extraconf("configs", "vs_runtime", "default")
-            end
-            if readonly == nil then
-                readonly = package:extraconf("configs", "vs_runtime", "readonly")
-            end
-            if default ~= nil or readonly ~= nil then
-                wprint("please use add_configs(\"runtimes\") instead of add_configs(\"vs_runtime\").")
-            end
-        end
         if readonly and current ~= default then
             wprint("configs.%s is readonly in package(%s), it's always %s", name, package:name(), default)
             -- package:config() will use default value after loading package
