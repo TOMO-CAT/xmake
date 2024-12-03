@@ -1,11 +1,6 @@
-target("lua")
+target("lua", function()
     set_kind("static")
     set_warnings("all")
-
-    -- disable c99(/TP) for windows
-    if is_plat("windows") then
-        set_languages("c89")
-    end
 
     -- add header files
     add_headerfiles("lua/(*.h)", {prefixdir = "lua"})
@@ -38,3 +33,4 @@ target("lua")
         io.replace(loslib_file, "system(cmd)", "0", {plain = true})
         target:add("files", loslib_file)
     end)
+end)
