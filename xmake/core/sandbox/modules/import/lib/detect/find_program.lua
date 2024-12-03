@@ -75,16 +75,6 @@ end
 -- check program
 function sandbox_lib_detect_find_program._check(program, opt)
     local findname = program
-    if os.subhost() == "windows" then
-        if not program:endswith(".exe") and not program:endswith(".cmd") and not program:endswith(".bat") then
-            findname = program .. ".exe"
-        end
-    elseif os.subhost() == "msys" and os.isfile(program) and os.filesize(program) < 256 then
-        -- only a sh script on msys2? e.g. c:/msys64/usr/bin/7z
-        -- we need to use sh to wrap it, otherwise os.exec cannot run it
-        program = "sh " .. program
-        findname = program
-    end
     if sandbox_lib_detect_find_program._do_check(findname, opt) then
         return program
     -- check "zig c++" without ".exe"

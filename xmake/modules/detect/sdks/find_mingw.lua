@@ -41,11 +41,6 @@ function _find_mingwdir(sdkdir)
             sdkdir = "/opt/homebrew/opt/mingw-w64"
         elseif is_host("linux") then
             sdkdir = "/usr"
-        elseif is_subhost("msys") then
-            local mingw_prefix = os.getenv("MINGW_PREFIX")
-            if mingw_prefix and os.isdir(mingw_prefix) then
-                sdkdir = mingw_prefix
-            end
         end
         -- attempt to get it from $PATH
         -- @see https://github.com/xmake-io/xmake/issues/977

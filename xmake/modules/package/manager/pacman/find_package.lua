@@ -32,18 +32,6 @@ function _find_package_from_list(list, name, pacman, opt)
     local cygpath = nil
     local pathtomsys = nil
     local msystem = nil
-    if is_subhost("msys") and opt.plat == "mingw" then
-        cygpath = find_tool("cygpath")
-        if not cygpath then
-            return
-        end
-        pathtomsys = os.iorunv(cygpath.program, {"--windows", "/"})
-        pathtomsys = pathtomsys:trim()
-        msystem = os.getenv("MSYSTEM")
-        if msystem then
-            msystem = msystem:lower()
-        end
-    end
 
     -- iterate over each file path inside the pacman package
     local result = {includedirs = {}, linkdirs = {}, links = {}}
@@ -52,11 +40,6 @@ function _find_package_from_list(list, name, pacman, opt)
         if line:find("/include/", 1, true) and (line:endswith(".h") or line:endswith(".hpp")) then
             if not line:startswith("/usr/include/") then
                 local hpath = line
-                if is_subhost("msys") and opt.plat == "mingw" then
-                    hpath = path.join(pathtomsys, line)
-                    local basehpath = path.join(pathtomsys, msystem .. "/include")
-                    table.insert(result.includedirs, basehpath)
-                end
                 table.insert(result.includedirs, path.directory(hpath))
             end
         -- remove lib and .a, .dll.a and .so to have the links
@@ -70,10 +53,6 @@ function _find_package_from_list(list, name, pacman, opt)
             table.insert(result.links, target.linkname(path.filename(line), {plat = opt.plat}))
         elseif line:endswith(".a") then
             local apath = line
-            if is_subhost("msys") and opt.plat == "mingw" then
-                apath = path.join(pathtomsys, line)
-                apath = apath:trim()
-            end
             table.insert(result.linkdirs, path.directory(apath))
             table.insert(result.links, target.linkname(path.filename(apath), {plat = opt.plat}))
         end
@@ -113,21 +92,6 @@ function main(name, opt)
     local pacman = find_tool("pacman")
     if not pacman then
         return
-    end
-
-    -- for msys2/mingw? mingw-w64-[i686|x86_64]-xxx
-    if is_subhost("msys") and opt.plat == "mingw" then
-        -- try to get the package prefix from the environment first
-        -- https://www.msys2.org/docs/package-naming/
-        local prefix = "mingw-w64-"
-        local arch = (opt.arch == "x86_64" and "x86_64-" or "i686-")
-        local msystem = os.getenv("MSYSTEM")
-        if msystem and not msystem:startswith("MINGW") then
-            local i, j = msystem:find("%D+")
-            name = prefix .. msystem:sub(i, j):lower() .. "-" .. arch .. name
-        else
-            name = prefix .. arch .. name
-        end
     end
 
     -- get package files list

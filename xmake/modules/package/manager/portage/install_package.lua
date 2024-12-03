@@ -41,11 +41,6 @@ function main(name, opt)
         raise("emerge not found!")
     end
 
-    -- for msys2/mingw? mingw-w64-[i686|x86_64]-xxx
-    if opt.plat == "mingw" then
-        name = "mingw64-runtime"
-    end
-
     -- init argv
     -- ask for confirmation, view tree of packages, verbose
     -- it is set this way because Portage compiles from source
@@ -57,7 +52,7 @@ function main(name, opt)
     end
 
     -- install package directly if the current user is root
-    if is_subhost("msys") or os.isroot() then
+    if os.isroot() then
         os.vrunv(emerge.program, argv)
     -- install with administrator permission?
     elseif sudo.has() then

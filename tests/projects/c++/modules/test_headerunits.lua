@@ -18,11 +18,7 @@ function _build()
 end
 
 function main(t)
-    if is_subhost("msys") then
-        -- on windows, mingw modulemapper doesn't handle headeunit path correctly, but it's working with mingw on macOS / Linux
-        -- os.exec("xmake f -c -p mingw --yes")
-        -- _build()
-    elseif is_host("linux") then
+    if is_host("linux") then
         -- only support for clang
         --
         -- local gcc = find_tool("gcc", {version = true})

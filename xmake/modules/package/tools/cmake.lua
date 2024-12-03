@@ -659,22 +659,6 @@ function _get_configs_for_generator(package, configs, opt)
                                  jobs, linkjobs))
             end
         end
-    elseif package:is_plat("mingw") and is_subhost("msys") then
-        table.insert(configs, "-G")
-        table.insert(configs, "MSYS Makefiles")
-    elseif package:is_plat("mingw") and is_subhost("windows") then
-        table.insert(configs, "-G")
-        table.insert(configs, "MinGW Makefiles")
-    elseif package:is_plat("wasm") and is_subhost("windows") then
-        -- we attempt to use ninja if it exist
-        -- @see https://github.com/xmake-io/xmake/issues/3771
-        table.insert(configs, "-G")
-        if find_tool("ninja") then
-            table.insert(configs, "Ninja")
-            opt.cmake_generator = "Ninja"
-        else
-            table.insert(configs, "MinGW Makefiles")
-        end
     else
         table.insert(configs, "-G")
         table.insert(configs, "Unix Makefiles")

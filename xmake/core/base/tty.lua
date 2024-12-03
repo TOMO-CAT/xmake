@@ -234,17 +234,7 @@ function tty.term()
         -- get term from system
         if term == nil then
             local subhost = xmake._SUBHOST
-            if subhost == "windows" then
-                if os.getenv("XMAKE_IN_VSTUDIO") then
-                    term = "vstudio"
-                elseif os.getenv("WT_SESSION") then
-                    term = "windows-terminal"
-                else
-                    term = tty.shell()
-                end
-            elseif subhost == "msys" then
-                term = "msys2"
-            elseif subhost == "cygwin" then
+            if subhost == "cygwin" then
                 term = "cygwin"
             elseif subhost == "macosx" then
                 term = "xterm"

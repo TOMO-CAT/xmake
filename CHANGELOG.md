@@ -242,7 +242,6 @@
 * [#4276](https://github.com/xmake-io/xmake/issues/4276): 支持自定义域 API
 * [#4286](https://github.com/xmake-io/xmake/pull/4286): 添加 Apple XROS 支持
 * [#4345](https://github.com/xmake-io/xmake/issues/4345): 支持检测类型大小 sizeof
-* [#4369](https://github.com/xmake-io/xmake/pull/4369): 添加 windows.manifest.uac 策略
 
 ### 改进
 
