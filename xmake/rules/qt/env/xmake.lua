@@ -18,7 +18,7 @@
 -- @file        xmake.lua
 --
 
-rule("qt.env")
+rule("qt.env", function()
     on_config(function (target)
 
         -- imports
@@ -32,8 +32,6 @@ rule("qt.env")
         end
 
         local qmlimportpath = target:values("qt.env.qmlimportpath") or {}
-        if target:is_plat("msys", "cygwin") then
-            raise("please run `xmake f -p mingw --mingw=/mingw64` to support Qt/Mingw64 on Msys!")
-        end
         target:set("runenv", "QML2_IMPORT_PATH", qmlimportpath)
     end)
+end)

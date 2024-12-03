@@ -19,7 +19,7 @@
 --
 
 -- define theme
-theme("ninja")
+theme("ninja", function()
 
     -- the success status
     set_text("success", "$ok")
@@ -53,11 +53,7 @@ theme("ninja")
     set_color("build.target", "magenta bright")
 
     -- the spinner chars
-    if (is_subhost("windows") and winos.version():lt("win10")) or is_subhost("msys", "cygwin") then
-        set_text("spinner.chars", '\\', '-', '/', '|')
-    else
-        set_text("spinner.chars", '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏')
-    end
+    set_text("spinner.chars", '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏')
 
     -- color dump
     set_text("dump.default_format", "%s")
@@ -86,3 +82,4 @@ theme("ninja")
     set_text("interactive.prompt2", "xmake>>")
     set_color("interactive.prompt", "green")
     set_color("interactive.prompt2", "green")
+end)

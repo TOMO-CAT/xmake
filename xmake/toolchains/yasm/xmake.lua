@@ -19,8 +19,7 @@
 --
 
 -- define toolchain
-toolchain("yasm")
-
+toolchain("yasm", function()
     -- set homepage
     set_homepage("https://yasm.tortall.net/")
     set_description("The Yasm Modular Assembler")
@@ -34,7 +33,6 @@ toolchain("yasm")
             toolchain:add("yasm.asflags", "-f", toolchain:is_arch("x86_64") and "macho64" or "macho32")
         elseif toolchain:is_plat("linux", "bsd") then
             toolchain:add("yasm.asflags", "-f", toolchain:is_arch("x86_64") and "elf64" or "elf32")
-        elseif toolchain:is_plat("windows", "mingw", "msys", "cygwin") then
-            toolchain:add("yasm.asflags", "-f", toolchain:is_arch("x86_64", "x64") and "win64" or "win32")
         end
     end)
+end)

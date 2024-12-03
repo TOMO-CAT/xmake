@@ -33,12 +33,6 @@ function _find_plat(plat)
         if not plat then
             plat = os.subhost()
         end
-        if plat == "msys" then
-            local msystem = os.getenv("MSYSTEM")
-            if msystem and msystem:lower():find("mingw", 1, true) then
-                plat = "mingw"
-            end
-        end
     end
     return plat
 end
@@ -102,16 +96,6 @@ function _find_arch(plat, arch)
                 arch = appledev == "simulator" and os.arch() or "armv7k"
             elseif plat == "wasm" then
                 arch = "wasm32"
-            elseif plat == "mingw" then
-                local mingw_chost = nil
-                if is_subhost("msys") then
-                    mingw_chost = os.getenv("MINGW_CHOST")
-                end
-                if mingw_chost == "i686-w64-mingw32" then
-                    arch = "i386"
-                else
-                    arch = "x86_64"
-                end
             elseif plat == "harmony" then
                 arch = "arm64-v8a"
             elseif plat == "cross" then
