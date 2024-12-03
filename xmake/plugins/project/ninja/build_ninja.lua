@@ -42,9 +42,6 @@ end
 
 -- escape path
 function _escape_path(filepath)
-    if is_host("windows") then
-        filepath = filepath:gsub('\\', '/')
-    end
     return filepath
 end
 

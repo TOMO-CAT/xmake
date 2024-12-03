@@ -40,7 +40,7 @@ rule("wdk.inf")
         local wdk = target:data("wdk")
 
         -- get stampinf
-        local stampinf = path.join(wdk.bindir, wdk.sdkver, arch, is_host("windows") and "stampinf.exe" or "stampinf")
+        local stampinf = path.join(wdk.bindir, wdk.sdkver, arch, "stampinf")
         assert(stampinf and os.isexec(stampinf), "stampinf not found!")
 
         -- save uic
@@ -103,4 +103,3 @@ rule("wdk.inf")
         dependinfo.values = args
         depend.save(dependinfo, dependfile)
     end)
-

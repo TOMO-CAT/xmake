@@ -41,14 +41,6 @@ function main(opt)
     opt.check   = opt.check or "-V"
     opt.command = opt.command or "-V"
 
-    -- find it from some logical drives paths
-    if is_host("windows") then
-        opt.paths = opt.paths or {}
-        for _, logical_drive in ipairs(winos.logical_drives()) do
-            table.insert(opt.paths, path.join(logical_drive, "iverilog", "bin"))
-        end
-    end
-
     -- find program
     local program = find_program(opt.program or "vvp", opt)
 
@@ -59,4 +51,3 @@ function main(opt)
     end
     return program, version
 end
-

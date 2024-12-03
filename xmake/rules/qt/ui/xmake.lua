@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,20 +17,19 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-rule("qt.ui")
+rule("qt.ui", function()
     add_deps("qt.env")
     set_extensions(".ui")
-    on_config(function (target)
+    on_config(function(target)
 
         -- get uic
         local qt = assert(target:data("qt"), "Qt not found!")
-        local uic = path.join(qt.bindir, is_host("windows") and "uic.exe" or "uic")
+        local uic = path.join(qt.bindir, "uic")
         if not os.isexec(uic) and qt.libexecdir then
-            uic = path.join(qt.libexecdir, is_host("windows") and "uic.exe" or "uic")
+            uic = path.join(qt.libexecdir, "uic")
         end
         if not os.isexec(uic) and qt.libexecdir_host then
-            uic = path.join(qt.libexecdir_host, is_host("windows") and "uic.exe" or "uic")
+            uic = path.join(qt.libexecdir_host, "uic")
         end
         assert(uic and os.isexec(uic), "uic not found!")
 
@@ -39,7 +38,8 @@ rule("qt.ui")
         --
         -- @see https://github.com/xmake-io/xmake/issues/1180
         --
-        local headerfile_dir = path.join(target:autogendir(), "rules", "qt", "ui")
+        local headerfile_dir = path.join(target:autogendir(), "rules", "qt",
+                                         "ui")
         if not os.isdir(headerfile_dir) then
             os.mkdir(headerfile_dir)
         end
@@ -49,15 +49,19 @@ rule("qt.ui")
         target:data_set("qt.uic", uic)
     end)
 
-    before_buildcmd_file(function (target, batchcmds, sourcefile_ui, opt)
+    before_buildcmd_file(function(target, batchcmds, sourcefile_ui, opt)
         local uic = target:data("qt.uic")
-        local headerfile_dir = path.join(target:autogendir(), "rules", "qt", "ui")
-        local headerfile_ui = path.join(headerfile_dir, "ui_" .. path.basename(sourcefile_ui) .. ".h")
-        batchcmds:show_progress(opt.progress, "${color.build.object}compiling.qt.ui %s", sourcefile_ui)
+        local headerfile_dir = path.join(target:autogendir(), "rules", "qt",
+                                         "ui")
+        local headerfile_ui = path.join(headerfile_dir, "ui_" ..
+                                            path.basename(sourcefile_ui) .. ".h")
+        batchcmds:show_progress(opt.progress,
+                                "${color.build.object}compiling.qt.ui %s",
+                                sourcefile_ui)
         batchcmds:mkdir(headerfile_dir)
         batchcmds:vrunv(uic, {path(sourcefile_ui), "-o", path(headerfile_ui)})
         batchcmds:add_depfiles(sourcefile_ui)
         batchcmds:set_depmtime(os.mtime(headerfile_ui))
         batchcmds:set_depcache(target:dependfile(headerfile_ui))
     end)
-
+end)

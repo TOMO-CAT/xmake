@@ -31,11 +31,7 @@ function _stop_remote_build_server(...)
         if pid then
             pid = pid:trim()
             try { function ()
-                if is_host("windows") then
-                    os.run("taskkill /f /t /pid %s", pid)
-                else
-                    os.run("kill -9 %s", pid)
-                end
+                os.run("kill -9 %s", pid)
                 print("service[%s]: stopped", pid)
             end}
         end
@@ -50,11 +46,7 @@ function _stop_remote_cache_server(...)
         if pid then
             pid = pid:trim()
             try { function ()
-                if is_host("windows") then
-                    os.run("taskkill /f /t /pid %s", pid)
-                else
-                    os.run("kill -9 %s", pid)
-                end
+                os.run("kill -9 %s", pid)
                 print("service[%s]: stopped", pid)
             end}
         end
@@ -69,11 +61,7 @@ function _stop_distcc_build_server(...)
         if pid then
             pid = pid:trim()
             try { function ()
-                if is_host("windows") then
-                    os.run("taskkill /f /t /pid %s", pid)
-                else
-                    os.run("kill -9 %s", pid)
-                end
+                os.run("kill -9 %s", pid)
                 print("service[%s]: stopped", pid)
             end}
         end
@@ -87,4 +75,3 @@ function main(...)
         stop_server(...)
     end
 end
-

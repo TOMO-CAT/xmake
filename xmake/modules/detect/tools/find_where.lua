@@ -31,8 +31,5 @@ function main(opt)
     opt = opt or {}
     opt.check = "/?"
     local program
-    if is_host("windows") then
-        program = find_program(opt.program or "where.exe", opt)
-    end
     return program
 end

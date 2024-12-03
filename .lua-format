@@ -1,0 +1,4 @@
+# https://github.com/Koihik/LuaFormatter/blob/master/docs/Style-Config.md
+column_limit: 80
+keep_simple_control_block_one_line: false
+keep_simple_function_one_line: false

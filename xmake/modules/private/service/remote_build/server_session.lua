@@ -193,9 +193,6 @@ function server_session:pull(respmsg)
     local fileitems = {}
     for _, filepath in ipairs(filepaths) do
         local fileitem = path.relative(filepath, self:sourcedir())
-        if is_host("windows") then
-            fileitem = fileitem:gsub("\\", "/")
-        end
         if fileitem:startswith("./") then
             fileitem = fileitem:sub(3)
         end

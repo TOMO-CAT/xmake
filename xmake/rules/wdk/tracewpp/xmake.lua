@@ -37,9 +37,9 @@ rule("wdk.tracewpp")
         local arch = assert(config.arch(), "arch not found!")
 
         -- get tracewpp
-        local tracewpp = path.join(wdk.bindir, arch, is_host("windows") and "tracewpp.exe" or "tracewpp")
+        local tracewpp = path.join(wdk.bindir, arch, "tracewpp")
         if not os.isexec(tracewpp) then
-            tracewpp = path.join(wdk.bindir, wdk.sdkver, arch, is_host("windows") and "tracewpp.exe" or "tracewpp")
+            tracewpp = path.join(wdk.bindir, wdk.sdkver, arch, "tracewpp")
         end
         assert(os.isexec(tracewpp), "tracewpp not found!")
 
@@ -112,4 +112,3 @@ rule("wdk.tracewpp")
         dependinfo.values = args
         depend.save(dependinfo, dependfile)
     end)
-

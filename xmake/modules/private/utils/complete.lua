@@ -36,11 +36,6 @@ function main(pos, config, ...)
     local argv = os.argv(word)
 
     if argv[1] then
-
-        -- normailize word to remove "xmake"
-        if is_host("windows") and argv[1]:lower() == "xmake.exe" then
-            argv[1] = "xmake"
-        end
         if argv[1] == "xmake" then
             table.remove(argv, 1)
         end
@@ -59,4 +54,3 @@ function main(pos, config, ...)
         comp:complete(items, argv, completing or "")
     end
 end
-

@@ -151,17 +151,6 @@ function make(target)
     -- add package run environments
     _add_target_pkgenvs(addenvs, target, {})
 
-    -- add search directories for all dependent shared libraries on windows
-    if target:is_plat("windows") or (target:is_plat("mingw") and is_host("windows")) then
-        local pathenv = addenvs["PATH"] or setenvs["PATH"]
-        local runpath = _make_runpath_on_windows(target)
-        if pathenv == nil then
-            addenvs["PATH"] = runpath
-        else
-            table.join2(pathenv, runpath)
-        end
-    end
-
     -- deduplicate envs
     if addenvs then
         addenvs = _dedup_envs(addenvs)

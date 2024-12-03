@@ -62,10 +62,4 @@ toolchain("wasi")
         toolchain:add("mxflags", "--sysroot=" .. sysroot)
         toolchain:add("ldflags", "--sysroot=" .. sysroot)
         toolchain:add("shflags", "--sysroot=" .. sysroot)
-
-        -- add bin search library for loading some dependent .dll files windows
-        local bindir = toolchain:bindir()
-        if bindir and is_host("windows") then
-            toolchain:add("runenvs", "PATH", bindir)
-        end
     end)

@@ -313,26 +313,6 @@ end
 
 -- enter package test environments
 function _enter_package_testenvs(package)
-
-    -- add compiler runtime library directory to $PATH
-    -- @see https://github.com/xmake-io/xmake-repo/pull/3606
-    if is_host("windows") and package:is_plat("windows", "mingw") then -- bin/*.dll for windows
-        local toolchains = package:toolchains()
-        if not toolchains then
-            local platform_inst = platform.load(package:plat(), package:arch())
-            toolchains = platform_inst:toolchains()
-            for _, toolchain_inst in ipairs(toolchains) do
-                if toolchain_inst:check() then
-                    local runenvs = toolchain_inst:runenvs()
-                    if runenvs and runenvs.PATH then
-                        local envs = {PATH = runenvs.PATH}
-                        os.addenvs(envs)
-                    end
-                end
-            end
-        end
-    end
-
     -- enter package environments
     for _, dep in ipairs(package:orderdeps()) do
         dep:envs_enter()

@@ -44,16 +44,4 @@ toolchain("verilator")
     end)
 
     on_load(function (toolchain)
-        if is_host("windows") then
-            for _, package in ipairs(toolchain:packages()) do
-                local envs = package:get("envs")
-                if envs then
-                    local verilator_root = envs.VERILATOR_ROOT
-                    if verilator_root then
-                        toolchain:add("runenvs", "VERILATOR_ROOT", table.unwrap(verilator_root))
-                        break
-                    end
-                end
-            end
-        end
     end)

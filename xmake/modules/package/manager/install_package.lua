@@ -32,9 +32,7 @@ function _install_package(manager_name, package_name, opt)
 
     -- get suitable package managers
     local managers = {}
-    if is_host("windows") then
-        table.insert(managers, "pacman") -- msys/mingw
-    elseif is_host("linux") then
+    if is_host("linux") then
         table.insert(managers, "apt")
         table.insert(managers, "yum")
         table.insert(managers, "pacman")
