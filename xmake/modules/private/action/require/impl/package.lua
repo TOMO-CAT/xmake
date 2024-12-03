@@ -153,13 +153,6 @@ function _load_require(require_str, requires_extra, parentinfo)
         require_build_configs.debug = true
     end
 
-    -- vs_runtime is deprecated, we should use runtimes
-    if require_build_configs and require_build_configs.vs_runtime then
-        require_build_configs.runtimes = require_build_configs.vs_runtime
-        require_build_configs.vs_runtime = nil
-        wprint("add_requires(%s): vs_runtime is deprecated, please use runtimes!", require_str)
-    end
-
     -- require package in the current host platform
     if require_extra.host then
         if is_subhost(core_package.targetplat()) and os.subarch() == core_package.targetarch() then
@@ -372,10 +365,6 @@ function _add_package_configurations(package)
             return true
         end})
     end
-    -- deprecated, please use runtimes
-    if package:extraconf("configs", "vs_runtime", "default") == nil then
-        package:add("configs", "vs_runtime", {builtin = true, description = "Set vs compiler runtime.", values = {"MT", "MTd", "MD", "MDd"}})
-    end
     if package:extraconf("configs", "toolchains", "default") == nil then
         package:add("configs", "toolchains", {builtin = true, description = "Set package toolchains only for cross-compilation."})
     end
@@ -541,7 +530,7 @@ function _init_requireinfo(requireinfo, package, opt)
         end
         requireinfo.configs.runtimes = requireinfo.configs.runtimes or project.get("target.runtimes")
         if project.policy("package.inherit_external_configs") then
-            requireinfo.configs.runtimes = requireinfo.configs.runtimes or get_config("runtimes") or get_config("vs_runtime")
+            requireinfo.configs.runtimes = requireinfo.configs.runtimes or get_config("runtimes")
         end
         if type(requireinfo.configs.runtimes) == "table" then
             requireinfo.configs.runtimes = table.concat(requireinfo.configs.runtimes, ",")
@@ -570,38 +559,11 @@ function _finish_requireinfo(requireinfo, package)
         package:arch_set(requireinfo.arch)
     end
     requireinfo.configs = requireinfo.configs or {}
-    if not package:is_headeronly() then
-        if package:is_plat("windows") then
-            -- @see https://github.com/xmake-io/xmake/issues/4477#issuecomment-1913249489
-            local runtimes = requireinfo.configs.runtimes
-            if runtimes then
-                runtimes = runtimes:split(",")
-            else
-                runtimes = {}
-            end
-            if not table.contains(runtimes, "MT", "MD", "MTd", "MDd") then
-                table.insert(runtimes, "MT")
-            end
-            requireinfo.configs.runtimes = table.concat(runtimes, ",")
-        end
-    end
     -- we need to ensure readonly configs
     for _, name in ipairs(table.keys(requireinfo.configs)) do
         local current = requireinfo.configs[name]
         local default = package:extraconf("configs", name, "default")
         local readonly = package:extraconf("configs", name, "readonly")
-        if name == "runtimes" then
-            -- vs_runtime is deprecated, but we need also support it now.
-            if default == nil then
-                default = package:extraconf("configs", "vs_runtime", "default")
-            end
-            if readonly == nil then
-                readonly = package:extraconf("configs", "vs_runtime", "readonly")
-            end
-            if default ~= nil or readonly ~= nil then
-                wprint("please use add_configs(\"runtimes\") instead of add_configs(\"vs_runtime\").")
-            end
-        end
         if readonly and current ~= default then
             wprint("configs.%s is readonly in package(%s), it's always %s", name, package:name(), default)
             -- package:config() will use default value after loading package
@@ -740,55 +702,6 @@ function _inherit_parent_configs(requireinfo, package, parentinfo)
     end
 end
 
--- select artifacts for msvc
-function _select_artifacts_for_msvc(package, artifacts_manifest)
-    local msvc
-    for _, instance in ipairs(package:toolchains()) do
-        if instance:name() == "msvc" then
-            msvc = instance
-            break
-        end
-    end
-    if not msvc then
-        msvc = toolchain.load("msvc", {plat = package:plat(), arch = package:arch()})
-    end
-    local vcvars = msvc:config("vcvars")
-    if vcvars then
-        local vs_toolset = vcvars.VCToolsVersion
-        if vs_toolset and semver.is_valid(vs_toolset) then
-            local artifacts_infos = {}
-            for key, artifacts_info in pairs(artifacts_manifest) do
-                if key:startswith(package:plat() .. "-" .. package:arch() .. "-vc") and key:endswith("-" .. package:buildhash()) then
-                    table.insert(artifacts_infos, artifacts_info)
-                end
-            end
-            -- we sort them to select a newest toolset to get better optimzed performance
-            table.sort(artifacts_infos, function (a, b)
-                if a.toolset and b.toolset then
-                    return semver.compare(a.toolset, b.toolset) > 0
-                else
-                    return false
-                end
-            end)
-            if package:config("shared") or package:is_binary() then
-                -- executable programs and dynamic libraries only need to select the latest toolset
-                return artifacts_infos[1]
-            else
-                -- static libraries need to consider toolset compatibility
-                for _, artifacts_info in ipairs(artifacts_infos) do
-                    -- toolset is backwards compatible
-                    --
-                    -- @see https://github.com/xmake-io/xmake/issues/1513
-                    -- https://docs.microsoft.com/en-us/cpp/porting/binary-compat-2015-2017?view=msvc-160
-                    if artifacts_info.toolset and semver.compare(vs_toolset, artifacts_info.toolset) >= 0 then
-                        return artifacts_info
-                    end
-                end
-            end
-        end
-    end
-end
-
 -- select artifacts for generic
 function _select_artifacts_for_generic(package, artifacts_manifest)
     local buildid = package:plat() .. "-" .. package:arch() .. "-" .. package:buildhash()
@@ -806,11 +719,7 @@ function _select_artifacts(package, artifacts_manifest)
         return
     end
     local artifacts_info
-    if package:is_plat("windows") then -- for msvc
-        artifacts_info = _select_artifacts_for_msvc(package, artifacts_manifest)
-    else
-        artifacts_info = _select_artifacts_for_generic(package, artifacts_manifest)
-    end
+    artifacts_info = _select_artifacts_for_generic(package, artifacts_manifest)
     if artifacts_info then
         package:artifacts_set(artifacts_info)
     end

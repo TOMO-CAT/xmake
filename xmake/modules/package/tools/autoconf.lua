@@ -46,27 +46,6 @@ function _translate_cygwin_paths(paths)
     return paths
 end
 
--- translate windows bin path
-function _translate_windows_bin_path(bin_path)
-    if bin_path then
-        local argv = os.argv(bin_path)
-        argv[1] = path.unix(argv[1]) .. ".exe"
-        return os.args(argv)
-    end
-end
-
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
--- get msvc run environments
-function _get_msvc_runenvs(package)
-    return os.joinenvs(_get_msvc(package):runenvs())
-end
-
 -- map compiler flags
 function _map_compflags(package, langkind, name, values)
     return compiler.map_flags(langkind, name, values, {target = package})
@@ -393,9 +372,6 @@ function buildenvs(package, opt)
             name = name:gsub("gcc%-", "g++-")
             envs.CXX = dir and path.join(dir, name) or name
         end
-    elseif package:is_plat("windows") and not package:config("toolchains") then
-        envs.PATH = os.getenv("PATH") -- we need to reserve PATH on msys2
-        envs = os.joinenvs(envs, _get_msvc(package):runenvs())
     end
     local ACLOCAL_PATH = {}
     local PKG_CONFIG_PATH = {}
@@ -417,15 +393,7 @@ function buildenvs(package, opt)
         end
     end
     envs.ACLOCAL_PATH = path.joinenv(ACLOCAL_PATH)
-    -- fix PKG_CONFIG_PATH for windows/msys2
-    -- @see https://github.com/xmake-io/xmake-repo/issues/3442
-    if package:is_plat("windows") then
-        -- pkg-config can only support for unix path and env seperator on msys/cygwin
-        PKG_CONFIG_PATH = _translate_cygwin_paths(PKG_CONFIG_PATH)
-        envs.PKG_CONFIG_PATH = path.joinenv(PKG_CONFIG_PATH, ":")
-    else
-        envs.PKG_CONFIG_PATH = path.joinenv(PKG_CONFIG_PATH)
-    end
+    envs.PKG_CONFIG_PATH = path.joinenv(PKG_CONFIG_PATH)
     return envs
 end
 
@@ -508,13 +476,7 @@ function make(package, argv, opt)
         end
     end
     assert(program, "make not found!")
-
-    if package:is_plat("windows") then
-        local envs = opt.envs or buildenvs(package, opt)
-        os.vrunv(program, argv, {envs = envs})
-    else
-        os.vrunv(program, argv)
-    end
+    os.vrunv(program, argv)
 end
 
 -- build package

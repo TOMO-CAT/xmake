@@ -5,21 +5,21 @@ includes("@builtin/xpack")
 
 add_requires("zlib", {configs = {shared = true}})
 
-target("test")
+target("test", function()
     set_kind("binary")
     add_files("src/*.cpp")
-    if is_plat("windows") then
-        add_files("src/*.rc")
-    end
+end)
 
-target("foo")
+target("foo", function()
     set_kind("shared")
     add_files("src/*.cpp")
     add_headerfiles("include/(*.h)")
     add_packages("zlib")
+end)
 
-xpack("test")
-    set_formats("nsis", "srpm", "rpm", "deb", "zip", "targz", "srczip", "srctargz", "runself", "wix")
+xpack("test", function()
+    set_formats("nsis", "srpm", "rpm", "deb", "zip", "targz", "srczip",
+                "srctargz", "runself", "wix")
     set_title("hello")
     set_author("ruki <waruqi@gmail.com>")
     set_description("A test installer.")
@@ -33,7 +33,7 @@ xpack("test")
     set_iconfile("src/assets/xmake.ico")
     add_components("LongPath")
 
-    on_load(function (package)
+    on_load(function(package)
         if package:with_source() then
             package:set("basename", "test-$(plat)-src-v$(version)")
         else
@@ -41,26 +41,29 @@ xpack("test")
         end
     end)
 
-    after_installcmd(function (package, batchcmds)
+    after_installcmd(function(package, batchcmds)
         if package:format() == "runself" then
             batchcmds:runv("echo", {"hello"})
         else
             batchcmds:mkdir(package:installdir("resources"))
-            batchcmds:cp("src/assets/*.txt", package:installdir("resources"), {rootdir = "src"})
+            batchcmds:cp("src/assets/*.txt", package:installdir("resources"),
+                         {rootdir = "src"})
             batchcmds:mkdir(package:installdir("stub"))
         end
     end)
 
-    after_uninstallcmd(function (package, batchcmds)
+    after_uninstallcmd(function(package, batchcmds)
         batchcmds:rmdir(package:installdir("resources"))
         batchcmds:rmdir(package:installdir("stub"))
     end)
+end)
 
-xpack_component("LongPath")
+xpack_component("LongPath", function()
     set_default(false)
     set_title("Enable Long Path")
-    set_description("Increases the maximum path length limit, up to 32,767 characters (before 256).")
-    on_installcmd(function (component, batchcmds)
+    set_description(
+        "Increases the maximum path length limit, up to 32,767 characters (before 256).")
+    on_installcmd(function(component, batchcmds)
         batchcmds:rawcmd("wix", [[
     <RegistryKey Root="HKLM" Key="SYSTEM\CurrentControlSet\Control\FileSystem">
         <RegistryValue Type="integer" Name="LongPathsEnabled" Value="1" KeyPath="yes"/>
@@ -72,3 +75,4 @@ xpack_component("LongPath")
     WriteRegDWORD ${HKLM} "SYSTEM\CurrentControlSet\Control\FileSystem" "LongPathsEnabled" 1
   ${EndIf}]])
     end)
+end)

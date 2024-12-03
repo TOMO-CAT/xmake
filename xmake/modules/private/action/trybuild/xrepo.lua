@@ -111,7 +111,7 @@ function _get_common_configs(argv)
     if config.get("toolchain") then
         table.insert(argv, "--toolchain=" .. config.get("toolchain"))
     end
-    local runtimes = config.get("runtimes") or config.get("vs_runtime")
+    local runtimes = config.get("runtimes")
     if runtimes then
         table.insert(argv, "-f")
         table.insert(argv, "runtimes='" .. runtimes .. "'")

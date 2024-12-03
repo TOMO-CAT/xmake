@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-rule("luarocks.module")
-    on_load(function (target)
+rule("luarocks.module", function()
+    on_load(function(target)
 
         -- imports
         import("core.cache.detectcache")
@@ -28,7 +27,8 @@ rule("luarocks.module")
         -- set kind
         if target:is_plat("macosx") then
             target:set("kind", "binary")
-            target:add("ldflags", "-bundle", "-undefined dynamic_lookup", {force = true})
+            target:add("ldflags", "-bundle", "-undefined dynamic_lookup",
+                       {force = true})
         else
             target:set("kind", "shared")
         end
@@ -36,20 +36,10 @@ rule("luarocks.module")
         -- set library name
         local modulename = target:name():split('.', {plain = true})
         modulename = modulename[#modulename]
-        if target:is_plat("windows", "mingw") then
-            target:set("basename", modulename)
-        else
-            target:set("filename", modulename .. ".so")
-        end
+        target:set("filename", modulename .. ".so")
 
         -- export symbols
-        if target:is_plat("windows") then
-            local exported_name = target:name():gsub("%.", "_")
-            exported_name = exported_name:match('^[^%-]+%-(.+)$') or exported_name
-            target:add("shflags", "/export:luaopen_" .. exported_name, {force = true})
-        else
-            target:set("symbols", "none")
-        end
+        target:set("symbols", "none")
 
         -- add lua library
         local has_lua = false
@@ -70,7 +60,11 @@ rule("luarocks.module")
             target:add(find_package("lua"))
         end
     end)
-    on_install(function (target)
+    on_install(function(target)
         local moduledir = path.directory((target:name():gsub('%.', '/')))
-        import('target.action.install')(target, {libdir = path.join('lib', moduledir), bindir = path.join('lib', moduledir)})
+        import('target.action.install')(target, {
+            libdir = path.join('lib', moduledir),
+            bindir = path.join('lib', moduledir)
+        })
     end)
+end)

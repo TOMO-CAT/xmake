@@ -94,19 +94,6 @@ function _is_cross_compilation()
 end
 
 function _get_cmake_system_processor()
-    -- on Windows, CMAKE_SYSTEM_PROCESSOR comes from PROCESSOR_ARCHITECTURE
-    -- on other systems it's the output of uname -m
-    if is_plat("windows") then
-        local archs = {
-            x86 = "x86",
-            x64 = "AMD64",
-            x86_64 = "AMD64",
-            arm = "ARM",
-            arm64 = "ARM64",
-            arm64ec = "ARM64EC"
-        }
-        return archs[os.subarch()] or os.subarch()
-    end
     return os.subarch()
 end
 
@@ -340,33 +327,12 @@ function _get_configs_for_host_toolchain(configs)
     end
 end
 
--- get cmake generator for msvc
-function _get_cmake_generator_for_msvc()
-    local vsvers =
-    {
-        ["2022"] = "17",
-        ["2019"] = "16",
-        ["2017"] = "15",
-        ["2015"] = "14",
-        ["2013"] = "12",
-        ["2012"] = "11",
-        ["2010"] = "10",
-        ["2008"] = "9"
-    }
-    local vs = _get_msvc():config("vs") or config.get("vs")
-    assert(vsvers[vs], "Unknown Visual Studio version: '" .. tostring(vs) .. "' set in project.")
-    return "Visual Studio " .. vsvers[vs] .. " " .. vs
-end
-
 -- get configs for cmake generator
 function _get_configs_for_generator(configs, opt)
     opt     = opt or {}
     configs = configs or {}
     local cmake_generator = opt.cmake_generator
     if cmake_generator then
-        if cmake_generator:find("Visual Studio", 1, true) then
-            cmake_generator = _get_cmake_generator_for_msvc()
-        end
         table.insert(configs, "-G")
         table.insert(configs, cmake_generator)
     elseif is_plat("mingw") and is_subhost("msys") then
@@ -375,9 +341,6 @@ function _get_configs_for_generator(configs, opt)
     elseif is_plat("mingw") and is_subhost("windows") then
         table.insert(configs, "-G")
         table.insert(configs, "MinGW Makefiles")
-    elseif is_plat("windows") then
-        table.insert(configs, "-G")
-        table.insert(configs, _get_cmake_generator_for_msvc())
     elseif is_plat("wasm") and is_subhost("windows") then
         table.insert(configs, "-G")
         table.insert(configs, "MinGW Makefiles")
@@ -401,9 +364,7 @@ function _get_configs(opt)
     local configs = {}
     _get_configs_for_install(configs, opt)
     _get_configs_for_generator(configs, opt)
-    if is_plat("windows") then
-        _get_configs_for_windows(configs, opt)
-    elseif is_plat("android") then
+    if is_plat("android") then
         _get_configs_for_android(configs)
     elseif is_plat("iphoneos", "watchos") or
         -- for cross-compilation on macOS, @see https://github.com/xmake-io/xmake/issues/2804
@@ -443,20 +404,6 @@ function _get_configs(opt)
     return configs
 end
 
--- build for msvc
-function _build_for_msvc(opt)
-    local runenvs = _get_msvc_runenvs()
-    local msbuild = find_tool("msbuild", {envs = runenvs})
-    local slnfile = assert(find_file("*.sln", os.curdir()), "*.sln file not found!")
-    os.vexecv(msbuild.program, {slnfile, "-nologo", "-t:Build", "-m",
-        "-p:Configuration=" .. (is_mode("debug") and "Debug" or "Release"),
-        "-p:Platform=" .. _get_vsarch()}, {envs = runenvs})
-    local projfile = os.isfile("INSTALL.vcxproj") and "INSTALL.vcxproj" or "INSTALL.vcproj"
-    if os.isfile(projfile) then
-        os.vexecv(msbuild.program, {projfile, "/property:configuration=" .. (is_mode("debug") and "Debug" or "Release")}, {envs = runenvs})
-    end
-end
-
 -- build for make
 function _build_for_make(opt)
     local argv = {"-j" .. option.get("jobs")}
@@ -483,9 +430,6 @@ function _build_for_ninja(opt)
     table.insert(argv, "-j")
     table.insert(argv, njob)
     local envs
-    if is_plat("windows") then
-        envs = _get_msvc_runenvs()
-    end
     os.vexecv(ninja.program, argv, {envs = envs})
 end
 
@@ -501,13 +445,7 @@ function clean()
         local configfile = find_file("[mM]akefile", buildir) or (is_plat("windows") and find_file("*.sln", buildir))
         if configfile then
             local oldir = os.cd(buildir)
-            if is_plat("windows") then
-                local runenvs = _get_msvc_runenvs()
-                local msbuild = find_tool("msbuild", {envs = runenvs})
-                os.vexecv(msbuild.program, {configfile, "-nologo", "-t:Clean", "-p:Configuration=" .. (is_mode("debug") and "Debug" or "Release"), "-p:Platform=" .. (is_arch("x64") and "x64" or "Win32")}, {envs = runenvs})
-            else
-                os.vexec("make clean")
-            end
+            os.vexec("make clean")
             os.cd(oldir)
         end
     end
@@ -537,9 +475,7 @@ function build()
     -- do build
     local cmake_generator = opt.cmake_generator
     if cmake_generator then
-        if cmake_generator:find("Visual Studio", 1, true) then
-            _build_for_msvc(opt)
-        elseif cmake_generator == "Ninja" then
+        if cmake_generator == "Ninja" then
             _build_for_ninja(opt)
         elseif cmake_generator:find("Makefiles", 1, true) then
             _build_for_make(opt)
@@ -547,11 +483,7 @@ function build()
             raise("unknown cmake generator(%s)!", cmake_generator)
         end
     else
-        if is_plat("windows") then
-            _build_for_msvc(opt)
-        else
-            _build_for_make(opt)
-        end
+        _build_for_make(opt)
     end
 
     cprint("output to ${bright}%s", artifacts_dir)

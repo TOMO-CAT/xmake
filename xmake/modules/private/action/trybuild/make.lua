@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        make.lua
 --
-
 -- imports
 import("core.base.option")
 import("core.project.config")
@@ -30,11 +29,7 @@ end
 
 -- do clean
 function clean()
-    if is_subhost("windows") then
-        os.vexec("nmake clean")
-    else
-        os.vexec("make clean")
-    end
+    os.vexec("make clean")
 end
 
 -- do build
@@ -44,15 +39,12 @@ function build()
     if option.get("verbose") then
         table.insert(argv, "VERBOSE=1")
     end
-    if is_subhost("windows") then
-        os.vexecv("nmake", argv)
+
+    table.insert(argv, "-j" .. option.get("jobs"))
+    if is_host("bsd") then
+        os.vexecv("gmake", argv)
     else
-        table.insert(argv, "-j" .. option.get("jobs"))
-        if is_host("bsd") then
-            os.vexecv("gmake", argv)
-        else
-            os.vexecv("make", argv)
-        end
+        os.vexecv("make", argv)
     end
     cprint("${color.success}build ok!")
 end

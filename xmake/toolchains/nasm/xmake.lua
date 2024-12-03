@@ -43,12 +43,6 @@ toolchain("nasm")
             elseif toolchain:is_arch("i386") then
                 asflags = "-f elf32"
             end
-        elseif toolchain:is_plat("windows", "mingw", "msys", "cygwin") then
-            if toolchain:is_arch("x64", "x86_64") then
-                asflags = "-f win64"
-            elseif toolchain:is_arch("x86", "i386") then
-                asflags = "-f win32"
-            end
         end
         toolchain:add("nasm.asflags", asflags)
     end)

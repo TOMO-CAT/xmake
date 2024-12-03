@@ -50,12 +50,6 @@ end
 
 -- get pkg-config, we need force to find it, because package install environments will be changed
 function _get_pkgconfig(package)
-    if package:is_plat("windows") then
-        local pkgconf = find_tool("pkgconf", {force = true})
-        if pkgconf then
-            return pkgconf.program
-        end
-    end
     local pkgconfig = find_tool("pkg-config", {force = true})
     if pkgconfig then
         return pkgconfig.program
@@ -74,13 +68,6 @@ function _translate_flags(package, flags)
             end
         end
         flags = flags_new
-    elseif package:is_plat("windows") then
-        for idx, flag in ipairs(flags) do
-            -- @see https://github.com/xmake-io/xmake/issues/4407
-            if flag:startswith("-libpath:") then
-                flags[idx] = flag:gsub("%-libpath:", "/libpath:")
-            end
-        end
     end
     return flags
 end
@@ -143,25 +130,6 @@ function _insert_cross_configs(package, file, opt)
         elseif package:is_arch("x86", "i386") then
             cpu = "i686"
             cpu_family = "x86"
-        else
-            raise("unsupported arch(%s)", package:arch())
-        end
-        file:print("system = 'windows'")
-        file:print("cpu_family = '%s'", cpu_family)
-        file:print("cpu = '%s'", cpu)
-        file:print("endian = 'little'")
-    elseif package:is_plat("windows") then
-        local cpu
-        local cpu_family
-        if package:is_arch("arm64", "arm64ec") then
-            cpu = "aarch64"
-            cpu_family = "aarch64"
-        elseif package:is_arch("x86") then
-            cpu = "x86"
-            cpu_family = "x86"
-        elseif package:is_arch("x64") then
-            cpu = "x86_64"
-            cpu_family = "x86_64"
         else
             raise("unsupported arch(%s)", package:arch())
         end
@@ -346,19 +314,6 @@ function _get_configs(package, configs, opt)
         table.insert(configs, "-Db_sanitize=address")
     end
 
-    -- add vs runtimes flags
-    if package:is_plat("windows") then
-        if package:has_runtime("MT") then
-            table.insert(configs, "-Db_vscrt=mt")
-        elseif package:has_runtime("MTd") then
-            table.insert(configs, "-Db_vscrt=mtd")
-        elseif package:has_runtime("MD") then
-            table.insert(configs, "-Db_vscrt=md")
-        elseif package:has_runtime("MDd") then
-            table.insert(configs, "-Db_vscrt=mdd")
-        end
-    end
-
     -- add cross file
     if package:is_cross() or package:is_plat("mingw") then
         table.insert(configs, "--cross-file=" .. _get_configs_file(package, opt))
@@ -454,13 +409,6 @@ function buildenvs(package, opt)
         envs.ASFLAGS   = table.concat(asflags, ' ')
         envs.LDFLAGS   = table.concat(ldflags, ' ')
         envs.SHFLAGS   = table.concat(shflags, ' ')
-        if package:is_plat("windows") then
-            envs = os.joinenvs(envs, _get_msvc_runenvs(package))
-            local pkgconf = _get_pkgconfig(package)
-            if pkgconf then
-                envs.PKG_CONFIG = pkgconf
-            end
-        end
     end
     local ACLOCAL_PATH = {}
     local PKG_CONFIG_PATH = {}
@@ -547,9 +495,4 @@ function install(package, configs, opt)
     -- do install
     local meson = assert(find_tool("meson"), "meson not found!")
     os.vrunv(meson.program, argv, {envs = opt.envs or buildenvs(package, opt)})
-
-    -- fix static libname on windows
-    if package:is_plat("windows") and not package:config("shared") then
-        _fix_libname_on_windows(package)
-    end
 end

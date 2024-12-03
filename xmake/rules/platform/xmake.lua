@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-rule("platform.wasm")
+rule("platform.wasm", function()
     add_deps("platform.wasm.preloadfiles")
     add_deps("platform.wasm.installfiles")
+end)
 
-rule("platform.windows")
+rule("platform.windows", function()
     add_deps("platform.windows.def")
+end)

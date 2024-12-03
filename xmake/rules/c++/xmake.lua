@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,36 +17,23 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-rule("c.build")
+rule("c.build", function()
     set_sourcekinds("cc")
     add_deps("c.build.pcheader", "c.build.optimization", "c.build.sanitizer")
     on_build_files("private.action.build.object", {batch = true, distcc = true})
-    on_config(function (target)
-        -- https://github.com/xmake-io/xmake/issues/4621
-        if target:is_plat("windows") and target:is_static() and target:has_tool("cc", "tcc") then
-            target:set("extension", ".a")
-            target:set("prefixname", "lib")
-        end
+    on_config(function(target)
     end)
 
-rule("c++.build")
+    rule("c++.build")
     set_sourcekinds("cxx")
-    add_deps("c++.build.pcheader", "c++.build.modules", "c++.build.optimization", "c++.build.sanitizer")
+    add_deps("c++.build.pcheader", "c++.build.modules",
+             "c++.build.optimization", "c++.build.sanitizer")
     on_build_files("private.action.build.object", {batch = true, distcc = true})
-    on_config(function (target)
-        -- we enable c++ exceptions by default
-        if target:is_plat("windows") and not target:get("exceptions") then
-            target:set("exceptions", "cxx")
-        end
-        -- https://github.com/xmake-io/xmake/issues/4621
-        if target:is_plat("windows") and target:is_static() and target:has_tool("cxx", "tcc") then
-            target:set("extension", ".a")
-            target:set("prefixname", "lib")
-        end
+    on_config(function(target)
     end)
+end)
 
-rule("c")
+rule("c", function()
 
     -- add build rules
     add_deps("c.build")
@@ -70,8 +57,9 @@ rule("c")
 
     -- add linker rules
     add_deps("linker")
+end)
 
-rule("c++")
+rule("c++", function()
 
     -- add build rules
     add_deps("c++.build")
@@ -95,4 +83,4 @@ rule("c++")
 
     -- add linker rules
     add_deps("linker")
-
+end)

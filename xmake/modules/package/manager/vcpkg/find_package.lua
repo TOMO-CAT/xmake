@@ -101,9 +101,6 @@ function _find_package(vcpkgdir, name, opt)
     if info then
         for _, line in ipairs(info:split('\n')) do
             line = line:trim()
-            if plat == "windows" then
-                line = line:lower()
-            end
 
             -- get pkgconfig files
             if line:find(triplet .. (mode == "debug" and "/debug" or "") .. "/lib/pkgconfig/", 1, true) and line:endswith(".pc") then
@@ -126,17 +123,6 @@ function _find_package(vcpkgdir, name, opt)
                     result.libfiles = result.libfiles or {}
                     table.insert(result.linkdirs, path.join(installdir, path.directory(line)))
                     table.insert(result.links, target.linkname(path.filename(line), {plat = plat}))
-                    table.insert(result.libfiles, path.join(installdir, path.directory(line), path.filename(line)))
-                end
-            end
-
-            -- add shared library directory (/bin/) to linkdirs for running with PATH on windows
-            if plat == "windows" and line:endswith(".dll") then
-                if line:find(plat .. (mode == "debug" and "/debug" or "") .. "/bin/", 1, true) then
-                    result = result or {}
-                    result.linkdirs = result.linkdirs or {}
-                    result.libfiles = result.libfiles or {}
-                    table.insert(result.linkdirs, path.join(installdir, path.directory(line)))
                     table.insert(result.libfiles, path.join(installdir, path.directory(line), path.filename(line)))
                 end
             end

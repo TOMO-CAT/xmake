@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        makefile.lua
 --
-
 -- imports
 import("core.base.colors")
 import("core.tool.compiler")
@@ -57,13 +56,16 @@ end
 function _translate_flag(flag, outputdir)
     if flag then
         if path.instance_of(flag) then
-            flag = flag:clone():set(_get_relative_unix_path(flag:rawstr(), outputdir)):str()
+            flag = flag:clone():set(_get_relative_unix_path(flag:rawstr(),
+                                                            outputdir)):str()
         elseif path.is_absolute(flag) then
             flag = _get_relative_unix_path(flag, outputdir)
         elseif flag:startswith("-fmodule-file=") then
-            flag = "-fmodule-file=" .. _get_relative_unix_path(flag:sub(15), outputdir)
+            flag = "-fmodule-file=" ..
+                       _get_relative_unix_path(flag:sub(15), outputdir)
         elseif flag:startswith("-fmodule-mapper=") then
-            flag = "-fmodule-mapper=" .. _get_relative_unix_path(flag:sub(17), outputdir)
+            flag = "-fmodule-mapper=" ..
+                       _get_relative_unix_path(flag:sub(17), outputdir)
         elseif flag:startswith("-isystem") and #flag > 8 then
             flag = "-isystem" .. _get_relative_unix_path(flag:sub(9), outputdir)
         elseif flag:startswith("-I") and #flag > 2 then
@@ -117,7 +119,10 @@ function _get_common_flags(target, sourcekind, sourcebatch)
     for _, sourcefile in ipairs(sourcebatch.sourcefiles) do
 
         -- make compiler flags
-        local flags = compiler.compflags(sourcefile, {target = target, sourcekind = sourcekind})
+        local flags = compiler.compflags(sourcefile, {
+            target = target,
+            sourcekind = sourcekind
+        })
         for _, flag in ipairs(flags) do
             flags_stats[flag] = (flags_stats[flag] or 0) + 1
         end
@@ -158,70 +163,37 @@ end
 
 -- get command: mkdir
 function _get_cmd_mkdir(dir)
-    if is_subhost("windows") then
-        return string.format("-@mkdir %s > NUL 2>&1", dir)
-    else
-        return string.format("@mkdir -p %s", dir)
-    end
+    return string.format("@mkdir -p %s", dir)
 end
 
 -- get command: cp
 function _get_cmd_cp(sourcefile, targetfile)
-    if is_subhost("windows") then
-        return string.format("@copy /Y %s %s > NUL 2>&1", sourcefile, targetfile)
-    else
-        return string.format("@cp %s %s", sourcefile, targetfile)
-    end
+    return string.format("@cp %s %s", sourcefile, targetfile)
 end
 
 -- get command: mv
 function _get_cmd_mv(sourcefile, targetfile)
-    if is_subhost("windows") then
-        return string.format("@ren %s %s > NUL 2>&1", sourcefile, targetfile)
-    else
-        return string.format("@mv %s %s", sourcefile, targetfile)
-    end
+    return string.format("@mv %s %s", sourcefile, targetfile)
 end
 
 -- get command: ln
 function _get_cmd_ln(sourcefile, targetfile)
-    if is_subhost("windows") then
-        if os.isdir(sourcefile) then
-            return string.format("@mklink /D %s %s > NUL 2>&1", sourcefile, targetfile)
-        else
-            return string.format("@mklink %s %s > NUL 2>&1", sourcefile, targetfile)
-        end
-    else
-        return string.format("@ln -s %s %s", sourcefile, targetfile)
-    end
+    return string.format("@ln -s %s %s", sourcefile, targetfile)
 end
 
 -- get command: cpdir
 function _get_cmd_cpdir(sourcedir, targetdir)
-    if is_subhost("windows") then
-        return string.format("@copy /Y %s %s > NUL 2>&1", sourcedir, targetdir)
-    else
-        return string.format("@cp -r %s %s", sourcedir, targetdir)
-    end
+    return string.format("@cp -r %s %s", sourcedir, targetdir)
 end
 
 -- get command: rm
 function _get_cmd_rm(filedir)
-    if is_subhost("windows") then
-        -- we attempt to delete it as file first, we remove it as directory if failed
-        return string.format("@del /F /Q %s > NUL 2>&1 || rmdir /S /Q %s > NUL 2>&1", filedir, filedir)
-    else
-        return string.format("@rm -rf %s", filedir)
-    end
+    return string.format("@rm -rf %s", filedir)
 end
 
 -- get command: rmdir
 function _get_cmd_rmdir(filedir)
-    if is_subhost("windows") then
-        return string.format("@rmdir /S /Q %s > NUL 2>&1", filedir)
-    else
-        return string.format("@rm -rf %s", filedir)
-    end
+    return string.format("@rm -rf %s", filedir)
 end
 
 -- get command: echo
@@ -244,25 +216,32 @@ function _get_command_string(cmd, outputdir)
         for _, v in ipairs(cmd.argv) do
             table.insert(argv, _translate_flag(v, outputdir))
         end
-        local command = _get_relative_unix_path(cmd.program) .. " " .. os.args(argv)
+        local command = _get_relative_unix_path(cmd.program) .. " " ..
+                            os.args(argv)
         if opt and opt.curdir then
-            wprint("curdir has been not supported in batchcmds:execv() for makefile generator!")
+            wprint(
+                "curdir has been not supported in batchcmds:execv() for makefile generator!")
         end
         return "%$(VV)" .. command
     elseif kind == "cp" then
         if os.isdir(cmd.srcpath) then
-            return _get_cmd_cpdir(get_relative_unix_path(cmd.srcpath, outputdir), _get_relative_unix_path(cmd.dstpath, outputdir))
+            return _get_cmd_cpdir(
+                       get_relative_unix_path(cmd.srcpath, outputdir),
+                       _get_relative_unix_path(cmd.dstpath, outputdir))
         else
-            return _get_cmd_cp(_get_relative_unix_path(cmd.srcpath, outputdir), _get_relative_unix_path(cmd.dstpath, outputdir))
+            return _get_cmd_cp(_get_relative_unix_path(cmd.srcpath, outputdir),
+                               _get_relative_unix_path(cmd.dstpath, outputdir))
         end
     elseif kind == "rm" then
         return _get_cmd_rm(_get_relative_unix_path(cmd.filepath, outputdir))
     elseif kind == "rmdir" then
         return _get_cmd_rmdir(_get_relative_unix_path(cmd.dir, outputdir))
     elseif kind == "mv" then
-        return _get_cmd_mv(_get_relative_unix_path(cmd.srcpath, outputdir), _get_relative_unix_path(cmd.dstpath, outputdir))
+        return _get_cmd_mv(_get_relative_unix_path(cmd.srcpath, outputdir),
+                           _get_relative_unix_path(cmd.dstpath, outputdir))
     elseif kind == "ln" then
-        return _get_cmd_ln(_get_relative_unix_path(cmd.srcpath, outputdir), _get_relative_unix_path(cmd.dstpath, outputdir))
+        return _get_cmd_ln(_get_relative_unix_path(cmd.srcpath, outputdir),
+                           _get_relative_unix_path(cmd.dstpath, outputdir))
     elseif kind == "cd" then
         return _get_cmd_cd(_get_relative_unix_path(cmd.dir, outputdir))
     elseif kind == "mkdir" then
@@ -282,7 +261,7 @@ end
 
 -- add header
 function _add_header(makefile)
-   makefile:print([[# this is the build file for project %s
+    makefile:print([[# this is the build file for project %s
 # it is autogenerated by the xmake build system.
 # do not edit by hand.
 ]], project.name() or "")
@@ -290,15 +269,9 @@ end
 
 -- add switches
 function _add_switches(makefile)
-    if is_subhost("windows") then
-        makefile:print("!if \"%$(VERBOSE)\" != \"1\"")
-        makefile:print("VV=@")
-        makefile:print("!endif")
-    else
-        makefile:print("ifneq (%$(VERBOSE),1)")
-        makefile:print("VV=@")
-        makefile:print("endif")
-    end
+    makefile:print("ifneq (%$(VERBOSE),1)")
+    makefile:print("VV=@")
+    makefile:print("endif")
     makefile:print("")
 end
 
@@ -328,7 +301,8 @@ function _add_toolchains(makefile, outputdir)
     for _, linkerkind in ipairs(table.unique(linkerkinds)) do
         local program = platform.tool(linkerkind)
         if program and program ~= "" then
-            makefile:print("%s=%s", (linkerkind:upper():gsub('%-', '_')), program)
+            makefile:print("%s=%s", (linkerkind:upper():gsub('%-', '_')),
+                           program)
         end
     end
     makefile:print("")
@@ -336,16 +310,19 @@ function _add_toolchains(makefile, outputdir)
     -- add toolchains from targets
     for targetname, target in pairs(project.targets()) do
         if not target:is_phony() then
-            local program = _get_program_from_target(target, target:linker():kind())
+            local program = _get_program_from_target(target,
+                                                     target:linker():kind())
             if program then
-                makefile:print("%s_%s=%s", targetname, target:linker():kind():upper(), program)
+                makefile:print("%s_%s=%s", targetname,
+                               target:linker():kind():upper(), program)
             end
             for _, sourcebatch in pairs(target:sourcebatches()) do
                 local sourcekind = sourcebatch.sourcekind
                 if sourcekind then
                     local program = _get_program_from_target(target, sourcekind)
                     if program then
-                        makefile:print("%s_%s=%s", targetname, sourcekind:upper(), program)
+                        makefile:print("%s_%s=%s", targetname,
+                                       sourcekind:upper(), program)
                     end
                 end
             end
@@ -361,19 +338,26 @@ function _add_flags(makefile, targetflags, outputdir)
             for _, sourcebatch in pairs(target:sourcebatches()) do
                 local sourcekind = sourcebatch.sourcekind
                 if sourcekind then
-                    local commonflags, sourceflags = _get_common_flags(target, sourcekind, sourcebatch)
-                    makefile:print("%s_%sFLAGS=%s", targetname, sourcekind:upper(), os.args(_translate_flags(commonflags, outputdir)))
-                    targetflags[targetname .. '_' .. sourcekind:upper()] = sourceflags
+                    local commonflags, sourceflags =
+                        _get_common_flags(target, sourcekind, sourcebatch)
+                    makefile:print("%s_%sFLAGS=%s", targetname,
+                                   sourcekind:upper(), os.args(
+                                       _translate_flags(commonflags, outputdir)))
+                    targetflags[targetname .. '_' .. sourcekind:upper()] =
+                        sourceflags
                 end
             end
-            makefile:print("%s_%sFLAGS=%s", targetname, target:linker():kind():upper(), os.args(_translate_flags(target:linkflags(), outputdir)))
+            makefile:print("%s_%sFLAGS=%s", targetname,
+                           target:linker():kind():upper(), os.args(
+                               _translate_flags(target:linkflags(), outputdir)))
         end
     end
     makefile:print("")
 end
 
 -- add build object
-function _add_build_object(makefile, target, sourcefile, objectfile, sourceflags, outputdir, precmds_label)
+function _add_build_object(makefile, target, sourcefile, objectfile,
+                           sourceflags, outputdir, precmds_label)
 
     -- get the source file kind
     local sourcekind = language.sourcekind_of(sourcefile)
@@ -394,8 +378,12 @@ function _add_build_object(makefile, target, sourcefile, objectfile, sourceflags
     objectfile = _get_relative_unix_path(objectfile, outputdir)
 
     -- make command
-    local macro = "$\01" .. target:name() .. '_' .. sourcekind:upper() .. "FLAGS\02"
-    local command = compiler.compcmd(sourcefile, objectfile, {target = target, compflags = table.join(macro, compflags)})
+    local macro = "$\01" .. target:name() .. '_' .. sourcekind:upper() ..
+                      "FLAGS\02"
+    local command = compiler.compcmd(sourcefile, objectfile, {
+        target = target,
+        compflags = table.join(macro, compflags)
+    })
     command = command:gsub('\01', '(')
     command = command:gsub('\02', ')')
 
@@ -406,9 +394,12 @@ function _add_build_object(makefile, target, sourcefile, objectfile, sourceflags
     end
     if p then
         if program_global then
-            command = format("%s$(%s)%s", command:sub(1, p - 1), sourcekind:upper(), command:sub(e + 1))
+            command = format("%s$(%s)%s", command:sub(1, p - 1),
+                             sourcekind:upper(), command:sub(e + 1))
         else
-            command = format("%s$(%s_%s)%s", command:sub(1, p - 1), target:name(), sourcekind:upper(), command:sub(e + 1))
+            command = format("%s$(%s_%s)%s", command:sub(1, p - 1),
+                             target:name(), sourcekind:upper(),
+                             command:sub(e + 1))
         end
     end
 
@@ -417,7 +408,8 @@ function _add_build_object(makefile, target, sourcefile, objectfile, sourceflags
     if ccache then
         p, e = command:find(ccache.program, 1, true)
         if p then
-            command = format("%s$(%s)%s", command:sub(1, p - 1), "CCACHE", command:sub(e + 1))
+            command = format("%s$(%s)%s", command:sub(1, p - 1), "CCACHE",
+                             command:sub(e + 1))
         end
     end
 
@@ -431,7 +423,9 @@ function _add_build_object(makefile, target, sourcefile, objectfile, sourceflags
     makefile:print(" %s", sourcefile)
 
     -- make body
-    makefile:print("\t%s", _get_cmd_echo(string.format("%scompiling.$(mode) %s", ccache and "ccache " or "", sourcefile)))
+    makefile:print("\t%s", _get_cmd_echo(
+                       string.format("%scompiling.$(mode) %s",
+                                     ccache and "ccache " or "", sourcefile)))
     makefile:print("\t%s", _get_cmd_mkdir(path.directory(objectfile)))
     makefile:writef("\t$(VV)%s\n", command)
 
@@ -440,7 +434,8 @@ function _add_build_object(makefile, target, sourcefile, objectfile, sourceflags
 end
 
 -- add build objects
-function _add_build_objects(makefile, target, sourcekind, sourcebatch, sourceflags, outputdir, precmds_label)
+function _add_build_objects(makefile, target, sourcekind, sourcebatch,
+                            sourceflags, outputdir, precmds_label)
     local handled_objects = target:data("makefile.handled_objects")
     if not handled_objects then
         handled_objects = {}
@@ -450,8 +445,8 @@ function _add_build_objects(makefile, target, sourcekind, sourcebatch, sourcefla
         -- remove repeat
         -- this is because some rules will repeatedly bind the same sourcekind, e.g. `rule("c++.build.modules.builder")`
         if not handled_objects[objectfile] then
-            _add_build_object(makefile, target,
-                sourcebatch.sourcefiles[index], objectfile, sourceflags, outputdir, precmds_label)
+            _add_build_object(makefile, target, sourcebatch.sourcefiles[index],
+                              objectfile, sourceflags, outputdir, precmds_label)
             handled_objects[objectfile] = true
         end
     end
@@ -469,14 +464,18 @@ function _add_build_phony(makefile, target)
 end
 
 -- add custom commands before building target
-function _add_build_custom_commands_before(makefile, target, sourcegroups, outputdir)
+function _add_build_custom_commands_before(makefile, target, sourcegroups,
+                                           outputdir)
 
     -- add before commands
     -- we use irpairs(groups), because the last group that should be given the highest priority.
     local cmds_before = {}
     target_cmds.get_target_buildcmd(target, cmds_before, {suffix = "before"})
-    target_cmds.get_target_buildcmd_sourcegroups(target, cmds_before, sourcegroups, {suffix = "before"})
-    target_cmds.get_target_buildcmd_sourcegroups(target, cmds_before, sourcegroups)
+    target_cmds.get_target_buildcmd_sourcegroups(target, cmds_before,
+                                                 sourcegroups,
+                                                 {suffix = "before"})
+    target_cmds.get_target_buildcmd_sourcegroups(target, cmds_before,
+                                                 sourcegroups)
 
     local targetname = target:name()
     local label = "precmds_" .. targetname
@@ -494,9 +493,12 @@ function _add_build_custom_commands_before(makefile, target, sourcegroups, outpu
 end
 
 -- add custom commands after building target
-function _add_build_custom_commands_after(makefile, target, sourcegroups, outputdir)
+function _add_build_custom_commands_after(makefile, target, sourcegroups,
+                                          outputdir)
     local cmds_after = {}
-    target_cmds.get_target_buildcmd_sourcegroups(target, cmds_after, sourcegroups, {suffix = "after"})
+    target_cmds.get_target_buildcmd_sourcegroups(target, cmds_after,
+                                                 sourcegroups,
+                                                 {suffix = "after"})
     target_cmds.get_target_buildcmd(target, cmds_after, {suffix = "after"})
     if #cmds_after > 0 then
         for _, cmd in ipairs(cmds_after) do
@@ -515,10 +517,13 @@ function _add_build_target(makefile, target, targetflags, outputdir)
     target:data_set("plugin.project.kind", "makefile")
 
     -- build sourcebatch groups first
-    local sourcegroups = rule_groups.build_sourcebatch_groups(target, target:sourcebatches())
+    local sourcegroups = rule_groups.build_sourcebatch_groups(target,
+                                                              target:sourcebatches())
 
     -- add custom commands before building target
-    local precmds_label = _add_build_custom_commands_before(makefile, target, sourcegroups, outputdir)
+    local precmds_label = _add_build_custom_commands_before(makefile, target,
+                                                            sourcegroups,
+                                                            outputdir)
 
     -- is phony target?
     if target:is_phony() then
@@ -548,7 +553,8 @@ function _add_build_target(makefile, target, targetflags, outputdir)
     -- make dependence for the dependent targets
     for _, depname in ipairs(target:get("deps")) do
         local dep = project.target(depname)
-        makefile:write(" " .. (dep:is_phony() and depname or _get_relative_unix_path(dep:targetfile(), outputdir)))
+        makefile:write(" " .. (dep:is_phony() and depname or
+                           _get_relative_unix_path(dep:targetfile(), outputdir)))
     end
 
     -- make dependence for objects
@@ -575,12 +581,15 @@ function _add_build_target(makefile, target, targetflags, outputdir)
     end
 
     -- get command
-    local command = target:linker():linkcmd(objectfiles_translated, targetfile, {target = target})
+    local command = target:linker():linkcmd(objectfiles_translated, targetfile,
+                                            {target = target})
 
     -- replace linkflags to $(XX)
     local p, e = command:find(os.args(target:linkflags()), 1, true)
     if p then
-        command = format("%s$(%s_%sFLAGS)%s", command:sub(1, p - 1), target:name(), (linkerkind:upper():gsub('%-', '_')), command:sub(e + 1))
+        command = format("%s$(%s_%sFLAGS)%s", command:sub(1, p - 1),
+                         target:name(), (linkerkind:upper():gsub('%-', '_')),
+                         command:sub(e + 1))
     end
 
     -- replace program to $(XX)
@@ -590,14 +599,21 @@ function _add_build_target(makefile, target, targetflags, outputdir)
     end
     if p then
         if program_global then
-            command = format("%s$(%s)%s", command:sub(1, p - 1), (linkerkind:upper():gsub('%-', '_')), command:sub(e + 1))
+            command = format("%s$(%s)%s", command:sub(1, p - 1),
+                             (linkerkind:upper():gsub('%-', '_')),
+                             command:sub(e + 1))
         else
-            command = format("%s$(%s_%s)%s", command:sub(1, p - 1), target:name(), (linkerkind:upper():gsub('%-', '_')), command:sub(e + 1))
+            command = format("%s$(%s_%s)%s", command:sub(1, p - 1),
+                             target:name(),
+                             (linkerkind:upper():gsub('%-', '_')),
+                             command:sub(e + 1))
         end
     end
 
     -- make body
-    makefile:print("\t%s", _get_cmd_echo(string.format("linking.$(mode) %s", path.filename(targetfile))))
+    makefile:print("\t%s", _get_cmd_echo(
+                       string.format("linking.$(mode) %s",
+                                     path.filename(targetfile))))
     makefile:print("\t%s", _get_cmd_mkdir(path.directory(targetfile)))
     makefile:writef("\t$(VV)%s\n", command)
 
@@ -612,8 +628,10 @@ function _add_build_target(makefile, target, targetflags, outputdir)
         local sourcekind = sourcebatch.sourcekind
         if sourcekind then
             -- compile source files to single object at once
-            local sourceflags = targetflags[target:name() .. '_' .. sourcekind:upper()]
-            _add_build_objects(makefile, target, sourcekind, sourcebatch, sourceflags, outputdir, precmds_label)
+            local sourceflags = targetflags[target:name() .. '_' ..
+                                    sourcekind:upper()]
+            _add_build_objects(makefile, target, sourcekind, sourcebatch,
+                               sourceflags, outputdir, precmds_label)
         end
     end
 end

@@ -37,10 +37,8 @@ end
 -- get configs
 function _get_configs(package, configs, opt)
     configs = configs or {}
-    if not package:is_plat("windows") then
-        configs.cc  = package:build_getenv("cc")
-        configs.cxx = package:build_getenv("cxx")
-    end
+    configs.cc  = package:build_getenv("cc")
+    configs.cxx = package:build_getenv("cxx")
     if package:is_plat("macosx") then
         configs.extra_ldflags = {"-lstdc++"}
         local xcode = toolchain.load("xcode", {plat = package:plat(), arch = package:arch()})
@@ -50,8 +48,6 @@ function _get_configs(package, configs, opt)
         configs.target_os = "linux"
     elseif package:is_plat("macosx") then
         configs.target_os = "mac"
-    elseif package:is_plat("windows") then
-        configs.target_os = "win"
     elseif package:is_plat("iphoneos") then
         configs.target_os = "ios"
     elseif package:is_plat("android") then
@@ -82,9 +78,6 @@ end
 -- get the build environments
 function buildenvs(package, opt)
     local envs = {}
-    if package:is_plat("windows") then
-        envs = os.joinenvs(_get_msvc(package):runenvs())
-    end
     return envs
 end
 

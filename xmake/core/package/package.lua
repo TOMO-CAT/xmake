@@ -1483,19 +1483,6 @@ function _instance:config(name)
     local configs = self:configs()
     if configs then
         value = configs[name]
-        -- vs_runtime is deprecated now
-        if name == "vs_runtime" then
-            local runtimes = configs.runtimes
-            if runtimes then
-                for _, item in ipairs(runtimes:split(",")) do
-                    if item:startswith("MT") or item:startswith("MD") then
-                        value = item
-                        break
-                    end
-                end
-            end
-            utils.warning("please use package:runtimes() or package:has_runtime() instead of package:config(\"vs_runtime\")")
-        end
     end
     return value
 end
@@ -1522,10 +1509,6 @@ function _instance:configs()
                 local value = configs_overrided[name] or configs_required[name]
                 if value == nil then
                     value = self:extraconf("configs", name, "default")
-                    -- support for the deprecated vs_runtime in add_configs
-                    if name == "runtimes" and value == nil then
-                        value = self:extraconf("configs", "vs_runtime", "default")
-                    end
                 end
                 configs[name] = value
             end
@@ -1564,10 +1547,6 @@ function _instance:_configs_for_buildhash()
                     local value = configs_overrided[name] or configs_required[name]
                     if value == nil then
                         value = self:extraconf("configs", name, "default")
-                        -- support for the deprecated vs_runtime in add_configs
-                        if name == "runtimes" and value == nil then
-                            value = self:extraconf("configs", "vs_runtime", "default")
-                        end
                     end
                     configs[name] = value
                 end
@@ -1601,15 +1580,6 @@ function _instance:buildhash()
                 str = str .. label
             end
             if configs then
-
-                -- with old vs_runtime configs
-                -- https://github.com/xmake-io/xmake/issues/4477
-                if opt.vs_runtime then
-                    configs = table.clone(configs)
-                    configs.vs_runtime = configs.runtimes
-                    configs.runtimes = nil
-                end
-
                 -- since luajit v2.1, the key order of the table is random and undefined.
                 -- We cannot directly deserialize the table, so the result may be different each time
                 local configs_order = {}
@@ -1682,16 +1652,6 @@ function _instance:buildhash()
         -- without toolchains (< 2.6.4)
         if not buildhash then
             buildhash = _get_buildhash(self:_configs_for_buildhash(), {toolchains = false})
-            if not os.isdir(_get_installdir(buildhash)) then
-                buildhash = nil
-            end
-        end
-
-        -- we need to be compatible with the previous xmake version
-        -- with deprecated vs_runtime (< 2.8.7)
-        -- @see https://github.com/xmake-io/xmake/issues/4477
-        if not buildhash then
-            buildhash = _get_buildhash(self:_configs_for_buildhash(), {vs_runtime = true})
             if not os.isdir(_get_installdir(buildhash)) then
                 buildhash = nil
             end

@@ -50,9 +50,6 @@ function test_cp_mvdir_into_another_dir(t)
 end
 
 function test_cp_symlink(t)
-    if is_host("windows") then
-        return
-    end
     os.touch("test1")
     os.ln("test1", "test2")
     t:require(os.isfile("test1"))
@@ -148,4 +145,3 @@ function test_args(t)
     t:are_equal(os.args('-DTEST=hello'), '-DTEST=hello') -- irreversible
     t:are_equal(os.args({'-DTEST="hello world"', '-DTEST2="hello world2"'}), '"-DTEST=\\\"hello world\\\"" "-DTEST2=\\\"hello world2\\\""')
 end
-

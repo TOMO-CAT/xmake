@@ -22,12 +22,6 @@
 rule("utils.compiler.runtime")
     on_config(function (target)
         local runtimes = get_config("runtimes")
-        if not runtimes and target:is_plat("windows") then
-            runtimes = get_config("vs_runtime")
-            if runtimes then
-                wprint("--vs_runtime=%s is deprecated, please use --runtimes=%s", runtimes, runtimes)
-            end
-        end
         if not runtimes and target:is_plat("android") then
             runtimes = get_config("ndk_cxxstl")
             if runtimes then
@@ -41,4 +35,3 @@ rule("utils.compiler.runtime")
             target:set("runtimes", runtimes)
         end
     end)
-

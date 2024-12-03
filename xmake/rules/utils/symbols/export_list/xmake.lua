@@ -56,11 +56,7 @@ rule("utils.symbols.export_list")
         assert(exportsymbols and #exportsymbols > 0, 'rule("utils.symbols.export_list"): no exported symbols!')
         local linkername = target:linker():name()
         if linkername == "dmd" then
-            if target:is_plat("windows") then
-                exportkind = "def"
-                exportfile = path.join(target:autogendir(), "rules", "symbols", "export_list.def")
-                target:add("shflags", "-L/def:" .. exportfile, {force = true})
-            elseif target:is_plat("macosx", "iphoneos", "watchos", "appletvos") then
+            if target:is_plat("macosx", "iphoneos", "watchos", "appletvos") then
                 exportkind = "apple"
                 exportfile = path.join(target:autogendir(), "rules", "symbols", "export_list.exp")
                 target:add("shflags", {"-L-exported_symbols_list", "-L" .. exportfile}, {force = true, expand = false})
@@ -115,4 +111,3 @@ rule("utils.symbols.export_list")
             end
         end
     end)
-

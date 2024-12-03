@@ -35,17 +35,6 @@ function main(target)
     local targetfile = target:targetfile()
     remove_files(targetfile)
 
-    -- remove import library of the target file
-    -- @see https://github.com/xmake-io/xmake/issues/3052
-    if target:is_plat("windows") and target:is_shared() then
-        local expfile = path.join(path.directory(targetfile), path.basename(targetfile) .. ".exp")
-        local libfile = path.join(path.directory(targetfile), path.basename(targetfile) .. ".lib")
-        if os.isfile(expfile) then
-            remove_files(libfile)
-            remove_files(expfile)
-        end
-    end
-
     -- remove the symbol file
     remove_files(target:symbolfile())
 
@@ -86,4 +75,3 @@ function main(target)
         remove_files(target:autogendir())
     end
 end
-

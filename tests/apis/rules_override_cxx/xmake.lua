@@ -1,6 +1,6 @@
-rule("xx")
+rule("xx", function()
     add_deps("c++")
-    on_load(function (target)
+    on_load(function(target)
 
         -- add .xx
         local rule = target:rule("c++.build"):clone()
@@ -20,15 +20,12 @@ rule("xx")
         end
 
         -- force as c++ source file
-        if target:is_plat("windows") then
-            target:add("cxxflags", "/TP")
-        else
-            target:add("cxxflags", "-x c++")
-        end
+        target:add("cxxflags", "-x c++")
     end)
+end)
 
-target("test")
+target("test", function()
     set_kind("binary")
     add_rules("xx")
     add_files("src/*.xx", "src/*.cc")
-
+end)

@@ -42,11 +42,6 @@ toolchain("llvm", function()
 
     on_load(function(toolchain)
 
-        -- add runtimes
-        if toolchain:is_plat("windows") then
-            toolchain:add("runtimes", "MT", "MTd", "MD", "MDd")
-        end
-
         -- add march flags
         local march
         if toolchain:is_arch("x86_64", "x64") then

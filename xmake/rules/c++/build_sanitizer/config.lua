@@ -62,24 +62,9 @@ function main(target, sourcekind)
     end
 
     if sanitizer then
-
         -- enable the debug symbols for sanitizer
         if not target:get("symbols") then
             target:set("symbols", "debug")
-        end
-
-        -- we need to load runenvs for msvc
-        -- @see https://github.com/xmake-io/xmake/issues/4176
-        if target:is_plat("windows") and target:is_binary() then
-            local msvc = target:toolchain("msvc")
-            if msvc then
-                local envs = msvc:runenvs()
-                local vscmd_ver = envs and envs.VSCMD_VER
-                if vscmd_ver and semver.match(vscmd_ver):ge("17.7") then
-                    local cl = assert(find_tool("cl", {envs = envs}), "cl not found!")
-                    target:add("runenvs", "PATH", path.directory(cl.program))
-                end
-            end
         end
     end
 end

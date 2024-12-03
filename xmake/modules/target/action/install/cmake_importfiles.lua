@@ -24,9 +24,7 @@ import("core.project.project")
 -- get the lib file of the target
 function _get_libfile(target, installdir)
     local libfile = path.filename(target:targetfile())
-    if target:is_plat("windows") then
-        libfile = libfile:gsub("%.dll$", ".lib")
-    elseif target:is_plat("mingw") then
+    if target:is_plat("mingw") then
         if os.isfile(path.join(installdir, "lib", libfile:gsub("%.dll$", ".dll.a"))) then
             libfile = libfile:gsub("%.dll$", ".dll.a")
         else
@@ -159,4 +157,3 @@ function main(target, opt)
         end
     end
 end
-
