@@ -17,7 +17,7 @@ function ok() {
 }
 
 xmake f --debug=y
-xmake -br
+xmake b -rD
 
 is_wsl() {
     if grep -qEi "(Microsoft|WSL)" /proc/version; then
