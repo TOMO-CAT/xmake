@@ -32,6 +32,7 @@ import("build")
 import("build_files")
 import("cleaner")
 import("check", {alias = "check_targets"})
+import("private.tools.ccache")
 import("private.cache.build_cache")
 import("private.service.remote_build.action", {alias = "remote_build_action"})
 import("private.utils.statistics")
@@ -129,7 +130,9 @@ function build_targets(targetnames, opt)
             check_targets(targetnames, {build = true})
 
             -- dump cache stats
-            build_cache.dump_stats()
+            if not ccache.is_enabled() and build_cache.is_enabled() then
+                build_cache.dump_stats()
+            end
         end,
         catch
         {
