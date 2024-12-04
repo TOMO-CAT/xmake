@@ -30,5 +30,5 @@ The information of xmake:
 ## 调试命令
 
 ```bash
-xrepo env -b "emmylua_debugger 1.8.6" -v -- xmake -bvrD
+xrepo env -b emmylua_debugger -v -- xmake b -vrD
 ```
