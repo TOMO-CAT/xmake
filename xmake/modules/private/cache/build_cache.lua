@@ -57,16 +57,16 @@ function is_enabled(target)
     if result == nil then
         -- target may be option instance
         if result == nil and target and target.policy then
-            result = target:policy("build.ccache")
+            result = target:policy("build.xcache")
         end
         if result == nil and os.isfile(os.projectfile()) then
-            local policy = project.policy("build.ccache")
+            local policy = project.policy("build.xcache")
             if policy ~= nil then
                 result = policy
             end
         end
         if result == nil then
-            result = config.get("ccache")
+            result = config.get("xcache")
         end
         result = result or false
         _memcache():set2("enabled", key)
@@ -117,8 +117,8 @@ end
 function rootdir()
     local cachedir = _g.cachedir
     if not cachedir then
-        cachedir = config.get("ccachedir")
-        if not cachedir and project.policy("build.ccache.global_storage") then
+        cachedir = config.get("xcachedir")
+        if not cachedir and project.policy("build.xcache.global_storage") then
             cachedir = path.join(global.directory(), ".build_cache")
         end
         if not cachedir then
