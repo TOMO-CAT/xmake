@@ -21,6 +21,8 @@
 -- imports
 import("core.project.config")
 import("lib.detect.find_tool")
+import("core.cache.memcache")
+import("core.project.project")
 
 -- get ccache tool
 function _ccache()
@@ -30,6 +32,44 @@ function _ccache()
         _g.ccache = ccache or false
     end
     return ccache or nil
+end
+
+-- get memcache
+function _memcache()
+    local cache = _g.memcache
+    if not cache then
+        cache = memcache.cache("ccache")
+        _g.memcache = cache
+    end
+    return cache
+end
+
+-- is enabled?
+function is_enabled(target)
+    local key = tostring(target or "all")
+    local result = _memcache():get2("enabled", key)
+    if result == nil then
+        -- check if ccache exist?
+        if result == nil and not exists() then
+            result = false
+        end
+        -- target may be option instance
+        if result == nil and target and target.policy then
+            result = target:policy("build.ccache")
+        end
+        if result == nil and os.isfile(os.projectfile()) then
+            local policy = project.policy("build.ccache")
+            if policy ~= nil then
+                result = policy
+            end
+        end
+        if result == nil then
+            result = config.get("ccache")
+        end
+        result = result or false
+        _memcache():set2("enabled", key)
+    end
+    return result
 end
 
 -- exists ccache?

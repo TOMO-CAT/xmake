@@ -24,6 +24,7 @@ import("core.theme.theme")
 import("core.tool.compiler")
 import("core.project.depend")
 import("private.cache.build_cache")
+import("private.tools.ccache")
 import("async.runjobs")
 import("utils.progress")
 import("private.service.distcc_build.client", {alias = "distcc_build_client"})
@@ -67,11 +68,13 @@ function _do_build_file(target, sourcefile, opt)
     -- exists ccache or distcc?
     -- we just show cache/distc to avoid confusion with third-party ccache/distcc
     local prefix = ""
-    if build_cache.is_enabled(target) and build_cache.is_supported(sourcekind) then
-        prefix = "cache "
+    if ccache.is_enabled(target) then
+        prefix = "ccache "
+    elseif build_cache.is_enabled(target) and build_cache.is_supported(sourcekind) then
+        prefix = "xcache "
     end
     if distcc_build_client.is_distccjob() and distcc_build_client.singleton():has_freejobs() then
-        prefix = prefix .. "distc "
+        prefix = prefix .. "distcc "
     end
 
     -- trace progress info

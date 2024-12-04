@@ -31,6 +31,7 @@ import("core.language.language")
 import("utils.progress")
 import("private.cache.build_cache")
 import("private.service.distcc_build.client", {alias = "distcc_build_client"})
+import("private.tools.ccache")
 
 function init(self)
 
@@ -833,6 +834,16 @@ function compargv(self, sourcefile, objectfile, flags, opt)
     return self:program(), argv
 end
 
+-- make the compile arguments list
+function _compargv_ccache(self, sourcefile, objectfile, flags)
+    -- precompiled header?
+    local extension = path.extension(sourcefile)
+    if (extension:startswith(".h") or extension == ".inl") then
+        return _compargv_pch(self, sourcefile, objectfile, flags)
+    end
+    return ccache.cmdargv(self:program(), table.join("-c", flags, "-o", objectfile, sourcefile))
+end
+
 -- compile the source file
 function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
 
@@ -864,7 +875,11 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
             end
 
             -- do compile
-            return _compile(self, sourcefile, objectfile, compflags, opt)
+            if ccache.is_enabled() then
+                return os.iorunv(_compargv_ccache(self, sourcefile, objectfile, compflags))
+            else
+                return _compile(self, sourcefile, objectfile, compflags, opt)
+            end
         end,
         catch
         {
