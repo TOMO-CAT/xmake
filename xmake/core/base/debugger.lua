@@ -30,7 +30,7 @@ local path     = require("base/path")
 --
 -- e.g.
 --
--- xrepo env -b emmylua_debugger xmake --version
+-- xrepo env -b emmylua_debugger -- xmake --version
 --
 function debugger:_start_emmylua_debugger()
     local debugger_libfile = os.getenv("EMMYLUA_DEBUGGER")
