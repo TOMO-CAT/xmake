@@ -25,6 +25,7 @@
 * [#30](https://github.com/TOMO-CAT/xmake/issues/30): 修复 protobuf rule 丢失导致未触发增量编译的问题
 * [#55](https://github.com/TOMO-CAT/xmake/issues/55): 修复 protobuf target objectfiles 列表顺序不一致导致的重复编译问题
 * [#90](https://github.com/TOMO-CAT/xmake/issues/90): 将 build-ccache 更名成 xcache (xmake-cache), 默认不开启 `build.xcache.global_storage` policy
+* [#92](https://github.com/TOMO-CAT/xmake/issues/92): 修复删除 `~/.xmake/packages` 后不会触发重新安装 package 的 bug
 
 ### v3.0.2
 
