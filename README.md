@@ -5,11 +5,11 @@
 ## build && install
 
 ```bash
-# 全量安装
+# install xmake && it's scripts
 bash scripts/install.sh
 
-# 仅更新 Lua 脚本
-./scripts/get.sh __local__ __install_only__
+# only install xmake scripts
+# ./scripts/get.sh __local__ __install_only__
 ```
 
 ## test
