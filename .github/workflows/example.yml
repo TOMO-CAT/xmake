@@ -1,0 +1,31 @@
+name: Run Example Script
+
+on:
+  pull_request:
+  push:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Prepare Local Xmake
+        run: cp -rf . ../xmake-source
+      - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: local#../xmake-source
+      - name: Prepare Environment
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential lcov
+      - name: Run Examples
+        env:
+          XMAKE_ROOT: y
+          XMAKE_MAIN_REPO: https://github.com/TOMO-CAT/xmake-repo.git
+          XMAKE_BINARY_REPO: https://github.com/TOMO-CAT/xmake-build-artifacts.git
+        run: |
+          bash scripts/example.sh
