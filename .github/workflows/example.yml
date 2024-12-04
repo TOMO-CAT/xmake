@@ -22,6 +22,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y build-essential lcov
+          sudo apt install -y ccache
       - name: Run Examples
         env:
           XMAKE_ROOT: y
