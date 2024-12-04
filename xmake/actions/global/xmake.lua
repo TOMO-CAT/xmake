@@ -35,13 +35,14 @@ task("global")
                                                                return import("core.theme.theme.names")()
                                                            end},
                     {nil, "debugger",       "kv", "auto"    , "The debugger program path."                                },
-                    {nil, "ccache",         "kv", nil       , "Enable or disable the c/c++ compiler cache."               },
+                    {nil, "ccache",         "kv", nil       , "Enable or disable the c/c++ compiler ccache."              },
+                    {nil, "xcache",         "kv", nil       , "Enable or disable the c/c++ compiler xmake cache."         },
                     {category = "Build Configuration"},
-                    {nil, "cachedir",       "kv", nil       , "The global cache directory."                               },
+                    {nil, "xachedir",       "kv", nil       , "The global xache directory."                               },
                     {nil, "policies",       "kv", nil       , "Set the global project policies.",
                                                             "    e.g.",
                                                             "    - xmake g --policies=run.autobuild",
-                                                            "    - xmake g --policies=build.warning:n"                      },
+                                                            "    - xmake g --policies=build.warning:n"                    },
                     -- network configuration
                     {category = "Network Configuration"},
                     {nil, "network",        "kv", "public" , "Set the network mode."
@@ -91,6 +92,3 @@ task("global")
                     end
                 }
             }
-
-
-

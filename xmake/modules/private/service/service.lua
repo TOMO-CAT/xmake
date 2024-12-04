@@ -47,7 +47,7 @@ function main(daemon, ...)
         table.insert(starters, _start_remote_build_server)
     elseif option.get("distcc") then
         table.insert(starters, _start_distcc_build_server)
-    elseif option.get("ccache") then
+    elseif option.get("xcache") then
         table.insert(starters, _start_remote_cache_server)
     else
         if config.get("remote_build") then
@@ -64,4 +64,3 @@ function main(daemon, ...)
         scheduler.co_start(start_server, daemon, ...)
     end
 end
-

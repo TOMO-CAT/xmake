@@ -27,7 +27,7 @@
 --     add_files("src/*.c")
 -- @endcode
 --
-rule("plugin.compile_commands.autoupdate")
+rule("plugin.compile_commands.autoupdate", function()
     set_kind("project")
     after_build(function (opt)
 
@@ -72,3 +72,4 @@ rule("plugin.compile_commands.autoupdate")
             lockfile:close()
         end
     end)
+end)

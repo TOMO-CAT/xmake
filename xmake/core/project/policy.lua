@@ -51,9 +51,11 @@ function policy.policies()
             -- Merge archive intead of linking for all dependent targets
             ["build.merge_archive"]               = {description = "Enable merge archive intead of linking for all dependent targets.", default = false, type = "boolean"},
             -- C/C++ build cache
-            ["build.ccache"]                      = {description = "Enable C/C++ build cache.", type = "boolean"},
-            -- Use global storage if build.ccache is enabled
-            ["build.ccache.global_storage"]       = {description = "Use global storge if build.ccache is enabled.", default = true, type = "boolean"},
+            ["build.ccache"]                      = {description = "Enable C/C++ build ccache.", type = "boolean"},
+            -- C/C++ build xmake cache
+            ["build.xcache"]                      = {description = "Enable C/C++ build xmake ccache.", type = "boolean"},
+            -- Use global storage if build.xcache is enabled
+            ["build.xcache.global_storage"]       = {description = "Use global storge if build.xcache is enabled.", default = false, type = "boolean"},
             -- Always update configfiles when building
             ["build.always_update_configfiles"]   = {description = "Always update configfiles when building.", type = "boolean"},
             -- Enable build warning output, it's enabled by default.
@@ -98,9 +100,9 @@ function policy.policies()
             ["run.autobuild"]                     = {description = "Automatically build before running.", default = true, type = "boolean"},
             -- Enable install rpath
             ["install.rpath"]                     = {description = "Enable install rpath.", default = true, type = "boolean"},
-            -- Preprocessor configuration for ccache/distcc, we can disable linemarkers to speed up preprocess
+            -- Preprocessor configuration for xcache/distcc, we can disable linemarkers to speed up preprocess
             ["preprocessor.linemarkers"]          = {description = "Enable linemarkers for preprocessor.", default = true, type = "boolean"},
-            -- Preprocessor configuration for ccache/distcc, we can disable it to avoid cache object file with __DATE__, __TIME__
+            -- Preprocessor configuration for xcache/distcc, we can disable it to avoid cache object file with __DATE__, __TIME__
             ["preprocessor.gcc.directives_only"]  = {description = "Enable -fdirectives-only for gcc preprocessor.", type = "boolean"},
             -- We need to enable longpaths when building target or installing package
             ["platform.longpaths"]                = {description = "Enable long paths when building target or installing package on windows.", default = false, type = "boolean"},

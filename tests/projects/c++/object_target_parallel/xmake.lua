@@ -5,6 +5,7 @@ add_includedirs(os.projectdir())
 
 set_policy("build.across_targets_in_parallel", true)
 set_policy("build.ccache", false)
+set_policy("build.xcache", false)
 
 -- add_cxxflags("-ftemplate-depth=1000")
 -- add_cxxflags("-Wno-stack-exhausted")

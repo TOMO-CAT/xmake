@@ -49,7 +49,7 @@ function main(...)
         table.insert(disconnectors, _disconnect_distcc_build_server)
         default = false
     end
-    if option.get("ccache") then
+    if option.get("xcache") then
         table.insert(disconnectors, _disconnect_remote_cache_server)
         default = false
     end
@@ -62,5 +62,3 @@ function main(...)
         scheduler.co_start(disconnect_server, ...)
     end
 end
-
-

@@ -7,7 +7,7 @@ add_requires("gtest")
 -- 不禁用 xmake build-cache 时可能会报错: no valid records found in tracefile coverage/coverage.info
 -- 复现方法: 不删除 ~/.xmake/.build_cache 缓存目录, 只删除 build 目录重新编译
 --
--- set_config("ccache", false)
+-- set_config("xcache", false)
 
 target("time_checker_test", function()
     set_kind("binary")
