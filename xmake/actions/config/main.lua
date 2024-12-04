@@ -97,6 +97,18 @@ function _need_check(changed)
             changed = true
         end
     end
+
+    -- xmake package has been deleted?
+    local package_cache = localcache.cache("package")
+    if package_cache then
+        for _, package in pairs(package_cache:data()) do
+            local package_installdir = package.installdir
+            if package_installdir and not os.isdir(package_installdir) then
+                changed = true
+            end
+        end
+    end
+
     return changed
 end
 
