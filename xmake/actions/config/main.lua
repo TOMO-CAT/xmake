@@ -421,24 +421,28 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
         -- load targets
         project.load_targets({recheck = recheck})
 
-        -- after install xrepo packages, we will call `os.tryrm()` to delete `package:data("cleanable_sourcedir")`,
-        -- and deleting the sourcedir will remove the installdir of the dependent packages that
-        -- are symlibked in `${sourcedir}/build/.pkg`, so we choose not to create softlink in XREPO
-        if not os.getenv("XMAKE_IN_XREPO") then
-            -- mkdir a softlink to all packages' installdir to avoid using absolute paths with the __FILE__ macro
-            -- @see https://github.com/TOMO-CAT/xmake/issues/62
-            local requires = project.required_packages()
-            if requires then
-                for requirename, require in pairs(requires) do
-                    local pkg_softlink_installdir = path.join(config.buildir(), ".pkg", requirename)
-                    local pkg_installdir = require:installdir()
-                    -- FIXME:
-                    -- when we `add_requires("zlib")` in a project, require:installdir() may be nil
-                    -- this may be because this library is a system library
-                    if pkg_installdir then
-                        -- remove previous softlink to force update the symbolic link of package installdir
-                        os.rm(pkg_softlink_installdir)
-                        os.ln(pkg_installdir, pkg_softlink_installdir)
+        -- FIXME: disable softlink package because of bugs
+        -- https://github.com/TOMO-CAT/xmake/issues/99
+        if false then
+            -- after install xrepo packages, we will call `os.tryrm()` to delete `package:data("cleanable_sourcedir")`,
+            -- and deleting the sourcedir will remove the installdir of the dependent packages that
+            -- are symlibked in `${sourcedir}/build/.pkg`, so we choose not to create softlink in XREPO
+            if not os.getenv("XMAKE_IN_XREPO") then
+                -- mkdir a softlink to all packages' installdir to avoid using absolute paths with the __FILE__ macro
+                -- @see https://github.com/TOMO-CAT/xmake/issues/62
+                local requires = project.required_packages()
+                if requires then
+                    for requirename, require in pairs(requires) do
+                        local pkg_softlink_installdir = path.join(config.buildir(), ".pkg", requirename)
+                        local pkg_installdir = require:installdir()
+                        -- FIXME:
+                        -- when we `add_requires("zlib")` in a project, require:installdir() may be nil
+                        -- this may be because this library is a system library
+                        if pkg_installdir then
+                            -- remove previous softlink to force update the symbolic link of package installdir
+                            os.rm(pkg_softlink_installdir)
+                            os.ln(pkg_installdir, pkg_softlink_installdir)
+                        end
                     end
                 end
             end

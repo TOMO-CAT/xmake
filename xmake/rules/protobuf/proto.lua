@@ -331,7 +331,7 @@ function build_cxfile(target, sourcefile_proto, opt, sourcekind)
     -- add includedirs
     target:add("includedirs", sourcefile_dir, { public = public })
 
-    -- add objectfile
+    -- build objectfile
     local objectfile = target:objectfile(sourcefile_cx)
     local dependfile = target:dependfile(sourcefile_proto)
 
