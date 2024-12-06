@@ -119,12 +119,12 @@ fi
 if test_nq "$branch" "__local__"; then
     fasthost=$(get_fast_host)
     if test_eq "$fasthost" "gitee.com"; then
-        gitrepo="https://gitee.com/tboox/xmake.git"
-        gitrepo_raw="https://gitee.com/tboox/xmake/raw/master"
+        gitrepo="https://gitee.com/tomocat/xmake.git"
+        gitrepo_raw="https://gitee.com/tomocat/xmake/raw/master"
     else
-        gitrepo="https://github.com/xmake-io/xmake.git"
-        #gitrepo_raw="https://github.com/xmake-io/xmake/raw/master"
-        gitrepo_raw="https://fastly.jsdelivr.net/gh/xmake-io/xmake@master"
+        gitrepo="https://github.com/TOMO-CAT/xmake"
+        # gitrepo_raw="https://github.com/TOMO-CAT/xmake/raw/master"
+        gitrepo_raw="https://fastly.jsdelivr.net/gh/TOMO-CAT/xmake@master"
     fi
 fi
 
