@@ -483,7 +483,13 @@ function install(package, configs, opt)
     end
 
     -- do configure
-    os.vrunv(os.programfile(), argv, {envs = envs})
+    if not option.get("verbose") and package:is_source_embed() then
+        -- print install logs for packages with sourcedir even if we don't set verbose
+        -- @see https://github.com/TOMO-CAT/xmake/issues/101
+        os.execv(os.programfile(), argv, {envs = envs})
+    else
+        os.vrunv(os.programfile(), argv, {envs = envs})
+    end
 
     -- do build
     argv = {"build"}
@@ -495,7 +501,13 @@ function install(package, configs, opt)
     if opt.target then
         table.insert(argv, opt.target)
     end
-    os.vrunv(os.programfile(), argv, {envs = envs})
+    if not option.get("verbose") and package:is_source_embed() then
+        -- print install logs for packages with sourcedir even if we don't set verbose
+        -- @see https://github.com/TOMO-CAT/xmake/issues/101
+        os.execv(os.programfile(), argv, {envs = envs})
+    else
+        os.vrunv(os.programfile(), argv, {envs = envs})
+    end
 
     -- do install
     argv = {"install", "-y", "--nopkgs", "-o", package:installdir()}

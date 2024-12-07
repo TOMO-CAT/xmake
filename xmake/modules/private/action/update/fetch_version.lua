@@ -26,15 +26,6 @@ import("net.http")
 import("devel.git")
 import("net.fasturl")
 
--- the official git sources for xmake
-local official_sources =
-{
-    "https://github.com/xmake-io/xmake.git",
-    "git@github.com:xmake-io/xmake.git",
-    "https://gitlab.com/tboox/xmake.git",
-    "https://gitee.com/tboox/xmake.git"
-}
-
 -- get version and url of provided xmakever
 function main(xmakever)
 

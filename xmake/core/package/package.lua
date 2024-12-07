@@ -2881,6 +2881,13 @@ function package.load_from_project(packagename, project)
 
     -- new an instance
     instance = _instance.new(packagename, packageinfo)
+
+    -- disable parallelize for installation because we need to print install logs for packages with sourcedir
+    -- @see https://github.com/TOMO-CAT/xmake/issues/101
+    if instance:is_source_embed() then
+        instance:set("parallelize", false)
+    end
+
     package._memcache():set2("packages", instance)
     return instance
 end
