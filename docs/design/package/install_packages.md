@@ -101,17 +101,17 @@ end
 
 然后调用 `package:fetch` 方法去 fetch package，写入到 `slef._FETCHINFO` 中。
 
-* binary / toolchain package 调用 `self._fetch_tool` 
-* 其他 package 调用 `self._fetch_library`，对于 xmake repo 而言会调用 `package.manager.xmake.find_package` 
+* binary / toolchain package 调用 `self._fetch_tool`
+* 其他 package 调用 `self._fetch_library`，对于 xmake repo 而言会调用 `package.manager.xmake.find_package`
 
 这里只介绍 xmake-package-manager 的逻辑：
 
 * 从 `package:installdir` 中查找 `"manifest.txt"`，如果查找不到则 fetch 失败
 * 如果 `manifest.vars` 中有 includedirs 则直接写入 `fetchinfo.includedirs`，没有的话如果 installdir 中有 include 文件夹也可以写入到 `fetchinfo.includedirs`
 * 同样我们可以自动扫描得到：
-  *  `fetchinfo.links` 
-  * `fetchinfo.linkdirs` 
-  * `fetchinfo.libfiles` 
+  * `fetchinfo.links`
+  * `fetchinfo.linkdirs`
+  * `fetchinfo.libfiles`
   * `fetchinfo.shared`  / `fetchinfo.static`：是否有动态库 / 静态库
   * `fetchinfo.syslinks`
 * 对 fetchinfo 拿到的结果去重
