@@ -33,6 +33,8 @@ import("configfiles", {alias = "generate_configfiles"})
 import("private.action.require.register", {alias = "register_packages"})
 import("private.action.require.install", {alias = "install_packages"})
 import("private.service.remote_build.action", {alias = "remote_build_action"})
+import("private.action.require.impl.utils.get_requires")
+import("private.action.require.impl.package")
 
 -- filter option
 function _option_filter(name)
@@ -63,53 +65,88 @@ end
 
 -- need check
 function _need_check(changed)
+    if changed then
+        return true
+    end
 
     -- clean?
-    if not changed then
-        changed = option.get("clean") or option.get("check")
+    if option.get("clean") or option.get("check") then
+        return true
     end
 
     -- check for all project files
     local mtimes = project.mtimes()
-    if not changed then
-        local mtimes_prev = localcache.get("config", "mtimes")
-        if mtimes_prev then
-            for file, mtime in pairs(mtimes) do
-                -- modified? reconfig and rebuild it
-                local mtime_prev = mtimes_prev[file]
-                if not mtime_prev or mtime > mtime_prev then
-                    changed = true
-                    break
-                end
+    local mtimes_prev = localcache.get("config", "mtimes")
+    if mtimes_prev then
+        for file, mtime in pairs(mtimes) do
+            -- modified? reconfig and rebuild it
+            local mtime_prev = mtimes_prev[file]
+            if not mtime_prev or mtime > mtime_prev then
+                return true
             end
         end
     end
 
     -- unfinished config/recheck
-    if not changed and localcache.get("config", "recheck") then
-        changed = true
+    if localcache.get("config", "recheck") then
+        return true
     end
 
-    -- Has xmake been updated? force to check config again
+    -- has xmake been updated? force to check config again
     -- we need to clean the dirty config cache of the old version
-    if not changed then
-        if os.mtime(path.join(os.programdir(), "core", "main.lua")) > os.mtime(config.filepath()) then
-            changed = true
-        end
+    if os.mtime(path.join(os.programdir(), "core", "main.lua")) > os.mtime(config.filepath()) then
+        return true
     end
 
-    -- xmake package has been deleted?
+    -- xmake package has been deleted / broken?
     local package_cache = localcache.cache("package")
-    if package_cache then
-        for _, package in pairs(package_cache:data()) do
-            local package_installdir = package.installdir
-            if package_installdir and not os.isdir(package_installdir) then
-                changed = true
+    local package_dirs = localcache.cache("references")
+    package_cache = package_cache and package_cache:data()
+    package_dirs = package_dirs and package_dirs:data()
+    package_dirs = package_dirs and package_dirs.packages
+
+    if package_cache and package_dirs then
+        -- detect broken pkg dir
+        local package_broken_path = {}
+        local function _check_package_broken_dir(pkg_name, dirs)
+            for _, dir in ipairs(table.wrap(dirs)) do
+                if dir and not os.isdir(dir) then
+                    table.insert(package_broken_path, dir)
+                end
             end
         end
+        for pkg_name, pkg in pairs(package_cache) do
+            _check_package_broken_dir(pkg_name, pkg.installdir)
+            _check_package_broken_dir(pkg_name, pkg.includedirs)
+            _check_package_broken_dir(pkg_name, pkg.sysincludedirs)
+            _check_package_broken_dir(pkg_name, pkg.linkdirs)
+        end
+
+        -- if package:installdir is broken, we need to delete installdir to trigger a forced reinstallation.
+        local need_delete_package_dirs = {}
+        for _, pkg_dir in ipairs(package_dirs) do
+            for _, broken_path in ipairs(package_broken_path) do
+                if broken_path:startswith(pkg_dir) then
+                    table.insert(need_delete_package_dirs, pkg_dir)
+                    break
+                end
+            end
+        end
+
+        -- remove broken packages
+        for _, pkg_dir in ipairs(need_delete_package_dirs) do
+            cprint(
+                "${color.warning} pkg [%s] have been broken, we will remove it's installdir and reinstall it later",
+                pkg_dir)
+            os.tryrm(pkg_dir)
+        end
+
+        if #need_delete_package_dirs > 0 then
+            return true
+        end
     end
 
-    return changed
+    return false
 end
 
 -- check target
