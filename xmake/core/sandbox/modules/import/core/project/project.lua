@@ -217,7 +217,7 @@ end
 function sandbox_core_project.lock(opt)
     if sandbox_core_project.trylock(opt) then
         return true
-    elseif baseoption.get("diagnosis") then
+    else
         utils.cprint("${color.warning}the current project is being accessed by other processes, please wait!")
         io.flush()
     end

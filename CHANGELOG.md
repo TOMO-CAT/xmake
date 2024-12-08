@@ -1,5 +1,11 @@
 # 更新日志
 
+## master
+
+### 新特性
+
+* [#101](https://github.com/TOMO-CAT/xmake/issues/101): 安装 local package 时展示日志
+
 ## v3.0.3
 
 ### 新特性

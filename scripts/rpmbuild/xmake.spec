@@ -2,7 +2,7 @@
 %define     use_luajit 0
 
 Name:       xmake
-Version:    3.0.2
+Version:    3.0.3
 Release:    1%{?dist}
 Summary:    A cross-platform build utility based on Lua
 

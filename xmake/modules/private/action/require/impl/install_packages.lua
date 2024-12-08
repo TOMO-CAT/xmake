@@ -184,7 +184,7 @@ function _get_confirm(packages)
             local packages_repo = {}
             local packages_group = {}
             for _, instance in ipairs(packages) do
-                -- achive packages by repository
+                -- achieve packages by repository
                 local reponame = instance:repo() and instance:repo():name() or (instance:is_system() and "system" or "")
                 if instance:is_thirdparty() then
                     reponame = instance:name():lower():split("::")[1]
@@ -192,7 +192,7 @@ function _get_confirm(packages)
                 packages_repo[reponame] = packages_repo[reponame] or {}
                 table.insert(packages_repo[reponame], instance)
 
-                -- achive packages by group
+                -- achieve packages by group
                 local group = instance:group()
                 if group then
                     packages_group[group] = packages_group[group] or {}
@@ -542,6 +542,13 @@ function _install_packages(packages_install, packages_download, installdeps)
         local downloading = {}
         for _, index in ipairs(running_jobs_indices) do
             local instance = packages_installing[index]
+
+            -- do not print progress info when installing a source-embed package
+            -- @see https://github.com/TOMO-CAT/xmake/issues/101
+            if instance and instance:is_source_embed() then
+                return
+            end
+
             if instance then
                 table.insert(installing, instance:displayname())
             end

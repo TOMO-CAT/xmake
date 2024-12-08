@@ -37,6 +37,14 @@ end
 
 此时就可以检测出来循环依赖了，但是感觉这种方式不是那么优雅，有空再改进一下。
 
+## package 类型
+
+### 1. thirdparty
+
+* brew::pcre2/libpcre2-8
+* conan::OpenSSL/1.0.2n@conan/stable
+
+
 ## 加载 package
 
 ### 1. 从 repo 里加载
