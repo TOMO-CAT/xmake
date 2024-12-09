@@ -335,10 +335,20 @@ function build_cxfile(target, sourcefile_proto, opt, sourcekind)
     local objectfile = target:objectfile(sourcefile_cx)
     local dependfile = target:dependfile(sourcefile_proto)
 
+    -- FIXME: on_config bugs https://github.com/TOMO-CAT/xmake/issues/112
+    if not table.contains(target:objectfiles(), objectfile) then
+        table.insert(target:objectfiles(), objectfile)
+    end
+
     local objectfile_grpc
     if grpc_cpp_plugin then
         objectfile_grpc = target:objectfile(sourcefile_cx_grpc)
+        if not table.contains(target:objectfiles(), objectfile_grpc) then
+            table.insert(target:objectfiles(), objectfile_grpc)
+        end
     end
+
+    table.sort(target:objectfiles())
 
     local build_opt = table.join({ objectfile = objectfile, dependfile = dependfile, sourcekind = sourcekind }, opt)
     import("private.action.build.object").build_object(target, sourcefile_cx, build_opt)

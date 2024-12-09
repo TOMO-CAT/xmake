@@ -94,6 +94,7 @@
         "orderdeps",
         "orderules",
         "otype",
+        "packagenv",
         "parentdirs",
         "parentpkgs",
         "pcfile",
