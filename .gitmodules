@@ -1,6 +1,3 @@
-[submodule "core/src/tbox/tbox"]
-	path = core/src/tbox/tbox
-	url = ../../tboox/tbox.git
 [submodule "core/src/luajit/luajit"]
 	path = core/src/luajit/luajit
 	url = ../../xmake-io/xmake-core-luajit.git
