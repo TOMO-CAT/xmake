@@ -22,6 +22,7 @@
 import("core.base.option")
 import("core.base.task")
 import("lib.detect.find_tool")
+import("core.project.config")
 import("private.action.require.impl.package")
 import("private.action.require.impl.repository")
 import("private.action.require.impl.environment")
@@ -80,6 +81,32 @@ function main(requires_raw)
         task.run("repo", {update = true})
     end
 
+    -- since install-package may operate across processes,
+    -- we need to write the installed packages info into local-cache.
+    -- @see https://github.com/TOMO-CAT/xmake/issues/107
+    --
+    -- We choose to set the install-packages information before install_packages to ensure that the xmake parent 
+    -- process sets the XMAKE_INSTALL_PACKAGES_RESULT environment variable, thereby ensuring that this information 
+    -- is shared throughout the entire xmake build process.
+    --
+    -- skip `xrepo env -b emmylua_debugger` situation
+    if not os.getenv("XREPO_OUTSIDE_PROGRAM") then
+        if not os.getenv("XMAKE_INSTALL_PACKAGES_RESULT") then
+            local key = "install_packages_result"
+            local mtime = tostring(math.floor(os.mclock()))
+            os.setenv("XMAKE_INSTALL_PACKAGES_RESULT", mtime)
+            os.setenv("XMAKE_MASTER_PROJECT_CACHE_DIR", path.absolute(config.cachedir()))
+
+            local master_misccache = import("core.cache.master_misccache", {anonymous = true})
+
+            -- clear the history cache
+            local cacheinfo = {}
+            cacheinfo[mtime] = {}
+            master_misccache:set(key, cacheinfo)
+            master_misccache:save()
+        end
+    end
+
     -- install packages
     environment.enter()
     local packages = install_packages(requires, {requires_extra = requires_extra})
@@ -87,5 +114,25 @@ function main(requires_raw)
         _check_missing_packages(packages)
     end
     environment.leave()
-end
 
+    -- dump install-package-result to misc local-cache
+    -- @see https://github.com/TOMO-CAT/xmake/issues/107
+    local install_package_result_mtime = os.getenv("XMAKE_INSTALL_PACKAGES_RESULT")
+    if install_package_result_mtime then
+        local master_misccache = import("core.cache.master_misccache", {anonymous = true})
+
+        local key = "install_packages_result"
+        local cacheinfo = master_misccache:get2(key, install_package_result_mtime) or {}
+        for _, instance in ipairs(packages) do
+            -- to avoid affecting too many packages, we only add packages with install-always policy
+            if instance:policy("package.install_always") and instance:installdir() then
+                local pkg_name = instance:name()
+                local pkg_installdir = instance:installdir()
+                cacheinfo[pkg_name] = cacheinfo[pkg_name] or {}
+                cacheinfo[pkg_name][pkg_installdir] = {}
+            end
+        end
+        master_misccache:set2(key, install_package_result_mtime, cacheinfo)
+        master_misccache:save()
+    end
+end

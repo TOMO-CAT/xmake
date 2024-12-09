@@ -452,7 +452,6 @@ end
 
 -- install package
 function install(package, configs, opt)
-
     -- get build environments
     opt = opt or {}
     local envs = opt.envs or buildenvs(package)

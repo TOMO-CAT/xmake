@@ -146,6 +146,35 @@ function _need_check(changed)
         end
     end
 
+    local requires, requires_extra = get_requires(requires_raw)
+    if requires and #requires > 0 then
+        local packages = package.load_packages(requires, {requires_extra = requires_extra})
+        for _, pkg in ipairs(packages) do
+            -- have package with "package.install_always" policy?
+            -- @see https://github.com/TOMO-CAT/xmake/issues/108
+            if pkg and pkg:policy("package.install_always") then
+                -- if package with "package.install_always" policy have been installed, then we don't need to recheck it
+                -- @see https://github.com/TOMO-CAT/xmake/issues/107
+                local install_package_result_mtime = os.getenv("XMAKE_INSTALL_PACKAGES_RESULT")
+                if not install_package_result_mtime then
+                    return true
+                else
+                    local master_misccache = import("core.cache.master_misccache", {anonymous = true})
+                    local key = "install_packages_result"
+                    local cacheinfo = master_misccache:get2(key, install_package_result_mtime) or {}
+
+                    local pkg_name = pkg:name()
+                    local pkg_installdir = pkg:installdir()
+                    if not cacheinfo[pkg_name] then
+                        return true
+                    elseif not cacheinfo[pkg_name][pkg_installdir] then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+
     return false
 end
 

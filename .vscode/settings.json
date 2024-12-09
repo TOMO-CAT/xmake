@@ -150,9 +150,11 @@
         "Werror",
         "Wextra",
         "wprint",
+        "xcore",
         "xmake",
         "xmakerc",
         "xmakever",
+        "xmath",
         "xpack",
         "xrepo",
         "zxvf"

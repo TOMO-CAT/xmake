@@ -444,7 +444,10 @@ function main()
             if program == "shell" then
                 _run_shell(envs)
             else
+                envs["XREPO_OUTSIDE_PROGRAM"] = nil
+                os.setenv("XREPO_OUTSIDE_PROGRAM", nil)
                 os.execv(program, option.get("arguments"), {envs = envs})
+                os.setenv("XREPO_OUTSIDE_PROGRAM", "y")
             end
         else
             print(envs)
