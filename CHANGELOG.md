@@ -7,6 +7,10 @@
 * [#101](https://github.com/TOMO-CAT/xmake/issues/101): 安装 local package 时展示日志
 * [#104](https://github.com/TOMO-CAT/xmake/issues/104): 删除了 project 的 indirect package 也会在 xmake build 的触发重新安装
 
+### Bugs 修复
+
+* [112](https://github.com/TOMO-CAT/xmake/issues/112): 临时修复 on_config 导致的 protobuf.cpp 在 link 丢失 objectfile 问题
+
 ## v3.0.3
 
 ### 新特性
