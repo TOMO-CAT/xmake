@@ -30,6 +30,7 @@ local raise     = require("sandbox/modules/raise")
 -- inherit some builtin interfaces
 sandbox_core_project_config.buildir   = config.buildir
 sandbox_core_project_config.debugdir  = config.debugdir
+sandbox_core_project_config.cachedir  = config.cachedir
 sandbox_core_project_config.plat      = config.plat
 sandbox_core_project_config.arch      = config.arch
 sandbox_core_project_config.mode      = config.mode

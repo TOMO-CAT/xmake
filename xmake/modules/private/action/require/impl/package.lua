@@ -956,6 +956,7 @@ function _load_packages(requires, opt)
         if package then
 
             -- load dependent packages and save them first of this package
+            -- `package._DEPS` is to avoid repeatedly resolving the dependencies of the same package
             if not package._DEPS then
                 if package:get("deps") and opt.nodeps ~= true then
 
@@ -1136,6 +1137,22 @@ function should_install(package, opt)
         return false
     end
     if not opt.install_finished and package:policy("package.install_always") then
+        -- avoid repeatedly install packages with "package.install_always" policy
+        -- @see https://github.com/TOMO-CAT/xmake/issues/107
+        local install_package_result_mtime = os.getenv("XMAKE_INSTALL_PACKAGES_RESULT")
+        if install_package_result_mtime then
+            local master_misccache = import("core.cache.master_misccache", {anonymous = true})
+            local key = "install_packages_result"
+            local cacheinfo = master_misccache:get2(key, install_package_result_mtime) or {}
+
+            local pkg_name = package:name()
+            local pkg_installdir = package:installdir()
+            if cacheinfo[pkg_name] and cacheinfo[pkg_name][pkg_installdir] then
+                cprint("${color.warning} skip installed package [%s:%s]", pkg_name, pkg_installdir)
+                return false
+            end
+        end
+
         return true
     end
     if package:exists() and _compatible_with_previous_librarydeps(package, opt) then

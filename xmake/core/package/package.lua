@@ -2888,6 +2888,11 @@ function package.load_from_project(packagename, project)
         instance:set("parallelize", false)
     end
 
+    -- disable parallelize for install-always package because we need to write mastercache
+    if instance:policy("package.install_always") then
+        instance:set("parallelize", false)
+    end
+
     package._memcache():set2("packages", instance)
     return instance
 end

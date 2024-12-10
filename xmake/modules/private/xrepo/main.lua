@@ -192,6 +192,12 @@ function main(...)
     -- tell xmake that xrepo is currently being used
     os.setenv("XREPO_WORKING", "y")
 
+    -- used to distinguish whether we are running a program
+    --
+    -- eg. "xrepo env -b emmylua_debugger -- xmake f -cyv"
+    -- we need to know if we enter the `xmake f -cyv`
+    os.setenv("XREPO_OUTSIDE_PROGRAM", "y")
+
     -- do action
     if menu.action then
         menu.action()
