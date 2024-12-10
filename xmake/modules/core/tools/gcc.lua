@@ -876,7 +876,12 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
 
             -- do compile
             if ccache.is_enabled() then
-                return os.iorunv(_compargv_ccache(self, sourcefile, objectfile, compflags))
+                local program, argv = _compargv_ccache(self, sourcefile, objectfile, compflags)
+                local compile_start_time = os.mclock()
+                local outdata, errdata = os.iorunv(program, argv)
+                local compile_time = os.mclock() - compile_start_time
+                ccache.report_metrics(sourcefile, compile_time)
+                return outdata, errdata
             else
                 return _compile(self, sourcefile, objectfile, compflags, opt)
             end

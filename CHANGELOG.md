@@ -8,6 +8,7 @@
 * [#104](https://github.com/TOMO-CAT/xmake/issues/104): 删除了 project 的 indirect package 也会在 xmake build 的触发重新安装
 * [#108](https://github.com/TOMO-CAT/xmake/issues/108): 对于配置了 `package.install_always` policy 的 package 即使是 xmake build 也会触发重新安装
 * [#107](https://github.com/TOMO-CAT/xmake/issues/107): 避免配置了 `package.install_always` policy 的 package 在 `import("package.tools.xmake").install(package)` 中被重复安装
+* [#118](https://github.com/TOMO-CAT/xmake/issues/118): 编译完成后输出 ccache 近似的命中率报告
 
 ### Bugs 修复
 

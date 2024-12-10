@@ -130,7 +130,9 @@ function build_targets(targetnames, opt)
             check_targets(targetnames, {build = true})
 
             -- dump cache stats
-            if not ccache.is_enabled() and build_cache.is_enabled() then
+            if ccache.is_enabled() then
+                ccache.dump_stats()
+            elseif build_cache.is_enabled() then
                 build_cache.dump_stats()
             end
         end,
