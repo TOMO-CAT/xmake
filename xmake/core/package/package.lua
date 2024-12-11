@@ -1804,10 +1804,16 @@ function _instance:_fetch_library(opt)
                 end
             end
         else
+            -- package with "package.install_always" should disable `-isystem` to ensure incremental compilation works
+            -- @see https://github.com/TOMO-CAT/xmake/issues/121
+            local external = opt.external
+            if self:policy("package.install_always") then
+                external = false
+            end
             fetchinfo = self:find_package("xmake::" .. self:name(), {
                                            require_version = opt.require_version,
                                            cachekey = "fetch_package_xmake",
-                                           external = opt.external,
+                                           external = external,
                                            force = opt.force})
         end
     end
