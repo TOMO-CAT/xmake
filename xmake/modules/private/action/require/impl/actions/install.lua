@@ -387,7 +387,7 @@ function main(package)
 
             -- fetch package and force to flush the cache
             local fetchinfo = package:fetch({force = true, softlink_installdir = false})
-            if option.get("verbose") or option.get("diagnosis") then
+            if option.get("verbose") and option.get("diagnosis") then
                 print(fetchinfo)
             end
             assert(fetchinfo, "fetch %s failed!", tipname)
