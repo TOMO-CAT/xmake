@@ -164,7 +164,7 @@ function dump_stats()
 
     -- build cache stats
     print("")
-    cprint("${color.success}build cache stats:")
+    cprint("${color.success}build xcache stats:")
     vprint("cache directory: %s", rootdir())
     print("cache hit rate: %d%%", hitrate())
     print("cache hit: %d", cache_hit_count)
