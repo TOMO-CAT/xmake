@@ -27,6 +27,7 @@ import("core.platform.platform")
 import("core.language.language")
 import("core.project.policy")
 import("utils.progress")
+import("private.tools.ccache")
 
 -- init it
 function init(self)
@@ -345,6 +346,10 @@ function compargv(self, sourcefile, objectfile, flags)
     return self:program(), table.join("-c", flags, "-o", objectfile, sourcefile)
 end
 
+function ccache_compargv(self, sourcefile, objectfile, flags)
+    return ccache.cmdargv(self:program(), table.join("-c", flags, "-o", objectfile, sourcefile))
+end
+
 -- compile the source file
 function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
 
@@ -356,30 +361,48 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
     try
     {
         function ()
-
             -- generate includes file
             local compflags = flags
             if depfile then
-                if _has_flags_mmd_mf(self) then
+                -- ccache report "preprocessor error" with "-MMD -MF $depfile" / "-MD -MF $depfile" args 
+                -- @see https://github.com/TOMO-CAT/xmake/issues/120
+                if not ccache.is_enabled() and _has_flags_mmd_mf(self) then
                     compflags = table.join(compflags, "-MMD", "-MF", depfile)
                 elseif _has_flags_mm(self) then
                     -- since -MMD is not supported, run nvcc twice
                     local program, argv = compargv(self, sourcefile, depfile, table.join(flags, "-MM"))
                     os.runv(program, argv, {envs = self:runenvs()})
-                elseif _has_flags_md_mf(self) then
+
+                    -- replace the wrong *.o file in depfile
+                    local wrong_objectfile = path.basename(sourcefile) .. ".o"
+                    io.replace(depfile, wrong_objectfile, objectfile, {plain = true})
+                elseif not ccache.is_enabled() and _has_flags_md_mf(self) then
                     -- on windows only -MD and -M are supported
                     compflags = table.join(compflags, "-MD", "-MF", depfile)
                 elseif _has_flags_m(self) then
                     -- since -MD is not supported, run nvcc twice
                     local program, argv = compargv(self, sourcefile, depfile, table.join(flags, "-M"))
                     os.runv(program, argv, {envs = self:runenvs()})
+
+                    -- replace the wrong *.o file in depfile
+                    local wrong_objectfile = path.basename(sourcefile) .. ".o"
+                    io.replace(depfile, wrong_objectfile, objectfile, {plain = true})
                 end
             end
 
             -- do compile
-            local program, argv = compargv(self, sourcefile, objectfile, compflags)
-            local outdata, errdata = os.iorunv(program, argv, {envs = self:runenvs()})
-            return (outdata or "") .. (errdata or "")
+            if ccache.is_enabled() then
+                local program, argv = ccache_compargv(self, sourcefile, objectfile, compflags)
+                local compile_start_time = os.mclock()
+                local outdata, errdata = os.iorunv(program, argv, {envs = self:runenvs()})
+                local compile_time = os.mclock() - compile_start_time
+                ccache.report_metrics(sourcefile, compile_time)
+                return (outdata or "") .. (errdata or "")
+            else
+                local program, argv = compargv(self, sourcefile, objectfile, compflags)
+                local outdata, errdata = os.iorunv(program, argv, {envs = self:runenvs()})
+                return (outdata or "") .. (errdata or "")
+            end
         end,
         catch
         {
@@ -444,4 +467,3 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
         }
     }
 end
-
