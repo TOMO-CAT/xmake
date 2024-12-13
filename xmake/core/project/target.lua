@@ -1305,6 +1305,9 @@ function _instance:orderpkgs(opt)
                 local pkg = requires[packagename]
                 if pkg and pkg:enabled() then
                     table.insert(packages, pkg)
+                else
+                    local sourceinfo = self:sourceinfo("packages", packagename) or {}
+                    utils.warning("%s:%d:${clear} unknown package(%s)", sourceinfo.file or "", sourceinfo.line or -1, packagename)
                 end
             end
         end
