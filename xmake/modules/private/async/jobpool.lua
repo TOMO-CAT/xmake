@@ -337,8 +337,13 @@ function jobpool:prune_redundant_edges()
         table.join2(node._ancestors, ancestors)
         local deps = node._deps
         if deps then
-            for _, dep in deps:keys() do
-                dfs(dep, table.join(node._parents, node._ancestors))
+            local deps_array = deps:to_array()
+            table.sort(deps_array,function(a, b)
+                return a.name < b.name 
+            end)
+            local ancestors_merge = table.join(node._parents, node._ancestors)
+            for _, dep in ipairs(deps_array) do
+                dfs(dep, ancestors_merge)
             end
         end
         visited[node] = true
