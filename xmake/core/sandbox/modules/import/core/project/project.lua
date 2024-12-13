@@ -172,7 +172,11 @@ function sandbox_core_project._load_package_rules_for_target(target)
                     for _, dep in pairs(table.wrap(r:deps())) do
                         target:rule_add(dep)
                     end
+                else
+                    raise("unknown rule(%s) in package(%s) for target(%s)!", rulename, packagename, target:name())
                 end
+            else
+                raise("unknown package(%s) to get rule(%s) for target(%s)!", packagename, rulename, target:name())
             end
         end
     end

@@ -12,6 +12,7 @@
 * [#121](https://github.com/TOMO-CAT/xmake/issues/121): 配置了 `package.install_always` policy 的 package 不应用使用 `-isystem` 从而保证可以触发增量编译
 * [#120](https://github.com/TOMO-CAT/xmake/issues/121): 提供 nvcc 的 ccache 功能
 * [#116](https://github.com/TOMO-CAT/xmake/issues/116): 对于不存在的 packages 直接报错中断运行
+* [#125](https://github.com/TOMO-CAT/xmake/issues/125): 对于不存在的 package-rule 直接报错中断运行
 
 ### Bugs 修复
 
