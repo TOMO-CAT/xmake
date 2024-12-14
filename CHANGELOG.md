@@ -13,6 +13,7 @@
 * [#120](https://github.com/TOMO-CAT/xmake/issues/121): 提供 nvcc 的 ccache 功能
 * [#116](https://github.com/TOMO-CAT/xmake/issues/116): 对于不存在的 packages 直接报错中断运行
 * [#125](https://github.com/TOMO-CAT/xmake/issues/125): 对于不存在的 package-rule 直接报错中断运行
+* [#110](https://github.com/TOMO-CAT/xmake/issues/110): 使用 Luajit 加速
 
 ### Bugs 修复
 
