@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 -- @author      ruki
 -- @file        debugger.lua
 --
-
 -- define module
 local debugger = {}
 
 -- load modules
-local utils    = require("base/utils")
-local os       = require("base/os")
-local path     = require("base/path")
+local utils = require("base/utils")
+local os = require("base/os")
+local path = require("base/path")
 
 -- start emmylua debugger
 --
@@ -34,7 +33,8 @@ local path     = require("base/path")
 --
 function debugger:_start_emmylua_debugger()
     local debugger_libfile = os.getenv("EMMYLUA_DEBUGGER")
-    local script, errors = package.loadlib(debugger_libfile, "luaopen_emmy_core")
+    local script, errors =
+        package.loadlib(debugger_libfile, "luaopen_emmy_core")
     if not script then
         return false, errors
     end
@@ -50,7 +50,9 @@ function debugger:_start_emmylua_debugger()
         listen_port = listen_port + 1
     end
     os.setenv("EMMYLUA_DEBUGGER_PORT", tostring(listen_port))
-    utils.cprint("${bright blue}[improvement]${clear} Emmylua debugger listen on port [" .. listen_port .. "]")
+    utils.cprint(
+        "${bright blue}[improvement]${clear} Emmylua debugger listen on port [" ..
+            listen_port .. "]")
 
     debugger_inst.tcpListen("127.0.0.1", listen_port)
     debugger_inst.waitIDE()

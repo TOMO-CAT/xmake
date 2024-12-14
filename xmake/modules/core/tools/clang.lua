@@ -29,9 +29,7 @@ function init(self)
     _super.init(self)
 
     -- add cuflags
-    if not self:is_plat("windows", "mingw") then
-        self:add("shared.cuflags", "-fPIC")
-    end
+    self:add("shared.cuflags", "-fPIC")
 
     -- suppress warning
     self:add("cxflags", "-Qunused-arguments")

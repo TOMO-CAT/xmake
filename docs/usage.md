@@ -133,23 +133,7 @@ target("test")
     add_cugencodes("compute_35")
 ```
 
-### 6. WDK/UMDF 驱动程序
-
-```lua
-target("echo")
-    add_rules("wdk.driver", "wdk.env.umdf")
-    add_files("driver/*.c")
-    add_files("driver/*.inx")
-    add_includedirs("exe")
-
-target("app")
-    add_rules("wdk.binary", "wdk.env.umdf")
-    add_files("exe/*.cpp")
-```
-
-更多WDK驱动程序例子(umdf/kmdf/wdm)，见：[WDK工程例子](https://xmake.io/#/zh-cn/guide/project_examples?id=wdk%e9%a9%b1%e5%8a%a8%e7%a8%8b%e5%ba%8f)
-
-### 7. IOS/MacOS 应用程序
+### 6. IOS/MacOS 应用程序
 
 ```lua
 target("test")
@@ -158,7 +142,7 @@ target("test")
     add_files("src/Info.plist")
 ```
 
-### 8. Framework 和 Bundle 程序（iOS/MacOS）
+### 7. Framework 和 Bundle 程序（iOS/MacOS）
 
 ```lua
 target("test")
@@ -167,7 +151,7 @@ target("test")
     add_files("src/Info.plist")
 ```
 
-### 9. OpenMP 程序
+### 8. OpenMP 程序
 
 ```lua
 add_requires("libomp", {optional = true})
@@ -178,7 +162,7 @@ target("loop")
     add_packages("libomp")
 ```
 
-### 10. Zig 程序
+### 9. Zig 程序
 
 ```lua
 target("test")

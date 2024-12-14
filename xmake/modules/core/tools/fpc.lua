@@ -26,9 +26,7 @@ import("core.language.language")
 
 -- init it
 function init(self)
-    if not self:is_plat("windows", "mingw") then
-        self:add("shared.pcflags", "-Cg")
-    end
+    self:add("shared.pcflags", "-Cg")
 end
 
 -- make the optimize flag
@@ -112,4 +110,3 @@ function build(self, sourcefiles, targetkind, targetfile, flags)
     os.mkdir(path.directory(targetfile))
     os.runv(buildargv(self, sourcefiles, targetkind, targetfile, flags))
 end
-

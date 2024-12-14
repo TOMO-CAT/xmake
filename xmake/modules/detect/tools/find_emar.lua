@@ -83,5 +83,5 @@ function main(opt)
     end
 
     -- find program
-    return find_program(opt.program or (is_host("windows") and "emar.bat" or "emar"), opt)
+    return find_program(opt.program or "emar", opt)
 end

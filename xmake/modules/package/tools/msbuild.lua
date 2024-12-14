@@ -29,18 +29,6 @@ function _get_parallel_njobs(opt)
     return opt.jobs or option.get("jobs") or tostring(os.default_njob())
 end
 
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
--- get msvc run environments
-function _get_msvc_runenvs(package)
-    return os.joinenvs(_get_msvc(package):runenvs())
-end
-
 -- get vs arch
 function _get_vsarch(package)
     local arch = package:arch()
@@ -76,7 +64,7 @@ end
 
 -- get the build environments
 function buildenvs(package, opt)
-    return _get_msvc_runenvs(package)
+    return {}
 end
 
 -- build package

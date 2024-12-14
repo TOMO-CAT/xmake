@@ -26,11 +26,6 @@ import("detect.tools.find_cudagdb")
 import("detect.tools.find_cudamemcheck")
 import("detect.tools.find_gdb")
 import("detect.tools.find_lldb")
-import("detect.tools.find_windbg")
-import("detect.tools.find_x64dbg")
-import("detect.tools.find_ollydbg")
-import("detect.tools.find_devenv")
-import("detect.tools.find_vsjitdebugger")
 import("detect.tools.find_renderdoc")
 import("lib.detect.find_tool")
 import("private.action.run.runenvs")
@@ -102,25 +97,6 @@ function _run_lldb(program, argv, opt)
     return true
 end
 
--- run windbg
-function _run_windbg(program, argv, opt)
-
-    -- find windbg
-    local windbg = find_windbg({program = config.get("debugger")})
-    if not windbg then
-        return false
-    end
-
-    -- patch arguments
-    argv = argv or {}
-    table.insert(argv, 1, program)
-
-    -- run it
-    opt.detach = true
-    os.execv(windbg, argv, opt)
-    return true
-end
-
 -- run cuda-memcheck
 function _run_cudamemcheck(program, argv, opt)
 
@@ -136,83 +112,6 @@ function _run_cudamemcheck(program, argv, opt)
 
     -- run it
     os.execv(cudamemcheck, argv, opt)
-    return true
-end
-
--- run x64dbg
-function _run_x64dbg(program, argv, opt)
-
-    -- find x64dbg
-    local x64dbg = find_x64dbg({program = config.get("debugger")})
-    if not x64dbg then
-        return false
-    end
-
-    -- patch arguments
-    argv = argv or {}
-    table.insert(argv, 1, program)
-
-    -- run it
-    opt.detach = true
-    os.execv(x64dbg, argv, opt)
-    return true
-end
-
--- run ollydbg
-function _run_ollydbg(program, argv, opt)
-
-    -- find ollydbg
-    local ollydbg = find_ollydbg({program = config.get("debugger")})
-    if not ollydbg then
-        return false
-    end
-
-    -- patch arguments
-    argv = argv or {}
-    table.insert(argv, 1, program)
-
-    -- run it
-    opt.detach = true
-    os.execv(ollydbg, argv, opt)
-    return true
-end
-
--- run vsjitdebugger
-function _run_vsjitdebugger(program, argv, opt)
-
-    -- find vsjitdebugger
-    local vsjitdebugger = find_vsjitdebugger({program = config.get("debugger")})
-    if not vsjitdebugger then
-        return false
-    end
-
-    -- patch arguments
-    argv = argv or {}
-    table.insert(argv, 1, program)
-
-    -- run it
-    opt.detach = true
-    os.execv(vsjitdebugger, argv, opt)
-    return true
-end
-
--- run devenv
-function _run_devenv(program, argv, opt)
-
-    -- find devenv
-    local devenv = find_devenv({program = config.get("debugger")})
-    if not devenv then
-        return false
-    end
-
-    -- patch arguments
-    argv = argv or {}
-    table.insert(argv, 1, "/DebugExe")
-    table.insert(argv, 2, program)
-
-    -- run it
-    opt.detach = true
-    os.execv(devenv, argv, opt)
     return true
 end
 
@@ -357,15 +256,6 @@ function main(program, argv, opt)
     ,   {"gede"        , _run_gede}
     ,   {"seergdb"     , _run_seergdb}
     }
-
-    -- for windows target or on windows?
-    if (config.plat() or os.host()) == "windows" then
-        table.insert(debuggers, 1, {"windbg",           _run_windbg})
-        table.insert(debuggers, 1, {"ollydbg",          _run_ollydbg})
-        table.insert(debuggers, 1, {"x64dbg",           _run_x64dbg})
-        table.insert(debuggers, 1, {"vsjitdebugger",    _run_vsjitdebugger})
-        table.insert(debuggers, 1, {"devenv",           _run_devenv})
-    end
 
     -- get debugger from configuration
     opt = opt or {}

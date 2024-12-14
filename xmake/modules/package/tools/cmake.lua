@@ -28,7 +28,6 @@ import("core.project.project")
 import("lib.detect.find_file")
 import("lib.detect.find_tool")
 import("package.tools.ninja")
-import("package.tools.msbuild")
 import("detect.sdks.find_emsdk")
 import("private.utils.toolchain", {alias = "toolchain_utils"})
 
@@ -65,13 +64,6 @@ function _is_toolchain_compatible_with_host(package)
             return true
         end
     end
-end
-
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
 end
 
 -- get cflags from package deps
@@ -619,33 +611,12 @@ function _get_configs_for_host_toolchain(package, configs, opt)
     _insert_configs_from_envs(configs, envs, opt)
 end
 
--- get cmake generator for msvc
-function _get_cmake_generator_for_msvc(package)
-    local vsvers = {
-        ["2022"] = "17",
-        ["2019"] = "16",
-        ["2017"] = "15",
-        ["2015"] = "14",
-        ["2013"] = "12",
-        ["2012"] = "11",
-        ["2010"] = "10",
-        ["2008"] = "9"
-    }
-    local vs = _get_msvc(package):config("vs") or config.get("vs")
-    assert(vsvers[vs], "Unknown Visual Studio version: '" .. tostring(vs) ..
-               "' set in project.")
-    return "Visual Studio " .. vsvers[vs] .. " " .. vs
-end
-
 -- get configs for cmake generator
 function _get_configs_for_generator(package, configs, opt)
     opt = opt or {}
     configs = configs or {}
     local cmake_generator = opt.cmake_generator
     if cmake_generator then
-        if cmake_generator:find("Visual Studio", 1, true) then
-            cmake_generator = _get_cmake_generator_for_msvc(package)
-        end
         table.insert(configs, "-G")
         table.insert(configs, cmake_generator)
         if cmake_generator:find("Ninja", 1, true) then
@@ -854,8 +825,6 @@ function _get_configs(package, configs, opt)
         (package:is_plat("macosx") and
             (get_config("appledev") or not package:is_arch(os.subarch()))) then
         _get_configs_for_appleos(package, configs, opt)
-    elseif package:is_plat("mingw") then
-        _get_configs_for_mingw(package, configs, opt)
     elseif package:is_plat("wasm") then
         _get_configs_for_wasm(package, configs, opt)
     elseif package:is_cross() then
@@ -885,19 +854,8 @@ end
 
 -- get build environments
 function buildenvs(package, opt)
-
-    -- we need to bind msvc environments manually
-    -- @see https://github.com/xmake-io/xmake/issues/1057
     opt = opt or {}
     local envs = {}
-
-    -- we need to pass pkgconf for windows/mingw without msys2/cygwin
-    if package:is_plat("windows", "mingw") and is_subhost("windows") then
-        local pkgconf = find_tool("pkgconf")
-        if pkgconf then
-            envs.PKG_CONFIG = pkgconf.program
-        end
-    end
 
     -- add environments for cmake/find_packages
     -- and we need also find them from private libraries,
@@ -946,22 +904,6 @@ function _build_for_make(package, configs, opt)
     end
     if is_host("bsd") then
         os.vrunv("gmake", argv)
-    elseif is_subhost("windows") and package:is_plat("mingw") then
-        local mingw = assert(package:build_getenv("mingw") or
-                                 package:build_getenv("sdk"), "mingw not found!")
-        local mingw_make = path.join(mingw, "bin", "mingw32-make.exe")
-        os.vrunv(mingw_make, argv)
-    elseif package:is_plat("android") and is_host("windows") then
-        local make
-        local ndk = get_config("ndk")
-        if ndk then
-            make = path.join(ndk, "prebuilt", "windows-x86_64", "bin",
-                             "make.exe")
-        end
-        if not make or not os.isfile(make) then
-            make = "make"
-        end
-        os.vrunv(make, argv)
     else
         os.vrunv("make", argv)
     end

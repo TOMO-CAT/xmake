@@ -1478,29 +1478,6 @@ function _instance:autogenfile(sourcefile, opt)
         relativedir = path.directory(sourcefile)
     end
 
-    -- translate path
-    --
-    -- e.g.
-    --
-    -- src/xxx.c
-    --      project/xmake.lua
-    --          build/.objs
-    --          build/.gens
-    --
-    -- objectfile: project/build/.objs/xxxx/../../xxx.c will be out of range for objectdir
-    -- autogenfile: project/build/.gens/xxxx/../../xxx.c will be out of range for autogendir
-    --
-    -- we need to replace '..' with '__' in this case
-    --
-    if path.is_absolute(relativedir) and os.host() == "windows" then
-        -- remove C:\\ and whitespaces and fix long path issue
-        -- e.g. C:\\Program Files (x64)\\xxx\Windows.h
-        --
-        -- @see
-        -- https://github.com/xmake-io/xmake/issues/3021
-        -- https://github.com/xmake-io/xmake/issues/3715
-        relativedir = hash.uuid4(relativedir):gsub("%-", ""):lower()
-    end
     relativedir = relativedir:gsub("%.%.", "__")
     local rootdir = (opt and opt.rootdir) and opt.rootdir or self:autogendir()
     if relativedir ~= "." then
@@ -2907,11 +2884,7 @@ end
 
 -- get the link name of the target file
 function target.linkname(filename, opt)
-    -- for implib/mingw, e.g. libxxx.dll.a
     opt = opt or {}
-    if filename:startswith("lib") and filename:endswith(".dll.a") then
-        return filename:sub(4, #filename - 6)
-    end
     -- for macOS, libxxx.tbd
     if filename:startswith("lib") and filename:endswith(".tbd") then
         return filename:sub(4, #filename - 4)
@@ -2919,10 +2892,6 @@ function target.linkname(filename, opt)
     local linkname, count = filename:gsub(target.filename("__pattern__", "static", {plat = opt.plat}):gsub("%.", "%%."):gsub("__pattern__", "(.+)") .. "$", "%1")
     if count == 0 then
         linkname, count = filename:gsub(target.filename("__pattern__", "shared", {plat = opt.plat}):gsub("%.", "%%."):gsub("__pattern__", "(.+)") .. "$", "%1")
-    end
-    -- in order to be compatible with mingw/windows library with .lib
-    if count == 0 and opt.plat == "mingw" then
-        linkname, count = filename:gsub(target.filename("__pattern__", "static", {plat = "windows"}):gsub("%.", "%%."):gsub("__pattern__", "(.+)") .. "$", "%1")
     end
     if count > 0 and linkname then
         return linkname

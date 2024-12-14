@@ -86,8 +86,6 @@ function policy.policies()
             ["build.c++.modules.tryreuse.discriminate_on_defines"] = {description = "Enable defines module reuse discrimination.", default = false, type = "boolean"},
             -- Force C++ modules fallback dependency scanner for clang
             ["build.c++.clang.fallbackscanner"]   = {description = "Force clang fallback module dependency scanner.", default = false, type = "boolean"},
-            -- Force C++ modules fallback dependency scanner for msvc
-            ["build.c++.msvc.fallbackscanner"]    = {description = "Force msvc fallback module dependency scanner.", default = false, type = "boolean"},
             -- Force C++ modules fallback dependency scanner for gcc
             ["build.c++.gcc.fallbackscanner"]     = {description = "Force gcc fallback module dependency scanner.", default = false, type = "boolean"},
             -- Force to enable new cxx11 abi in C++ modules for gcc

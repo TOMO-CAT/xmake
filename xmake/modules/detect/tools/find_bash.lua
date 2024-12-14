@@ -41,12 +41,6 @@ function main(opt)
     -- init options
     opt = opt or {}
 
-    -- find bash from git for windows
-    if is_host("windows") then
-        opt.paths = opt.paths or {}
-        table.insert(opt.paths, "$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\GitForWindows;InstallPath)\\bin")
-    end
-
     -- find program
     local program = find_program(opt.program or "bash", opt)
 

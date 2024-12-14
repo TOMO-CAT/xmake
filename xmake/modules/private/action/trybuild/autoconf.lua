@@ -109,9 +109,9 @@ function _get_buildenvs()
             local ld = envs.LD
             if ld then
                 if ld:endswith("x86_64-w64-mingw32-g++") then
-                    envs.LD = path.join(path.directory(ld), is_host("windows") and "ld" or "x86_64-w64-mingw32-ld")
+                    envs.LD = path.join(path.directory(ld), "x86_64-w64-mingw32-ld")
                 elseif ld:endswith("i686-w64-mingw32-g++") then
-                    envs.LD = path.join(path.directory(ld), is_host("windows") and "ld" or "i686-w64-mingw32-ld")
+                    envs.LD = path.join(path.directory(ld), "i686-w64-mingw32-ld")
                 end
             end
         elseif is_plat("cross") or (ar and ar:find("ar")) then

@@ -42,7 +42,7 @@ function generate_dependency_for(target, sourcefile, opt)
         local outputdir = compiler_support.get_outputdir(target, sourcefile)
 
         local jsonfile = path.join(outputdir, path.filename(sourcefile) .. ".module.json")
-        if scandependenciesflag and not target:policy("build.c++.msvc.fallbackscanner") then
+        if scandependenciesflag then
             local flags = {jsonfile, sourcefile, ifcoutputflag, outputdir, "-Fo" .. target:objectfile(sourcefile)}
             local compinst = target:compiler("cxx")
             local compflags = table.join(compinst:compflags({sourcefile = sourcefile, target = target}) or {}, common_flags, flags)
@@ -66,4 +66,3 @@ function generate_dependency_for(target, sourcefile, opt)
     end, {dependfile = dependfile, files = {sourcefile}, changed = target:is_rebuilt()})
     return changed
 end
-

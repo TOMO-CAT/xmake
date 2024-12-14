@@ -31,7 +31,7 @@ import("private.tools.rust.check_target")
 
 -- get cargo registry directory
 function _get_cargo_registrydir()
-    return path.join(is_host("windows") and os.getenv("USERPROFILE") or "~", ".cargo", "registry")
+    return path.join("~", ".cargo", "registry")
 end
 
 -- get the Cargo.toml of package
@@ -150,9 +150,6 @@ function main(name, opt)
     local libfiles_native_host
     if is_host("macosx") then
         libfiles_native_host = os.files(path.join(librarydir_host, "*.dylib"))
-    elseif is_host("windows") then
-        libfiles_native_host = os.files(path.join(librarydir_host, "*.lib|*.dll.lib"))
-        table.join2(libfiles_native_host, os.files(path.join(librarydir_host, "*.dll")))
     else
         libfiles_native_host = os.files(path.join(librarydir_host, "*.so"))
     end
