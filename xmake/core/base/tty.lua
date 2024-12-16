@@ -153,28 +153,14 @@ end
 function tty.shell()
     local shell = tty._SHELL
     if shell == nil then
-        local subhost = xmake._SUBHOST
-        if subhost == "windows" then
-            if os.getenv("PROMPT") then
-                shell = "cmd"
-            else
-                local ok, result = os.iorun("pwsh -v")
-                if ok then
-                    shell = "pwsh"
-                else
-                    shell = "powershell"
-                end
-            end
-        else
-            shell = os.getenv("XMAKE_SHELL")
-            if not shell then
-                shell = os.getenv("SHELL")
-                if shell then
-                    for _, shellname in ipairs({"zsh", "bash", "sh"}) do
-                        if shell:find(shellname) then
-                            shell = shellname
-                            break
-                        end
+        shell = os.getenv("XMAKE_SHELL")
+        if not shell then
+            shell = os.getenv("SHELL")
+            if shell then
+                for _, shellname in ipairs({"zsh", "bash", "sh"}) do
+                    if shell:find(shellname) then
+                        shell = shellname
+                        break
                     end
                 end
             end
@@ -248,19 +234,6 @@ end
 function tty.has_emoji()
     local has_emoji = tty._HAS_EMOJI
     if has_emoji == nil then
-        local term = tty.term()
-        local winos = require("base/winos")
-
-        -- before win8? disable it
-        if has_emoji == nil and (os.host() == "windows" and winos.version():le("win8")) then
-            has_emoji = false
-        end
-
-        -- on msys2/cygwin/powershell? disable it
-        if has_emoji == nil and (term == "msys2" or term == "cygwin" or term == "powershell") then
-            has_emoji = false
-        end
-
         -- enable it by default
         if has_emoji == nil then
             has_emoji = true
@@ -302,19 +275,8 @@ function tty.has_color8()
 
         -- detect it from system
         if has_color8 == nil then
-            if os.host() == "windows" then
-                local winos = require("base/winos")
-                if os.getenv("ANSICON") then
-                    has_color8 = true
-                elseif winos.version():le("win8") then
-                    has_color8 = false
-                else
-                    has_color8 = true
-                end
-            else
-                -- alway enabled for unix-like system
-                has_color8 = true
-            end
+            -- alway enabled for unix-like system
+            has_color8 = true
         end
         tty._HAS_COLOR8 = has_color8 or false
     end
@@ -350,9 +312,7 @@ function tty.has_color256()
 
         -- detect it from system
         if has_color256 == nil then
-            if os.host() == "windows" then
-                has_color256 = false
-            elseif os.host() == "linux" or os.host("macosx") then
+            if os.host() == "linux" or os.host("macosx") then
                 -- alway enabled for linux/macOS, $TERM maybe xterm, not xterm-256color, but it is supported
                 has_color256 = true
             else

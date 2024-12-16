@@ -29,18 +29,6 @@ function _get_parallel_njobs(opt)
     return opt.jobs or option.get("jobs") or tostring(os.default_njob())
 end
 
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
--- get msvc run environments
-function _get_msvc_runenvs(package)
-    return os.joinenvs(_get_msvc(package):runenvs())
-end
-
 -- get vs arch
 function _get_vsarch(package)
     local arch = package:arch()
@@ -64,19 +52,12 @@ function _get_configs(package, configs, opt)
     if not configs_str:find("p:Platform=", 1, true) then
         table.insert(configs, "-p:Platform=" .. _get_vsarch(package))
     end
-    if project.policy("package.msbuild.multi_tool_task") then
-        table.insert(configs, "/p:UseMultiToolTask=true")
-        table.insert(configs, "/p:EnforceProcessCountAcrossBuilds=true")
-        if jobs then
-            table.insert(configs, format("/p:MultiProcMaxCount=%d", jobs))
-        end
-    end
     return configs
 end
 
 -- get the build environments
 function buildenvs(package, opt)
-    return _get_msvc_runenvs(package)
+    return {}
 end
 
 -- build package

@@ -487,9 +487,7 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
         -- load targets
         project.load_targets({recheck = recheck})
 
-        -- FIXME: disable softlink package because of bugs
-        -- https://github.com/TOMO-CAT/xmake/issues/99
-        if false then
+        if project.policy("package.enable_softlink_installdir") then
             -- after install xrepo packages, we will call `os.tryrm()` to delete `package:data("cleanable_sourcedir")`,
             -- and deleting the sourcedir will remove the installdir of the dependent packages that
             -- are symlibked in `${sourcedir}/build/.pkg`, so we choose not to create softlink in XREPO
@@ -501,7 +499,6 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
                     for requirename, require in pairs(requires) do
                         local pkg_softlink_installdir = path.join(config.buildir(), ".pkg", requirename)
                         local pkg_installdir = require:installdir()
-                        -- FIXME:
                         -- when we `add_requires("zlib")` in a project, require:installdir() may be nil
                         -- this may be because this library is a system library
                         if pkg_installdir then

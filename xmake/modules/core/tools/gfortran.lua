@@ -31,8 +31,6 @@ function init(self)
     self:set("fcshflags", "-shared")
 
     -- add -fPIC for shared
-    if not self:is_plat("windows", "mingw") then
-        self:add("fcshflags", "-fPIC")
-        self:add("shared.fcflags", "-fPIC")
-    end
+    self:add("fcshflags", "-fPIC")
+    self:add("shared.fcflags", "-fPIC")
 end

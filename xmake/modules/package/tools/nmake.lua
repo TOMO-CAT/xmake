@@ -24,16 +24,9 @@ import("core.project.config")
 import("core.tool.toolchain")
 import("lib.detect.find_tool")
 
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
 -- get the build environments
 function buildenvs(package, opt)
-    return os.joinenvs(_get_msvc(package):runenvs())
+    return {}
 end
 
 -- do make

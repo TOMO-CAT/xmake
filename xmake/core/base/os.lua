@@ -1035,13 +1035,6 @@ function os.isexec(filepath)
     if os.isfile(filepath) then
         return true
     end
-    if os.host() == "windows" then
-        for _, suffix in ipairs({".exe", ".cmd", ".bat"}) do
-            if os.isfile(filepath .. suffix) then
-                return true
-            end
-        end
-    end
 end
 
 -- get system host
@@ -1156,31 +1149,26 @@ function os.fscase(filepath)
                 return os._FSCASE
             end
         end
-        if os.host() == "windows" then
-            os._FSCASE = false
+        -- get temporary directory
+        local tmpdir = os.tmpdir()
+
+        -- get matching pattern, this is equal to os.filedirs(path.join(tmpdir, "*"))
+        --
+        -- @note we cannot use os.match() becase os.fscase() will be called in os.match()
+        --
+        local pattern = path.join(tmpdir, "*")
+        pattern = pattern:gsub("([%+%.%-%^%$%(%)%%])", "%%%1")
+        pattern = pattern:gsub("%*", "\002")
+        pattern = pattern:gsub("\002", "[^/]*")
+
+        -- attempt to detect it
+        local file = os.find(tmpdir, pattern, 0, -1, nil, function (file, isdir) return false end)
+        if file and #file > 0 then
+            local file1 = file[1]
+            local file2 = file1:gsub(".",  function (ch) return (ch >= 'a' and ch <= 'z') and ch:upper() or ch:lower() end)
+            os._FSCASE = not (os.exists(file1) and os.exists(file2))
         else
-
-            -- get temporary directory
-            local tmpdir = os.tmpdir()
-
-            -- get matching pattern, this is equal to os.filedirs(path.join(tmpdir, "*"))
-            --
-            -- @note we cannot use os.match() becase os.fscase() will be called in os.match()
-            --
-            local pattern = path.join(tmpdir, "*")
-            pattern = pattern:gsub("([%+%.%-%^%$%(%)%%])", "%%%1")
-            pattern = pattern:gsub("%*", "\002")
-            pattern = pattern:gsub("\002", "[^/]*")
-
-            -- attempt to detect it
-            local file = os.find(tmpdir, pattern, 0, -1, nil, function (file, isdir) return false end)
-            if file and #file > 0 then
-                local file1 = file[1]
-                local file2 = file1:gsub(".",  function (ch) return (ch >= 'a' and ch <= 'z') and ch:upper() or ch:lower() end)
-                os._FSCASE = not (os.exists(file1) and os.exists(file2))
-            else
-                os._FSCASE = true
-            end
+            os._FSCASE = true
         end
     end
     return os._FSCASE
@@ -1204,11 +1192,6 @@ function os.getenvs()
         local p = line:find('=', 1, true)
         if p then
             local key = line:sub(1, p - 1):trim()
-            -- only translate Path to PATH on windows
-            -- @see https://github.com/xmake-io/xmake/issues/3752
-            if os.host() == "windows" and key:lower() == "path" then
-                key = key:upper()
-            end
             local values = line:sub(p + 1):trim()
             if #key > 0 then
                 envs[key] = values
@@ -1421,9 +1404,6 @@ function os.default_njob()
     local ncpu = os.cpuinfo().ncpu
     if ncpu > 2 then
         njob = ncpu + 2
-        if os.host() == "windows" and njob > 128 then
-            njob = 128
-        end
         if njob > 512 then
             njob = 512
         end

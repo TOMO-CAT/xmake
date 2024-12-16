@@ -218,15 +218,6 @@ function cpu._info()
                     end
                 end
             end
-        elseif os.host() == "windows" then
-            cpuinfo.vendor_id      = winos.registry_query("HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;VendorIdentifier")
-            cpuinfo.cpu_model_name = winos.registry_query("HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;ProcessorNameString")
-            local cpu_id = winos.registry_query("HKEY_LOCAL_MACHINE\\Hardware\\Description\\System\\CentralProcessor\\0;Identifier")
-            if cpu_id then
-                local cpu_family, cpu_model = cpu_id:match("Family (%d+) Model (%d+)")
-                cpuinfo.cpu_family = cpu_family
-                cpuinfo.cpu_model  = cpu_model
-            end
         elseif os.host() == "bsd" then
             local ok, dmesginfo = os.iorun("dmesg")
             if ok and dmesginfo then

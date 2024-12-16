@@ -33,10 +33,8 @@ import("private.tools.ccache")
 function init(self)
 
     -- init cuflags
-    if not self:is_plat("windows", "mingw") then
-        self:set("shared.cuflags", "-Xcompiler -fPIC")
-        self:set("binary.cuflags", "-Xcompiler -fPIE")
-    end
+    self:set("shared.cuflags", "-Xcompiler -fPIC")
+    self:set("binary.cuflags", "-Xcompiler -fPIE")
 
     -- init flags map
     self:set("mapflags", {

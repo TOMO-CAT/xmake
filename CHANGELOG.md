@@ -12,6 +12,8 @@
 * [#121](https://github.com/TOMO-CAT/xmake/issues/121): 配置了 `package.install_always` policy 的 package 不应用使用 `-isystem` 从而保证可以触发增量编译
 * [#120](https://github.com/TOMO-CAT/xmake/issues/121): 提供 nvcc 的 ccache 功能
 * [#116](https://github.com/TOMO-CAT/xmake/issues/116): 对于不存在的 packages 直接报错中断运行
+* [#125](https://github.com/TOMO-CAT/xmake/issues/125): 对于不存在的 package-rule 直接报错中断运行
+* [#110](https://github.com/TOMO-CAT/xmake/issues/110): 使用 Luajit 加速
 
 ### Bugs 修复
 
@@ -1084,7 +1086,6 @@
 
 * [#958](https://github.com/xmake-io/xmake/issues/958): 改进mingw平台，增加对 llvm-mingw 工具链的支持，以及 arm64/arm 架构的支持
 * 增加 `add_requires("zlib~xxx")` 模式使得能够支持同时安装带有多种配置的同一个包，作为独立包存在
-* [#977](https://github.com/xmake-io/xmake/issues/977): 改进 find_mingw 在 windows 上的探测
 * [#978](https://github.com/xmake-io/xmake/issues/978): 改进工具链的flags顺序
 * 改进XCode工具链，支持macOS/arm64
 
@@ -1595,7 +1596,7 @@
 * [#83](https://github.com/xmake-io/xmake/issues/83): 添加用户扩展模块去探测程序，库文件以及其他主机环境
 * 添加`find_program`, `find_file`, `find_library`, `find_tool`和`find_package` 等模块接口
 * 添加`net.*`和`devel.*`扩展模块
-* 添加`val()`接口去获取内置变量，例如：`val("host")`, `val("env PATH")`, `val("shell echo hello")` and `val("reg HKEY_LOCAL_MACHINE\\XX;Value")`
+* 添加`val()`接口去获取内置变量，例如：`val("host")`, `val("env PATH")` and `val("shell echo hello")`
 * 增加对微软.rc资源文件的编译支持，当在windows上编译时，可以增加资源文件了
 * 增加`has_flags`, `features`和`has_features`等探测模块接口
 * 添加`option.on_check`, `option.after_check` 和 `option.before_check` 接口

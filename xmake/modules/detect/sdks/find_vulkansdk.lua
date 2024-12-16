@@ -58,13 +58,7 @@ function _find_vulkan_from_paths(paths, opt)
 
     -- find api version
     local vkinfo
-    if is_host("windows") then
-        if arch == "x86" then
-            vkinfo = find_file("vulkaninfoSDK.exe", paths, {suffixes = {"bin32"}})
-        else
-            vkinfo = find_file("vulkaninfoSDK.exe", paths, {suffixes = {"bin"}})
-        end
-    elseif is_host("linux") then
+    if is_host("linux") then
         vkinfo = find_file("vulkaninfo", paths, {suffixes = {"bin"}})
     end
     if vkinfo then

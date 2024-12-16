@@ -31,10 +31,8 @@ function init(self)
     self:set("shflags", "-shared")
 
     -- add -fPIC for shared
-    if not self:is_plat("windows", "mingw") then
-        self:add("shflags", "-fPIC")
-        self:add("shared.cxflags", "-fPIC")
-    end
+    self:add("shflags", "-fPIC")
+    self:add("shared.cxflags", "-fPIC")
 end
 
 -- make the strip flag

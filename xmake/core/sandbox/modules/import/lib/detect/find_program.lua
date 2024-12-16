@@ -216,35 +216,13 @@ function sandbox_lib_detect_find_program._find(name, paths, opt)
     if program_path_real then
         return program_path_real
     end
-
-    -- attempt to find it use `where.exe program.exe` command
-    --
-    -- and we need to add `.exe` suffix to avoid find some incorrect programs. e.g. pkg-config.bat
-    if os.host() == "windows" then
-        local program_name = name:lower()
-        if not program_name:endswith(".exe") then
-            program_name = program_name .. ".exe"
-        end
-        local ok, wherepaths = os.iorunv("where.exe", {program_name})
-        if ok and wherepaths then
-            for _, program_path in ipairs(wherepaths:split("\n")) do
-                program_path = program_path:trim()
-                if #program_path > 0 then
-                    local program_path_real = sandbox_lib_detect_find_program._check(program_path, opt)
-                    if program_path_real then
-                        return program_path_real
-                    end
-                end
-            end
-        end
-    end
 end
 
 -- find program
 --
 -- @param name      the program name
 -- @param opt       the options, e.g. {paths = {"/usr/bin"}, check = function (program) os.run("%s -h", program) end, verbose = true, force = true, cachekey = "xxx"}
---                    - opt.paths     the program paths (e.g. dirs, paths, winreg paths, script paths)
+--                    - opt.paths     the program paths (e.g. dirs, paths, script paths)
 --                    - opt.check     the check script or command
 --                    - opt.norun     do not attempt to run program to check program fastly
 --                    - opt.system    true: only find it from system, false: only find it from xmake/packages
@@ -257,7 +235,6 @@ end
 -- local program = find_program("ccache", {paths = {"/usr/bin", "/usr/local/bin"}})
 -- local program = find_program("ccache", {paths = {"/usr/bin", "/usr/local/bin"}, check = "--help"}) -- simple check command: ccache --help
 -- local program = find_program("ccache", {paths = {"/usr/bin", "/usr/local/bin"}, check = function (program) os.run("%s -h", program) end})
--- local program = find_program("ccache", {paths = {"$(env PATH)", "$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\AeDebug;Debugger)"}})
 -- local program = find_program("ccache", {paths = {"$(env PATH)", function () return "/usr/local/bin" end}})
 -- local program = find_program("ccache", {envs = {PATH = "xxx"}})
 --

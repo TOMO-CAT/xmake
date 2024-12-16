@@ -41,7 +41,7 @@ function main(opt)
     opt = opt or {}
 
     -- find program
-    local program = find_program(opt.program or (is_host("windows") and "xrepo.bat" or "xrepo"), opt)
+    local program = find_program(opt.program or "xrepo", opt)
 
     -- find program version
     local version = nil

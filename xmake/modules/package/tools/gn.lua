@@ -68,13 +68,6 @@ function _get_configs(package, configs, opt)
     return configs
 end
 
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
 -- get the build environments
 function buildenvs(package, opt)
     local envs = {}

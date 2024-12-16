@@ -31,12 +31,6 @@ import("extension", {alias = "get_archive_extension"})
 
 -- extract archivefile using tar
 function _extract_using_tar(archivefile, outputdir, extension, opt)
-
-    -- the tar of windows can only extract "*.tar"
-    if os.host() == "windows" and extension ~= ".tar" then
-        return false
-    end
-
     -- find tar
     local program = find_tar()
     if not program then
@@ -54,10 +48,8 @@ function _extract_using_tar(archivefile, outputdir, extension, opt)
     end
 
     -- set outputdir
-    if not is_host("windows") then
-        table.insert(argv, "-C")
-        table.insert(argv, outputdir)
-    end
+    table.insert(argv, "-C")
+    table.insert(argv, outputdir)
 
     -- excludes files
     if opt.excludes then

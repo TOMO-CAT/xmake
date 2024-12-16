@@ -330,18 +330,6 @@ function _get_configs(package, configs, opt)
     return configs
 end
 
--- get msvc
-function _get_msvc(package)
-    local msvc = package:toolchain("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
--- get msvc run environments
-function _get_msvc_runenvs(package)
-    return os.joinenvs(_get_msvc(package):runenvs())
-end
-
 -- fix libname on windows
 function _fix_libname_on_windows(package)
     for _, lib in ipairs(os.files(path.join(package:installdir("lib"), "lib*.a"))) do

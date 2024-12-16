@@ -34,10 +34,8 @@ function init(self)
     self:set("dcshflags", "-shared")
 
     -- add -fPIC for shared
-    if not self:is_plat("windows", "mingw") then
-        self:add("dcshflags", "-fPIC")
-        self:add("shared.dcflags", "-fPIC")
-    end
+    self:add("dcshflags", "-fPIC")
+    self:add("shared.dcflags", "-fPIC")
 end
 
 -- make the optimize flag

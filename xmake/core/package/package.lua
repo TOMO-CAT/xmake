@@ -1916,7 +1916,11 @@ function _instance:fetch(opt)
 
     -- use sysincludedirs/-isystem instead of -I?
     local external
-    if opt.external ~= nil then
+    -- softlink installdir must not be external (because -isystem would loss dependent information in *.d file)
+    -- @see https://github.com/TOMO-CAT/xmake/issues/98
+    if project.policy("package.enable_softlink_installdir") and not os.getenv("XMAKE_IN_XREPO") and self:is_toplevel() then
+        external = false
+    elseif opt.external ~= nil then
         external = opt.external
     else
         external = self:use_external_includes()
@@ -1991,15 +1995,21 @@ function _instance:fetch(opt)
         end
     end
 
-    -- FIXME: disable softlink package because of bugs
-    -- https://github.com/TOMO-CAT/xmake/issues/99
-    if false then
-        -- using a relative path with a softlink will definitely cause errors when we're not in os.projectdir,
-        -- therefore, we need to exclude scenarios like package:on_test() with opt.softlink_installdir
+    -- use softlink installdir for top-level package to make brief __FILE__ symbol 
+    -- @see https://github.com/TOMO-CAT/xmake/issues/129
+    -- @see https://github.com/TOMO-CAT/xmake/issues/62
+    --
+    -- using a relative path with a softlink will definitely cause errors when we're not in os.projectdir,
+    -- therefore, we need to exclude scenarios like package:on_test() with opt.softlink_installdir
+    if project.policy("package.enable_softlink_installdir") then
         if opt.softlink_installdir ~= false then
-            if not self:is_local() and fetchinfo and not os.getenv("XMAKE_IN_XREPO") then
+            if self:is_toplevel() and fetchinfo and not os.getenv("XMAKE_IN_XREPO") then
                 local installdir = self:installdir()
                 if installdir and project and project.required_package(self:name()) then
+                    fetchinfo.includedirs = table.wrap(fetchinfo.includedirs)
+                    fetchinfo.sysincludedirs = table.wrap(fetchinfo.sysincludedirs)
+                    fetchinfo.linkdirs = table.wrap(fetchinfo.linkdirs)
+
                     local softlink_installdir = path.join(config.buildir(), ".pkg", self:name())
                     _transform_softlink_installdir(fetchinfo.includedirs, installdir, softlink_installdir)
                     _transform_softlink_installdir(fetchinfo.sysincludedirs, installdir, softlink_installdir)

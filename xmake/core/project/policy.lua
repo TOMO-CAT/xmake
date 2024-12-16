@@ -48,14 +48,14 @@ function policy.policies()
             ["build.fence"]                       = {description = "Block all targets build that depends on self.", default = false, type = "boolean"},
             -- We can compile the source files for each target in parallel
             ["build.across_targets_in_parallel"]  = {description = "Enable compile the source files for each target in parallel.", default = true, type = "boolean"},
-            -- Merge archive intead of linking for all dependent targets
-            ["build.merge_archive"]               = {description = "Enable merge archive intead of linking for all dependent targets.", default = false, type = "boolean"},
+            -- Merge archive instead of linking for all dependent targets
+            ["build.merge_archive"]               = {description = "Enable merge archive instead of linking for all dependent targets.", default = false, type = "boolean"},
             -- C/C++ build cache
             ["build.ccache"]                      = {description = "Enable C/C++ build ccache.", type = "boolean"},
             -- C/C++ build xmake cache
             ["build.xcache"]                      = {description = "Enable C/C++ build xmake ccache.", type = "boolean"},
             -- Use global storage if build.xcache is enabled
-            ["build.xcache.global_storage"]       = {description = "Use global storge if build.xcache is enabled.", default = false, type = "boolean"},
+            ["build.xcache.global_storage"]       = {description = "Use global storage if build.xcache is enabled.", default = false, type = "boolean"},
             -- Always update configfiles when building
             ["build.always_update_configfiles"]   = {description = "Always update configfiles when building.", type = "boolean"},
             -- Enable build warning output, it's enabled by default.
@@ -82,12 +82,10 @@ function policy.policies()
             ["build.c++.modules.culling"]         = {description = "Enable unrefereced and non-public named module culling.", default = true, type = "boolean"},
             -- Try to reuse compiled module bmi file if targets flags permit it
             ["build.c++.modules.tryreuse"]        = {description = "Try to reuse compiled module if possible.", default = true, type = "boolean"},
-            -- Enable module taking defines acbount for bmi reuse discrimination
+            -- Enable module taking defines account for bmi reuse discrimination
             ["build.c++.modules.tryreuse.discriminate_on_defines"] = {description = "Enable defines module reuse discrimination.", default = false, type = "boolean"},
             -- Force C++ modules fallback dependency scanner for clang
             ["build.c++.clang.fallbackscanner"]   = {description = "Force clang fallback module dependency scanner.", default = false, type = "boolean"},
-            -- Force C++ modules fallback dependency scanner for msvc
-            ["build.c++.msvc.fallbackscanner"]    = {description = "Force msvc fallback module dependency scanner.", default = false, type = "boolean"},
             -- Force C++ modules fallback dependency scanner for gcc
             ["build.c++.gcc.fallbackscanner"]     = {description = "Force gcc fallback module dependency scanner.", default = false, type = "boolean"},
             -- Force to enable new cxx11 abi in C++ modules for gcc
@@ -137,8 +135,8 @@ function policy.policies()
             ["package.xmake.pass_depconfs"]       = {description = "Automatically passes dependency configuration for inner xmake package", default = true, type = "boolean"},
             -- It will force cmake package use ninja for build
             ["package.cmake_generator.ninja"]     = {description = "Set cmake package use ninja for build", default = false, type = "boolean"},
-            -- Enable msbuild MultiToolTask
-            ["package.msbuild.multi_tool_task"]   = {description = "Enable msbuild MultiToolTask.", type = "boolean"},
+            -- Enable required-package softlink installdir
+            ["package.enable_softlink_installdir"] = {description = "Enable required-package softlink installdir.", default = true, type = "boolean"},
             -- Stop to test on the first failure
             ["test.stop_on_first_failure"]        = {description = "Stop to test on the first failure", default = false, type = "boolean"},
             -- Return zero as exit code on failure

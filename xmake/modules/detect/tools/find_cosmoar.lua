@@ -37,8 +37,5 @@ function main(opt)
     opt = opt or {}
     opt.shell = true
     local program = find_program(opt.program or "cosmoar", opt)
-    if program and is_host("windows") then
-        program = program:gsub("\\", "/")
-    end
     return program
 end

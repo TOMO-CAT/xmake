@@ -37,7 +37,7 @@ function _find_wasm_ld(sdkdir)
     end
     table.insert(paths, "$(env WASI_SDK_PATH)")
 
-    local wasm_ldname = (is_host("windows") and "wasm-ld.exe" or "wasm-ld")
+    local wasm_ldname = "wasm-ld"
     local wasm_ld = find_file(wasm_ldname, paths, {suffixes = subdirs})
     if wasm_ld then
         return path.directory(wasm_ld)

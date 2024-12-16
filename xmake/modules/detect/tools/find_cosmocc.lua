@@ -39,9 +39,6 @@ function main(opt)
     opt.shell = true
     opt.envs  = {PATH = os.getenv("PATH")}
     local program = find_program(opt.program or "cosmocc", opt)
-    if program and is_host("windows") then
-        program = program:gsub("\\", "/")
-    end
     local version = nil
     if program and opt and opt.version then
         version = find_programver(program, opt)
