@@ -6,6 +6,10 @@
 
 * [#131](https://github.com/TOMO-CAT/xmake/issues/131): 支持传递参数控制是否编译 luajit 版本
 
+### Bugs 修复
+
+* [#132](https://github.com/TOMO-CAT/xmake/issues/132): 存在 local package 时将 install package 并发度降为 1
+
 ## v3.0.4
 
 ### 新特性

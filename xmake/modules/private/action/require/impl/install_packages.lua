@@ -385,9 +385,16 @@ function _install_packages(packages_install, packages_download, installdeps)
     -- we need to hide wait characters if is not a tty
     local show_wait = io.isatty()
 
+    -- When a local package exists, concurrent installation of packages should not be allowed
+    -- @see https://github.com/TOMO-CAT/xmake/issues/132
+    local concurrent_install = true
+
     -- init installed packages
     local packages_installed = {}
     for _, instance in ipairs(packages_install) do
+        if instance:is_source_embed() then
+            concurrent_install = false
+        end
         packages_installed[tostring(instance)] = false
     end
 
@@ -528,7 +535,7 @@ function _install_packages(packages_install, packages_download, installdeps)
         packages_downloading[index] = nil
 
     end, {total = #packages_install,
-          comax = (option.get("verbose") or option.get("diagnosis")) and 1 or 4,
+          comax = (option.get("verbose") or option.get("diagnosis") or not concurrent_install) and 1 or 4,
           isolate = true,
           on_timer = function (running_jobs_indices)
 
