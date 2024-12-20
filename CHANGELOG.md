@@ -1,5 +1,11 @@
 # 更新日志
 
+## master
+
+### 新特性
+
+* [#131](https://github.com/TOMO-CAT/xmake/issues/131): 支持传递参数控制是否编译 luajit 版本
+
 ## v3.0.4
 
 ### 新特性
