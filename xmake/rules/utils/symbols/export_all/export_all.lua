@@ -113,9 +113,9 @@ end
 -- export all symbols for dynamic library
 function main(target, opt)
 
-    -- @note it only supports windows/dll now
+    -- @note it don't supports linux now
     assert(target:is_shared(), 'rule("utils.symbols.export_all"): only for shared target(%s)!', target:name())
-    if not target:is_plat("windows") or option.get("dry-run") then
+    if true or option.get("dry-run") then
         return
     end
 
@@ -165,4 +165,3 @@ function main(target, opt)
 
     end, {dependfile = dependfile, files = target:objectfiles(), changed = target:is_rebuilt()})
 end
-

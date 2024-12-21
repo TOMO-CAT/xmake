@@ -52,32 +52,6 @@ function nf_symbol(self, level, opt)
     local flags = nil
     if level == "debug" then
         flags = {"-G", "-g", "-lineinfo"}
-        if self:is_plat("windows") then
-            local host_flags = nil
-            local symbolfile = nil
-            local target = opt.target
-            if target and target.symbolfile then
-                symbolfile = target:symbolfile()
-            end
-            if symbolfile then
-
-                -- ensure the object directory
-                local symboldir = path.directory(symbolfile)
-                if not os.isdir(symboldir) then
-                    os.mkdir(symboldir)
-                end
-
-                -- check and add symbol output file
-                host_flags = "-Zi -Fd" .. path.join(symboldir, "compile." .. path.filename(symbolfile))
-                if self:has_flags({'-Xcompiler "-Zi -FS -Fd' .. os.nuldev() .. '.pdb"'}, "cuflags", { flagskey = '-Xcompiler "-Zi -FS -Fd"' }) then
-                    host_flags = "-FS " .. host_flags
-                end
-            else
-                host_flags = "-Zi"
-            end
-            table.insert(flags, "-Xcompiler")
-            table.insert(flags, host_flags)
-        end
     end
     return flags
 end
@@ -91,18 +65,6 @@ function nf_warning(self, level)
         none       = "-w"
     ,   everything = { "-Wreorder", "--Wno-deprecated-gpu-targets", "--Wno-deprecated-declarations" }
     ,   error      = { "-Werror", "cross-execution-space-call,reorder,deprecated-declarations" }
-    }
-
-    -- for cl.exe on windows
-    local cl_maps =
-    {
-        none       = "-W0"
-    ,   less       = "-W1"
-    ,   more       = "-W3"
-    ,   all        = "-W3" -- = "-Wall" will enable too more warnings
-    ,   allextra   = "-W4"
-    ,   everything = "-Wall"
-    ,   error      = "-WX"
     }
 
     -- for gcc & clang on linux, may be work for other gnu compatible compilers such as icc
@@ -129,12 +91,7 @@ function nf_warning(self, level)
     -- for cl.exe on windows, it is the only supported host compiler on the platform
     -- for gcc/clang, or any gnu compatible compiler on *nix
     --
-    local host_warning = nil
-    if self:is_plat("windows") then
-        host_warning = cl_maps[level]
-    else
-        host_warning = gcc_clang_maps[level]
-    end
+    local host_warning = gcc_clang_maps[level]
     if host_warning then
         warning = table.wrap(warning)
         table.insert(warning, '-Xcompiler')
@@ -164,15 +121,7 @@ end
 
 -- make vs runtime flag
 function nf_runtime(self, runtime)
-    if self:is_plat("windows") and runtime then
-        local maps = {
-            MT = '-Xcompiler "-MT"',
-            MD = '-Xcompiler "-MD"',
-            MTd = '-Xcompiler "-MTd"',
-            MDd = '-Xcompiler "-MDd"'
-        }
-        return maps[runtime]
-    end
+    return
 end
 
 -- make the language flag

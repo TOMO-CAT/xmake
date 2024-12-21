@@ -62,15 +62,6 @@ function main(target, outputfile, libraryfiles)
     if program and toolname then
         if toolname:find("ar") then
             _merge_for_ar(target, program, outputfile, libraryfiles)
-        elseif toolname == "link" and target:is_plat("windows") then
-            local msvc
-            for _, toolchain_inst in ipairs(target:toolchains()) do
-                if toolchain_inst:name() == "msvc" then
-                    msvc = toolchain_inst
-                    break
-                end
-            end
-            _merge_for_msvclib(target, (program:gsub("link%.exe", "lib.exe")), outputfile, libraryfiles, {runenvs = msvc and msvc:runenvs()})
         else
             raise("cannot merge (%s): unknown ar tool %s!", table.concat(libraryfiles, ", "), toolname)
         end
@@ -78,4 +69,3 @@ function main(target, outputfile, libraryfiles)
         raise("cannot merge (%s): ar not found!", table.concat(libraryfiles, ", "))
     end
 end
-

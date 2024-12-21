@@ -2335,14 +2335,6 @@ function _instance:_generate_build_configs(configs, opt)
     -- since we are ignoring the runtimes of the headeronly library,
     -- we can only get the runtimes from the dependency library to detect the link.
     local runtimes = self:runtimes()
-    if self:is_headeronly() and not runtimes and self:librarydeps() then
-        for _, dep in ipairs(self:librarydeps()) do
-            if dep:is_plat("windows") and dep:runtimes() then
-                runtimes = dep:runtimes()
-                break
-            end
-        end
-    end
     if runtimes then
         local sourcekind = opt.sourcekind or "cxx"
         local tool, name = self:tool("ld")

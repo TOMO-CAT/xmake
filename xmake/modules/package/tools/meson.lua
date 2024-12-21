@@ -204,12 +204,9 @@ function _get_configs_file(package, opt)
         if ld then
             file:print("ld=['%s']", executable_path(ld))
         end
-        -- we cannot pass link.exe to ar for msvc, it will raise `unknown linker`
-        if not package:is_plat("windows") then
-            local ar = package:build_getenv("ar")
-            if ar then
-                file:print("ar=['%s']", executable_path(ar))
-            end
+        local ar = package:build_getenv("ar")
+        if ar then
+            file:print("ar=['%s']", executable_path(ar))
         end
         local strip = package:build_getenv("strip")
         if strip then

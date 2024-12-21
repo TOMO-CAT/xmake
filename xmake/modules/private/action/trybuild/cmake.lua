@@ -442,7 +442,7 @@ end
 function clean()
     local buildir = _get_buildir()
     if os.isdir(buildir) then
-        local configfile = find_file("[mM]akefile", buildir) or (is_plat("windows") and find_file("*.sln", buildir))
+        local configfile = find_file("[mM]akefile", buildir)
         if configfile then
             local oldir = os.cd(buildir)
             os.vexec("make clean")
