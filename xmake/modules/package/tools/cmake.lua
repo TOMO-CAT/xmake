@@ -950,18 +950,6 @@ function _install_for_make(package, configs, opt)
         local mingw_make = path.join(mingw, "bin", "mingw32-make.exe")
         os.vrunv(mingw_make, argv)
         os.vrunv(mingw_make, {"install"})
-    elseif package:is_plat("android") and is_host("windows") then
-        local make
-        local ndk = get_config("ndk")
-        if ndk then
-            make = path.join(ndk, "prebuilt", "windows-x86_64", "bin",
-                             "make.exe")
-        end
-        if not make or not os.isfile(make) then
-            make = "make"
-        end
-        os.vrunv(make, argv)
-        os.vrunv(make, {"install"})
     else
         os.vrunv("make", argv)
         os.vrunv("make", {"install"})

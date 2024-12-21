@@ -30,9 +30,9 @@ import("lib.detect.find_package")
 function _find_vulkan_from_paths(paths, opt)
     opt = opt or {}
     local arch = opt.arch or config.arch() or os.arch()
-    local binsuffix = ((is_host("windows") and arch == "x86") and "bin32" or "bin")
-    local libname = (is_host("windows") and "vulkan-1" or "vulkan")
-    local libsuffix = ((is_host("windows") and arch == "x86") and "lib32" or "lib")
+    local binsuffix = "bin"
+    local libname = "vulkan"
+    local libsuffix = "lib"
 
     -- find library
     local result = {links = {}, linkdirs = {}, includedirs = {}}

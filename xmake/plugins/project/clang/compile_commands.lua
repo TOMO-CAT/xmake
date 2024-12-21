@@ -65,10 +65,6 @@ function _translate_arguments(arguments)
         -- convert path to string, maybe we need to convert path, but not supported now.
         arg = tostring(arg)
 
-        -- see https://github.com/xmake-io/xmake/issues/1721
-        if idx == 1 and is_host("windows") and path.extension(arg) == "" then
-            arg = arg .. ".exe"
-        end
         if arg:startswith("-isystem-after", 1, true) then
             arg = "-I" .. arg:sub(15)
         elseif arg:startswith("-isystem", 1, true) then

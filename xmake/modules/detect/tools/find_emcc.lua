@@ -50,7 +50,7 @@ function main(opt)
     end
 
     -- find program
-    local program = find_program(opt.program or (is_host("windows") and "emcc.bat" or "emcc"), opt)
+    local program = find_program(opt.program or "emcc", opt)
 
     -- find program version
     local version = nil

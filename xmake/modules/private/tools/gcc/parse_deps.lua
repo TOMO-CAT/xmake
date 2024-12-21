@@ -26,14 +26,13 @@ import("core.base.hashset")
 -- a placeholder for spaces in path
 local space_placeholder = "\001"
 
--- normailize path of a dependecy
-function _normailize_dep(dep, projectdir)
+-- normalize path of a dependency
+function _normalize_dep(dep, projectdir)
     -- escape characters, e.g. \#Qt.Widget_pch.h -> #Qt.Widget_pch.h
     -- @see https://github.com/xmake-io/xmake/issues/4134
     -- https://github.com/xmake-io/xmake/issues/4273
-    if not is_host("windows") then
-        dep = dep:gsub("\\(.)", "%1")
-    end
+    dep = dep:gsub("\\(.)", "%1")
+
     if path.is_absolute(dep) then
         dep = path.translate(dep)
     else
@@ -102,7 +101,7 @@ function main(depsdata, opt)
             includefile = includefile:replace(space_placeholder, ' ', plain)
             includefile = includefile:split("\n", plain)[1]
             if #includefile > 0 then
-                includefile = _normailize_dep(includefile, projectdir)
+                includefile = _normalize_dep(includefile, projectdir)
                 if includefile then
                     results:insert(includefile)
                 end
@@ -126,7 +125,7 @@ function main(depsdata, opt)
                     local modulekey = modulefile:sub(1, #modulefile - 5)
                     local modulepath = mapper[modulekey]
                     if modulepath then
-                        modulepath = _normailize_dep(modulepath, projectdir)
+                        modulepath = _normalize_dep(modulepath, projectdir)
                         results:insert(modulepath)
                     end
                 end

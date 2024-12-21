@@ -105,12 +105,6 @@ function nf_symbol(self, level)
             _g.symbol_maps = maps
         end
         return maps[level .. '_' .. kind] or maps[level]
-    elseif kind == "ld" or kind == "sh" then
-        -- we need to add `-g` to linker to generate pdb symbol file for mingw-gcc, llvm-clang on windows
-        local plat = self:plat()
-        if level == "debug" and (plat == "windows" or (plat == "mingw" and is_host("windows"))) then
-            return "-g"
-        end
     end
 end
 
@@ -587,12 +581,6 @@ function _has_color_diagnostics(self)
                 -- for clang
                 elseif self:has_flags("-fcolor-diagnostics", "cxflags") then
                     colors_diagnostics = "-fcolor-diagnostics"
-                end
-
-                -- enable color output for windows, @see https://github.com/xmake-io/xmake-vscode/discussions/260
-                if colors_diagnostics and self:name() == "clang" and is_host("windows") and
-                    self:has_flags("-fansi-escape-codes", "cxflags") then
-                    colors_diagnostics = table.join(colors_diagnostics, "-fansi-escape-codes")
                 end
             end
         end
