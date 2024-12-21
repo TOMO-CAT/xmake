@@ -62,15 +62,8 @@ function main(target, opt)
         qmldir = path.join(target:scriptdir(), qmldir)
     end
 
-    -- find msvc to set VCINSTALLDIR env
     local envs = nil
-    local msvc = toolchain.load("msvc", {plat = target:plat(), arch = target:arch()})
-    if msvc then
-        local vcvars = msvc:config("vcvars")
-        if vcvars and vcvars.VCInstallDir then
-            envs = {VCINSTALLDIR = vcvars.VCInstallDir}
-        end
-    end
+
     -- bind qt bin path
     -- https://github.com/xmake-io/xmake/issues/4297
     if qt.bindir then

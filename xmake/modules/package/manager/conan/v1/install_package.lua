@@ -196,26 +196,7 @@ function main(conan, name, opt)
     end
 
     -- set compiler settings
-    if opt.plat == "windows" then
-        local vsvers = {["2022"] = "17",
-                        ["2019"] = "16",
-                        ["2017"] = "15",
-                        ["2015"] = "14",
-                        ["2013"] = "12",
-                        ["2012"] = "11",
-                        ["2010"] = "10",
-                        ["2008"] = "9",
-                        ["2005"] = "8"}
-        local vs = assert(config.get("vs"), "vs not found!")
-        table.insert(argv, "-s")
-        table.insert(argv, "compiler=Visual Studio")
-        table.insert(argv, "-s")
-        table.insert(argv, "compiler.version=" .. assert(vsvers[vs], "unknown msvc version!"))
-        if configs.runtimes then
-            table.insert(argv, "-s")
-            table.insert(argv, "compiler.runtime=" .. configs.runtimes)
-        end
-    elseif opt.plat == "iphoneos" then
+    if opt.plat == "iphoneos" then
         local target_minver = nil
         local toolchain_xcode = toolchain.load("xcode", {plat = opt.plat, arch = opt.arch})
         if toolchain_xcode then

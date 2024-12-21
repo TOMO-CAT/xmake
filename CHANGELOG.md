@@ -149,7 +149,6 @@
 
 ### 改进
 
-* [#5077](https://github.com/xmake-io/xmake/issues/5077): 当构建 x86 目标时，使用 x64 的 msvc 编译工具
 * [#5109](https://github.com/xmake-io/xmake/issues/5109): 改进 add_rpathdirs 支持 runpath/rpath 切换
 * [#5132](https://github.com/xmake-io/xmake/pull/5132): 改进 ifort/icc/icx 在 windows 上的支持
 
@@ -169,7 +168,6 @@
 
 ### 改进
 
-* [#4893](https://github.com/xmake-io/xmake/issues/4893): 改进 rc 头文件依赖检测
 * [#4928](https://github.com/xmake-io/xmake/issues/4928): 改进构建和链接速度，增量编译时候效果更加明显
 * [#4931](https://github.com/xmake-io/xmake/pull/4931): 更新 pdcurses
 * [#4973](https://github.com/xmake-io/xmake/issues/4973): 改进选择脚本的匹配模式
@@ -322,7 +320,6 @@
 
 * [#3960](https://github.com/xmake-io/xmake/issues/3960): 改进 msys2/crt64 支持
 * [#4032](https://github.com/xmake-io/xmake/pull/4032): 移除一些非常老的废弃接口
-* 改进 tools.msbuild 升级 vcproj 文件
 * 支持 add_requires("xmake::xxx") 包
 * [#4049](https://github.com/xmake-io/xmake/issues/4049): 改进 Rust 支持交叉编译
 * 改进 clang 下 c++ modules 支持
@@ -337,7 +334,6 @@
 
 * [#3821](https://github.com/xmake-io/xmake/pull/3821): windows 安装器添加长路径支持选项
 * [#3828](https://github.com/xmake-io/xmake/pull/3828): 添加 zypper 包管理器支持
-* [#3871](https://github.com/xmake-io/xmake/issues/3871): 改进 tools.msbuild 支持对 vsproj 进行自动升级
 * [#3148](https://github.com/xmake-io/xmake/issues/3148): 改进 protobuf 支持 grpc
 * [#3889](https://github.com/xmake-io/xmake/issues/3889): add_links 支持库路径添加
 * [#3912](https://github.com/orgs/xmake-io/issues/3912): 添加 set_pmxxheader 去支持 objc 预编译头
@@ -399,7 +395,6 @@
 * [#3498](https://github.com/xmake-io/xmake/issues/3498): 改进绑定包虚拟环境
 * [#3504](https://github.com/xmake-io/xmake/pull/3504): 添加 swig java 支持
 * [#3508](https://github.com/xmake-io/xmake/issues/3508): 改进 trybuild/cmake 去支持工具链切换
-* 为 msvc 禁用 build cache 加速，因为 msvc 的预处理器太慢，反而极大影响构建性能。
 
 ### Bugs 修复
 
@@ -446,7 +441,6 @@
 
 ### Bugs 修复
 
-* [#3229](https://github.com/xmake-io/xmake/issues/3229): 修复 vs2015 下找不到 rc.exe 问题
 * [#3271](https://github.com/xmake-io/xmake/issues/3271): 修复支持带有空格的宏定义
 * [#3273](https://github.com/xmake-io/xmake/issues/3273): 修复 nim 链接错误
 * [#3286](https://github.com/xmake-io/xmake/issues/3286): 修复 compile_commands 对 clangd 的支持
@@ -479,13 +473,11 @@
 * [#3049](https://github.com/xmake-io/xmake/pull/3049): 添加 `xmake format` 插件
 * 添加 `plugin.compile_commands.autoupdate` 规则
 * [#3172](https://github.com/xmake-io/xmake/pull/3172): 添加 xmake.sh
-* [#3168](https://github.com/xmake-io/xmake/pull/3168): 为 msvc 添加 C++23 标准模块支持
 
 ### 改进
 
 * [#3056](https://github.com/xmake-io/xmake/issues/3056): 改进 Zig 支持
 * [#3060](https://github.com/xmake-io/xmake/issues/3060): 改进支持 msys2 的环境探测
-* [#3071](https://github.com/xmake-io/xmake/issues/3071): 为 llvm/clang 工具链支持 rc 编译
 * [#3122](https://github.com/xmake-io/xmake/pull/3122): 改进 c++20 模块依赖图的源码分析，支持预处理
 * [#3125](https://github.com/xmake-io/xmake/pull/3125): 增加私有 C++20 模块的编译支持
 * [#3133](https://github.com/xmake-io/xmake/pull/3133): 增加 internal partitions 模块支持
@@ -512,7 +504,6 @@
 * 一种新的可选域配置语法，对 LSP 友好，并且支持域隔离。
 * [#2944](https://github.com/xmake-io/xmake/issues/2944): 为嵌入式工程添加 `gnu-rm.binary` 和 `gnu-rm.static` 规则和测试工程
 * [#2636](https://github.com/xmake-io/xmake/issues/2636): 支持包组件
-* 支持 msvc 的 armasm/armasm64
 * [#3023](https://github.com/xmake-io/xmake/pull/3023): 改进 xmake run -d，添加 renderdoc 调试器支持
 * [#3022](https://github.com/xmake-io/xmake/issues/3022): 为特定编译器添加 flags
 * [#3025](https://github.com/xmake-io/xmake/pull/3025): 新增 C++ 异常接口配置
@@ -524,7 +515,6 @@
 * [#2948](https://github.com/xmake-io/xmake/issues/2948): 支持 OpenBSD
 * 添加 `xmake g --insecure-ssl=y` 配置选项去禁用 ssl 证书检测
 * [#3000](https://github.com/xmake-io/xmake/issues/3000): 改进 C++ 模块构建支持，实现增量编译支持
-* [#3016](https://github.com/xmake-io/xmake/pull/3016): 改进 clang/msvc 去更好地支持 std 模块
 
 ### Bugs 修复
 
@@ -556,16 +546,13 @@
 * [#2782](https://github.com/xmake-io/xmake/pull/2782): 改进查找 matlib sdk 和运行时
 * [#2793](https://github.com/xmake-io/xmake/issues/2793): 改进 mconfdialog 配置操作体验
 * [#2804](https://github.com/xmake-io/xmake/issues/2804): 安装依赖包支持 macOS arm64/x86_64 交叉编译
-* [#2809](https://github.com/xmake-io/xmake/issues/2809): 改进 msvc 的编译优化选项
 * 改进 trybuild 模式，为 meson/autoconf/cmake 提供更好的交叉编译支持
 * [#2846](https://github.com/xmake-io/xmake/discussions/2846): 改进对 configfiles 的生成
 * [#2866](https://github.com/xmake-io/xmake/issues/2866): 更好地控制 rule 规则执行顺序
 
 ### Bugs 修复
 
-* [#2740](https://github.com/xmake-io/xmake/issues/2740): 修复 msvc 构建 C++ modules 卡死问题
 * [#2875](https://github.com/xmake-io/xmake/issues/2875): 修复构建 linux 驱动错误
-* [#2885](https://github.com/xmake-io/xmake/issues/2885): 修复 ccache 下，msvc 编译 pch 失败问题
 
 ## v2.7.1
 
@@ -585,12 +572,10 @@
 * [#2571](https://github.com/xmake-io/xmake/issues/2571): 改进分布式编译的调度算法，增加 cpu/memory 状态权重
 * [#2410](https://github.com/xmake-io/xmake/issues/2410): 改进 cmakelists 生成
 * [#2690](https://github.com/xmake-io/xmake/issues/2690): 改机传递 toolchains 到包
-* [#2562](https://github.com/xmake-io/xmake/issues/2562): 改进 rc.exe 对引用文件依赖的解析和增量编译支持
 * 改进默认的并行构建任务数
 
 ### Bugs 修复
 
-* [#2614](https://github.com/xmake-io/xmake/issues/2614): 为 msvc 修复构建 submodules2 测试工程
 * [#2620](https://github.com/xmake-io/xmake/issues/2620): 修复构建缓存导致的增量编译问题
 * [#2177](https://github.com/xmake-io/xmake/issues/2177): 修复 python.library 在 macOS 上段错误崩溃
 * [#2708](https://github.com/xmake-io/xmake/issues/2708): 修复 mode.coverage 规则的链接错误
@@ -638,7 +623,6 @@
 * [#2421](https://github.com/xmake-io/xmake/issues/2421): 改进配置选项菜单
 * [#2425](https://github.com/xmake-io/xmake/issues/2425): 添加 `preprocessor.gcc.directives_only` 策略
 * [#2455](https://github.com/xmake-io/xmake/issues/2455): 改进 emcc 的优化选项
-* [#2467](https://github.com/xmake-io/xmake/issues/2467): 支持回退到原始文件编译，兼容 msvc 预处理器的一些问题
 * [#2452](https://github.com/xmake-io/xmake/issues/2452): 添加 build.warning 策略
 
 ### Bugs 修复
@@ -738,7 +722,6 @@
 ### Bugs 修复
 
 * [#2005](https://github.com/xmake-io/xmake/issues/2005): 修复 path.extension
-* [#2008](https://github.com/xmake-io/xmake/issues/2008): 修复 windows manifest 文件编译
 * [#2016](https://github.com/xmake-io/xmake/issues/2016): 修复 vs project generator 里，对象文件名冲突导致的编译失败
 
 ## v2.6.3
@@ -776,7 +759,6 @@
 * [#1872](https://github.com/xmake-io/xmake/issues/1872): 支持转义 set_configvar 中字符串值
 * [#1888](https://github.com/xmake-io/xmake/issues/1888): 改进 windows 安装器，避免错误删除其他安装目录下的文件
 * [#1893](https://github.com/xmake-io/xmake/issues/1893): 改进探测 icc 和 ifort 工具链
-* [#1905](https://github.com/xmake-io/xmake/pull/1905): 改进 msvc 对 external 头文件搜索探测支持
 * [#1904](https://github.com/xmake-io/xmake/pull/1904): 改进 vs201x 工程生成器
 * 添加 `XMAKE_THEME` 环境变量去切换主题配置
 * [#1907](https://github.com/xmake-io/xmake/issues/1907): 添加 `-f/--force` 参数使得 `xmake create` 可以在费控目录被强制创建
@@ -800,7 +782,6 @@
 * [#1776](https://github.com/xmake-io/xmake/issues/1776): 改进 system::find_package，支持从环境变量中查找系统库
 * [#1786](https://github.com/xmake-io/xmake/issues/1786): 改进 apt:find_package，支持查找 alias 包
 * [#1819](https://github.com/xmake-io/xmake/issues/1819): 添加预编译头到 cmake 生成器
-* 改进 C++20 Modules 为 msvc 支持 std 标准库
 * [#1792](https://github.com/xmake-io/xmake/issues/1792): 添加自定义命令到 vs 工程生成器
 * [#1835](https://github.com/xmake-io/xmake/issues/1835): 改进 MDK 程序构建支持，增加 `set_runtimes("microlib")`
 * [#1858](https://github.com/xmake-io/xmake/issues/1858): 改进构建 c++20 modules，修复跨 target 构建问题
@@ -835,8 +816,6 @@
 ### 改进
 
 * [#1528](https://github.com/xmake-io/xmake/issues/1528): 检测 c++17/20 特性
-* [#1729](https://github.com/xmake-io/xmake/issues/1729): 改进 C++20 modules 对 clang/gcc/msvc 的支持，支持模块间依赖编译和并行优化
-* [#1779](https://github.com/xmake-io/xmake/issues/1779): 改进 ml.exe/x86，移除内置的 `-Gd` 选项
 
 ## v2.5.8
 
@@ -921,7 +900,6 @@
 
 ### 改进
 
-* [#1425](https://github.com/xmake-io/xmake/issues/1425): 改进 tools/meson 去加载 msvc 环境，并且增加一些内置配置。
 * [#1442](https://github.com/xmake-io/xmake/issues/1442): 支持从 git url 去下载包资源文件
 * [#1389](https://github.com/xmake-io/xmake/issues/1389): 支持添加工具链环境到 `xrepo env`
 * [#1453](https://github.com/xmake-io/xmake/issues/1453): 支持 protobuf 规则导出头文件搜索目录
@@ -997,10 +975,8 @@
 * 添加 linuxos 内置模块获取 linux 系统信息
 * [#1217](https://github.com/xmake-io/xmake/issues/1217): 支持当编译项目时自动拉取工具链
 * [#1123](https://github.com/xmake-io/xmake/issues/1123): 添加 `rule("utils.symbols.export_all")` 自动导出所有 windows/dll 中的符号
-* [#1181](https://github.com/xmake-io/xmake/issues/1181): 添加 `utils.platform.gnu2mslib(mslib, gnulib)` 模块接口去转换 mingw/xxx.dll.a 到 msvc xxx.lib
 * [#1246](https://github.com/xmake-io/xmake/issues/1246): 改进规则支持新的批处理命令去简化自定义规则实现
 * [#1239](https://github.com/xmake-io/xmake/issues/1239): 添加 `add_extsources` 去改进外部包的查找
-* [#1241](https://github.com/xmake-io/xmake/issues/1241): 支持为 windows 程序添加 .manifest 文件参与链接
 * 支持使用 `xrepo remove --all` 命令去移除所有的包，并且支持模式匹配
 * [#1254](https://github.com/xmake-io/xmake/issues/1254): 支持导出包配置给父 target，实现包配置的依赖继承
 
@@ -1068,7 +1044,6 @@
 * [#996](https://github.com/xmake-io/xmake/issues/996): 改进 vcpkg 目录查找
 * [#1008](https://github.com/xmake-io/xmake/issues/1008): 改进交叉编译工具链
 * [#1030](https://github.com/xmake-io/xmake/issues/1030): 改进 xcode.framework and xcode.application 规则
-* [#1051](https://github.com/xmake-io/xmake/issues/1051): 为 msvc 编译器添加 `edit` 和 `embed` 调试信息格式类型到 `set_symbols()`
 * [#1062](https://github.com/xmake-io/xmake/issues/1062): 改进 `xmake project -k vs` 插件
 
 ## v2.3.8
@@ -1081,7 +1056,6 @@
 * [#972](https://github.com/xmake-io/xmake/issues/972): 添加`depend.on_changed()`去简化依赖文件的处理
 * [#981](https://github.com/xmake-io/xmake/issues/981): 添加`set_fpmodels()`去抽象化设置math/float-point编译优化模式
 * [#980](https://github.com/xmake-io/xmake/issues/980): 添加对 Intel C/C++ 和 Fortran 编译器的全平台支持
-* [#986](https://github.com/xmake-io/xmake/issues/986): 对16.8以上msvc编译器增加 `c11`/`c17` 支持
 * [#979](https://github.com/xmake-io/xmake/issues/979): 添加对OpenMP的跨平台抽象配置。`add_rules("c++.openmp")`
 
 ### 改进
@@ -1100,15 +1074,12 @@
 
 ### 新特性
 
-* [#2941](https://github.com/microsoft/winget-pkgs/pull/2941): 支持通过 winget 来安装 xmake
-* 添加 xmake-tinyc 安装包，内置tinyc编译器，支持windows上无msvc环境也可直接编译c代码
 * 添加 tinyc 编译工具链
 * 添加 emcc (emscripten) 编译工具链去编译 asm.js 和 WebAssembly
 * [#947](https://github.com/xmake-io/xmake/issues/947): 通过 `xmake g --network=private` 配置设置私有网络模式，避免远程依赖包下载访问外网导致编译失败
 
 ### 改进
 
-* [#907](https://github.com/xmake-io/xmake/issues/907): 改进msvc的链接器优化选项，生成更小的可执行程序
 * 改进ubuntu下Qt环境的支持
 * [#918](https://github.com/xmake-io/xmake/pull/918): 改进cuda11工具链的支持
 * 改进Qt支持，对通过 ubuntu/apt 安装的Qt sdk也进行了探测支持，并且检测效率也优化了下
@@ -1152,11 +1123,9 @@
 ### 改进
 
 * [#828](https://github.com/xmake-io/xmake/issues/828): 针对protobuf规则增加导入子目录proto文件支持
-* [#835](https://github.com/xmake-io/xmake/issues/835): 改进mode.minsizerel模式，针对msvc增加/GL支持，进一步优化目标程序大小
 * [#828](https://github.com/xmake-io/xmake/issues/828): protobuf规则支持import多级子目录
 * [#838](https://github.com/xmake-io/xmake/issues/838#issuecomment-643570920): 支持完全重写内置的构建规则，`add_files("src/*.c", {rules = {"xx", override = true}})`
 * [#847](https://github.com/xmake-io/xmake/issues/847): 支持rc文件的头文件依赖解析
-* 改进msvc工具链，去除全局环境变量的依赖
 * [#857](https://github.com/xmake-io/xmake/pull/857): 改进`set_toolchains()`支持交叉编译的时候，特定target可以切换到host工具链同时编译
 
 ### Bugs 修复
@@ -1403,7 +1372,6 @@
 * 添加插件管理器，`xmake plugin --help`
 * 添加`add_syslinks`接口去设置系统库依赖，分离与`add_links`添加的库依赖之间的链接顺序
 * 添加 `xmake l time xmake [--rebuild]` 去记录编译耗时
-* [#250](https://github.com/xmake-io/xmake/issues/250): 添加`xmake f --vs_sdkver=10.0.15063.0`去改变windows sdk版本
 * 添加`lib.luajit.ffi`和`lib.luajit.jit`扩展模块
 * [#263](https://github.com/xmake-io/xmake/issues/263): 添加object目标类型，仅仅用于编译生成object对象文件
 * [#269](https://github.com/xmake-io/xmake/issues/269): 每天第一次构建时候后台进程自动清理最近30天的临时文件
@@ -1608,7 +1576,6 @@
 * 添加`add_moduledirs`接口在工程中定义和加载扩展模块
 * 添加`includes`接口替换`add_subdirs`和`add_subfiles`
 * [#133](https://github.com/xmake-io/xmake/issues/133): 改进工程插件，通过运行`xmake project -k compile_commands`来导出`compile_commands.json`
-* 添加`set_pcheader`和`set_pcxxheader`去支持跨编译器预编译头文件，支持`gcc`, `clang`和`msvc`
 * 添加`xmake f -p cross`平台用于交叉编译，并且支持自定义平台名
 
 ### 改进
@@ -1762,7 +1729,6 @@
 
 ### Bugs 修复
 
-* 修复msvc的编译选项不支持问题：`-def:xxx.def`
 * 修复ml.exe汇编器脚本
 * 修复选项链接顺序问题
 

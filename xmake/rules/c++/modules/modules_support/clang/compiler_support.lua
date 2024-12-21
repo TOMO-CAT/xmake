@@ -62,13 +62,10 @@ function _get_toolchain_includedirs_for_stlheaders(target, includedirs, clang)
 end
 
 function _get_cpplibrary_name(target)
-    -- libc++ come first because on windows, if we use libc++ clang will still use msvc crt so MD / MT / MDd / MTd can be set
     if target:has_runtime("c++_shared", "c++_static") then
         return "c++"
     elseif target:has_runtime("stdc++_shared", "stdc++_static") then
         return "stdc++"
-    elseif target:has_runtime("MD", "MT", "MDd", "MTd") then
-        return "msstl"
     end
     if target:is_plat("macosx") then
         return "c++"
@@ -280,21 +277,6 @@ function get_stdmodules(target)
                 end
             elseif cpplib == "stdc++" then
                 -- libstdc++ doesn't have a std module file atm
-            elseif cpplib == "msstl" then
-                -- msstl std module file is not compatible with llvm <= 19
-                -- local toolchain = target:toolchain("clang")
-                -- local msvc = import("core.tool.toolchain", {anonymous = true}).load("msvc", {plat = toolchain:plat(), arch = toolchain:arch()})
-                -- if msvc then
-                --     local vcvars = msvc:config("vcvars")
-                --     if vcvars.VCInstallDir and vcvars.VCToolsVersion then
-                --         modules = {}
-                --
-                --         local stdmodulesdir = path.join(vcvars.VCInstallDir, "Tools", "MSVC", vcvars.VCToolsVersion, "modules")
-                --         assert(stdmodulesdir, "Can't enable C++23 std modules, directory missing !")
-                --
-                --         return {path.join(stdmodulesdir, "std.ixx"), path.join(stdmodulesdir, "std.compat.ixx")}
-                --     end
-                -- end
             end
         end
     end

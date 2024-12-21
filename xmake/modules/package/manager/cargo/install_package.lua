@@ -76,7 +76,7 @@ function main(name, opt)
     end
 
     -- get target
-    -- e.g. x86_64-pc-windows-msvc, aarch64-unknown-none
+    -- e.g. aarch64-unknown-none
     -- @see https://github.com/xmake-io/xmake/issues/4049
     local target = check_target(opt.arch, true) and opt.arch or nil
 

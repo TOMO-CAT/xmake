@@ -33,17 +33,6 @@ function _find_sdkdir(sdkdir)
     if not sdkdir then
         sdkdir = os.getenv("WindowsSdkDir")
     end
-
-    -- get sdk directory from vcvars
-    if not sdkdir then
-        local msvc = toolchain.load("msvc")
-        if msvc and msvc:check() then
-            local vcvars = msvc:config("vcvars")
-            if vcvars then
-                sdkdir = vcvars.WindowsSdkDir
-            end
-        end
-    end
     return sdkdir
 end
 

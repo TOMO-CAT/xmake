@@ -5,7 +5,6 @@
 ```bash
 $ xmake show -l toolchains
 xcode         Xcode IDE
-msvc          Microsoft Visual C/C++ Compiler
 yasm          The Yasm Modular Assembler
 clang         A C language family frontend for LLVM
 go            Go Programming Language Compiler
@@ -90,7 +89,7 @@ hdk           Harmony SDK
 ## 分布式编译和缓存
 
 * [x] 跨平台支持
-* [x] 支持 msvc, clang, gcc 和交叉编译工具链
+* [x] 支持 clang, gcc 和交叉编译工具链
 * [x] 支持构建 android, ios, linux, win, macOS 程序
 * [x] 除了编译工具链，无任何其他依赖
 * [x] 支持编译服务器负载均衡调度

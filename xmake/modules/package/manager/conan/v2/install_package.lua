@@ -151,7 +151,6 @@ end
 
 -- get compiler version
 --
--- https://github.com/conan-io/conan/blob/353c63b16c31c90d370305b5cbb5dc175cf8a443/conan/tools/microsoft/visual.py#L13
 -- https://github.com/xmake-io/xmake/issues/5338
 function _conan_get_compiler_version(name, opt)
     opt = opt or {}

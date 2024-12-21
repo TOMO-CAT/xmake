@@ -27,13 +27,12 @@ local sandbox_macos = sandbox_macos or {}
 
 -- get system version
 function sandbox_macos.version()
-    local winver = macos.version()
-    if not winver then
+    local macos_ver = macos.version()
+    if not macos_ver then
         raise("cannot get the version of the current macos!")
     end
-    return winver
+    return macos_ver
 end
 
 -- return module
 return sandbox_macos
-

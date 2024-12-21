@@ -25,7 +25,6 @@ function arch(arch)
         i386            = "x86",
 
         -- android: armeabi armeabi-v7a arm64-v8a x86 x86_64 mips mip64
-        -- Offers a doc: https://github.com/microsoft/vcpkg/blob/master/docs/users/android.md
         ["armeabi-v7a"] = "arm",
         ["arm64-v8a"]   = "arm64",
 
@@ -83,4 +82,3 @@ function main()
         default_registries = {description = "set the default registries in vcpkg-configuration.json"}
     }
 end
-

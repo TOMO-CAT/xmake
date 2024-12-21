@@ -506,7 +506,7 @@ function _add_target_include_directories(cmakelists, target, outputdir)
 end
 
 -- add target system include directories
--- we disable system/external includes first, because cmake doesn’t seem to be able to support msvc /external:I
+-- we disable system/external includes first
 -- https://github.com/xmake-io/xmake/issues/1050
 function _add_target_sysinclude_directories(cmakelists, target, outputdir)
     local includedirs = _get_configs_from_target(target, "sysincludedirs")

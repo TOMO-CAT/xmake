@@ -60,17 +60,6 @@ function _get_vsarch()
     return arch
 end
 
--- get msvc
-function _get_msvc()
-    local msvc = toolchain.load("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
--- get msvc run environments
-function _get_msvc_runenvs()
-    return os.joinenvs(_get_msvc():runenvs())
-end
 
 -- translate paths
 function _translate_paths(paths)

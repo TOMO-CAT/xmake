@@ -27,18 +27,3 @@ function is_compatible_with_host(name)
         end
     end
 end
-
--- get vs toolset version, e.g. v143, v144, ..
-function get_vs_toolset_ver(vs_toolset)
-    local toolset_ver
-    if vs_toolset then
-        local verinfo = semver.new(vs_toolset)
-        toolset_ver = "v" .. verinfo:major() .. (tostring(verinfo:minor()):sub(1, 1) or "0")
-
-        -- @see https://github.com/xmake-io/xmake/pull/5176
-        if toolset_ver and toolset_ver == "v144" and verinfo:ge("14.40") and verinfo:lt("14.43") then
-            toolset_ver = "v143"
-        end
-    end
-    return toolset_ver
-end

@@ -143,32 +143,6 @@ function _add_rules_for_compiler_clang(ninjafile, sourcekind, program)
     return _add_rules_for_compiler_gcc(ninjafile, sourcekind, program)
 end
 
--- add rules for complier (msvc/ml)
-function _add_rules_for_compiler_msvc_ml(ninjafile, sourcekind, program)
-    ninjafile:print("rule %s", sourcekind)
-    ninjafile:print(" command = %s -c $ARGS -Fo$out $in", program)
-    ninjafile:print(" deps = msvc")
-    ninjafile:print(" description = compiling.%s $in", config.mode())
-    ninjafile:print("")
-end
-
--- add rules for resource complier (msvc/rc)
-function _add_rules_for_compiler_msvc_rc(ninjafile, sourcekind, program)
-    ninjafile:print("rule %s", sourcekind)
-    ninjafile:print(" command = %s $ARGS -Fo$out $in", program)
-    ninjafile:print(" deps = msvc")
-    ninjafile:print(" description = compiling.%s $in", config.mode())
-    ninjafile:print("")
-end
-
--- add rules for resource complier (windres/rc)
-function _add_rules_for_compiler_windres(ninjafile, sourcekind, program)
-    ninjafile:print("rule %s", sourcekind)
-    ninjafile:print(" command = %s $ARGS $in $out", program)
-    ninjafile:print(" description = compiling.%s $in", config.mode())
-    ninjafile:print("")
-end
-
 -- add rules for complier
 function _add_rules_for_compiler(ninjafile)
     ninjafile:print("# rules for compiler")
@@ -178,10 +152,6 @@ function _add_rules_for_compiler(ninjafile)
         gxx     = _add_rules_for_compiler_gcc,
         clang   = _add_rules_for_compiler_clang,
         clangxx = _add_rules_for_compiler_clang,
-        ml      = _add_rules_for_compiler_msvc_ml,
-        ml64    = _add_rules_for_compiler_msvc_ml,
-        rc      = _add_rules_for_compiler_msvc_rc,
-        windres = _add_rules_for_compiler_windres
     }
     for sourcekind, _ in pairs(language.sourcekinds()) do
         local program, toolname = platform.tool(sourcekind)
@@ -220,22 +190,6 @@ function _add_rules_for_linker_clang(ninjafile, linkerkind, program)
     return _add_rules_for_linker_gcc(ninjafile, linkerkind, program)
 end
 
--- add rules for linker (msvc)
-function _add_rules_for_linker_msvc(ninjafile, linkerkind, program)
-    if linkerkind == "ar" then
-        program = program .. " -lib"
-    elseif linkerkind == "sh" then
-        program = program .. " -dll"
-    end
-    -- @note we use rspfile to handle long command limit on windows
-    ninjafile:print("rule %s", linkerkind)
-    ninjafile:print(" command = %s @$out.rsp", program)
-    ninjafile:print(" rspfile = $out.rsp")
-    ninjafile:print(" rspfile_content = $ARGS -out:$out $in_newline")
-    ninjafile:print(" description = linking.%s $out", config.mode())
-    ninjafile:print("")
-end
-
 -- add rules for linker
 function _add_rules_for_linker(ninjafile)
     ninjafile:print("# rules for linker")
@@ -250,7 +204,6 @@ function _add_rules_for_linker(ninjafile)
         gxx     = _add_rules_for_linker_gcc,
         clang   = _add_rules_for_linker_clang,
         clangxx = _add_rules_for_linker_clang,
-        link    = _add_rules_for_linker_msvc
     }
     for _, linkerkind in ipairs(table.unique(linkerkinds)) do
         local program, toolname = platform.tool(linkerkind)
@@ -413,14 +366,7 @@ function make(outputdir)
     local oldir = os.cd(os.projectdir())
 
     -- open the build.ninja file
-    --
-    -- we need to change encoding to support msvc_deps_prefix
-    -- @see https://github.com/ninja-build/ninja/issues/613
-    --
-    -- TODO maybe we need support more encoding for other languages
-    --
-    local encoding = is_subhost("windows") and "gbk"
-    local ninjafile = io.open(path.join(outputdir, "build.ninja"), "w", {encoding = encoding})
+    local ninjafile = io.open(path.join(outputdir, "build.ninja"), "w")
 
     -- add header
     _add_header(ninjafile)

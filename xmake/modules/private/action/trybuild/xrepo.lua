@@ -157,17 +157,6 @@ function _get_install_configs(argv)
         table.insert(argv, "--mingw=" .. config.get("mingw"))
     end
 
-    -- msvc
-    if config.get("vs") then
-        table.insert(argv, "--vs=" .. config.get("vs"))
-    end
-    if config.get("vs_toolset") then
-        table.insert(argv, "--vs_toolset=" .. config.get("vs_toolset"))
-    end
-    if config.get("vs_sdkver") then
-        table.insert(argv, "--vs_sdkver=" .. config.get("vs_sdkver"))
-    end
-
     -- xcode
     if config.get("xcode") then
         table.insert(argv, "--xcode=" .. config.get("xcode"))

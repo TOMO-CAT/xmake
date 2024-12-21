@@ -26,49 +26,6 @@ import("core.base.hashset")
 import("core.project.depend")
 import("utils.progress")
 
--- use dumpbin to get all symbols from object files
-function _get_allsymbols_by_dumpbin(target, dumpbin, opt)
-    opt = opt or {}
-    local allsymbols = hashset.new()
-    local export_classes = opt.export_classes
-    local export_filter = opt.export_filter
-    for _, objectfile in ipairs(target:objectfiles()) do
-        local objectsymbols = try { function () return os.iorunv(dumpbin, {"/symbols", "/nologo", objectfile}) end }
-        if objectsymbols then
-            for _, line in ipairs(objectsymbols:split('\n', {plain = true})) do
-                -- https://docs.microsoft.com/en-us/cpp/build/reference/symbols
-                -- 008 00000000 SECT3  notype ()    External     | add
-                if line:find("External") and not line:find("UNDEF") then
-                    local symbol = line:match(".*External%s+| (.*)")
-                    if symbol then
-                        symbol = symbol:split('%s')[1]
-                        if export_filter then
-                            if export_filter(symbol) then
-                                allsymbols:insert(symbol)
-                            end
-                        elseif not symbol:startswith("__") then
-                            -- we need ignore DllMain, https://github.com/xmake-io/xmake/issues/3992
-                            if target:is_arch("x86") and symbol:startswith("_") and not symbol:startswith("_DllMain@") then
-                                symbol = symbol:sub(2)
-                            end
-                            if export_classes or not symbol:startswith("?") then
-                                if export_classes then
-                                    if not symbol:startswith("??_G") and not symbol:startswith("??_E") then
-                                        allsymbols:insert(symbol)
-                                    end
-                                else
-                                    allsymbols:insert(symbol)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-    return allsymbols
-end
-
 -- use objdump to get all symbols from object files
 function _get_allsymbols_by_objdump(target, objdump, opt)
     opt = opt or {}
@@ -140,15 +97,6 @@ function main(target, opt)
             allsymbols = _get_allsymbols_by_objdump(target, objdump.program, {
                 export_classes = export_classes,
                 export_filter = export_filter})
-        end
-        if not allsymbols then
-            local msvc = toolchain.load("msvc", {plat = target:plat(), arch = target:arch()})
-            if msvc:check() then
-                local dumpbin = assert(find_tool("dumpbin", {envs = msvc:runenvs()}), "dumpbin not found!")
-                allsymbols = _get_allsymbols_by_dumpbin(target, dumpbin.program, {
-                    export_classes = export_classes,
-                    export_filter = export_filter})
-            end
         end
 
         -- export all symbols
