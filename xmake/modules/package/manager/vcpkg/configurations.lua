@@ -66,8 +66,6 @@ function triplet(configs, plat, arch)
         if (arch == "x64" or arch == "arm64") and configs.shared then
             triplet = triplet .. "-dynamic"
         end
-    elseif plat == "mingw" then
-        triplet = triplet .. (configs.shared ~= true and "-static" or "-dynamic")
     end
     return triplet
 end

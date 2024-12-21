@@ -33,7 +33,7 @@ end
 
 -- get conan platform
 function _conan_get_plat(opt)
-    local plats = {macosx = "Macos", windows = "Windows", mingw = "Windows", linux = "Linux", cross = "Linux", iphoneos = "iOS", android = "Android"}
+    local plats = {macosx = "Macos",linux = "Linux", cross = "Linux", iphoneos = "iOS", android = "Android"}
     return plats[opt.plat]
 end
 
@@ -118,14 +118,6 @@ function _conan_find_library(name, opt)
                     result.static = true
                     table.insert(libfiles, file)
                 elseif file:endswith(".so") or file:match(".+%.so%..+$") or file:endswith(".dylib") or file:endswith(".dll") then -- maybe symlink to libxxx.so.1
-                    result.shared = true
-                    table.insert(libfiles, file)
-                end
-            end
-        end
-        if opt.plat == "windows" or opt.plat == "mingw" then
-            for _, bindir in ipairs(buildinfo.__bindirs) do
-                for _, file in ipairs(os.files(path.join(bindir, "*.dll"))) do
                     result.shared = true
                     table.insert(libfiles, file)
                 end

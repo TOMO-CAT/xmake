@@ -1029,12 +1029,12 @@ function _instance:_rawenvs()
         envs = {}
 
         -- add bin PATH
-        if self:is_binary() or self:is_plat("windows", "mingw") then -- bin/*.dll for windows
+        if self:is_binary() then
             envs.PATH = {"bin"}
         end
 
         -- add LD_LIBRARY_PATH to load *.so directory
-        if os.host() ~= "windows" and self:is_plat(os.host()) and self:is_arch(os.arch()) then
+        if self:is_plat(os.host()) and self:is_arch(os.arch()) then
             envs.LD_LIBRARY_PATH = {"lib"}
             if os.host() == "macosx" then
                 envs.DYLD_LIBRARY_PATH = {"lib"}
@@ -2930,9 +2930,9 @@ function package.load_from_repository(packagename, packagedir, opt)
     -- we need to modify plat/arch in description scope at same time
     -- if plat/arch are passed to add_requires.
     --
-    -- @see https://github.com/orgs/xmake-io/discussions/3439
+    -- @see https://github.com/xmake-io/xmake/discussions/3439
     --
-    -- e.g. add_requires("zlib~mingw", {plat = "mingw", arch = "x86_64"})
+    -- e.g. add_requires("zlib~android", {plat = "android", arch = "x86_64"})
     --
     if opt.plat then
         package._memcache():set("target_plat", opt.plat)

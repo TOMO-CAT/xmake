@@ -102,7 +102,7 @@ package("sfml")
     on_component("main", function (package, component)
     end)
 
-    on_load("linux", "macosx", "mingw", function (package)
+    on_load("linux", "macosx", function (package)
         if package:is_plat("linux") then
             package:add("deps", "cmake")
         end
@@ -149,12 +149,9 @@ package("sfml")
         import("package.tools.cmake").install(package, configs, {packagedeps = packagedeps})
     end)
 
-    on_install("macosx", "mingw", function (package)
+    on_install("macosx", function (package)
         os.cp("lib", package:installdir())
         os.cp("include", package:installdir())
-        if package:is_plat("mingw") then
-            os.cp("bin/*", package:installdir("lib"), {rootdir = "bin"})
-        end
     end)
 
     on_test(function (package)

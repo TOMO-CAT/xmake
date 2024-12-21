@@ -23,7 +23,6 @@ llvm          A collection of modular and reusable compiler and toolchain techno
 cross         Common cross compilation toolchain
 nasm          NASM Assembler
 gcc           GNU Compiler Collection
-mingw         Minimalist GNU for Windows
 gnu-rm        GNU Arm Embedded Toolchain
 envs          Environment variables toolchain
 fasm          Flat Assembler
@@ -57,9 +56,6 @@ hdk           Harmony SDK
 * WatchOS (armv7k, i386)
 * AppleTVOS (armv7, arm64, i386, x86_64)
 * AppleXROS (arm64, x86_64)
-* MSYS (i386, x86_64)
-* MinGW (i386, x86_64, arm, arm64)
-* Cygwin (i386, x86_64)
 * Wasm (wasm32, wasm64)
 * Haiku (i386, x86_64)
 * Harmony (x86_64, armeabi-v7a, arm64-v8a)

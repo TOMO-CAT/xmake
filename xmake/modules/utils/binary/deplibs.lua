@@ -42,15 +42,7 @@ function _get_all_depends_by_objdump(binaryfile, opt)
         if result then
             for _, line in ipairs(result:split("\n")) do
                 line = line:trim()
-                if plat == "windows" or plat == "mingw" then
-                    if line:startswith("DLL Name:") then
-                        local filename = line:split(":")[2]:trim()
-                        if filename:endswith(".dll") then
-                            depends = depends or {}
-                            table.insert(depends, filename)
-                        end
-                    end
-                elseif plat == "macosx" or plat == "iphoneos" or plat == "appletvos" or plat == "watchos" then
+                if plat == "macosx" or plat == "iphoneos" or plat == "appletvos" or plat == "watchos" then
                     local filename = line:match(".-%.dylib") or line:match(".-%.framework")
                     if filename then
                         depends = depends or {}

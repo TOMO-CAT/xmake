@@ -131,8 +131,6 @@ end
 -- get os
 function _conan_get_os(plat)
     local map = {macosx   = "Macos",
-                 windows  = "Windows",
-                 mingw    = "Windows",
                  linux    = "Linux",
                  cross    = "Linux",
                  iphoneos = "iOS",

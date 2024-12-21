@@ -114,14 +114,9 @@ function make(package, argv, opt)
     opt = opt or {}
     local program
     local runenvs = opt.envs or buildenvs(package)
-    if package:is_plat("mingw") and is_subhost("windows") then
-        local mingw = assert(package:build_getenv("mingw") or package:build_getenv("sdk"), "mingw not found!")
-        program = path.join(mingw, "bin", "mingw32-make.exe")
-    else
-        local tool = find_tool("make", {envs = runenvs})
-        if tool then
-            program = tool.program
-        end
+    local tool = find_tool("make", {envs = runenvs})
+    if tool then
+        program = tool.program
     end
     assert(program, "make not found!")
     os.vrunv(program, argv or {}, {envs = runenvs, curdir = opt.curdir})

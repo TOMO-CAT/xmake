@@ -345,7 +345,7 @@ function nf_linkgroup(self, linkgroup, opt)
     end
     local flags = {}
     local extra = opt.extra
-    if extra and not self:is_plat("macosx", "windows", "mingw") then
+    if extra and not self:is_plat("macosx") then
         local group = extra.group
         local whole = extra.whole
         if group and whole then
@@ -539,11 +539,6 @@ function linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
             table.insert(flags_extra, "-install_name")
             table.insert(flags_extra, "@rpath/" .. path.filename(targetfile))
         end
-    end
-
-    -- add `-Wl,--out-implib,outputdir/libxxx.a` for xxx.dll on mingw/gcc
-    if targetkind == "shared" and self:is_plat("mingw") then
-        table.insert(flags_extra, "-Wl,--out-implib," .. path.join(path.directory(targetfile), path.basename(targetfile) .. ".dll.a"))
     end
 
     -- init arguments

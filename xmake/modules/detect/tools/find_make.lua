@@ -39,9 +39,6 @@ function main(opt)
     -- find program
     opt = opt or {}
     local program = find_program(opt.program or (is_host("bsd") and "gmake" or "make"), opt)
-    if not program and not opt.program and is_subhost("msys", "cygwin") then
-        program = find_program("mingw32-make.exe", opt)
-    end
 
     -- find program version
     local version = nil
@@ -50,4 +47,3 @@ function main(opt)
     end
     return program, version
 end
-

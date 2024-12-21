@@ -28,13 +28,7 @@ import("lib.detect.find_library")
 function _link(target, linkdirs, framework, qt_sdkver, infix)
     if framework:startswith("Qt") then
         local debug_suffix = "_debug"
-        if target:is_plat("mingw") then
-            if qt_sdkver:ge("5.15.2") then
-                debug_suffix = ""
-            else
-                debug_suffix = "d"
-            end
-        elseif target:is_plat("android") or target:is_plat("linux") then
+        if target:is_plat("android") or target:is_plat("linux") then
             debug_suffix = ""
         end
         if qt_sdkver:ge("5.0") then
@@ -42,14 +36,8 @@ function _link(target, linkdirs, framework, qt_sdkver, infix)
                 "Qt" .. qt_sdkver:major() .. framework:sub(3) .. infix ..
                     (is_mode("debug") and debug_suffix or "")
         else -- for qt4.x, e.g. QtGui4.lib
-            if target:is_plat("windows", "mingw") then
-                framework = "Qt" .. framework:sub(3) .. infix ..
-                                (is_mode("debug") and debug_suffix or "") ..
-                                qt_sdkver:major()
-            else
-                framework = "Qt" .. framework:sub(3) .. infix ..
-                                (is_mode("debug") and debug_suffix or "")
-            end
+            framework = "Qt" .. framework:sub(3) .. infix ..
+                            (is_mode("debug") and debug_suffix or "")
         end
         if target:is_plat("android") then -- > -lQt5Core_armeabi/-lQt5CoreDebug_armeabi for 5.14.x
             local libinfo = find_library(framework .. "_" .. config.arch(),
@@ -66,9 +54,7 @@ end
 function _find_static_links_3rd(target, linkdirs, qt_sdkver, libpattern)
     local links = {}
     local debug_suffix = "_debug"
-    if target:is_plat("mingw") then
-        debug_suffix = "d"
-    elseif target:is_plat("android") or target:is_plat("linux") then
+    if target:is_plat("android") or target:is_plat("linux") then
         debug_suffix = ""
     end
     for _, linkdir in ipairs(linkdirs) do
@@ -204,11 +190,9 @@ function main(target, opt)
     end
 
     -- add -fPIC
-    if not target:is_plat("windows", "mingw") then
-        target:add("cxflags", "-fPIC")
-        target:add("mxflags", "-fPIC")
-        target:add("asflags", "-fPIC")
-    end
+    target:add("cxflags", "-fPIC")
+    target:add("mxflags", "-fPIC")
+    target:add("asflags", "-fPIC")
 
     -- need c++11 at least
     local languages = target:get("languages")
@@ -451,13 +435,6 @@ function main(target, opt)
         _add_includedirs(target, path.join(qt.mkspecsdir, "linux-g++"))
         target:add("rpathdirs", qt.libdir)
         target:add("linkdirs", qt.libdir)
-    elseif target:is_plat("mingw") then
-        target:set("frameworks", nil)
-        _add_includedirs(target, qt.includedir)
-        _add_includedirs(target, path.join(qt.mkspecsdir, "win32-g++"))
-        target:add("linkdirs", qt.libdir)
-        target:add("syslinks", "mingw32", "ws2_32", "gdi32", "ole32",
-                   "advapi32", "shell32", "user32", "iphlpapi")
     elseif target:is_plat("android") then
         target:set("frameworks", nil)
         _add_includedirs(target, qt.includedir)
@@ -516,13 +493,6 @@ function main(target, opt)
                        "-s USE_WEBGL2=1")
             target:add("shflags",
                        "-s EXPORTED_RUNTIME_METHODS=[\"UTF16ToString\",\"stringToUTF16\"]")
-        end
-    end
-
-    -- is gui application?
-    if opt.gui then
-        if target:is_plat("mingw") then
-            target:add("ldflags", "-mwindows", {force = true})
         end
     end
 

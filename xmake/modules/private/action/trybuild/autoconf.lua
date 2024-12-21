@@ -102,19 +102,7 @@ function _get_buildenvs()
     -- cross-compilation? pass the full build environments
     if cross then
         local ar = envs.AR
-        if is_plat("mingw") then
-            -- fix linker error, @see https://github.com/xmake-io/xmake/issues/574
-            -- libtool: line 1855: lib: command not found
-            envs.ARFLAGS = nil
-            local ld = envs.LD
-            if ld then
-                if ld:endswith("x86_64-w64-mingw32-g++") then
-                    envs.LD = path.join(path.directory(ld), "x86_64-w64-mingw32-ld")
-                elseif ld:endswith("i686-w64-mingw32-g++") then
-                    envs.LD = path.join(path.directory(ld), "i686-w64-mingw32-ld")
-                end
-            end
-        elseif is_plat("cross") or (ar and ar:find("ar")) then
+        if is_plat("cross") or (ar and ar:find("ar")) then
             -- only for cross-toolchain
             envs.CXX = _get_buildenv("cxx")
             if not envs.ARFLAGS or envs.ARFLAGS == "" then
@@ -217,13 +205,6 @@ function _get_configs(artifacts_dir)
                 mips64          = "mips64-linux-android"    -- removed in ndk r17
             }
             table.insert(configs, "--host=" .. (triples[config.arch()] or triples["armeabi-v7a"]))
-        elseif is_plat("mingw") then
-            local triples =
-            {
-                i386   = "i686-w64-mingw32",
-                x86_64 = "x86_64-w64-mingw32"
-            }
-            table.insert(configs, "--host=" .. (triples[config.arch()] or triples.i386))
         elseif is_plat("cross") then
             local host = config.arch()
             if is_arch("arm64") then

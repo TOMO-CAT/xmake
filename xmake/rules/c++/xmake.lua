@@ -53,7 +53,6 @@ rule("c", function()
 
     -- add platform rules
     add_deps("platform.wasm")
-    add_deps("platform.windows")
 
     -- add linker rules
     add_deps("linker")
@@ -79,7 +78,6 @@ rule("c++", function()
 
     -- add platform rules
     add_deps("platform.wasm")
-    add_deps("platform.windows")
 
     -- add linker rules
     add_deps("linker")

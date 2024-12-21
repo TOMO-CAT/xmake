@@ -63,8 +63,6 @@ function menu_options()
         {category = "Cross Compilation Configuration"                        },
         {nil, "sdk",           "kv", nil, "Set the SDK directory of cross toolchain." },
         {nil, "toolchain",     "kv", nil, "Set the toolchain name."          },
-        {category = "MingW Configuration"                                    },
-        {nil, "mingw",         "kv", nil, "Set the MingW SDK directory."     },
         {category = "XCode SDK Configuration"                                },
         {nil, "xcode",         "kv", nil, "The Xcode Application Directory"  },
         {nil, "xcode_sdkver",  "kv", nil, "The SDK Version for Xcode"        },
@@ -83,7 +81,6 @@ function menu_options()
                                        "    - xrepo install /tmp/zlib.lua",
                                        "    - xrepo install -p iphoneos -a arm64 \"zlib >=1.2.0\"",
                                        "    - xrepo install -p android [--ndk=/xxx] -m debug \"pcre2 10.x\"",
-                                       "    - xrepo install -p mingw [--mingw=/xxx] -k shared zlib",
                                        "    - xrepo install conan::zlib/1.2.11 vcpkg::zlib",
                                         values = function (complete, opt) return import("private.xrepo.quick_search.completion")(complete, opt) end}
     }
@@ -197,10 +194,6 @@ function _install_packages(packages)
     end
     if option.get("toolchain") then
         table.insert(config_argv, "--toolchain=" .. option.get("toolchain"))
-    end
-    -- for mingw
-    if option.get("mingw") then
-        table.insert(config_argv, "--mingw=" .. option.get("mingw"))
     end
     -- for xcode
     if option.get("xcode") then

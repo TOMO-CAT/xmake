@@ -45,16 +45,6 @@ function _package_library(target)
         end
     end
 
-    -- copy *.lib for shared/windows (*.dll) target
-    -- @see https://github.com/xmake-io/xmake/issues/787
-    if target:is_shared() and target:is_plat("windows", "mingw") then
-        local targetfile = target:targetfile()
-        local targetfile_lib = path.join(path.directory(targetfile), path.basename(targetfile) .. ".lib")
-        if os.isfile(targetfile_lib) then
-            os.vcp(targetfile_lib, format("%s/%s.pkg/$(plat)/$(arch)/lib/$(mode)/", outputdir, targetname))
-        end
-    end
-
     -- copy headers
     local srcheaders, dstheaders = target:headerfiles(format("%s/%s.pkg/$(plat)/$(arch)/include", outputdir, targetname))
     if srcheaders and dstheaders then

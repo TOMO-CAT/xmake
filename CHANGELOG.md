@@ -318,7 +318,6 @@
 
 ### 改进
 
-* [#3960](https://github.com/xmake-io/xmake/issues/3960): 改进 msys2/crt64 支持
 * [#4032](https://github.com/xmake-io/xmake/pull/4032): 移除一些非常老的废弃接口
 * 支持 add_requires("xmake::xxx") 包
 * [#4049](https://github.com/xmake-io/xmake/issues/4049): 改进 Rust 支持交叉编译
@@ -376,8 +375,6 @@
 * [#3596](https://github.com/xmake-io/xmake/issues/3596): 修复 check_cxxfuncs 和 check_cxxsnippets
 * [#3603](https://github.com/xmake-io/xmake/issues/3603): 修复 xmake update 的无效 url
 * [#3614](https://github.com/xmake-io/xmake/issues/3614): 修复 xmake run 对 Qt 环境的加载
-* [#3628](https://github.com/xmake-io/xmake/issues/3628): 修复 msys2/mingw 下 os.exec 总是优先查找错误的可执行程序
-* 修复 msys/mingw 下环境变量设置问题
 
 ## v2.7.8
 
@@ -389,7 +386,6 @@
 
 ### 改进
 
-* [#3433](https://github.com/xmake-io/xmake/issues/3433): 改进 QT 在 msys2/mingw64 和 wasm 上的构建支持
 * [#3419](https://github.com/xmake-io/xmake/issues/3419): 支持 fish shell 环境
 * [#3455](https://github.com/xmake-io/xmake/issues/3455): Dlang 增量编译支持
 * [#3498](https://github.com/xmake-io/xmake/issues/3498): 改进绑定包虚拟环境
@@ -435,7 +431,6 @@
 ### 改进
 
 * [#3255](https://github.com/xmake-io/xmake/pull/3225): 改进 clang libc++ 模块支持
-* 支持使用 mingw 编译 xmake
 * 改进 xmake 在 win xp 上的兼容性
 * 如果外部依赖被启用，切换 json 模块到纯 lua 实现，移除对 lua-cjson 的依赖
 
@@ -477,7 +472,6 @@
 ### 改进
 
 * [#3056](https://github.com/xmake-io/xmake/issues/3056): 改进 Zig 支持
-* [#3060](https://github.com/xmake-io/xmake/issues/3060): 改进支持 msys2 的环境探测
 * [#3122](https://github.com/xmake-io/xmake/pull/3122): 改进 c++20 模块依赖图的源码分析，支持预处理
 * [#3125](https://github.com/xmake-io/xmake/pull/3125): 增加私有 C++20 模块的编译支持
 * [#3133](https://github.com/xmake-io/xmake/pull/3133): 增加 internal partitions 模块支持
@@ -600,7 +594,6 @@
 ### Bugs 修复
 
 * [#2488](https://github.com/xmake-io/xmake/issues/2488): 修复从 windows 到 linux 的远程编译路径问题
-* [#2504](https://github.com/xmake-io/xmake/issues/2504): 修复在 msys2 上远程编译失败问题
 * [#2525](https://github.com/xmake-io/xmake/issues/2525): 修复安装依赖包时候卡死问题
 * [#2557](https://github.com/xmake-io/xmake/issues/2557): 修复 cmake.find_package 查找 links 错误
 * 修复缓存导致的预处理文件路径冲突问题
@@ -835,7 +828,6 @@
 * 改进 `set_symbols("debug")` 支持 clang/windows 生成 pdb 文件
 * [#1638](https://github.com/xmake-io/xmake/issues/1638): 改进合并静态库
 * 改进 on_load/after_load 去支持动态的添加 target deps
-* [#1675](https://github.com/xmake-io/xmake/pull/1675): 针对 mingw 平台，重命名动态库和导入库文件名后缀
 * [#1694](https://github.com/xmake-io/xmake/issues/1694): 支持在 set_configvar 中定义一个不带引号的字符串变量
 * 改进对 Android NDK r23 的支持
 * 为 `set_languages` 新增 `c++latest` 和 `clatest` 配置值
@@ -1034,7 +1026,6 @@
 * [#1009](https://github.com/xmake-io/xmake/issues/1009): 支持忽略校验去安装任意版本的包，`add_requires("libcurl 7.73.0", {verify = false})`
 * [#1016](https://github.com/xmake-io/xmake/issues/1016): 针对依赖包增加license兼容性检测
 * [#1017](https://github.com/xmake-io/xmake/issues/1017): 支持外部/系统头文件支持 `add_sysincludedirs`，依赖包默认使用`-isystem`
-* [#1020](https://github.com/xmake-io/xmake/issues/1020): 支持在 archlinux 和 msys2 上查找安装 pacman 包
 * 改进 `xmake f --menu` 菜单配置，支持鼠标操作
 
 ### 改进
@@ -1060,7 +1051,6 @@
 
 ### 改进
 
-* [#958](https://github.com/xmake-io/xmake/issues/958): 改进mingw平台，增加对 llvm-mingw 工具链的支持，以及 arm64/arm 架构的支持
 * 增加 `add_requires("zlib~xxx")` 模式使得能够支持同时安装带有多种配置的同一个包，作为独立包存在
 * [#978](https://github.com/xmake-io/xmake/issues/978): 改进工具链的flags顺序
 * 改进XCode工具链，支持macOS/arm64
@@ -1087,7 +1077,7 @@
 * [#931](https://github.com/xmake-io/xmake/issues/931): 改进导出包，支持导出所有依赖包
 * [#930](https://github.com/xmake-io/xmake/issues/930): 如果私有包定义没有版本定义，支持直接尝试下载包
 * [#927](https://github.com/xmake-io/xmake/issues/927): 改进android ndk，支持arm/thumb指令模式切换
-* 改进 trybuild/cmake 支持 Android/Mingw/iPhoneOS/WatchOS 工具链
+* 改进 trybuild/cmake 支持 Android/iPhoneOS/WatchOS 工具链
 
 ### Bugs 修复
 
@@ -1344,7 +1334,6 @@
 
 * 针对远程依赖包，改进版本和调试模式切换
 * [#264](https://github.com/xmake-io/xmake/issues/264): 支持在windows上更新dev/master版本，`xmake update dev`
-* [#293](https://github.com/xmake-io/xmake/issues/293): 添加`xmake f/g --mingw=xxx` 配置选线，并且改进find_mingw检测
 * [#301](https://github.com/xmake-io/xmake/issues/301): 改进编译预处理头文件以及依赖头文件生成，编译速度提升30%
 * [#322](https://github.com/xmake-io/xmake/issues/322): 添加`option.add_features`, `option.add_cxxsnippets` 和 `option.add_csnippets`
 * 移除xmake 1.x的一些废弃接口, 例如：`add_option_xxx`
@@ -1367,7 +1356,6 @@
 
 ### 新特性
 
-* [#233](https://github.com/xmake-io/xmake/issues/233): 对mingw平台增加windres的支持
 * [#239](https://github.com/xmake-io/xmake/issues/239): 添加cparser编译器支持
 * 添加插件管理器，`xmake plugin --help`
 * 添加`add_syslinks`接口去设置系统库依赖，分离与`add_links`添加的库依赖之间的链接顺序
@@ -1406,9 +1394,7 @@
 
 ### 改进
 
-* 改进Qt编译编译环境探测，增加对mingw sdk的支持
 * 在自动扫描生成的xmake.lua中增加默认debug/release规则
-* [#178](https://github.com/xmake-io/xmake/issues/178): 修改mingw平台下的目标名
 * 对于`add_files()`在windows上支持大小写不敏感路径模式匹配
 * 改进`detect.sdks.find_qt`对于Qt根目录的探测
 * [#184](https://github.com/xmake-io/xmake/issues/184): 改进`lib.detect.find_package`支持vcpkg
@@ -1470,7 +1456,6 @@
 ### 改进
 
 * 改进交叉工具链配置，通过指定工具别名定向到已知的工具链来支持未知编译工具名配置, 例如: `xmake f --cc=gcc@ccmips.exe`
-* [#151](https://github.com/xmake-io/xmake/issues/151): 改进mingw平台下动态库生成
 * 改进生成makefile插件
 * 改进检测错误提示
 * 改进`add_cxflags`等flags api的设置，添加force参数，来禁用自动检测和映射，强制设置选项：`add_cxflags("-DTEST", {force = true})`
@@ -1484,8 +1469,6 @@
 ### Bugs 修复
 
 * 修复依赖修改编译和链接问题
-* [#151](https://github.com/xmake-io/xmake/issues/151): 修复`os.nuldev()`在mingw上传入gcc时出现问题
-* [#150](https://github.com/xmake-io/xmake/issues/150): 修复windows下ar.exe打包过长obj列表参数，导致失败问题
 * 修复`xmake f --cross`无法配置问题
 * 修复`os.cd`到windows根路径问题
 
@@ -1820,7 +1803,6 @@
 * 优化自动检测机制，更加的稳定和准确
 * 修改部分工程描述api，增强扩展性，减少一些命名歧义（对低版本向下兼容）
 * 优化静态库合并：`add_files("*.a")`，修复一些bug
-* 优化交叉编译，通过`--sdk=xxx`参数实现更加方便智能的进行交叉编译配置，简化mingw平台的编译配置
 * 简化命令行配置开关, 支持`xmake config --xxx=[y|n|yes|no|true|false]`等开关值
 * 合并iphoneos和iphonesimulator平台，以及watchos和watchsimulator平台，通过arch来区分，使得打包更加方便，能够支持一次性打包iphoneos的所有arch到一个包中
 

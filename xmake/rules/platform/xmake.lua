@@ -21,7 +21,3 @@ rule("platform.wasm", function()
     add_deps("platform.wasm.preloadfiles")
     add_deps("platform.wasm.installfiles")
 end)
-
-rule("platform.windows", function()
-    add_deps("platform.windows.def")
-end)

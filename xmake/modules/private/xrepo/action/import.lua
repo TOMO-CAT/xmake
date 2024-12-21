@@ -48,7 +48,6 @@ function menu_options()
                                        "    - xrepo import zlib boost",
                                        "    - xrepo import -p iphoneos -a arm64 \"zlib >=1.2.0\"",
                                        "    - xrepo import -p android -m debug \"pcre2 10.x\"",
-                                       "    - xrepo import -p mingw -k shared zlib",
                                        "    - xrepo import conan::zlib/1.2.11 vcpkg::zlib"}
     }
 
@@ -210,4 +209,3 @@ function main()
         raise("please specify the packages to be imported.")
     end
 end
-

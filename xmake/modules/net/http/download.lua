@@ -30,7 +30,7 @@ function _get_user_agent()
     if _g._USER_AGENT == nil then
 
         -- init systems
-        local systems = {macosx = "Macintosh", linux = "Linux", windows = "Windows", msys = "MSYS", cygwin = "Cygwin"}
+        local systems = {macosx = "Macintosh", linux = "Linux"}
 
         -- os user agent
         local os_user_agent = ""
@@ -39,7 +39,7 @@ function _get_user_agent()
             if osver then
                 os_user_agent = ("Intel Mac OS X " .. (osver or "")):trim()
             end
-        elseif is_subhost("linux", "msys", "cygwin") then
+        elseif is_subhost("linux") then
             local osver = try { function () return os.iorun("uname -r") end }
             if osver then
                 os_user_agent = (os_user_agent .. " " .. (osver or "")):trim()

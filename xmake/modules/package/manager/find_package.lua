@@ -65,10 +65,10 @@ function _find_package_with_builtin_rule(package_name, opt)
         table.insert(managers, "conan")
         if find_from_host then
             table.insert(managers, "pkgconfig")
-            if is_subhost("linux", "msys") and plat ~= "windows" and find_tool("pacman") then
+            if is_subhost("linux") and find_tool("pacman") then
                 table.insert(managers, "pacman")
             end
-            if is_subhost("linux", "msys") and plat ~= "windows" and find_tool("emerge") then
+            if is_subhost("linux") and find_tool("emerge") then
                 table.insert(managers, "portage")
             end
             table.insert(managers, "system")

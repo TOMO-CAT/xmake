@@ -177,7 +177,6 @@ set_menu {
     { category = "Cross Complation Configuration" },
     { nil, "cross", "kv", nil, "Set cross toolchains prefix"
     , "e.g."
-    , "    - i386-mingw32-"
     , "    - arm-linux-androideabi-" },
     { nil,                                        "target_os", "kv", nil, "Set target os only for cross-complation" },
     { nil, "bin", "kv", nil, "Set cross toolchains bin directory"

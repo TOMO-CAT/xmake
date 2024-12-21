@@ -152,11 +152,6 @@ function _get_install_configs(argv)
         table.insert(argv, "--ndk_cxxstl=" .. option.get("ndk_cxxstl"))
     end
 
-    -- mingw
-    if config.get("mingw") then
-        table.insert(argv, "--mingw=" .. config.get("mingw"))
-    end
-
     -- xcode
     if config.get("xcode") then
         table.insert(argv, "--xcode=" .. config.get("xcode"))

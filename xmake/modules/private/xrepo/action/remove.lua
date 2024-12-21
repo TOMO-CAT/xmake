@@ -54,7 +54,6 @@ function menu_options()
                                        "    - xrepo remove zlib boost",
                                        "    - xrepo remove -p iphoneos -a arm64 \"zlib >=1.2.0\"",
                                        "    - xrepo remove -p android -m debug \"pcre2 10.x\"",
-                                       "    - xrepo remove -p mingw -k shared zlib",
                                        "    - xrepo remove conan::zlib/1.2.11 vcpkg::zlib"}
     }
 

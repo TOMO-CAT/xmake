@@ -1047,7 +1047,7 @@ function os.arch()
     return xmake._ARCH
 end
 
--- get subsystem host, e.g. msys, cygwin on windows
+-- get subsystem host
 function os.subhost()
     return xmake._SUBHOST
 end

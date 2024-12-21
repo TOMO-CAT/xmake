@@ -28,14 +28,11 @@ import("package.manager.pkgconfig.find_package", {alias = "find_package_from_pkg
 -- get result from list of file inside pacman package
 function _find_package_from_list(list, name, pacman, opt)
 
-    -- mingw + pacman = cygpath available
-    local cygpath = nil
     local pathtomsys = nil
-    local msystem = nil
 
     -- iterate over each file path inside the pacman package
     local result = {includedirs = {}, linkdirs = {}, links = {}}
-    for _, line in ipairs(list:split('\n', {plain = true})) do -- on msys cygpath should be used to convert local path to windows path
+    for _, line in ipairs(list:split('\n', {plain = true})) do
         line = line:trim():split('%s+')[2]
         if line:find("/include/", 1, true) and (line:endswith(".h") or line:endswith(".hpp")) then
             if not line:startswith("/usr/include/") then
@@ -43,11 +40,6 @@ function _find_package_from_list(list, name, pacman, opt)
                 table.insert(result.includedirs, path.directory(hpath))
             end
         -- remove lib and .a, .dll.a and .so to have the links
-        elseif line:endswith(".dll.a") then -- only for mingw
-            local apath = path.join(pathtomsys, line)
-            apath = apath:trim()
-            table.insert(result.linkdirs, path.directory(apath))
-            table.insert(result.links, target.linkname(path.filename(apath), {plat = opt.plat}))
         elseif line:endswith(".so") then
             table.insert(result.linkdirs, path.directory(line))
             table.insert(result.links, target.linkname(path.filename(line), {plat = opt.plat}))

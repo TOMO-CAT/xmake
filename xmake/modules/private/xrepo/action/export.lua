@@ -51,7 +51,6 @@ function menu_options()
                                        "    - xrepo export zlib boost",
                                        "    - xrepo export -p iphoneos -a arm64 \"zlib >=1.2.0\"",
                                        "    - xrepo export -p android -m debug \"pcre2 10.x\"",
-                                       "    - xrepo export -p mingw -k shared zlib",
                                        "    - xrepo export conan::zlib/1.2.11 vcpkg::zlib"}
     }
 

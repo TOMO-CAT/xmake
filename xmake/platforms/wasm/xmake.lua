@@ -43,5 +43,3 @@ platform("wasm")
         ,   {nil, "emsdk", "kv", nil, "The emsdk directory" }
         }
     }
-
-

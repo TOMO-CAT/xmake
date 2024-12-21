@@ -230,12 +230,6 @@ function linkargv(self, objectfiles, targetkind, targetfile, flags)
         table.insert(flags_extra, "@rpath/" .. path.filename(targetfile))
     end
 
-    -- add `-Wl,--out-implib,outputdir/libxxx.a` for xxx.dll on mingw/gcc
-    if targetkind == "shared" and self:is_plat("mingw") then
-        table.insert(flags_extra, "-Xlinker")
-        table.insert(flags_extra, "-Wl,--out-implib," .. path.join(path.directory(targetfile), path.basename(targetfile) .. ".dll.a"))
-    end
-
     -- make link args
     return self:program(), table.join("-o", targetfile, objectfiles, flags, flags_extra)
 end

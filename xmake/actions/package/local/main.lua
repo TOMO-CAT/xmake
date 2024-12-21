@@ -101,36 +101,25 @@ function _package_library(target)
 
     -- copy the library file to the output directory
     local targetfile = target:targetfile()
-    if target:is_shared() and target:is_plat("windows", "mingw") then
-        os.mkdir(binarydir)
-        os.vcp(targetfile, binarydir)
-        os.trycp(target:symbolfile(), binarydir)
-        local targetfile_lib = path.join(path.directory(targetfile), path.basename(targetfile) .. ".lib")
-        if os.isfile(targetfile_lib) then
-            os.mkdir(librarydir)
-            os.vcp(targetfile_lib, librarydir)
+    os.mkdir(librarydir)
+    if os.islink(targetfile) then
+        local targetfile_with_soname = os.readlink(targetfile)
+        if not path.is_absolute(targetfile_with_soname) then
+            targetfile_with_soname = path.join(target:targetdir(), targetfile_with_soname)
         end
+        if os.islink(targetfile_with_soname) then
+            local targetfile_with_version = os.readlink(targetfile_with_soname)
+            if not path.is_absolute(targetfile_with_version) then
+                targetfile_with_version = path.join(target:targetdir(), targetfile_with_version)
+            end
+            os.vcp(targetfile_with_version, librarydir, {symlink = true, force = true})
+        end
+        os.vcp(targetfile_with_soname, librarydir, {symlink = true, force = true})
+        os.vcp(targetfile, librarydir, {symlink = true, force = true})
     else
-        os.mkdir(librarydir)
-        if os.islink(targetfile) then
-            local targetfile_with_soname = os.readlink(targetfile)
-            if not path.is_absolute(targetfile_with_soname) then
-                targetfile_with_soname = path.join(target:targetdir(), targetfile_with_soname)
-            end
-            if os.islink(targetfile_with_soname) then
-                local targetfile_with_version = os.readlink(targetfile_with_soname)
-                if not path.is_absolute(targetfile_with_version) then
-                    targetfile_with_version = path.join(target:targetdir(), targetfile_with_version)
-                end
-                os.vcp(targetfile_with_version, librarydir, {symlink = true, force = true})
-            end
-            os.vcp(targetfile_with_soname, librarydir, {symlink = true, force = true})
-            os.vcp(targetfile, librarydir, {symlink = true, force = true})
-        else
-            os.vcp(targetfile, librarydir)
-        end
-        os.trycp(target:symbolfile(), librarydir)
+        os.vcp(targetfile, librarydir)
     end
+    os.trycp(target:symbolfile(), librarydir)
 
     -- copy headers
     local srcheaders, dstheaders = target:headerfiles(headerdir)
@@ -216,7 +205,7 @@ function _package_library(target)
 
     on_fetch(function (package)
         local result = {}
-        local libfiledir = (package:config("shared") and package:is_plat("windows", "mingw")) and "bin" or "lib"
+        local libfiledir = "lib"
         result.links = "%s"
         result.linkdirs = package:installdir("lib")
         result.includedirs = package:installdir("include")
