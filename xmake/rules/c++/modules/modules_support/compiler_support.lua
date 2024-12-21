@@ -33,8 +33,6 @@ function _compiler_support(target)
             compiler_support = import("clang.compiler_support", {anonymous = true})
         elseif target:has_tool("cxx", "gcc", "gxx") then
             compiler_support = import("gcc.compiler_support", {anonymous = true})
-        elseif target:has_tool("cxx", "cl") then
-            compiler_support = import("msvc.compiler_support", {anonymous = true})
         else
             local _, toolname = target:tool("cxx")
             raise("compiler(%s): does not support c++ module!", toolname)
@@ -311,4 +309,3 @@ function add_installfiles_for_modules(target)
         end
     end
 end
-

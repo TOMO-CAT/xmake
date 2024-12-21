@@ -36,7 +36,7 @@ function _add_build_sanitizer(target, sourcekind, checkmode)
         mxx = "mxflags"
     }
     local flagname = flagnames[sourcekind]
-    if flagname and target:has_tool(sourcekind, "cl", "clang", "clangxx", "gcc", "gxx") then
+    if flagname and target:has_tool(sourcekind, "clang", "clangxx", "gcc", "gxx") then
         target:add(flagname, "-fsanitize=" .. checkmode)
     end
 

@@ -19,7 +19,6 @@
 --
 
 -- imports
-import("private.tools.vstool")
 import("core.base.hashset")
 
 -- init it
@@ -134,15 +133,12 @@ function compile(self, sourcefile, objectfile, dependinfo, flags)
     try
     {
         function ()
-            -- @note we don't need to use vstool.runv to enable unicode output for ml.exe
             local program, argv = compargv(self, sourcefile, objectfile, flags)
             os.runv(program, argv, {envs = self:runenvs()})
         end,
         catch
         {
             function (errors)
-
-                -- use link/stdout as errors first from vstool.iorunv()
                 if type(errors) == "table" then
                     local errs = errors.stdout or ""
                     if #errs:trim() == 0 then
@@ -155,4 +151,3 @@ function compile(self, sourcefile, objectfile, dependinfo, flags)
         }
     }
 end
-

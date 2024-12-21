@@ -117,19 +117,6 @@ function _add_includedirs(target, includedirs)
     end
 end
 
--- get target c++ version
-function _get_target_cppversion(target)
-    local languages = target:get("languages")
-    for _, language in ipairs(languages) do
-        if language:startswith("c++") or language:startswith("cxx") then
-            local v = language:match("%d+") or language:match("latest")
-            if v then
-                return v
-            end
-        end
-    end
-end
-
 -- get frameworks from target
 -- @see https://github.com/xmake-io/xmake/issues/4135
 function _get_frameworks_from_target(target)
@@ -236,19 +223,10 @@ function main(target, opt)
     if not cxxlang then
         -- Qt6 require at least '/std:c++17'
         -- @see https://github.com/xmake-io/xmake/issues/1183
-        local cppversion = _get_target_cppversion(target)
         if qt_sdkver:ge("6.0") then
-            -- add conditionnaly c++17 to avoid for example "cl : Command line warning D9025 : overriding '/std:c++latest' with '/std:c++17'" warning
-            if (not cppversion) or
-                (tonumber(cppversion) and tonumber(cppversion) < 17) then
-                target:add("languages", "c++17")
-            end
+            target:add("languages", "c++17")
         else
-            -- add conditionnaly c++11 to avoid for example "cl : Command line warning D9025 : overriding '/std:c++latest' with '/std:c++11'" warning
-            if (not cppversion) or
-                (tonumber(cppversion) and tonumber(cppversion) < 11) then
-                target:add("languages", "c++11")
-            end
+            target:add("languages", "c++11")
         end
     end
 

@@ -13,7 +13,6 @@
 -- limitations under the License.
 --
 -- Copyright (C) 2015-present, TBOOX Open Source Group.
--- Based On template file xmake\modules\detect\sdks\find_mdk.lua
 --
 -- @author      DawnMagnet
 -- @file        find_c51.lua

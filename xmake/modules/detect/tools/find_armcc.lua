@@ -21,7 +21,6 @@
 -- imports
 import("lib.detect.find_program")
 import("lib.detect.find_programver")
-import("detect.sdks.find_mdk")
 
 -- find armcc
 --
@@ -44,12 +43,6 @@ function main(opt)
 
     -- find program
     local program = find_program(opt.program or "armcc.exe", opt)
-    if not program then
-        local mdk = find_mdk()
-        if mdk and mdk.sdkdir_armcc then
-            program = find_program(path.join(mdk.sdkdir_armcc, "bin", "armcc.exe"), opt)
-        end
-    end
 
     -- find program version
     local version = nil

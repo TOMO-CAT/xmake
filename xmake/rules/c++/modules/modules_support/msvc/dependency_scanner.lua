@@ -22,7 +22,6 @@
 import("core.base.json")
 import("core.base.semver")
 import("core.project.depend")
-import("private.tools.vstool")
 import("utils.progress")
 import("compiler_support")
 import("builder")

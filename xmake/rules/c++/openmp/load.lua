@@ -23,9 +23,7 @@ function main(target, sourcekind)
     wprint("we no longer need add_rules(\"%s.openmp\") now, you just need to add add_packages(\"openmp\").", sourcekind == "cxx" and "c++" or "c")
     local _, compiler_name = target:tool(sourcekind)
     local flag_name        = sourcekind == "cxx" and "cxxflags" or "cflags"
-    if compiler_name == "cl" then
-        target:add(flag_name, "/openmp")
-    elseif compiler_name == "clang" or compiler_name == "clangxx" then
+    if compiler_name == "clang" or compiler_name == "clangxx" then
         if target:is_plat("macosx") then
             target:add(flag_name, "-Xpreprocessor -fopenmp")
         else
@@ -35,7 +33,5 @@ function main(target, sourcekind)
         target:add(flag_name, "-fopenmp")
     elseif compiler_name == "icc" or compiler_name == "icpc" then
         target:add(flag_name, "-qopenmp")
-    elseif compiler_name == "icl" then
-        target:add(flag_name, "-Qopenmp")
     end
 end

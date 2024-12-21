@@ -20,7 +20,6 @@
 
 -- imports
 import("core.base.option")
-import("private.tools.vstool")
 
 -- merge *.a archive libraries for ar
 function _merge_for_ar(target, program, outputfile, libraryfiles, opt)
@@ -48,12 +47,6 @@ function _merge_for_ar(target, program, outputfile, libraryfiles, opt)
         os.rm(tmpfile)
         os.rm(archivefile)
     end
-end
-
--- merge *.a archive libraries for msvc/lib.exe
-function _merge_for_msvclib(target, program, outputfile, libraryfiles, opt)
-    opt = opt or {}
-    vstool.runv(program, table.join("-nologo", "-out:" .. outputfile, libraryfiles), {envs = opt.runenvs})
 end
 
 -- merge *.a archive libraries

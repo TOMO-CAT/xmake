@@ -21,7 +21,6 @@
 -- imports
 import("lib.detect.find_program")
 import("lib.detect.find_programver")
-import("detect.sdks.find_mdk")
 
 -- find armasm
 --

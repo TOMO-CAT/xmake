@@ -1421,15 +1421,6 @@ _get_target_extension() {
     local extension=""
     if _has_target_item "${name}" "extension"; then
         _get_target_item "${name}" "extension"; extension="${_ret}"
-    elif is_plat "mingw"; then
-        _get_target_item "${name}" "kind"; local kind="${_ret}"
-        if test "x${kind}" = "xbinary"; then
-            extension=".exe"
-        elif test "x${kind}" = "xstatic"; then
-            extension=".a"
-        elif test "x${kind}" = "xshared"; then
-            extension=".dll"
-        fi
     else
         _get_target_item "${name}" "kind"; local kind="${_ret}"
         if test "x${kind}" = "xstatic"; then

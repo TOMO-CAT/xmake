@@ -14,8 +14,6 @@
 --
 -- Copyright (C) 2015-present, TBOOX Open Source Group.
 --
--- @author      ruki, Arthapz
--- @file        msvc/builder.lua
 --
 
 -- imports
@@ -27,7 +25,6 @@ import("private.action.build.object", {alias = "objectbuilder"})
 import("core.tool.compiler")
 import("core.project.config")
 import("core.project.depend")
-import("private.tools.vstool")
 import("compiler_support")
 import(".builder", {inherit = true})
 
@@ -439,4 +436,3 @@ function make_headerunit_buildcmds(target, batchcmds, headerunit, bmifile, outpu
     batchcmds:add_depfiles(headerunit.path)
     return os.mtime(bmifile)
 end
-

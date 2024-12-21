@@ -169,7 +169,6 @@
 
 ### 改进
 
-* 改进包管理，支持切换 clang-cl
 * [#4893](https://github.com/xmake-io/xmake/issues/4893): 改进 rc 头文件依赖检测
 * [#4928](https://github.com/xmake-io/xmake/issues/4928): 改进构建和链接速度，增量编译时候效果更加明显
 * [#4931](https://github.com/xmake-io/xmake/pull/4931): 更新 pdcurses
@@ -548,7 +547,6 @@
 * [#2859](https://github.com/xmake-io/xmake/issues/2859): 改进对三方库的 trybuild 构建，利用 xmake-repo 仓库脚本更加智能化地构建三方库
 * [#2879](https://github.com/xmake-io/xmake/issues/2879): 更好的动态创建和配置 target 和 rule
 * [#2374](https://github.com/xmake-io/xmake/issues/2374): 允许 xmake 包中引入自定义规则
-* 添加 clang-cl 工具链
 
 ### 改进
 
@@ -1041,7 +1039,6 @@
 
 ### 改进
 
-* [#1072](https://github.com/xmake-io/xmake/issues/1072): 修复并改进 cl 编译器头文件依赖信息
 * 针对 ui 模块和 `xmake f --menu` 增加 utf8 支持
 * 改进 zig 语言在 macOS 上的支持
 * [#1135](https://github.com/xmake-io/xmake/issues/1135): 针对特定 target 改进多平台多工具链同时配置支持

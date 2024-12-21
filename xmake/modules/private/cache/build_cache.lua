@@ -99,17 +99,6 @@ function cachekey(program, cppinfo, envs)
     end
     table.sort(items)
     table.insert(items, hash.xxhash128(cppfile))
-    if envs then
-        local basename = path.basename(program)
-        if basename == "cl" then
-            for _, name in ipairs({"WindowsSDKVersion", "VCToolsVersion", "LIB"}) do
-                local val = envs[name]
-                if val then
-                    table.insert(items, val)
-                end
-            end
-        end
-    end
     return hash.xxhash128(bytes(table.concat(items, "")))
 end
 

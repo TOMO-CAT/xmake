@@ -28,7 +28,6 @@ import("core.base.hashset")
 import("core.base.scheduler")
 import("core.tool.toolchain")
 import("core.cache.memcache")
-import("private.tools.vstool")
 import("private.service.server_config", {alias = "config"})
 import("private.service.message")
 

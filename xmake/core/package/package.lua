@@ -2286,9 +2286,7 @@ function _instance:_generate_lto_configs(sourcekind)
     if sourcekind then
         local _, cc = self:tool(sourcekind)
         local cflag = sourcekind == "cxx" and "cxxflags" or "cflags"
-        if cc == "cl" then
-            configs[cflag] = "-GL"
-        elseif cc == "clang" or cc == "clangxx" then
+        if cc == "clang" or cc == "clangxx" then
             configs[cflag] = "-flto=thin"
         elseif cc == "gcc" or cc == "gxx" then
             configs[cflag] = "-flto"
@@ -2315,7 +2313,7 @@ function _instance:_generate_sanitizer_configs(checkmode, sourcekind)
 
     -- add cflags
     local configs = {}
-    if sourcekind and self:has_tool(sourcekind, "cl", "clang", "clangxx", "gcc", "gxx") then
+    if sourcekind and self:has_tool(sourcekind, "clang", "clangxx", "gcc", "gxx") then
         local cflag = sourcekind == "cxx" and "cxxflags" or "cflags"
         configs[cflag] = "-fsanitize=" .. checkmode
     end
@@ -2370,10 +2368,6 @@ function _instance:_generate_build_configs(configs, opt)
                 table.join2(configs[k], v)
             end
         end
-    end
-    -- enable exceptions for msvc by default
-    if opt.sourcekind == "cxx" and configs.exceptions == nil and self:has_tool("cxx", "cl") then
-        configs.exceptions = "cxx"
     end
 
     -- pass user flags to on_test, because some flags need be passed to ldflags in on_test

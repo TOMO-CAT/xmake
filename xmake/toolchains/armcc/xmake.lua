@@ -28,18 +28,9 @@ toolchain("armcc")
     set_toolset("cc", "armcc")
     set_toolset("cxx", "armcc")
     set_toolset("ld", "armlink")
-    set_toolset("ar", "armar")
     set_toolset("as", "armasm")
 
     on_check(function (toolchain)
-        import("lib.detect.find_tool")
-        import("detect.sdks.find_mdk")
-        local mdk = find_mdk()
-        if mdk and mdk.sdkdir_armcc and find_tool("armcc") then
-            toolchain:config_set("sdkdir", mdk.sdkdir_armcc)
-            toolchain:configs_save()
-            return true
-        end
     end)
 
 

@@ -27,7 +27,6 @@ import("core.tool.linker")
 import("core.tool.compiler")
 import("lib.detect.find_tool")
 import("lib.detect.find_toolname")
-import("private.tools.cl.parse_include")
 
 -- this sourcebatch is built?
 function _sourcebatch_is_built(sourcebatch)
@@ -144,15 +143,6 @@ function _add_rules_for_compiler_clang(ninjafile, sourcekind, program)
     return _add_rules_for_compiler_gcc(ninjafile, sourcekind, program)
 end
 
--- add rules for complier (msvc/cl)
-function _add_rules_for_compiler_msvc_cl(ninjafile, sourcekind, program)
-    ninjafile:print("rule %s", sourcekind)
-    ninjafile:print(" command = %s -showIncludes -c $ARGS $in -Fo$out", program)
-    ninjafile:print(" deps = msvc")
-    ninjafile:print(" description = compiling.%s $in", config.mode())
-    ninjafile:print("")
-end
-
 -- add rules for complier (msvc/ml)
 function _add_rules_for_compiler_msvc_ml(ninjafile, sourcekind, program)
     ninjafile:print("rule %s", sourcekind)
@@ -188,7 +178,6 @@ function _add_rules_for_compiler(ninjafile)
         gxx     = _add_rules_for_compiler_gcc,
         clang   = _add_rules_for_compiler_clang,
         clangxx = _add_rules_for_compiler_clang,
-        cl      = _add_rules_for_compiler_msvc_cl,
         ml      = _add_rules_for_compiler_msvc_ml,
         ml64    = _add_rules_for_compiler_msvc_ml,
         rc      = _add_rules_for_compiler_msvc_rc,

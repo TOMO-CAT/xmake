@@ -72,10 +72,6 @@ function _check_try_running(flags, opt)
     -- compile the source file
     local objectfile = os.tmpfile() .. ".obj"
     local binaryfile = os.tmpfile() .. ".exe"
-    local cl = find_tool("cl")
-    if cl then
-        os.runv(cl.program, {"-c", "-nologo", "-Fo" .. objectfile, sourcefile}, {envs = opt.envs})
-    end
 
     -- try link it
     local ok, errors = _try_running(opt.program, table.join(flags, "-nologo", "-out:" .. binaryfile, objectfile), {envs = opt.envs})
@@ -118,4 +114,3 @@ function main(flags, opt)
     -- try running to check it
     return _check_try_running(flags, opt)
 end
-

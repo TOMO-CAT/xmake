@@ -127,10 +127,6 @@ if ($as_type eq "armasm") {
         system(@preprocess_c_cmd) == 0 or die "Error running preprocessor";
         exit 0;
     }
-
-    # If not preprocessing for getting a dependency list, use cl.exe
-    # instead.
-    $preprocess_c_cmd[0] = "cl";
 }
 
 # if compiling, avoid creating an output file named '-.o'

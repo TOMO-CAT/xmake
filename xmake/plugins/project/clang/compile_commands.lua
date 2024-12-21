@@ -82,11 +82,7 @@ function _translate_arguments(arguments)
         elseif arg:find("[%-/]external:W") or arg:find("[%-/]experimental:external") then
             arg = nil
         end
-        -- @see use msvc-style flags for msvc to support language-server better
-        -- https://github.com/xmake-io/xmake/issues/1284
-        if cc == "cl" and arg and arg:startswith("-") then
-            arg = arg:gsub("^%-", "/")
-        elseif cc == "nvcc" and arg then
+        if cc == "nvcc" and arg then
             -- support -I path with spaces for nvcc
             -- https://github.com/xmake-io/xmake/issues/1726
             if is_include then

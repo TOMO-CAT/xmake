@@ -88,7 +88,6 @@ function nf_warning(self, level)
 
     -- add host warning
     --
-    -- for cl.exe on windows, it is the only supported host compiler on the platform
     -- for gcc/clang, or any gnu compatible compiler on *nix
     --
     local host_warning = gcc_clang_maps[level]

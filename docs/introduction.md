@@ -6,7 +6,6 @@
 $ xmake show -l toolchains
 xcode         Xcode IDE
 msvc          Microsoft Visual C/C++ Compiler
-clang-cl      LLVM Clang C/C++ Compiler compatible with msvc
 yasm          The Yasm Modular Assembler
 clang         A C language family frontend for LLVM
 go            Go Programming Language Compiler
@@ -44,7 +43,6 @@ armclang      ARM Compiler Version 6 of Keil MDK
 c51           Keil development tools for the 8051 Microcontroller Architecture
 icx           Intel LLVM C/C++ Compiler
 dpcpp         Intel LLVM C++ Compiler for data parallel programming model based on Khronos SYCL
-masm32        The MASM32 SDK
 iverilog      Icarus Verilog
 verilator     Verilator open-source SystemVerilog simulator and lint system
 cosmocc       build-once run-anywhere

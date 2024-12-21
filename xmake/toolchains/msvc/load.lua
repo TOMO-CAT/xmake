@@ -25,39 +25,5 @@ import("core.project.config")
 
 -- main entry
 function main(toolchain)
-
-    -- set toolset
-    toolchain:set("toolset", "cc",  "cl.exe")
-    toolchain:set("toolset", "cxx", "cl.exe")
-    toolchain:set("toolset", "mrc", "rc.exe")
-    if toolchain:is_arch("x86") then
-        toolchain:set("toolset", "as",  "ml.exe")
-    elseif toolchain:is_arch("arm64", "arm64ec") then
-        toolchain:set("toolset", "as",  "armasm64_msvc@armasm64.exe")
-    elseif toolchain:is_arch("arm.*") then
-        toolchain:set("toolset", "as",  "armasm_msvc@armasm.exe")
-    else
-        toolchain:set("toolset", "as",  "ml64.exe")
-    end
-    toolchain:set("toolset", "ld",  "link.exe")
-    toolchain:set("toolset", "sh",  "link.exe")
-    toolchain:set("toolset", "ar",  "link.exe")
-
-    -- init flags
-    if toolchain:is_arch("arm64ec") then
-        toolchain:add("cxflags", "/arm64EC")
-    end
-
-    -- add vs environments
-    local expect_vars = {"PATH", "LIB", "INCLUDE", "LIBPATH"}
-    local curenvs = os.getenvs()
-    for _, name in ipairs(expect_vars) do
-        _add_vsenv(toolchain, name, curenvs)
-    end
-
-    -- check and add vs_binary_output env
-    local vs = toolchain:config("vs")
-    if vs and semver.is_valid(vs) and semver.compare(vs, "2005") < 0 then
-        toolchain:add("runenvs", "VS_BINARY_OUTPUT", "1")
-    end
+    raise("deprecated, going to delete msvc later")
 end

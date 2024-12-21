@@ -31,22 +31,6 @@ toolchain("armclang")
     set_toolset("ar", "armar")
 
     on_check(function (toolchain)
-        import("core.base.semver")
-        import("lib.detect.find_tool")
-        import("detect.sdks.find_mdk")
-        local mdk = find_mdk()
-        if mdk and mdk.sdkdir_armclang then
-            toolchain:config_set("sdkdir", mdk.sdkdir_armclang)
-            -- different assembler choices for different versions of armclang
-            local armclang = find_tool("armclang", {version = true, force = true, paths = path.join(mdk.sdkdir_armclang, "bin")})
-            if armclang and semver.compare(armclang.version, "6.13") > 0 then
-                toolchain:config_set("toolset_as", "armclang")
-            else
-                toolchain:config_set("toolset_as", "armasm")
-            end
-            toolchain:configs_save()
-            return true
-        end
     end)
 
     on_load(function (toolchain)
@@ -72,4 +56,3 @@ toolchain("armclang")
             toolchain:add("ldflags", "--cpu "   .. arch_cpu_ld)
         end
     end)
-
