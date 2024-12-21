@@ -37,9 +37,6 @@ function _find_sdkdir(sdkdir)
     if not result then
         -- find it from some logical drives paths
         paths = {}
-        for _, logical_drive in ipairs(winos.logical_drives()) do
-            table.insert(paths, path.join(logical_drive, "Keil_v5", "ARM"))
-        end
         result = find_path("armcc", paths) or find_path("armclang", paths)
     end
     return result
@@ -54,15 +51,6 @@ function _find_mdk(sdkdir)
         return nil
     end
     local result = {sdkdir = sdkdir}
-
-    -- get sdk version
-    local sdkver = winos.registry_query("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Keil\\Products\\MDK;Version")
-    if sdkver then
-        sdkver = semver.match(sdkver, 1, "V%d+%.%d+")
-        if sdkver then
-            result.sdkver = sdkver:rawstr()
-        end
-    end
 
     -- armcc sdk directory
     local sdkdir_armcc = path.join(sdkdir, "armcc")

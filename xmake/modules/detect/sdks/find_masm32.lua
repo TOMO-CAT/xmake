@@ -29,10 +29,6 @@ function _find_sdkdir(sdkdir)
     local paths = {}
     if sdkdir then
         table.insert(paths, path.join(sdkdir, "bin"))
-    else
-        for _, logical_drive in ipairs(winos.logical_drives()) do
-            table.insert(paths, path.join(logical_drive, "masm32", "bin"))
-        end
     end
     local bindir = find_path("ml.exe", paths)
     if bindir then

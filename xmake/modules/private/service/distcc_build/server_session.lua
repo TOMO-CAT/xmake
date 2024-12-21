@@ -280,13 +280,6 @@ function server_session:_clangxx_compile(toolname, flags, sourcefile, objectfile
     return self:_gcc_compile(toolname, flags, sourcefile, objectfile, opt)
 end
 
--- do compile job for cl
-function server_session:_cl_compile(toolname, flags, sourcefile, objectfile, opt)
-    local program, toolname_real, runenvs = self:_tool(opt.toolchain, opt)
-    assert(toolname_real == toolname, "toolname is not matched, %s != %s", toolname, toolname_real)
-    return vstool.iorunv(program, winos.cmdargv(table.join(flags, "-Fo" .. objectfile, sourcefile)), {envs = runenvs})
-end
-
 function server_session:__tostring()
     return string.format("<session %s>", self:id())
 end

@@ -129,9 +129,6 @@ end
 function linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
     opt = opt or {}
     local argv = table.join(flags, "-out:" .. targetfile, objectfiles)
-    if not opt.rawargs then
-        argv = winos.cmdargv(argv)
-    end
     -- @note we cannot put -lib/-dll to @args.txt
     if targetkind == "static" then
         table.insert(argv, 1, "-lib")
@@ -177,4 +174,3 @@ function link(self, objectfiles, targetkind, targetfile, flags, opt)
         }
     }
 end
-

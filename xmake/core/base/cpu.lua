@@ -23,8 +23,6 @@ local cpu = cpu or {}
 
 -- load modules
 local os      = require("base/os")
-local winos   = require("base/winos")
-local io      = require("base/io")
 local hashset = require("base/hashset")
 
 -- get cpu micro architecture for Intel

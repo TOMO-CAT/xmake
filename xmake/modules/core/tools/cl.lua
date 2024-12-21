@@ -571,37 +571,13 @@ function _preprocess(program, argv, opt)
     end
     table.insert(cppflags, sourcefile)
     return try{ function()
-        -- https://github.com/xmake-io/xmake/issues/2902#issuecomment-1326934902
-        local outfile = cppfile
-        local errfile = os.tmpfile() .. ".i.err"
-        local inherit_handles_safely = true
-        if not winos.inherit_handles_safely() then
-            outfile = os.tmpfile() .. ".i.out"
-            inherit_handles_safely = false
-        end
-        os.execv(program, winos.cmdargv(cppflags), table.join(opt, {stdout = outfile, stderr = errfile}))
-        local errdata
-        if os.isfile(errfile) then
-            errdata = io.readfile(errfile)
-        end
-        os.tryrm(errfile)
-        if not inherit_handles_safely then
-            os.cp(outfile, cppfile)
-            os.tryrm(outfile)
-        end
-        -- includes information will be output to stderr instead of stdout now
-        return {outdata = errdata, errdata = errdata,
-                sourcefile = sourcefile, objectfile = objectfile, cppfile = cppfile, cppflags = flags,
-                pdbfile = pdbfile}
+        raise("deprecated, going to delete cl later")
     end}
 end
 
 -- compile preprocessed file
 function _compile_preprocessed_file(program, cppinfo, opt)
-    local outdata, errdata = vstool.iorunv(program, winos.cmdargv(table.join(cppinfo.cppflags, "-Fo" .. cppinfo.objectfile, cppinfo.cppfile)), opt)
-    -- we need to get warning information from output
-    cppinfo.outdata = outdata
-    cppinfo.errdata = errdata
+    raise("deprecated, going to delete cl later")
 end
 
 -- do compile
@@ -641,7 +617,7 @@ function compargv(self, sourcefile, objectfile, flags, opt)
 
     -- make the compile arguments list
     local argv = table.join("-c", flags, "-Fo" .. objectfile, sourcefile)
-    return self:program(), (opt and opt.rawargs) and argv or winos.cmdargv(argv)
+    return self:program(), (opt and opt.rawargs) and argv
 end
 
 -- compile the source file

@@ -24,12 +24,10 @@ local sandbox_lib_detect_find_program = sandbox_lib_detect_find_program or {}
 -- load modules
 local os          = require("base/os")
 local path        = require("base/path")
-local option      = require("base/winos")
 local table       = require("base/table")
 local utils       = require("base/utils")
 local option      = require("base/option")
 local profiler    = require("base/profiler")
-local project     = require("project/project")
 local detectcache = require("cache/detectcache")
 local sandbox     = require("sandbox/sandbox")
 local package     = require("package/package")
