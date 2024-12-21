@@ -1,6 +1,6 @@
 # README
 
-🌟 A cross-platform build utility based on Lua, better suited for large-scale projects.
+🌟 A Linux C++ build utility based on Lua, better suited for large-scale projects.
 
 ## build && install
 
