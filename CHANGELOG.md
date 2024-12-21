@@ -405,7 +405,6 @@
 
 * [#3436](https://github.com/xmake-io/xmake/issues/3436): 修复自动补全和 menuconf
 * [#3463](https://github.com/xmake-io/xmake/issues/3463): 修复 c++modules 缓存问题
-* [#3545](https://github.com/xmake-io/xmake/issues/3545): 修复 armcc 的头文件依赖解析
 
 ## v2.7.7
 
@@ -530,7 +529,6 @@
 ### Bugs 修复
 
 * [#2949](https://github.com/xmake-io/xmake/issues/2949): 修复 vs 分组
-* [#2952](https://github.com/xmake-io/xmake/issues/2952): 修复 armlink 处理长命令失败问题
 * [#2954](https://github.com/xmake-io/xmake/issues/2954): 修复 c++ module partitions 路径无效问题
 * [#3033](https://github.com/xmake-io/xmake/issues/3033): 探测循环模块依赖
 
@@ -587,7 +585,6 @@
 * [#2571](https://github.com/xmake-io/xmake/issues/2571): 改进分布式编译的调度算法，增加 cpu/memory 状态权重
 * [#2410](https://github.com/xmake-io/xmake/issues/2410): 改进 cmakelists 生成
 * [#2690](https://github.com/xmake-io/xmake/issues/2690): 改机传递 toolchains 到包
-* [#2686](https://github.com/xmake-io/xmake/issues/2686): 改进 armcc/armclang 支持增量编译
 * [#2562](https://github.com/xmake-io/xmake/issues/2562): 改进 rc.exe 对引用文件依赖的解析和增量编译支持
 * 改进默认的并行构建任务数
 
@@ -759,7 +756,6 @@
 ### 改进
 
 * [#1923](https://github.com/xmake-io/xmake/issues/1923): 改进构建 linux 驱动，支持设置自定义 linux-headers 路径
-* [#1962](https://github.com/xmake-io/xmake/issues/1962): 改进 armclang 工具链去支持构建 asm
 * [#1969](https://github.com/xmake-io/xmake/issues/1969): 添加默认的 option 描述
 
 ### Bugs 修复
@@ -832,7 +828,6 @@
 * [#1765](https://github.com/xmake-io/xmake/issues/1756): 支持 nim 语言
 * [#1762](https://github.com/xmake-io/xmake/issues/1762): 为 `xrepo env` 管理和切换指定的环境配置
 * [#1767](https://github.com/xmake-io/xmake/issues/1767): 支持 Circle 编译器
-* [#1753](https://github.com/xmake-io/xmake/issues/1753): 支持 Keil/MDK 的 armcc/armclang 工具链
 * [#1774](https://github.com/xmake-io/xmake/issues/1774): 添加 table.contains api
 * [#1735](https://github.com/xmake-io/xmake/issues/1735): 添加自定义命令到 cmake 生成器
 * [#1781](https://github.com/xmake-io/xmake/issues/1781): 改进 get.sh 安装脚本支持 nixos

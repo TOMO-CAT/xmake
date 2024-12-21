@@ -23,7 +23,6 @@ import("core.base.option")
 import("core.project.project")
 import("private.tools.rc.parse_deps", {alias = "parse_deps_rc"})
 import("private.tools.gcc.parse_deps", {alias = "parse_deps_gcc"})
-import("private.tools.armcc.parse_deps", {alias = "parse_deps_armcc"})
 
 -- load depfiles
 function _load_depfiles(parser, dependinfo, depfiles, opt)
@@ -51,9 +50,6 @@ function load(dependfile, opt)
             elseif dependinfo.depfiles_rc then
                 _load_depfiles(parse_deps_rc, dependinfo, dependinfo.depfiles_rc, opt)
                 dependinfo.depfiles_rc = nil
-            elseif dependinfo.depfiles_armcc then
-                _load_depfiles(parse_deps_armcc, dependinfo, dependinfo.depfiles_armcc, opt)
-                dependinfo.depfiles_armcc = nil
             end
             return dependinfo
         end
