@@ -18,7 +18,7 @@
 -- @file        xmake.lua
 --
 
-platform("android")
+platform("android", function()
     set_os("android")
     set_hosts("macosx", "linux", "windows")
 
@@ -65,6 +65,4 @@ platform("android")
                 ,   {nil, "build_toolver",  "kv", nil,          "The Build Tool Version of Android SDK" }
                 }
             }
-
-
-
+end)
