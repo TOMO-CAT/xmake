@@ -29,14 +29,14 @@ else
         warning "file [${NDK_ZIP_FILE}] exists. skip downloading"
     else
         info "start downloading ndk zip file [${NDK_ZIP_FILE}]"
-        wget -v "https://dl.google.com/android/repository/android-ndk-r22-linux-x86_64.zip" -O android-ndk-r22-linux-x86_64.zip
+        wget "https://dl.google.com/android/repository/android-ndk-r22-linux-x86_64.zip" -O android-ndk-r22-linux-x86_64.zip
     fi
     set -x
     unzip -q -o ./android-ndk-r22-linux-x86_64.zip
     set +x
 fi
 
-xmake b -yrvD
+xmake b -yrD
 
 output=`file build/android/arm64-v8a/release/android-cross` || exit -1
 if [[ "$output" =~ "ARM" || "$output" =~ "aarch64" ]]; then

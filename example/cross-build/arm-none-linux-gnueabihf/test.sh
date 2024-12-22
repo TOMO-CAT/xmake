@@ -26,8 +26,8 @@ unset CC
 unset CXX
 unset LD
 
-SDK_ZIP_FILE="arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
-SDK_DIR="arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu"
+SDK_ZIP_FILE="arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz"
+SDK_DIR="arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf"
 
 if [ -d "${SDK_DIR}" ]; then
     warning "dir [${SDK_DIR}] exists, skip installing"
@@ -36,27 +36,27 @@ else
         warning "file [${SDK_ZIP_FILE}] exists. skip downloading"
     else
         info "start downloading ndk zip file [${SDK_ZIP_FILE}]"
-        wget "https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz" -O ${SDK_ZIP_FILE}
+        wget "https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz" -O ${SDK_ZIP_FILE}
     fi
     tar -xf ${SDK_ZIP_FILE}
 fi
 
-# 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 aarch64-none-linux-gnu-g++ 等二进制)
-xmake f -yD -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu
+# 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 arm-none-linux-gnueabihf-g++ 等二进制)
+xmake f -yvD -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf
 xmake b -yvrD
 
-output=`file build/cross/arm64/release/aarch64-none-linux-gnu-cross` || exit -1
-if [[ "$output" =~ "ARM" && "$output" =~ "aarch64" ]]; then
-    ok "output file is ARM aarch64"
+output=`file build/cross/arm/release/arm-none-linux-gnueabihf-cross` || exit -1
+if [[ "$output" =~ "ARM" && "$output" =~ "ELF 32-bit" ]]; then
+    ok "output file is ARM 32-bit"
 else
-    error "output file is not ARM aarch64!"
+    error "output file is not ARM 32-bit!"
     exit 1
 fi
 
 # 编译 host 版本
-xmake f -cyD
+xmake f -cvyD
 xmake b -yvrD
-output=`file build/linux/x86_64/release/aarch64-none-linux-gnu-cross` || exit -1
+output=`file build/linux/x86_64/release/arm-none-linux-gnueabihf-cross` || exit -1
 if [[ "$output" =~ "x86-64" ]]; then
     ok "output file is x86_64"
 else

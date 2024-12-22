@@ -12,11 +12,14 @@ target("pb", function()
     add_files("pb/*.proto", { proto_public = true})
     add_rules("protobuf.cpp")
     add_packages("protobuf-cpp", {public = true})
-    add_packages("protoc", {links = {}}) -- 只是为了获取 host protoc, 不引入 linkflags
-    set_policy('build.fence', true)
+
+    -- 只是为了获取 host protoc, 不引入 linkflags 和 linkdirs
+    -- 尤其是 protoc 是 host 版本, 引入 linkdirs 会找到错误 arch 的 lib 导致编译不过
+    add_packages("protoc", {links = {}, linkdirs = {}})
+    set_policy("build.fence", true)
 end)
 
-target("aarch64-none-linux-gnu-cross", function()
+target("arm-none-linux-gnueabihf-cross", function()
     set_kind("binary")
     add_files("src/*.cc")
     add_deps("pb")
