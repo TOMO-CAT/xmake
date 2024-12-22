@@ -96,6 +96,7 @@
         "gcflags",
         "getenvs",
         "gnuc",
+        "gnueabihf",
         "gnustl",
         "hpath",
         "iccenv",
