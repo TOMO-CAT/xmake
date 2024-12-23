@@ -262,6 +262,7 @@
         "trycp",
         "tryrm",
         "tsan",
+        "ubsan",
         "undefines",
         "vcpkg",
         "vcpkgdir",

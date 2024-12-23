@@ -17,9 +17,6 @@ set_languages("c99", "cxx11")
 add_rules("mode.release", "mode.debug")
 if is_mode("release") then
     set_optimize("smallest")
-    if is_plat("windows") then
-        add_ldflags("/LTCG")
-    end
 end
 
 -- generate compile_commands.json
@@ -86,12 +83,6 @@ option("onlylib")
     set_default(false)
     set_description("Only build xmake libraries for development")
 option_end()
-
--- suppress warnings
-if is_plat("windows") then
-    add_defines("_CRT_SECURE_NO_WARNINGS")
-    add_cxflags("/utf-8")
-end
 
 -- add projects
 includes("src/sv", "src/lz4", "src/tbox", "src/xmake", "src/demo")

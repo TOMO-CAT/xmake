@@ -26,7 +26,6 @@
  * includes
  */
 #include "prefix.h"
-#include "ssl.h"
 #include "url.h"
 #include "ipv4.h"
 #include "ipv6.h"

@@ -126,7 +126,6 @@
 * 改进spinlock实现
 * 新增进程输出重定向到管道
 * 针对协程栈使用虚拟内存
-* 改进基于openssl/mbedtls的https访问
 
 ## v1.6.3
 
@@ -198,7 +197,6 @@
 * 新增跨平台协程模块（支持i386, x86_64, arm, arm64, mips），提供更加易用的高性能并发编程模式
 * 新增基于协程的各种服务器开发实例（包括：简单轻量的http服务器，爬虫。。）
 * 新增poller轮询器接口，实现对epoll, poll, kqueue, select的封装，逐步取代老的aiop接口
-* 新增mbedtls ssl库接口支持，目前已支持：openssl, polarssl, mbedtls
 * tbox所有stream, socket, http, dns, ssl 等io相关操作，原生支持协程模式，并且可以在线程和协程间随意切换
 * 为协程提供lock, semaphone, channel模块
 
@@ -323,7 +321,7 @@
 
 ### 新特性
 
-* 增加asio模块，支持各种异步socket/file操作，支持异步dns、ssl（依赖polarssl/openssl）、http
+* 增加asio模块，支持各种异步socket/file操作，支持异步dns、http
 * 增加http cookie支持，完善http客户端协议
 * 增加sql数据库模块，依赖sqlite3/mysql
 * 增加object模块

@@ -1,3 +1,5 @@
+# TBOX
+
 ## 简介
 
 TBOX是一个用c语言实现的跨平台开发库。
@@ -6,7 +8,7 @@ TBOX是一个用c语言实现的跨平台开发库。
 
 这个项目的目的，是为了使C开发更加的简单高效。
 
-目前支持的平台有: Windows, Macosx, Linux, Android, iOS, *BSD等等。
+目前支持的平台有: Macosx, Linux, Android, iOS, *BSD等等。
 
 通过[xmake](https://github.com/xmake-io/xmake)支持各种编译模式：
 
@@ -78,7 +80,6 @@ TBOX是一个用c语言实现的跨平台开发库。
 * 实现http客户端模块
 * 实现cookies
 * 实现dns解析与缓存
-* 实现ssl(支持openssl, polarssl, mbedtls)
 * 支持ipv4、ipv6
 * 支持通过协程实现异步模式
 
