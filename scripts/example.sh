@@ -6,6 +6,14 @@ original_dir=$(pwd)
 
 export XMAKE_PROGRAM_DIR="${PWD}/xmake"
 
+# 交叉编译必须禁用掉对应的环境变量(这相当于环境变量是最高优先级?), 否则会用 host clang++ 以及错误的系统头文件
+unset CPLUS_INCLUDE_PATH
+unset C_INCLUDE_PATH
+unset CPP
+unset CC
+unset CXX
+unset LD
+
 mapfile -t test_scripts < <(find example -type f -name "test.sh")
 
 if [ -z "${GITHUB_ACTIONS+x}" ]; then

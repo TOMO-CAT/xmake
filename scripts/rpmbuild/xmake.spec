@@ -49,7 +49,7 @@ system to help users solve the integrated use of C/C++ dependent libraries.
 %autosetup -n %{name}-%{version} -p1
 
 # Cleanup bundled deps
-rm -rf core/src/{lua,luajit,lua-cjson,lz4,pdcurses}/*/
+rm -rf core/src/{lua,luajit,lua-cjson,lz4}/*/
 
 %build
 %set_build_flags

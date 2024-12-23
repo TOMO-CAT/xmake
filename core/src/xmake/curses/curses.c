@@ -31,10 +31,6 @@
 #ifdef XM_CONFIG_API_HAVE_CURSES
 #include "prefix.h"
 #include <stdlib.h>
-#if defined(PDCURSES)
-// fix macro redefinition
-#   undef MOUSE_MOVED
-#endif
 #define NCURSES_MOUSE_VERSION 2
 #ifdef TB_COMPILER_IS_MINGW
 #   include <ncursesw/curses.h>
@@ -103,9 +99,6 @@
  * globals
  */
 
-// map key for pdcurses, keeping the keys consistent with ncurses
-static int g_mapkey = 0;
-
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
@@ -124,53 +117,7 @@ static chtype xm_curses_checkch(lua_State* lua, int index)
 // get character and map key
 static int xm_curses_window_getch_impl(WINDOW* w)
 {
-#ifdef PDCURSES
-    static int has_key = 0;
-    static int temp_key = 0;
-
-    int key;
-    if (g_mapkey && has_key)
-    {
-        has_key = 0;
-        return temp_key;
-    }
-
-    key = wgetch(w);
-    if (key == KEY_RESIZE) resize_term(0, 0);
-    if (key == ERR || !g_mapkey) return key;
-    if (key >= ALT_A && key <= ALT_Z)
-    {
-        has_key = 1;
-        temp_key = key - ALT_A + 'A';
-    }
-    else if (key >= ALT_0 && key <= ALT_9)
-    {
-        has_key = 1;
-        temp_key = key - ALT_0 + '0';
-    }
-    else
-    {
-        switch (key)
-        {
-            case ALT_DEL:       temp_key = KEY_DC;      break;
-            case ALT_INS:       temp_key = KEY_IC;      break;
-            case ALT_HOME:      temp_key = KEY_HOME;    break;
-            case ALT_END:       temp_key = KEY_END;     break;
-            case ALT_PGUP:      temp_key = KEY_PPAGE;   break;
-            case ALT_PGDN:      temp_key = KEY_NPAGE;   break;
-            case ALT_UP:        temp_key = KEY_UP;      break;
-            case ALT_DOWN:      temp_key = KEY_DOWN;    break;
-            case ALT_RIGHT:     temp_key = KEY_RIGHT;   break;
-            case ALT_LEFT:      temp_key = KEY_LEFT;    break;
-            case ALT_BKSP:      temp_key = KEY_BACKSPACE; break;
-            default: return key;
-        }
-    }
-    has_key = 1;
-    return 27;
-#else
     return wgetch(w);
-#endif
 }
 
 // new a window object
@@ -277,21 +224,6 @@ static int xm_curses_window_addnstr(lua_State* lua)
     int n = luaL_optint(lua, 3, -1);
     if (n < 0) n = (int)lua_strlen(lua, 2);
     lua_pushboolean(lua, XM_CURSES_OK(waddnstr(w, str, n)));
-    return 1;
-}
-
-// window:keypad(true)
-static int xm_curses_window_keypad(lua_State* lua)
-{
-    WINDOW* w = xm_curses_window_check(lua, 1);
-    int enabled = lua_isnoneornil(lua, 2) ? 1 : lua_toboolean(lua, 2);
-    if (enabled)
-    {
-        // on WIN32 ALT keys need to be mapped, so to make sure you get the wanted keys,
-        // only makes sense when using keypad(true) and echo(false)
-        g_mapkey = 1;
-    }
-    lua_pushboolean(lua, XM_CURSES_OK(keypad(w, enabled)));
     return 1;
 }
 
@@ -487,13 +419,6 @@ static void xm_curses_register_constants(lua_State* lua)
     XM_CURSES_CONST(KEY_HELP)
     XM_CURSES_CONST(KEY_MARK)
     XM_CURSES_CONST(KEY_MESSAGE)
-#ifdef PDCURSES
-    // https://github.com/xmake-io/xmake/issues/1610#issuecomment-971149885
-    XM_CURSES_CONST(KEY_C2)
-    XM_CURSES_CONST(KEY_A2)
-    XM_CURSES_CONST(KEY_B1)
-    XM_CURSES_CONST(KEY_B3)
-#endif
 #if !defined(XCURSES)
 #   ifndef NOMOUSE
     XM_CURSES_CONST(KEY_MOUSE)
@@ -616,9 +541,7 @@ static int xm_curses_initscr(lua_State* lua)
 
     xm_curses_register_constants(lua);
 
-#ifndef PDCURSES
     atexit(xm_curses_cleanup);
-#endif
     return 1;
 }
 
@@ -754,7 +677,6 @@ XM_CURSES_WINDOW_BOOLOK(wnoutrefresh)
 static const luaL_Reg g_window_functions[] =
 {
     { "close",      xm_curses_window_delwin       },
-    { "keypad",     xm_curses_window_keypad       },
     { "meta",       xm_curses_window_meta         },
     { "nodelay",    xm_curses_window_nodelay      },
     { "leaveok",    xm_curses_window_leaveok      },

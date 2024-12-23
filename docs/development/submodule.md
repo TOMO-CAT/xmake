@@ -13,7 +13,7 @@ git submodule foreach --recursive git checkout .
 
 ```bash
 # 先使原先子模块不被版本控制
-git rm --cached core/src/lua/lua
+git rm --cached -r core/src/lua
 
 # 删除 submodule 的跟踪
 git submodule deinit -f core/src/lua/lua

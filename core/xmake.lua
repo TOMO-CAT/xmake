@@ -81,14 +81,6 @@ option("curses")
     add_defines("XM_CONFIG_API_HAVE_CURSES")
 option_end()
 
--- the pdcurses option
-option("pdcurses")
-    set_default(true)
-    set_description("Enable or disable pdcurses library")
-    add_defines("PDCURSES")
-    add_defines("XM_CONFIG_API_HAVE_CURSES")
-option_end()
-
 -- only build xmake libraries for development?
 option("onlylib")
     set_default(false)
@@ -110,9 +102,6 @@ if is_config("runtime", "luajit") then
     includes("src/luajit")
 else
     includes("src/lua")
-end
-if is_plat("windows") then
-    includes("src/pdcurses")
 end
 
 -- add xpack
