@@ -19,7 +19,7 @@ function ok() {
 }
 
 # 安装交叉编译工具链
-sudo apt install g++-9-aarch64-linux-gnu || exit 1
+sudo apt install g++-9-aarch64-linux-gnu -y || exit 1
 sudo mkdir -p /usr/aarch64-linux-gnu/usr/aarch64-linux-gnu
 sudo ln -svnf /usr/aarch64-linux-gnu/lib /usr/aarch64-linux-gnu/usr/aarch64-linux-gnu/lib
 

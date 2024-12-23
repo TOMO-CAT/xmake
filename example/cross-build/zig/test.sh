@@ -28,7 +28,7 @@ unset LD
 
 # 安装 zig
 # https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager
-sudo apt install snapd || exit 1
+sudo apt install snapd -y || exit 1
 sudo snap install zig --classic --beta || exit 1
 
 # 使用 zig 编译 host c / c++ 代码
