@@ -33,9 +33,7 @@ if has_config "small"; then
     add_cxflags "-fno-stack-protector"
 fi
 
-if is_plat "mingw" "msys" "cygwin"; then
-    add_syslinks "ws2_32" "pthread" "m"
-elif is_plat "haiku"; then
+if is_plat "haiku"; then
     add_syslinks "pthread" "network" "m" "c"
 else
     add_syslinks "pthread" "dl" "m" "c"

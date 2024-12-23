@@ -18,16 +18,16 @@
 -- @file        xmake.lua
 --
 
-rule("module.binary")
+rule("module.binary", function()
     on_load(function (target)
         import("core.project.config")
         target:set("kind", "binary")
         target:set("basename", "module_" .. target:name())
         target:set("targetdir", config.buildir())
     end)
+end)
 
-rule("module.shared")
-    add_deps("utils.symbols.export_all")
+rule("module.shared", function()
     on_load(function (target)
         import("core.project.config")
         target:set("kind", "shared")
@@ -40,4 +40,4 @@ rule("module.shared")
             target:add("defines", "XMI_USE_LUAJIT")
         end
     end)
-
+end)

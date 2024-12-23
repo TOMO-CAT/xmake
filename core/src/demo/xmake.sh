@@ -36,25 +36,9 @@ target "demo"
     add_installfiles "${projectdir}/(xmake/templates/**)" "share"
     add_installfiles "${projectdir}/scripts/xrepo.sh" "bin" "xrepo"
 
-    # fix os.exec() call incorrect program from /mingw64/bin. e.g. python, ..
-    #
-    # because xmake is installed to /mingw64/bin/xmake,
-    # os.exec/CreateProcess always gives the highest priority to finding the process from /mingw64/bin (if it exists),
-    # rather than from the $PATH environment variable.
-    #
-    # we install the xmake executable into a separate directory to ensure
-    # that os.exec() does not look for additional executables.
-    #
-    # @see https://github.com/xmake-io/xmake/issues/3628
-    if is_host "msys"; then
-        after_install "xmake_after_install"
-    fi
-
     # add syslinks
     add_options "atomic"
-    if is_plat "mingw" "msys" "cygwin"; then
-        add_syslinks "ws2_32" "pthread" "m"
-    elif is_plat "bsd"; then
+    if is_plat "bsd"; then
         add_syslinks "pthread" "m"
     elif is_plat "haiku"; then
         add_syslinks "pthread" "network" "m"

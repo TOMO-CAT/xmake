@@ -60,14 +60,12 @@ function border:on_draw(transparent)
     end
 
     -- the border characters
-    -- @note acs character will use 2 width on borders (pdcurses), so we use acsii characters instead of them.
-    local iswin = os.host() == "windows"
-    local hline = iswin and '-' or "hline"
-    local vline = iswin and '|' or "vline"
-    local ulcorner = iswin and ' ' or "ulcorner"
-    local llcorner = iswin and ' ' or "llcorner"
-    local urcorner = iswin and ' ' or "urcorner"
-    local lrcorner = iswin and ' ' or "lrcorner"
+    local hline = "hline"
+    local vline = "vline"
+    local ulcorner = "ulcorner"
+    local llcorner = "llcorner"
+    local urcorner = "urcorner"
+    local lrcorner = "lrcorner"
 
     -- draw left and top border
     self:canvas():attr(attr_ul)
