@@ -39,13 +39,6 @@ elseif is_arch("arm.*") then
     add_vectorexts("neon")
 end]]
 
--- for the windows platform (msvc)
-if is_plat("windows") then
-    set_runtimes("MT")
-    add_ldflags("-nodefaultlib:msvcrt.lib")
-    add_links("kernel32", "user32", "gdi32")
-end
-
 -- for mode coverage
 if is_mode("coverage") then
     add_ldflags("-coverage", "-fprofile-arcs", "-ftest-coverage")

@@ -28,10 +28,7 @@ target("demo")
     end
 
     -- add links
-    if is_plat("windows") then
-        add_syslinks("ws2_32", "advapi32", "shell32")
-        add_ldflags("/export:malloc", "/export:free", "/export:memmove")
-    elseif is_plat("android") then
+    if is_plat("android") then
         add_syslinks("m", "c")
     elseif is_plat("macosx") and is_config("runtime", "luajit") then
         add_ldflags("-all_load", "-pagezero_size 10000", "-image_base 100000000")
@@ -87,4 +84,3 @@ target("demo")
             batchcmds:rmdir(package:installdir("toolchains"))
         end
     end)
-

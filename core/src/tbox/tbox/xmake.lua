@@ -64,20 +64,8 @@ if has_config("small", "micro") then
     add_cxflags("-fno-stack-protector")
 end
 
--- for the windows platform (msvc)
-if is_plat("windows") then
-    add_defines("NOCRYPT", "NOGDI")
-    if is_mode("debug") then
-        add_cxflags("-Gs", "-RTC1")
-        set_runtimes("MTd")
-    else
-        set_runtimes("MT")
-    end
-    add_syslinks("ws2_32", "user32")
-elseif is_plat("android") then
+if is_plat("android") then
     add_syslinks("m", "c")
-elseif is_plat("mingw", "msys", "cygwin") then
-    add_syslinks("ws2_32", "user32", "pthread", "m")
 elseif is_plat("haiku") then
     add_syslinks("pthread", "network", "m", "c")
 else

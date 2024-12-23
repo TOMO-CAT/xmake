@@ -1,15 +1,7 @@
-target("tbox")
+target("tbox", function()
 
     -- make as a static/shared library
     set_kind("$(kind)")
-
-    -- export all symbols for windows/dll
-    if is_plat("windows") and is_kind("shared") then
-        if is_mode("release") then
-            set_optimize("fastest")
-        end
-        add_rules("utils.symbols.export_all")
-    end
 
     -- install importfiles for pkg-config/cmake
     add_rules("utils.install.cmake_importfiles")
@@ -169,3 +161,4 @@ target("tbox")
 
     -- check interfaces
     on_config("check_interfaces")
+end)
