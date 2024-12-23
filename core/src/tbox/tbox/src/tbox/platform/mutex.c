@@ -28,9 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "windows/mutex.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_PTHREAD_MUTEX_INIT)
+#if defined(TB_CONFIG_POSIX_HAVE_PTHREAD_MUTEX_INIT)
 #   include "posix/mutex.c"
 #else
 #   include "impl/mutex.h"

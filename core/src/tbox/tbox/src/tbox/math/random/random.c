@@ -38,8 +38,6 @@
  */
 #if defined(TB_CONFIG_LIBC_HAVE_RANDOM) && defined(TB_CONFIG_LIBC_HAVE_SRANDOM)
 #   include "../../platform/libc/random.c"
-#elif defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_IS_MINGW)
-#   include "../../platform/windows/random.c"
 #else
 tb_void_t tb_random_seed(tb_size_t seed)
 {
@@ -59,7 +57,6 @@ tb_void_t tb_random_reset(tb_bool_t pseudo)
         // init read
         tb_size_t read = 0;
 
-#ifndef TB_CONFIG_OS_WINDOWS
         // attempt to read seed from /dev/urandom
         tb_file_ref_t file = tb_file_init("/dev/urandom", TB_FILE_MODE_RO);
         if (file)
@@ -79,7 +76,6 @@ tb_void_t tb_random_reset(tb_bool_t pseudo)
             // exit file
             tb_file_exit(file);
         }
-#endif
 
         // init seed using clock if read failed?
         if (read != sizeof(tb_size_t))
@@ -119,4 +115,3 @@ tb_float_t tb_random_rangef(tb_float_t begin, tb_float_t end)
     return (tb_float_t)((end - begin) * factor);
 }
 #endif
-

@@ -29,9 +29,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_EXCEPTION_ENABLE) && defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/exception.c"
-#elif defined(TB_CONFIG_EXCEPTION_ENABLE) && \
+#if defined(TB_CONFIG_EXCEPTION_ENABLE) && \
         defined(TB_CONFIG_LIBC_HAVE_SIGNAL) && \
             (defined(TB_CONFIG_LIBC_HAVE_SETJMP) || defined(TB_CONFIG_LIBC_HAVE_SIGSETJMP))
 #   include "libc/exception.c"
@@ -46,4 +44,3 @@ tb_void_t tb_exception_exit_env()
     tb_trace_noimpl();
 }
 #endif
-

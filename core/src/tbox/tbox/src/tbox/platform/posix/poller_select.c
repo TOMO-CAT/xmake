@@ -25,23 +25,13 @@
 #include "../time.h"
 #include "../../container/container.h"
 #include "../../algorithm/algorithm.h"
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "../windows/interface/interface.h"
-#else
-#   include <sys/socket.h>
-#   include <sys/select.h>
-#   include <errno.h>
-#endif
+#include <sys/socket.h>
+#include <sys/select.h>
+#include <errno.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
  */
-
-// FD_ISSET
-#ifdef TB_CONFIG_OS_WINDOWS
-#   undef FD_ISSET
-#   define FD_ISSET(fd, set) tb_ws2_32()->__WSAFDIsSet((SOCKET)(fd), (fd_set FAR *)(set))
-#endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * types
@@ -208,11 +198,6 @@ static tb_bool_t tb_poller_select_insert(tb_poller_t* self, tb_poller_object_ref
     // check size
     tb_assert_and_check_return_val(poller->count < FD_SETSIZE, tb_false);
 
-#ifdef TB_CONFIG_OS_WINDOWS
-    // do not support pipe fd on windows
-    tb_assert_and_check_return_val(object->type != TB_POLLER_OBJECT_PIPE, tb_false);
-#endif
-
     // save fd
     tb_long_t fd = tb_ptr2fd(object->ref.ptr);
     if (fd > (tb_long_t)poller->sfdm) poller->sfdm = (tb_size_t)fd;
@@ -281,11 +266,7 @@ static tb_long_t tb_poller_select_wait(tb_poller_t* self, tb_poller_event_func_t
     struct timeval t = {0};
     if (timeout > 0)
     {
-#ifdef TB_CONFIG_OS_WINDOWS
-        t.tv_sec = (LONG)(timeout / 1000);
-#else
         t.tv_sec = (timeout / 1000);
-#endif
         t.tv_usec = (timeout % 1000) * 1000;
     }
 
@@ -301,14 +282,9 @@ static tb_long_t tb_poller_select_wait(tb_poller_t* self, tb_poller_event_func_t
         tb_memcpy(&poller->wfdc, &poller->wfds, sizeof(fd_set));
 
         // wait
-#ifdef TB_CONFIG_OS_WINDOWS
-        tb_long_t sfdn = tb_ws2_32()->select((tb_int_t) poller->sfdm + 1, &poller->rfdc, &poller->wfdc, tb_null, timeout >= 0? &t : tb_null);
-        if (!sfdn) return 0; // timeout
-#else
         tb_long_t sfdn = select(poller->sfdm + 1, &poller->rfdc, &poller->wfdc, tb_null, timeout >= 0? &t : tb_null);
         if (!sfdn || (sfdn == -1 && errno == EINTR)) // timeout or interrupted?
             return 0;
-#endif
 
         // error?
         tb_assert_and_check_return_val(sfdn >= 0, -1);
@@ -357,17 +333,10 @@ static tb_long_t tb_poller_select_wait(tb_poller_t* self, tb_poller_event_func_t
             if (FD_ISSET(fd, &poller->wfdc)) events |= TB_POLLER_EVENT_SEND;
 
             // check socket error?
-#ifdef TB_CONFIG_OS_WINDOWS
-            tb_int_t error = 0;
-            tb_int_t n = sizeof(tb_int_t);
-            if (!tb_ws2_32()->getsockopt(fd, SOL_SOCKET, SO_ERROR, (tb_char_t*)&error, &n) && error)
-                events |= TB_POLLER_EVENT_ERROR;
-#else
             tb_int_t error = 0;
             socklen_t n = sizeof(socklen_t);
             if (!getsockopt(fd, SOL_SOCKET, SO_ERROR, (tb_char_t*)&error, &n) && error)
                 events |= TB_POLLER_EVENT_ERROR;
-#endif
 
             // exists events?
             if (events)
@@ -468,4 +437,3 @@ tb_poller_t* tb_poller_select_init()
     // ok?
     return (tb_poller_t*)poller;
 }
-

@@ -27,9 +27,4 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "windows/native_memory.c"
-#else
-#   include "libc/native_memory.c"
-#endif
-
+#include "libc/native_memory.c"

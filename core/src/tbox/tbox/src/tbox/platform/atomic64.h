@@ -32,8 +32,6 @@
 #elif defined(TB_COMPILER_IS_GCC) \
     && (defined(__ATOMIC_SEQ_CST) || defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8))
 #   include "compiler/gcc/atomic64.h"
-#elif defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/atomic64.h"
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////

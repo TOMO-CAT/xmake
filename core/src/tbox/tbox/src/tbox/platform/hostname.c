@@ -27,9 +27,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "windows/hostname.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_GETHOSTNAME)
+#if defined(TB_CONFIG_POSIX_HAVE_GETHOSTNAME)
 #   include "posix/hostname.c"
 #else
 tb_bool_t tb_hostname(tb_char_t* name, tb_size_t size)

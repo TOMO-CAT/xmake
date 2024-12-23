@@ -36,7 +36,7 @@
  * and it will be not catched for linux exception (ignore int3 signal)
  */
 #if (defined(TB_ARCH_x86) || defined(TB_ARCH_x64)) && \
-        (!defined(TB_CONFIG_EXCEPTION_ENABLE) || defined(TB_CONFIG_OS_WINDOWS))
+        (!defined(TB_CONFIG_EXCEPTION_ENABLE))
 #   if defined(TB_ASSEMBLER_IS_MASM) && !defined(TB_ARCH_x64)
 //#       define tb_abort_done()                          do { __tb_asm__ { ud2 } } while (0)
 #       define tb_abort_done()                          do { __tb_asm__ { int 3 } } while (0)
@@ -54,5 +54,3 @@
 #define tb_abort()                                      do { tb_trace_e("abort"); tb_abort_done(); } while(0)
 
 #endif
-
-

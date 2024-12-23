@@ -6,11 +6,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   define tb_compare_path  tb_stricmp
-#else
-#   define tb_compare_path  tb_strcmp
-#endif
+#define tb_compare_path  tb_strcmp
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
@@ -69,53 +65,28 @@ tb_int_t tb_demo_platform_path_main(tb_int_t argc, tb_char_t** argv)
     tb_demo_path_test_directory("", tb_null);
     tb_demo_path_test_directory(".", tb_null);
     tb_demo_path_test_directory("foo", ".");
-#ifdef TB_CONFIG_OS_WINDOWS
-    tb_demo_path_test_directory("c:", tb_null);
-    tb_demo_path_test_directory("c:\\", tb_null);
-    tb_demo_path_test_directory("c:\\xxx", "c:");
-    tb_demo_path_test_directory("c:\\xxx\\yyy", "c:\\xxx");
-#else
     tb_demo_path_test_directory("/tmp", "/");
     tb_demo_path_test_directory("/tmp/", "/");
     tb_demo_path_test_directory("/tmp/xxx", "/tmp");
     tb_demo_path_test_directory("/tmp/xxx/", "/tmp");
     tb_demo_path_test_directory("/", tb_null);
-#endif
 
     tb_trace_i("");
     tb_demo_path_test_absolute_to("", "", tb_null);
     tb_demo_path_test_absolute_to(".", ".", ".");
-#ifdef TB_CONFIG_OS_WINDOWS
-    tb_demo_path_test_absolute_to("c:", "foo", "c:\\foo");
-    tb_demo_path_test_absolute_to("c:\\", "foo", "c:\\foo");
-    tb_demo_path_test_absolute_to("c:\\tmp", "foo", "c:\\tmp\\foo");
-    tb_demo_path_test_absolute_to("c:\\tmp\\", "foo", "c:\\tmp\\foo");
-    tb_demo_path_test_absolute_to("\\\\.\\tmp\\", "foo", "\\\\.\\tmp\\foo");
-    tb_demo_path_test_absolute_to("\\\\wsl.localhost\\tmp\\", "foo", "\\\\wsl.localhost\\tmp\\foo");
-    tb_demo_path_test_absolute_to("\\tmp\\", "foo", "\\tmp\\foo");
-#else
     tb_demo_path_test_absolute_to("/", "", tb_null);
     tb_demo_path_test_absolute_to("/", "/", "/");
     tb_demo_path_test_absolute_to("/", ".", "/");
     tb_demo_path_test_absolute_to("/tmp/", "foo", "/tmp/foo");
     tb_demo_path_test_absolute_to("/tmp", "foo", "/tmp/foo");
-#endif
 
     tb_trace_i("");
     tb_demo_path_test_relative_to("", "", tb_null);
     tb_demo_path_test_relative_to(".", ".", ".");
-#ifdef TB_CONFIG_OS_WINDOWS
-    tb_demo_path_test_relative_to("c:\\", "c:", ".");
-    tb_demo_path_test_relative_to("c:\\foo", "c:\\foo", ".");
-    tb_demo_path_test_relative_to("c:\\", "c:\\foo", "foo");
-    tb_demo_path_test_relative_to("c:\\tmp", "c:\\tmp\\foo", "foo");
-    tb_demo_path_test_relative_to("c:\\tmp\\", "c:\\tmp\\foo", "foo");
-#else
     tb_demo_path_test_relative_to("/", "", tb_null);
     tb_demo_path_test_relative_to("/", "/", ".");
     tb_demo_path_test_relative_to("/tmp/", "/tmp/foo", "foo");
     tb_demo_path_test_relative_to("/tmp", "/tmp/foo", "foo");
-#endif
 
     tb_trace_i("");
     tb_demo_path_test_translate(tb_false, "", tb_null);
@@ -124,25 +95,6 @@ tb_int_t tb_demo_platform_path_main(tb_int_t argc, tb_char_t** argv)
     tb_demo_path_test_translate(tb_true, "././.", ".");
     tb_demo_path_test_translate(tb_true, "../foo/..", "..");
     tb_demo_path_test_translate(tb_true, "../foo/bar/../..", "..");
-#ifdef TB_CONFIG_OS_WINDOWS
-    tb_demo_path_test_translate(tb_false, "c:", "c:");
-    tb_demo_path_test_translate(tb_false, "c:\\", "c:");
-    tb_demo_path_test_translate(tb_false, "c:\\foo\\\\\\", "c:\\foo");
-    tb_demo_path_test_translate(tb_false, "c:\\foo\\..\\..", "c:\\foo\\..\\..");
-    tb_demo_path_test_translate(tb_true, "c:\\foo\\.\\.\\", "c:\\foo");
-    tb_demo_path_test_translate(tb_true, "c:\\foo\\bar\\.\\..\\xyz", "c:\\foo\\xyz");
-    tb_demo_path_test_translate(tb_true, "c:\\foo\\..\\..", "c:");
-    tb_demo_path_test_translate(tb_true, "../..", "..\\..");
-    tb_demo_path_test_translate(tb_true, "../foo/bar/..", "..\\foo");
-    tb_demo_path_test_translate(tb_true, "../foo/bar/../../..", "..\\..");
-    tb_demo_path_test_translate(tb_false, "c:\\temp\\test-file.txt", "c:\\temp\\test-file.txt");
-    tb_demo_path_test_translate(tb_false, "\\\\127.0.0.1\\c$\\temp\\test-file.txt", "\\\\127.0.0.1\\c$\\temp\\test-file.txt");
-    tb_demo_path_test_translate(tb_false, "\\\\.\\c:\\temp\\test-file.txt", "\\\\.\\c:\\temp\\test-file.txt");
-    tb_demo_path_test_translate(tb_false, "\\\\?\\c:\\temp\\test-file.txt", "\\\\?\\c:\\temp\\test-file.txt");
-    tb_demo_path_test_translate(tb_false, "\\\\.\\UNC\\LOCALHOST\\c$\\temp\\test-file.txt", "\\\\.\\UNC\\LOCALHOST\\c$\\temp\\test-file.txt");
-    tb_demo_path_test_translate(tb_false, "\\\\127.0.0.1\\c$\\temp\\test-file.txt", "\\\\127.0.0.1\\c$\\temp\\test-file.txt");
-    tb_demo_path_test_translate(tb_false, "\\temp\\test-file.txt", "\\temp\\test-file.txt");
-#else
     tb_demo_path_test_translate(tb_false, "/", "/");
     tb_demo_path_test_translate(tb_false, "////", "/");
     tb_demo_path_test_translate(tb_false, "/foo//////", "/foo");
@@ -156,6 +108,5 @@ tb_int_t tb_demo_platform_path_main(tb_int_t argc, tb_char_t** argv)
     tb_demo_path_test_translate(tb_true, "../..", "../..");
     tb_demo_path_test_translate(tb_true, "../foo/bar/..", "../foo");
     tb_demo_path_test_translate(tb_true, "../foo/bar/../../..", "../..");
-#endif
     return 0;
 }

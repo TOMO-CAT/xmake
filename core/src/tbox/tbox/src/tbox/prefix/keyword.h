@@ -164,11 +164,7 @@
 #endif
 
 // newline
-#ifdef TB_CONFIG_OS_WINDOWS
-#   define __tb_newline__                       "\r\n"
-#else
-#   define __tb_newline__                       "\n"
-#endif
+#define __tb_newline__                       "\n"
 
 // the string only for the large mode
 #ifdef __tb_small__
@@ -347,5 +343,3 @@
 
 
 #endif
-
-

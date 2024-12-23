@@ -25,9 +25,7 @@
  * includes
  */
 #include "prefix.h"
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "../windows/prefix.h"
-#elif defined(TB_CONFIG_POSIX_HAVE_PTHREAD_MUTEX_INIT)
+#if defined(TB_CONFIG_POSIX_HAVE_PTHREAD_MUTEX_INIT)
 #   include <pthread.h>
 #else
 #   include "../spinlock.h"
@@ -41,9 +39,7 @@ __tb_extern_c_enter__
 /* //////////////////////////////////////////////////////////////////////////////////////
  * types
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-typedef HANDLE              tb_mutex_t;
-#elif defined(TB_CONFIG_POSIX_HAVE_PTHREAD_MUTEX_INIT)
+#if defined(TB_CONFIG_POSIX_HAVE_PTHREAD_MUTEX_INIT)
 typedef pthread_mutex_t     tb_mutex_t;
 #else
 typedef tb_spinlock_t       tb_mutex_t;

@@ -27,9 +27,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   include "windows/filelock.c"
-#elif defined(TB_CONFIG_BSD_HAVE_FLOCK) && !defined(TB_CONFIG_OS_HAIKU)
+#if defined(TB_CONFIG_BSD_HAVE_FLOCK) && !defined(TB_CONFIG_OS_HAIKU)
 #   include "bsd/filelock.c"
 #elif defined(TB_CONFIG_POSIX_HAVE_FCNTL)
 #   include "posix/filelock.c"

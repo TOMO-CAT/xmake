@@ -27,9 +27,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "windows/dynamic.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_DLOPEN)
+#if defined(TB_CONFIG_POSIX_HAVE_DLOPEN)
 #   include "posix/dynamic.c"
 #else
 tb_dynamic_ref_t tb_dynamic_init(tb_char_t const* name)
@@ -52,4 +50,3 @@ tb_pointer_t tb_dynamic_pvar(tb_dynamic_ref_t dynamic, tb_char_t const* name)
     return tb_null;
 }
 #endif
-

@@ -34,11 +34,7 @@
  */
 
 // the return value type of the thread function
-#ifdef TB_CONFIG_OS_WINDOWS
-typedef tb_uint32_t     tb_thread_retval_t;
-#else
 typedef tb_pointer_t    tb_thread_retval_t;
-#endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * declaration
@@ -78,11 +74,7 @@ tb_void_t tb_thread_local_clear_atexit()
 #endif
 }
 
-#ifdef TB_CONFIG_OS_WINDOWS
-static tb_thread_retval_t __tb_stdcall__ tb_thread_func(tb_pointer_t priv)
-#else
 static tb_thread_retval_t tb_thread_func(tb_pointer_t priv)
-#endif
 {
     // done
     tb_thread_retval_t  retval = (tb_thread_retval_t)0;
@@ -118,9 +110,7 @@ static tb_thread_retval_t tb_thread_func(tb_pointer_t priv)
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "windows/thread.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_PTHREAD_CREATE)
+#if defined(TB_CONFIG_POSIX_HAVE_PTHREAD_CREATE)
 #   include "posix/thread.c"
 #else
 tb_thread_ref_t tb_thread_init(tb_char_t const* name, tb_thread_func_t func, tb_cpointer_t priv, tb_size_t stack)
@@ -159,9 +149,7 @@ tb_size_t tb_thread_self()
 }
 #endif
 
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/thread_affinity.c"
-#elif defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
+#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
 #   include "mach/thread_affinity.c"
 #elif defined(TB_CONFIG_POSIX_HAVE_PTHREAD_SETAFFINITY_NP)
 #   include "posix/thread_affinity.c"

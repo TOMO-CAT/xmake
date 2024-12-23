@@ -3770,11 +3770,7 @@ _generate_configfile() {
     # replace builtin variables
     local patterns=""
     local target_os=""
-    if is_plat "mingw"; then
-        target_os="windows"
-    else
-        target_os="${_target_plat}"
-    fi
+    target_os="${_target_plat}"
     string_toupper ${target_os}; target_os="${_ret}"
     _vprint_configvar_value "OS" "${target_os}"
     _replace_configvar_value "OS" "${target_os}"; patterns="${_ret};${patterns}"
@@ -4382,4 +4378,3 @@ _generate_build_file() {
     fi
 }
 _generate_build_file
-

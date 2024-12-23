@@ -33,9 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/pipe.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_PIPE) || \
+#if defined(TB_CONFIG_POSIX_HAVE_PIPE) || \
         defined(TB_CONFIG_POSIX_HAVE_PIPE2) || \
             defined(TB_CONFIG_POSIX_HAVE_MKFIFO)
 #   include "posix/pipe.c"
