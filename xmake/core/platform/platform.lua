@@ -415,7 +415,7 @@ function platform.load(plat, arch)
     -- get cache key
     local cachekey = plat .. "_" .. arch
 
-    -- get it directly from cache dirst
+    -- get it directly from cache first
     platform._PLATFORMS = platform._PLATFORMS or {}
     if platform._PLATFORMS[cachekey] then
         return platform._PLATFORMS[cachekey]

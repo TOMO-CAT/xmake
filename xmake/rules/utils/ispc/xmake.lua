@@ -36,9 +36,7 @@ rule("utils.ispc")
             table.insert(flags, "--werror")
         end
 
-        if not target:is_plat("windows") then
-            table.insert(flags, "--pic")
-        end
+        table.insert(flags, "--pic")
 
         local headersdir = path.join(target:autogendir(), "rules", "utils", "ispc", "headers")
         local objectfile = target:objectfile(sourcefile_ispc)

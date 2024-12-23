@@ -32,20 +32,6 @@ function _translate_paths(paths)
     return paths
 end
 
--- translate cygwin paths
-function _translate_cygwin_paths(paths)
-    if type(paths) == "string" then
-        return path.cygwin(paths)
-    elseif type(paths) == "table" then
-        local result = {}
-        for _, p in ipairs(paths) do
-            table.insert(result, path.cygwin(p))
-        end
-        return result
-    end
-    return paths
-end
-
 -- map compiler flags
 function _map_compflags(package, langkind, name, values)
     return compiler.map_flags(langkind, name, values, {target = package})
@@ -122,13 +108,6 @@ function _get_configs(package, configs)
                 mips64          = "mips64-linux-android"    -- removed in ndk r17
             }
             table.insert(configs, "--host=" .. (triples[package:arch()] or triples["armeabi-v7a"]))
-        elseif package:is_plat("mingw") then
-            local triples =
-            {
-                i386   = "i686-w64-mingw32",
-                x86_64 = "x86_64-w64-mingw32"
-            }
-            table.insert(configs, "--host=" .. (triples[package:arch()] or triples.i386))
         elseif package:is_plat("cross") and package:targetos() then
             local host = package:arch()
             if package:is_arch("arm64") then
@@ -314,29 +293,15 @@ function buildenvs(package, opt)
 
     -- cross-compilation? pass the full build environments
     if cross then
-        if package:is_plat("mingw") then
-            -- fix linker error, @see https://github.com/xmake-io/xmake/issues/574
-            -- libtool: line 1855: lib: command not found
-            envs.ARFLAGS = nil
-            local ld = envs.LD
-            if ld then
-                if ld:endswith("x86_64-w64-mingw32-g++") then
-                    envs.LD = path.join(path.directory(ld),"x86_64-w64-mingw32-ld")
-                elseif ld:endswith("i686-w64-mingw32-g++") then
-                    envs.LD = path.join(path.directory(ld), "i686-w64-mingw32-ld")
-                end
-            end
-        else
-            if package:is_plat("macosx") then
-                -- force to apply shflags on macosx https://gmplib.org/manual/Known-Build-Problems
-                envs.CC = envs.CC .. " -arch " .. package:arch()
-            end
-            if package:is_plat("cross") or package:has_tool("ar", "ar", "emar") then
-                -- only for cross-toolchain
-                envs.CXX = package:build_getenv("cxx")
-                if not envs.ARFLAGS or envs.ARFLAGS == "" then
-                    envs.ARFLAGS = "-cr"
-                end
+        if package:is_plat("macosx") then
+            -- force to apply shflags on macosx https://gmplib.org/manual/Known-Build-Problems
+            envs.CC = envs.CC .. " -arch " .. package:arch()
+        end
+        if package:is_plat("cross") or package:has_tool("ar", "ar", "emar") then
+            -- only for cross-toolchain
+            envs.CXX = package:build_getenv("cxx")
+            if not envs.ARFLAGS or envs.ARFLAGS == "" then
+                envs.ARFLAGS = "-cr"
             end
         end
 
@@ -466,14 +431,9 @@ end
 function make(package, argv, opt)
     opt = opt or {}
     local program
-    if package:is_plat("mingw") and is_subhost("windows") then
-        local mingw = assert(package:build_getenv("mingw") or package:build_getenv("sdk"), "mingw not found!")
-        program = path.join(mingw, "bin", "mingw32-make.exe")
-    else
-        local tool = find_tool("make")
-        if tool then
-            program = tool.program
-        end
+    local tool = find_tool("make")
+    if tool then
+        program = tool.program
     end
     assert(program, "make not found!")
     os.vrunv(program, argv)

@@ -15,7 +15,7 @@ jobs:
 
     concurrency:
         group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Archlinux
-        cancel-in-progress: true
+        cancel-in-progress: false
     steps:
       - name: Prepare build tools
         run: |

@@ -36,11 +36,6 @@ function main(name, opt)
         return
     end
 
-    -- for msys2/mingw? mingw-w64-[i686|x86_64]-xxx
-    if opt.plat == "mingw" then
-        name = "mingw64-runtime" -- there is only one package for mingw
-    end
-
     -- get package contents file
     local file = find_file("CONTENTS", "/var/db/pkg/*/" .. name .. "-*")
     if not file then

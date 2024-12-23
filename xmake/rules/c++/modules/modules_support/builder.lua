@@ -238,8 +238,6 @@ function _builder(target)
             builder = import("clang.builder", {anonymous = true})
         elseif target:has_tool("cxx", "gcc", "gxx") then
             builder = import("gcc.builder", {anonymous = true})
-        elseif target:has_tool("cxx", "cl") then
-            builder = import("msvc.builder", {anonymous = true})
         else
             local _, toolname = target:tool("cxx")
             raise("compiler(%s): does not support c++ module!", toolname)
@@ -459,4 +457,3 @@ function add_headerunit_to_target_mapper(target, headerunit, bmifile)
     flush_target_module_mapper_keys(target)
     return deduplicated and true or false
 end
-

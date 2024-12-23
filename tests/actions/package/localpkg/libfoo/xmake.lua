@@ -1,19 +1,21 @@
 add_rules("mode.debug", "mode.release")
 set_license("Apache-2.0")
 
-target("sub")
+target("sub", function()
     set_kind("static")
     add_files("src/sub.cpp")
     add_headerfiles("src/sub.h")
+end)
 
-target("add")
+target("add", function()
     set_kind("static")
     add_files("src/add.cpp")
     add_headerfiles("src/add.h")
+end)
 
-target("foo")
+target("foo", function()
     add_deps("add", "sub")
     set_kind("static")
     add_files("src/foo.cpp")
     add_headerfiles("src/foo.h")
-
+end)

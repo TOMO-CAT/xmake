@@ -119,9 +119,6 @@ end
 -- update install rpath, we can only get and update rpathdirs with `{installonly = true}`
 -- e.g. add_rpathdirs("@loader_path/../lib", {installonly = true})
 function _update_target_install_rpath(target, batchcmds_, opt)
-    if target:is_plat("windows", "mingw") then
-        return
-    end
     local package = opt.package
     local bindir = _get_target_bindir(package, target)
     local targetfile = path.join(bindir, target:filename())
@@ -186,7 +183,7 @@ end
 -- install target shared libraries
 function _install_target_shared_libraries(target, batchcmds_, opt)
     local package = opt.package
-    local bindir = target:is_plat("windows", "mingw") and _get_target_bindir(package, target) or _get_target_libdir(package, target)
+    local bindir = _get_target_libdir(package, target)
 
     -- get all dependent shared libraries
     local libfiles = {}
@@ -244,7 +241,7 @@ end
 -- uninstall target shared libraries
 function _uninstall_target_shared_libraries(target, batchcmds_, opt)
     local package = opt.package
-    local bindir = target:is_plat("windows", "mingw") and _get_target_bindir(package, target) or _get_target_libdir(package, target)
+    local bindir = _get_target_libdir(package, target)
 
     -- get all dependent shared libraries
     local libfiles = {}
@@ -284,7 +281,7 @@ end
 -- on install shared target command
 function _on_target_installcmd_shared(target, batchcmds_, opt)
     local package = opt.package
-    local bindir = target:is_plat("windows", "mingw") and _get_target_bindir(package, target) or _get_target_libdir(package, target)
+    local bindir = _get_target_libdir(package, target)
     local libdir = _get_target_libdir(package, target)
 
     _copy_file_with_symlinks(batchcmds_, target:targetfile(), bindir)
@@ -295,7 +292,7 @@ function _on_target_installcmd_shared(target, batchcmds_, opt)
     -- install *.lib for shared/windows (*.dll) target
     -- @see https://github.com/xmake-io/xmake/issues/714
     local targetfile = target:targetfile()
-    local targetfile_lib = path.join(path.directory(targetfile), path.basename(targetfile) .. (target:is_plat("mingw") and ".dll.a" or ".lib"))
+    local targetfile_lib = path.join(path.directory(targetfile), path.basename(targetfile) .. ".lib")
     if os.isfile(targetfile_lib) then
         batchcmds_:mkdir(libdir)
         batchcmds_:cp(targetfile_lib, path.join(libdir, path.filename(targetfile_lib)))
@@ -375,7 +372,7 @@ end
 -- on uninstall shared target command
 function _on_target_uninstallcmd_shared(target, batchcmds_, opt)
     local package = opt.package
-    local bindir = target:is_plat("windows", "mingw") and _get_target_bindir(package, target) or _get_target_libdir(package, target)
+    local bindir = _get_target_libdir(package, target)
     local libdir = _get_target_libdir(package, target)
 
     -- uninstall target file
@@ -385,7 +382,7 @@ function _on_target_uninstallcmd_shared(target, batchcmds_, opt)
     -- uninstall *.lib for shared/windows (*.dll) target
     -- @see https://github.com/xmake-io/xmake/issues/714
     local targetfile = target:targetfile()
-    batchcmds_:rm(path.join(libdir, path.basename(targetfile) .. (target:is_plat("mingw") and ".dll.a" or ".lib")), {emptydirs = true})
+    batchcmds_:rm(path.join(libdir, path.basename(targetfile) .. ".lib"), {emptydirs = true})
 
     -- uninstall target headers
     _uninstall_target_headers(target, batchcmds_, opt)
@@ -628,4 +625,3 @@ function get_uninstallcmds(package)
     end
     return batchcmds_
 end
-

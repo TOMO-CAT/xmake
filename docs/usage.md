@@ -60,7 +60,7 @@ xmake test
 ### 6. 配置平台
 
 ```bash
-xmake f -p [windows|linux|macosx|android|iphoneos ..] -a [x86|arm64 ..] -m [debug|release]
+xmake f -p [linux|macosx|android|iphoneos ..] -a [x86|arm64 ..] -m [debug|release]
 xmake
 ```
 

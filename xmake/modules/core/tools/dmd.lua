@@ -57,16 +57,14 @@ end
 
 -- make the strip flag
 function nf_strip(self, level)
-    if not self:is_plat("windows") then
-        local maps = {
-            debug = "-L-S",
-            all   = "-L-s"
-        }
-        if self:is_plat("macosx", "iphoneos") then
-            maps.all = {"-L-x", "-L-dead_strip"}
-        end
-        return maps[level]
+    local maps = {
+        debug = "-L-S",
+        all   = "-L-s"
+    }
+    if self:is_plat("macosx", "iphoneos") then
+        maps.all = {"-L-x", "-L-dead_strip"}
     end
+    return maps[level]
 end
 
 -- make the symbol flag
@@ -81,8 +79,6 @@ function nf_symbol(self, level)
             _g.symbol_maps = maps
         end
         return maps[level .. '_' .. kind] or maps[level]
-    elseif (kind == "dcld" or kind == "dcsh") and self:is_plat("windows") and level == "debug" then
-        return "-g"
     end
 end
 
@@ -149,16 +145,14 @@ end
 
 -- make the rpathdir flag
 function nf_rpathdir(self, dir)
-    if not self:is_plat("windows") then
-        dir = path.translate(dir)
-        if self:has_flags("-L-rpath=" .. dir, "ldflags") then
-            return {"-L-rpath=" .. (dir:gsub("@[%w_]+", function (name)
-                local maps = {["@loader_path"] = "$ORIGIN", ["@executable_path"] = "$ORIGIN"}
-                return maps[name]
-            end))}
-        elseif self:has_flags("-L-rpath -L" .. dir, "ldflags") then
-            return {"-L-rpath", "-L" .. (dir:gsub("%$ORIGIN", "@loader_path"))}
-        end
+    dir = path.translate(dir)
+    if self:has_flags("-L-rpath=" .. dir, "ldflags") then
+        return {"-L-rpath=" .. (dir:gsub("@[%w_]+", function (name)
+            local maps = {["@loader_path"] = "$ORIGIN", ["@executable_path"] = "$ORIGIN"}
+            return maps[name]
+        end))}
+    elseif self:has_flags("-L-rpath -L" .. dir, "ldflags") then
+        return {"-L-rpath", "-L" .. (dir:gsub("%$ORIGIN", "@loader_path"))}
     end
 end
 

@@ -75,7 +75,7 @@ function _try_build()
         end
         return _do_try_build(configfile, tool, trybuild, trybuild_detected, targetname)
     else
-        for _, name in ipairs({"xrepo", "autoconf", "cmake", "meson", "scons", "bazel", "msbuild", "xcodebuild", "make", "ninja", "ndkbuild"}) do
+        for _, name in ipairs({"xrepo", "autoconf", "cmake", "meson", "scons", "bazel", "xcodebuild", "make", "ninja", "ndkbuild"}) do
             tool = import("private.action.trybuild." .. name, {anonymous = true})
             configfile = tool.detect()
             if configfile then

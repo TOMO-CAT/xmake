@@ -42,7 +42,6 @@ rule("c++.build.modules")
             -- disable ccache && xcache for this target
             --
             -- Caching can affect incremental compilation, for example
-            -- by interfering with the results of depfile generation for msvc.
             --
             -- @see https://github.com/xmake-io/xmake/issues/3000
             target:set("policy", "build.ccache", false)

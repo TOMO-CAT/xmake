@@ -40,8 +40,6 @@ function _find_sdkdir(sdkdir, sdkver)
         table.insert(subdirs, path.join(sdkver or "*", is_arch("x86_64") and "clang_64" or "clang_32", "bin"))
     elseif is_plat("iphoneos") then
         table.insert(subdirs, path.join(sdkver or "*", "ios", "bin"))
-    elseif is_plat("mingw") then
-        table.insert(subdirs, path.join(sdkver or "*", is_arch("x86_64") and "mingw*_64" or "mingw*_32", "bin"))
     elseif is_plat("android") then
         local subdir
         if is_arch("arm64-v8a") then

@@ -18,7 +18,7 @@
 -- @file        xmake.lua
 --
 
--- update compile_commandss.json automatically
+-- update compile_commands.json automatically
 --
 -- @code
 -- add_rules("plugin.compile_commands.autoupdate", {outputdir = ".vscode", lsp = "clangd"})

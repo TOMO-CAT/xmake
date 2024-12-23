@@ -19,7 +19,7 @@ jobs:
 
     concurrency:
         group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-macOS-${{ matrix.arch }}
-        cancel-in-progress: true
+        cancel-in-progress: false
     steps:
       - uses: actions/checkout@v2
         with:

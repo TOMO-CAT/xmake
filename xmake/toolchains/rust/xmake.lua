@@ -30,7 +30,7 @@ toolchain("rust")
 
     on_load(function (toolchain)
 
-        -- e.g. x86_64-pc-windows-msvc, aarch64-unknown-none
+        -- e.g. aarch64-unknown-none
         local arch = toolchain:arch()
         if toolchain:is_plat("android") then
             local targets = {

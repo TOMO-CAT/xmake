@@ -29,7 +29,7 @@ import("lib.detect.find_tool")
 -- @param opt   the options, e.g. { verbose = true, mode = "release", plat = , arch = ,
 --                                  configs = {
 --                                      remote = "", build = "all", options = {}, imports = {}, build_requires = {},
---                                      settings = {"compiler=msvc", "compiler.version=10", "compiler.runtime=MD"}}}
+--                                      settings = {"compiler=clang", "compiler.version=10"}}}
 --
 function main(name, opt)
     local conan = find_tool("conan", {version = true})

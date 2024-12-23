@@ -352,7 +352,7 @@ function _instance:_on_load()
     return on_load
 end
 
--- do load, @note we need to load it repeatly for each architectures
+-- do load, @note we need to load it repeatedly for each architectures
 function _instance:_load()
     local info = self:info()
     if not info:get("__loaded") and not info:get("__loading") then
@@ -622,7 +622,7 @@ function toolchain.load(name, opt)
     local cache = toolchain._memcache()
     local cachekey = toolchain._cachekey(name, opt)
 
-    -- get it directly from cache dirst
+    -- get it directly from cache first
     local instance = cache:get(cachekey)
     if instance then
         return instance

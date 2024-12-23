@@ -73,23 +73,11 @@ function _extract_using_7z(archivefile, outputdir, extension, opt)
         return false
     end
 
-    -- p7zip cannot extract other archive format on msys/cygwin, but it can extract .tgz
-    -- https://github.com/xmake-io/xmake/issues/1575#issuecomment-898205462
-    if is_subhost("msys", "cygwin") and program:startswith("sh ") and
-        extension ~= ".7z" and extension ~= ".tgz" then
-        return false
-    end
-
     -- extract to *.tar file first
     local outputdir_old = nil
     if extension:startswith(".tar.") or extension == ".tgz" then
         outputdir_old = outputdir
         outputdir = os.tmpfile({ramdisk = false}) .. ".tar"
-    end
-
-    -- on msys2/cygwin? we need to translate input path to cygwin-like path
-    if is_subhost("msys", "cygwin") and program:gsub("\\", "/"):find("/usr/bin") then
-        archivefile = path.cygwin_path(archivefile)
     end
 
     -- init argv
@@ -303,11 +291,6 @@ function _extract_using_bzip2(archivefile, outputdir, extension, opt)
     if extension:startswith(".tar.") then
         outputdir_old = outputdir
         outputdir = os.tmpfile({ramdisk = false}) .. ".tar"
-    end
-
-    -- on msys2/cygwin? we need to translate input path to cygwin-like path
-    if is_subhost("msys", "cygwin") and program:gsub("\\", "/"):find("/usr/bin") then
-        archivefile = path.cygwin_path(archivefile)
     end
 
     -- init temporary archivefile

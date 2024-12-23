@@ -1,11 +1,14 @@
 # README
 
-🌟 A cross-platform build utility based on Lua, better suited for large-scale projects.
+🌟 A Linux C++ build utility based on Lua, better suited for large-scale projects.
 
 ## build && install
 
 ```bash
-# install xmake && it's scripts
+# install xmake && it's scripts (luajit)
+bash scripts/install.sh --runtime=luajit
+
+# install xmake && it's scripts (lua 5.4.6)
 bash scripts/install.sh
 
 # only install xmake scripts

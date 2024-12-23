@@ -22,7 +22,6 @@
 import("core.base.option")
 import("core.base.hashset")
 import("core.project.project")
-import("private.tools.vstool")
 
 -- normailize path of a dependecy
 function _normailize_dep(dep, projectdir)
@@ -93,7 +92,6 @@ function compile(self, sourcefile, objectfile, dependinfo, flags)
     try
     {
         function ()
-            -- @note we don't need to use vstool.iorunv to enable unicode output for rc.exe
             local program, argv = compargv(self, sourcefile, objectfile, flags)
             local outdata, errdata = os.iorunv(program, argv, {envs = self:runenvs()})
             return (outdata or "") .. (errdata or "")
@@ -101,7 +99,6 @@ function compile(self, sourcefile, objectfile, dependinfo, flags)
         catch
         {
             function (errors)
-                -- use stdout as errors first from vstool.iorunv()
                 if type(errors) == "table" then
                     local errs = errors.stdout or ""
                     if #errs:trim() == 0 then
@@ -121,44 +118,4 @@ function compile(self, sourcefile, objectfile, dependinfo, flags)
             end
         }
     }
-
-    -- try to use cl.exe to parse includes, but cl.exe maybe not exists in masm32 sdk
-    -- @see https://github.com/xmake-io/xmake/issues/2562
-    local cl = self:toolchain():tool("cxx")
-    if cl then
-        local outfile = os.tmpfile() .. ".rc.out"
-        local errfile = os.tmpfile() .. ".rc.err"
-        local includeflags = {}
-        for _, flag in ipairs(flags) do
-            if flag:match("^[-/]I") then
-                table.insert(includeflags, flag)
-            end
-        end
-        local ok = try {function () os.execv(cl, table.join("-E", includeflags, sourcefile), {stdout = outfile, stderr = errfile, envs = self:runenvs()}); return true end}
-        if ok and os.isfile(outfile) then
-            local depfiles_rc
-            local includeset = hashset.new()
-            local file = io.open(outfile)
-            local projectdir = os.projectdir()
-            for line in file:lines() do
-                local includefile = _parse_includefile(line)
-                if includefile then
-                    includefile = _normailize_dep(includefile, projectdir)
-                    if includefile and not includeset:has(includefile)
-                        and path.absolute(includefile) ~= path.absolute(sourcefile)
-                        and os.isfile(includefile) then
-                        depfiles_rc = (depfiles_rc or "") .. "\n" .. includefile
-                        includeset:insert(includefile)
-                    end
-                end
-            end
-            file:close()
-            if dependinfo then
-                dependinfo.depfiles_rc = depfiles_rc
-            end
-        end
-        os.tryrm(outfile)
-        os.tryrm(errfile)
-    end
 end
-

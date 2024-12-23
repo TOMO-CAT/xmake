@@ -98,12 +98,6 @@ function _get_cross_file(buildir)
         if ranlib then
             file:print("ranlib='%s'", ranlib)
         end
-        if is_plat("mingw") then
-            local mrc = _get_buildenv("mrc")
-            if mrc then
-                file:print("windres='%s'", mrc)
-            end
-        end
         local cmake = find_tool("cmake")
         if cmake then
             file:print("cmake='%s'", cmake.program)
@@ -160,24 +154,7 @@ function _get_cross_file(buildir)
             file:print("cpu = '%s'", cpu)
             file:print("endian = 'little'")
         elseif is_plat("android") then
-            -- TODO
             raise("android has been not supported now!")
-        elseif is_plat("mingw") then
-            local cpu
-            local cpu_family
-            if is_arch("x64", "x86_64") then
-                cpu = "x86_64"
-                cpu_family = "x86_64"
-            elseif is_arch("x86", "i386") then
-                cpu = "i686"
-                cpu_family = "x86"
-            else
-                raise("unsupported arch(%s)", config.arch())
-            end
-            file:print("system = 'windows'")
-            file:print("cpu_family = '%s'", cpu_family)
-            file:print("cpu = '%s'", cpu)
-            file:print("endian = 'little'")
         elseif is_plat("wasm") then
             file:print("system = 'emscripten'")
             file:print("cpu_family = 'wasm32'")

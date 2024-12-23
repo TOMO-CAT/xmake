@@ -131,8 +131,6 @@ end
 -- get os
 function _conan_get_os(plat)
     local map = {macosx   = "Macos",
-                 windows  = "Windows",
-                 mingw    = "Windows",
                  linux    = "Linux",
                  cross    = "Linux",
                  iphoneos = "iOS",
@@ -151,7 +149,6 @@ end
 
 -- get compiler version
 --
--- https://github.com/conan-io/conan/blob/353c63b16c31c90d370305b5cbb5dc175cf8a443/conan/tools/microsoft/visual.py#L13
 -- https://github.com/xmake-io/xmake/issues/5338
 function _conan_get_compiler_version(name, opt)
     opt = opt or {}
@@ -160,11 +157,7 @@ function _conan_get_compiler_version(name, opt)
     if result and result.version then
         local v = semver.try_parse(result.version)
         if v then
-            if name == "cl" then
-                version = tostring(v:major()) .. tostring(v:minor()):sub(1, 1)
-            else
-                version = tostring(v:major())
-            end
+            version = tostring(v:major())
         end
     end
     return version
@@ -176,24 +169,7 @@ function _conan_generate_compiler_profile(profile, configs, opt)
     local plat = opt.plat
     local arch = opt.arch
     local runtimes = configs.runtimes
-    if plat == "windows" then
-        local msvc = toolchain.load("msvc", {plat = plat, arch = arch})
-        assert(msvc:check(), "vs not found!")
-        local vs = assert(msvc:config("vs"), "vs not found!")
-        profile:print("compiler=msvc")
-        local version = _conan_get_compiler_version("cl", {envs = msvc:runenvs()})
-        if version then
-            profile:print("compiler.version=" .. version)
-        end
-        -- @see https://github.com/conan-io/conan/issues/12387
-        if tonumber(vs) >= 2015 then
-            profile:print("compiler.cppstd=14")
-        end
-        if runtimes then
-            profile:print("compiler.runtime=" .. (runtimes:startswith("MD") and "dynamic" or "static"))
-            profile:print("compiler.runtime_type=" .. (runtimes:endswith("d") and "Debug" or "Release"))
-        end
-    elseif plat == "iphoneos" then
+    if plat == "iphoneos" then
         local target_minver = nil
         local xcode = toolchain.load("xcode", {plat = plat, arch = arch})
         if xcode then
@@ -339,4 +315,3 @@ function main(conan, name, opt)
     -- leave build directory
     os.cd(oldir)
 end
-

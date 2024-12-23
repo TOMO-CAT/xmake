@@ -29,7 +29,7 @@
 --     set_toolchains("ndk", {sdkver = "23"})
 -- @endcode
 --
-toolchain("ndk")
+toolchain("ndk", function()
     set_kind("standalone")
     set_homepage("https://developer.android.com/ndk")
     set_description("Android NDK")
@@ -37,3 +37,4 @@ toolchain("ndk")
 
     on_check("check")
     on_load("load")
+end)

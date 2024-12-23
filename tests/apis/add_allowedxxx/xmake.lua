@@ -5,12 +5,13 @@ set_defaultplat("linux")
 set_defaultarchs("macosx|arm64", "linux|i386", "armv7")
 
 set_allowedmodes("releasedbg", "debug")
-set_allowedplats("windows", "linux", "macosx")
+set_allowedplats("linux", "macosx")
 set_allowedarchs("macosx|arm64", "macosx|x86_64", "linux|i386", "linux|x86_64")
 
-target("test")
+target("test", function()
     set_kind("binary")
     add_files("src/*.cpp")
+end)
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
@@ -80,4 +81,3 @@ target("test")
 --
 -- @endcode
 --
-

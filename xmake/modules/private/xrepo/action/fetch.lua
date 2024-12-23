@@ -58,7 +58,6 @@ function menu_options()
                                        "    - xrepo fetch /tmp/zlib.lua",
                                        "    - xrepo fetch -p iphoneos -a arm64 \"zlib >=1.2.0\"",
                                        "    - xrepo fetch -p android -m debug \"pcre2 10.x\"",
-                                       "    - xrepo fetch -p mingw -k shared zlib",
                                        "    - xrepo fetch conan::zlib/1.2.11 vcpkg::zlib",
                                        "    - xrepo fetch brew::zlib",
                                        "    - xrepo fetch system::zlib (from pkgconfig, brew, /usr/lib ..)",

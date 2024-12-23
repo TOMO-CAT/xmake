@@ -20,7 +20,6 @@
 
 -- imports
 import("core.base.option")
-import("private.tools.vstool")
 
 -- merge *.a archive libraries for ar
 function _merge_for_ar(target, program, outputfile, libraryfiles, opt)
@@ -50,27 +49,12 @@ function _merge_for_ar(target, program, outputfile, libraryfiles, opt)
     end
 end
 
--- merge *.a archive libraries for msvc/lib.exe
-function _merge_for_msvclib(target, program, outputfile, libraryfiles, opt)
-    opt = opt or {}
-    vstool.runv(program, table.join("-nologo", "-out:" .. outputfile, libraryfiles), {envs = opt.runenvs})
-end
-
 -- merge *.a archive libraries
 function main(target, outputfile, libraryfiles)
     local program, toolname = target:tool("ar")
     if program and toolname then
         if toolname:find("ar") then
             _merge_for_ar(target, program, outputfile, libraryfiles)
-        elseif toolname == "link" and target:is_plat("windows") then
-            local msvc
-            for _, toolchain_inst in ipairs(target:toolchains()) do
-                if toolchain_inst:name() == "msvc" then
-                    msvc = toolchain_inst
-                    break
-                end
-            end
-            _merge_for_msvclib(target, (program:gsub("link%.exe", "lib.exe")), outputfile, libraryfiles, {runenvs = msvc and msvc:runenvs()})
         else
             raise("cannot merge (%s): unknown ar tool %s!", table.concat(libraryfiles, ", "), toolname)
         end
@@ -78,4 +62,3 @@ function main(target, outputfile, libraryfiles)
         raise("cannot merge (%s): ar not found!", table.concat(libraryfiles, ", "))
     end
 end
-

@@ -60,17 +60,6 @@ function _get_vsarch()
     return arch
 end
 
--- get msvc
-function _get_msvc()
-    local msvc = toolchain.load("msvc")
-    assert(msvc:check(), "vs not found!") -- we need to check vs envs if it has been not checked yet
-    return msvc
-end
-
--- get msvc run environments
-function _get_msvc_runenvs()
-    return os.joinenvs(_get_msvc():runenvs())
-end
 
 -- translate paths
 function _translate_paths(paths)
@@ -172,42 +161,6 @@ function _get_configs_for_appleos(configs)
     envs.CMAKE_FIND_ROOT_PATH_MODE_PROGRAM   = "NEVER"
     -- avoid install bundle targets
     envs.CMAKE_MACOSX_BUNDLE       = "NO"
-    for k, v in pairs(envs) do
-        table.insert(configs, "-D" .. k .. "=" .. v)
-    end
-end
-
--- get configs for mingw
-function _get_configs_for_mingw(configs)
-    local envs                     = {}
-    local cflags                   = table.join(table.wrap(_get_buildenv("cxflags")), _get_buildenv("cflags"))
-    local cxxflags                 = table.join(table.wrap(_get_buildenv("cxflags")), _get_buildenv("cxxflags"))
-    local sdkdir                   = _get_buildenv("mingw") or _get_buildenv("sdk")
-    envs.CMAKE_C_COMPILER          = _get_buildenv("cc")
-    envs.CMAKE_CXX_COMPILER        = _get_buildenv("cxx")
-    envs.CMAKE_ASM_COMPILER        = _get_buildenv("as")
-    envs.CMAKE_AR                  = _get_buildenv("ar")
-    envs.CMAKE_LINKER              = _get_buildenv("ld")
-    envs.CMAKE_RANLIB              = _get_buildenv("ranlib")
-    envs.CMAKE_C_FLAGS             = table.concat(cflags, ' ')
-    envs.CMAKE_CXX_FLAGS           = table.concat(cxxflags, ' ')
-    envs.CMAKE_ASM_FLAGS           = table.concat(table.wrap(_get_buildenv("asflags")), ' ')
-    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(_get_buildenv("arflags")), ' ')
-    envs.CMAKE_EXE_LINKER_FLAGS    = table.concat(table.wrap(_get_buildenv("ldflags")), ' ')
-    envs.CMAKE_SHARED_LINKER_FLAGS = table.concat(table.wrap(_get_buildenv("shflags")), ' ')
-    envs.CMAKE_SYSTEM_NAME         = "Windows"
-    envs.CMAKE_SYSTEM_PROCESSOR    = _get_cmake_system_processor()
-    -- avoid find and add system include/library path
-    envs.CMAKE_FIND_ROOT_PATH      = sdkdir
-    envs.CMAKE_SYSROOT             = sdkdir
-    envs.CMAKE_FIND_ROOT_PATH_MODE_PACKAGE = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_LIBRARY = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_INCLUDE = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "NEVER"
-    -- avoid add -isysroot on macOS
-    envs.CMAKE_OSX_SYSROOT = ""
-    -- Avoid cmake to add the flags -search_paths_first and -headerpad_max_install_names on macOS
-    envs.HAVE_FLAG_SEARCH_PATHS_FIRST = "0"
     for k, v in pairs(envs) do
         table.insert(configs, "-D" .. k .. "=" .. v)
     end
@@ -335,15 +288,6 @@ function _get_configs_for_generator(configs, opt)
     if cmake_generator then
         table.insert(configs, "-G")
         table.insert(configs, cmake_generator)
-    elseif is_plat("mingw") and is_subhost("msys") then
-        table.insert(configs, "-G")
-        table.insert(configs, "MSYS Makefiles")
-    elseif is_plat("mingw") and is_subhost("windows") then
-        table.insert(configs, "-G")
-        table.insert(configs, "MinGW Makefiles")
-    elseif is_plat("wasm") and is_subhost("windows") then
-        table.insert(configs, "-G")
-        table.insert(configs, "MinGW Makefiles")
     else
         table.insert(configs, "-G")
         table.insert(configs, "Unix Makefiles")
@@ -370,8 +314,6 @@ function _get_configs(opt)
         -- for cross-compilation on macOS, @see https://github.com/xmake-io/xmake/issues/2804
         (is_plat("macosx") and (get_config("appledev") or not is_arch(os.subarch()))) then
         _get_configs_for_appleos(configs)
-    elseif is_plat("mingw") then
-        _get_configs_for_mingw(configs)
     elseif is_plat("wasm") then
         _get_configs_for_wasm(configs)
     elseif _is_cross_compilation() then
@@ -442,7 +384,7 @@ end
 function clean()
     local buildir = _get_buildir()
     if os.isdir(buildir) then
-        local configfile = find_file("[mM]akefile", buildir) or (is_plat("windows") and find_file("*.sln", buildir))
+        local configfile = find_file("[mM]akefile", buildir)
         if configfile then
             local oldir = os.cd(buildir)
             os.vexec("make clean")

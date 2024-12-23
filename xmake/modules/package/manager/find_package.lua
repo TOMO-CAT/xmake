@@ -57,7 +57,7 @@ function _find_package_with_builtin_rule(package_name, opt)
         local plat = opt.plat
         local arch = opt.arch
         local find_from_host = not is_cross(plat, arch)
-        if find_from_host and not is_host("windows") then
+        if find_from_host then
             table.insert(managers, "brew")
         end
         -- vcpkg/conan support multi-platforms/architectures
@@ -65,10 +65,10 @@ function _find_package_with_builtin_rule(package_name, opt)
         table.insert(managers, "conan")
         if find_from_host then
             table.insert(managers, "pkgconfig")
-            if is_subhost("linux", "msys") and plat ~= "windows" and find_tool("pacman") then
+            if is_subhost("linux") and find_tool("pacman") then
                 table.insert(managers, "pacman")
             end
-            if is_subhost("linux", "msys") and plat ~= "windows" and find_tool("emerge") then
+            if is_subhost("linux") and find_tool("emerge") then
                 table.insert(managers, "portage")
             end
             table.insert(managers, "system")

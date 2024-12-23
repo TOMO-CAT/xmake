@@ -386,7 +386,7 @@ function _run_shell(envs)
             prompt = prompt .. " > "
         end
         os.execv(shell, option.get("arguments"), {envs = table.join({PS1 = prompt}, envs)})
-    elseif shell == "cmd" or is_host("windows") then
+    elseif shell == "cmd" then
         local prompt = _get_prompt()
         prompt = prompt .. " $P$G"
         local args = table.join({"/k", "set PROMPT=" .. prompt}, option.get("arguments"))

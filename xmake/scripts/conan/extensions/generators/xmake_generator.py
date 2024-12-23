@@ -3,7 +3,6 @@
 
 from conan import ConanFile
 from conan.tools.files import save, load
-from conan.tools.microsoft import unix_path, VCVars, is_msvc
 from conan.errors import ConanInvalidConfiguration
 from conan.errors import ConanException
 from conans.model.build_info import CppInfo
@@ -146,4 +145,3 @@ class XmakeDepsFormatter(object):
         self.cflags          = ", ".join('"%s"' % p for p in cflags)
         self.sharedlinkflags = ", ".join('"%s"' % p for p in sharedlinkflags)
         self.exelinkflags    = ", ".join('"%s"' % p for p in exelinkflags)
-

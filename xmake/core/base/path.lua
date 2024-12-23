@@ -162,13 +162,6 @@ function path.unix(p)
     return (tostring(p):gsub(path.sep(), "/"))
 end
 
--- get cygwin-style path, e.g. c:\, C:\ -> /c/
-function path.cygwin(p)
-    return (tostring(p):gsub("^(%w):", function (drive)
-        return "/" .. drive:lower()
-    end):gsub("\\", "/"))
-end
-
 -- translate path
 --
 -- @param p     the path
@@ -393,17 +386,6 @@ function path.pattern(pattern)
         pattern = string.ipattern(pattern, true)
     end
     return pattern
-end
-
--- get cygwin-style path on msys2/cygwin, e.g. "c:\xxx" -> "/c/xxx"
-function path.cygwin_path(p)
-    p = tostring(p)
-    p = p:gsub("\\", "/")
-    local pos = p:find(":/")
-    if pos == 2 then
-        return "/" .. p:sub(1, 1) .. p:sub(3)
-    end
-    return p
 end
 
 -- new a path instance

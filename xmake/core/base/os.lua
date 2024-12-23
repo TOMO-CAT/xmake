@@ -898,7 +898,7 @@ function os.execv(program, argv, opt)
 
         -- trace process
         if os._is_tracing_process() then
-            -- we cannot use cprint, it will cause dead-loop on windows, winos.version/os.iorunv
+            -- we cannot use cprint, it will cause dead-loop on windows
             utils.print("%s: %s %s", proc, filename, argv and os.args(argv) or "")
         end
 
@@ -1047,7 +1047,7 @@ function os.arch()
     return xmake._ARCH
 end
 
--- get subsystem host, e.g. msys, cygwin on windows
+-- get subsystem host
 function os.subhost()
     return xmake._SUBHOST
 end

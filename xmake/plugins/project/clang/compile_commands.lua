@@ -65,10 +65,6 @@ function _translate_arguments(arguments)
         -- convert path to string, maybe we need to convert path, but not supported now.
         arg = tostring(arg)
 
-        -- see https://github.com/xmake-io/xmake/issues/1721
-        if idx == 1 and is_host("windows") and path.extension(arg) == "" then
-            arg = arg .. ".exe"
-        end
         if arg:startswith("-isystem-after", 1, true) then
             arg = "-I" .. arg:sub(15)
         elseif arg:startswith("-isystem", 1, true) then
@@ -82,11 +78,7 @@ function _translate_arguments(arguments)
         elseif arg:find("[%-/]external:W") or arg:find("[%-/]experimental:external") then
             arg = nil
         end
-        -- @see use msvc-style flags for msvc to support language-server better
-        -- https://github.com/xmake-io/xmake/issues/1284
-        if cc == "cl" and arg and arg:startswith("-") then
-            arg = arg:gsub("^%-", "/")
-        elseif cc == "nvcc" and arg then
+        if cc == "nvcc" and arg then
             -- support -I path with spaces for nvcc
             -- https://github.com/xmake-io/xmake/issues/1726
             if is_include then

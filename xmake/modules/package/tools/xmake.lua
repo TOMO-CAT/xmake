@@ -107,23 +107,6 @@ function _get_configs_for_android(package, configs, opt)
     _get_configs_for_vcpkg(package, configs, opt)
 end
 
--- get configs for mingw
-function _get_configs_for_mingw(package, configs, opt)
-    local names = {"mingw", "sdk", "ld", "sh", "ar", "cc", "cxx", "mm", "mxx"}
-    for _, name in ipairs(names) do
-        local value = get_config(name)
-        if value ~= nil then
-            table.insert(configs, "--" .. name .. "=" .. tostring(value))
-        end
-    end
-    local runtimes = package:config("runtimes")
-    if runtimes then
-        table.insert(configs, "--runtimes=" .. runtimes)
-    end
-    _get_configs_for_qt(package, configs, opt)
-    _get_configs_for_vcpkg(package, configs, opt)
-end
-
 -- get configs for generic, e.g. linux, macosx, bsd host platforms
 function _get_configs_for_generic(package, configs, opt)
     local names = {"ld", "sh", "ar", "cc", "cxx", "mm", "mxx"}
@@ -221,8 +204,6 @@ function _get_configs(package, configs, opt)
         -- for cross-compilation on macOS, @see https://github.com/xmake-io/xmake/issues/2804
         (package:is_plat("macosx") and (get_config("appledev") or not package:is_arch(os.subarch()))) then
         _get_configs_for_appleos(package, configs, opt)
-    elseif package:is_plat("mingw") then
-        _get_configs_for_mingw(package, configs, opt)
     elseif package:is_cross() then
         _get_configs_for_cross(package, configs, opt)
     elseif package:config("toolchains") then
@@ -262,7 +243,7 @@ function _get_configs(package, configs, opt)
     if policies then
         table.insert(configs, "--policies=" .. policies)
     end
-    if not package:is_plat("windows", "mingw") and package:config("pic") ~= false then
+    if package:config("pic") ~= false then
         table.insert(cxflags, "-fPIC")
     end
     if cflags and #cflags > 0 then

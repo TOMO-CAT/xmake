@@ -405,52 +405,6 @@ function _get_configs_for_appleos(package, configs, opt)
     _insert_configs_from_envs(configs, envs, opt)
 end
 
--- get configs for mingw
-function _get_configs_for_mingw(package, configs, opt)
-    opt = opt or {}
-    opt.cross = true
-    local envs = {}
-    local sdkdir = package:build_getenv("mingw") or package:build_getenv("sdk")
-    envs.CMAKE_C_COMPILER = _translate_bin_path(package:build_getenv("cc"))
-    envs.CMAKE_CXX_COMPILER = _translate_bin_path(package:build_getenv("cxx"))
-    envs.CMAKE_ASM_COMPILER = _translate_bin_path(package:build_getenv("as"))
-    envs.CMAKE_AR = _translate_bin_path(package:build_getenv("ar"))
-    envs.CMAKE_RANLIB = _translate_bin_path(package:build_getenv("ranlib"))
-    envs.CMAKE_RC_COMPILER = _translate_bin_path(package:build_getenv("mrc"))
-    envs.CMAKE_C_FLAGS = _get_cflags(package, opt)
-    envs.CMAKE_CXX_FLAGS = _get_cxxflags(package, opt)
-    envs.CMAKE_ASM_FLAGS = _get_asflags(package, opt)
-    envs.CMAKE_STATIC_LINKER_FLAGS = table.concat(table.wrap(
-                                                      package:build_getenv(
-                                                          "arflags")), ' ')
-    envs.CMAKE_EXE_LINKER_FLAGS = _get_ldflags(package, opt)
-    envs.CMAKE_SHARED_LINKER_FLAGS = _get_shflags(package, opt)
-    envs.CMAKE_SYSTEM_NAME = "Windows"
-    envs.CMAKE_SYSTEM_PROCESSOR = _get_cmake_system_processor(package)
-    -- avoid find and add system include/library path
-    -- @see https://github.com/xmake-io/xmake/issues/2037
-    envs.CMAKE_FIND_ROOT_PATH = sdkdir
-    envs.CMAKE_FIND_ROOT_PATH_MODE_PACKAGE = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_LIBRARY = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_INCLUDE = "BOTH"
-    envs.CMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "NEVER"
-    -- avoid add -isysroot on macOS
-    envs.CMAKE_OSX_SYSROOT = ""
-    -- Avoid cmake to add the flags -search_paths_first and -headerpad_max_install_names on macOS
-    envs.HAVE_FLAG_SEARCH_PATHS_FIRST = "0"
-    -- CMAKE_MAKE_PROGRAM may be required for some CMakeLists.txt (libcurl)
-    if is_subhost("windows") and opt.cmake_generator ~= "Ninja" then
-        local mingw = assert(package:build_getenv("mingw") or
-                                 package:build_getenv("sdk"), "mingw not found!")
-        envs.CMAKE_MAKE_PROGRAM = _translate_bin_path(
-                                      path.join(mingw, "bin", "mingw32-make.exe"))
-    end
-    if opt.cmake_generator == "Ninja" then
-        envs.CMAKE_MAKE_PROGRAM = "ninja"
-    end
-    _insert_configs_from_envs(configs, envs, opt)
-end
-
 -- get configs for wasm
 function _get_configs_for_wasm(package, configs, opt)
     opt = opt or {}
@@ -461,14 +415,6 @@ function _get_configs_for_wasm(package, configs, opt)
                                                "cmake/Modules/Platform"))
     assert(emscripten_cmakefile, "Emscripten.cmake not found!")
     table.insert(configs, "-DCMAKE_TOOLCHAIN_FILE=" .. emscripten_cmakefile)
-    if is_subhost("windows") and opt.cmake_generator ~= "Ninja" then
-        local mingw = assert(package:build_getenv("mingw") or
-                                 package:build_getenv("sdk"),
-                             "mingw32-make not found!")
-        table.insert(configs, "-DCMAKE_MAKE_PROGRAM=" ..
-                         _translate_paths(
-                             path.join(mingw, "bin", "mingw32-make.exe")))
-    end
     _get_configs_for_generic(package, configs, opt)
 end
 
@@ -944,24 +890,6 @@ function _install_for_make(package, configs, opt)
     if is_host("bsd") then
         os.vrunv("gmake", argv)
         os.vrunv("gmake", {"install"})
-    elseif is_subhost("windows") and package:is_plat("mingw", "wasm") then
-        local mingw = assert(package:build_getenv("mingw") or
-                                 package:build_getenv("sdk"), "mingw not found!")
-        local mingw_make = path.join(mingw, "bin", "mingw32-make.exe")
-        os.vrunv(mingw_make, argv)
-        os.vrunv(mingw_make, {"install"})
-    elseif package:is_plat("android") and is_host("windows") then
-        local make
-        local ndk = get_config("ndk")
-        if ndk then
-            make = path.join(ndk, "prebuilt", "windows-x86_64", "bin",
-                             "make.exe")
-        end
-        if not make or not os.isfile(make) then
-            make = "make"
-        end
-        os.vrunv(make, argv)
-        os.vrunv(make, {"install"})
     else
         os.vrunv("make", argv)
         os.vrunv("make", {"install"})

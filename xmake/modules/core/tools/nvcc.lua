@@ -52,32 +52,6 @@ function nf_symbol(self, level, opt)
     local flags = nil
     if level == "debug" then
         flags = {"-G", "-g", "-lineinfo"}
-        if self:is_plat("windows") then
-            local host_flags = nil
-            local symbolfile = nil
-            local target = opt.target
-            if target and target.symbolfile then
-                symbolfile = target:symbolfile()
-            end
-            if symbolfile then
-
-                -- ensure the object directory
-                local symboldir = path.directory(symbolfile)
-                if not os.isdir(symboldir) then
-                    os.mkdir(symboldir)
-                end
-
-                -- check and add symbol output file
-                host_flags = "-Zi -Fd" .. path.join(symboldir, "compile." .. path.filename(symbolfile))
-                if self:has_flags({'-Xcompiler "-Zi -FS -Fd' .. os.nuldev() .. '.pdb"'}, "cuflags", { flagskey = '-Xcompiler "-Zi -FS -Fd"' }) then
-                    host_flags = "-FS " .. host_flags
-                end
-            else
-                host_flags = "-Zi"
-            end
-            table.insert(flags, "-Xcompiler")
-            table.insert(flags, host_flags)
-        end
     end
     return flags
 end
@@ -91,18 +65,6 @@ function nf_warning(self, level)
         none       = "-w"
     ,   everything = { "-Wreorder", "--Wno-deprecated-gpu-targets", "--Wno-deprecated-declarations" }
     ,   error      = { "-Werror", "cross-execution-space-call,reorder,deprecated-declarations" }
-    }
-
-    -- for cl.exe on windows
-    local cl_maps =
-    {
-        none       = "-W0"
-    ,   less       = "-W1"
-    ,   more       = "-W3"
-    ,   all        = "-W3" -- = "-Wall" will enable too more warnings
-    ,   allextra   = "-W4"
-    ,   everything = "-Wall"
-    ,   error      = "-WX"
     }
 
     -- for gcc & clang on linux, may be work for other gnu compatible compilers such as icc
@@ -126,15 +88,9 @@ function nf_warning(self, level)
 
     -- add host warning
     --
-    -- for cl.exe on windows, it is the only supported host compiler on the platform
     -- for gcc/clang, or any gnu compatible compiler on *nix
     --
-    local host_warning = nil
-    if self:is_plat("windows") then
-        host_warning = cl_maps[level]
-    else
-        host_warning = gcc_clang_maps[level]
-    end
+    local host_warning = gcc_clang_maps[level]
     if host_warning then
         warning = table.wrap(warning)
         table.insert(warning, '-Xcompiler')
@@ -164,15 +120,7 @@ end
 
 -- make vs runtime flag
 function nf_runtime(self, runtime)
-    if self:is_plat("windows") and runtime then
-        local maps = {
-            MT = '-Xcompiler "-MT"',
-            MD = '-Xcompiler "-MD"',
-            MTd = '-Xcompiler "-MTd"',
-            MDd = '-Xcompiler "-MDd"'
-        }
-        return maps[runtime]
-    end
+    return
 end
 
 -- make the language flag
@@ -282,12 +230,6 @@ function linkargv(self, objectfiles, targetkind, targetfile, flags)
         table.insert(flags_extra, "@rpath/" .. path.filename(targetfile))
     end
 
-    -- add `-Wl,--out-implib,outputdir/libxxx.a` for xxx.dll on mingw/gcc
-    if targetkind == "shared" and self:is_plat("mingw") then
-        table.insert(flags_extra, "-Xlinker")
-        table.insert(flags_extra, "-Wl,--out-implib," .. path.join(path.directory(targetfile), path.basename(targetfile) .. ".dll.a"))
-    end
-
     -- make link args
     return self:program(), table.join("-o", targetfile, objectfiles, flags, flags_extra)
 end
@@ -312,7 +254,7 @@ end
 -- support `-MMD -MF depfile.d`? some old gcc does not support it at same time
 function _has_flags_mmd_mf(self)
     local has_mmd_mf = _g._HAS_MMD_MF
-    if has_mmd_mf == nil and not is_host("windows") then
+    if has_mmd_mf == nil then
        has_mmd_mf = self:has_flags({"-MMD", "-MF", os.nuldev()}, "cuflags", { flagskey = "-MMD -MF" }) or false
         _g._HAS_MMD_MF = has_mmd_mf
     end
@@ -332,7 +274,7 @@ end
 -- support `-MM -o depfile.d`?
 function _has_flags_mm(self)
     local has_mm = _g._HAS_MM
-    if not has_mmd_mf and has_mm == nil and not is_host("windows") then
+    if not has_mmd_mf and has_mm == nil then
         has_mm = self:has_flags("-MM", "cuflags", { flagskey = "-MM" }) or false
         _g._HAS_MM = has_mm
     end

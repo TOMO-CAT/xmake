@@ -229,9 +229,7 @@ function _map_compflags(toolname, langkind, name, values)
         is_shared = function() return false end,
         tool = function()
             local program
-            if toolname == "cl" then
-                program = "cl.exe"
-            elseif toolname == "gcc" then
+            if toolname == "gcc" then
                 program = "gcc"
             elseif toolname == "clang" then
                 program = "clang"
@@ -508,7 +506,7 @@ function _add_target_include_directories(cmakelists, target, outputdir)
 end
 
 -- add target system include directories
--- we disable system/external includes first, because cmake doesn’t seem to be able to support msvc /external:I
+-- we disable system/external includes first
 -- https://github.com/xmake-io/xmake/issues/1050
 function _add_target_sysinclude_directories(cmakelists, target, outputdir)
     local includedirs = _get_configs_from_target(target, "sysincludedirs")
@@ -654,12 +652,7 @@ function _add_target_values(cmakelists, target, name)
         if name:endswith("s") then
             name = name:sub(1, #name - 1)
         end
-        cmakelists:print("if(MSVC)")
-        local flags_cl = _map_compflags("cl", "c", name, values)
-        for _, flag in ipairs(flags_cl) do
-            cmakelists:print("    target_compile_options(%s PRIVATE %s)", target:name(), flag)
-        end
-        cmakelists:print("elseif(Clang)")
+        cmakelists:print("if(Clang)")
         local flags_clang = _map_compflags("clang", "c", name, values)
         for _, flag in ipairs(flags_clang) do
             cmakelists:print("    target_compile_options(%s PRIVATE %s)", target:name(), flag)

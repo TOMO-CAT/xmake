@@ -56,11 +56,7 @@ end
 -- make the symbol flag
 function nf_symbol(self, level)
     if level == "debug" and self:kind() == "pc" then
-        if self:is_plat("windows") then
-            return {"-gw3", "-WN"}
-        else
-            return "-gw3"
-        end
+        return "-gw3"
     end
 end
 

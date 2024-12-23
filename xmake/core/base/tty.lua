@@ -174,12 +174,9 @@ end
 --  - xterm
 --  - cmd
 --  - vscode (in vscode)
---  - msys2
---  - cygwin
 --  - pwsh
 --  - powershell
 --  - mintty
---  - windows-terminal
 --  - gnome-terminal
 --  - xfce4-terminal
 --  - konsole
@@ -210,8 +207,6 @@ function tty.term()
             if TERM ~= nil then
                 if TERM:find("xterm", 1, true) then
                     term = "xterm"
-                elseif TERM == "cygwin" then
-                    term = "cygwin"
                 end
             end
         end
@@ -219,9 +214,7 @@ function tty.term()
         -- get term from system
         if term == nil then
             local subhost = xmake._SUBHOST
-            if subhost == "cygwin" then
-                term = "cygwin"
-            elseif subhost == "macosx" then
+            if subhost == "macosx" then
                 term = "xterm"
             end
         end

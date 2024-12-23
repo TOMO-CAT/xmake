@@ -21,11 +21,8 @@
 -- imports
 import("core.base.option")
 import("core.project.project")
-import("private.tools.cl.parse_deps", {alias = "parse_deps_cl"})
-import("private.tools.cl.parse_deps_json", {alias = "parse_deps_cl_json"})
 import("private.tools.rc.parse_deps", {alias = "parse_deps_rc"})
 import("private.tools.gcc.parse_deps", {alias = "parse_deps_gcc"})
-import("private.tools.armcc.parse_deps", {alias = "parse_deps_armcc"})
 
 -- load depfiles
 function _load_depfiles(parser, dependinfo, depfiles, opt)
@@ -50,18 +47,9 @@ function load(dependfile, opt)
             if dependinfo.depfiles_gcc then
                 _load_depfiles(parse_deps_gcc, dependinfo, dependinfo.depfiles_gcc, opt)
                 dependinfo.depfiles_gcc = nil
-            elseif dependinfo.depfiles_cl_json then
-                _load_depfiles(parse_deps_cl_json, dependinfo, dependinfo.depfiles_cl_json, opt)
-                dependinfo.depfiles_cl_json = nil
-            elseif dependinfo.depfiles_cl then
-                _load_depfiles(parse_deps_cl, dependinfo, dependinfo.depfiles_cl, opt)
-                dependinfo.depfiles_cl = nil
             elseif dependinfo.depfiles_rc then
                 _load_depfiles(parse_deps_rc, dependinfo, dependinfo.depfiles_rc, opt)
                 dependinfo.depfiles_rc = nil
-            elseif dependinfo.depfiles_armcc then
-                _load_depfiles(parse_deps_armcc, dependinfo, dependinfo.depfiles_armcc, opt)
-                dependinfo.depfiles_armcc = nil
             end
             return dependinfo
         end

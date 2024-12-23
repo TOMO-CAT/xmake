@@ -36,9 +36,4 @@ toolchain("cuda", function()
     set_toolset("cu",   "nvcc", "clang")
     set_toolset("culd", "nvcc")
     set_toolset("cu-ccbin", "$(env CXX)", "$(env CC)")
-
-    -- bind msvc environments, because nvcc will call cl.exe
-    on_load(function (toolchain)
-    end)
-
 end)

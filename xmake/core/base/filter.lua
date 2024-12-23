@@ -23,10 +23,7 @@ local filter = filter or {}
 
 -- load modules
 local os        = require("base/os")
-local winos     = require("base/winos")
 local table     = require("base/table")
-local utils     = require("base/utils")
-local string    = require("base/string")
 local scheduler = require("base/scheduler")
 
 -- globals
@@ -82,18 +79,6 @@ function filter.env(name)
     return os.getenv(name)
 end
 
--- filter the winreg path
-function filter.reg(path)
-
-    -- must be windows
-    if os.host() ~= "windows" then
-        return
-    end
-
-    -- query registry value
-    return (winos.registry_query(path))
-end
-
 -- set handlers
 function filter:set_handlers(handlers)
     self._HANDLERS = handlers
@@ -121,8 +106,6 @@ function filter:get(variable)
     -- is environment variable?
     elseif variable:startswith("env ") then
         return filter.env(variable:sub(5))
-    elseif variable:startswith("reg ") then
-        return filter.reg(variable:sub(5))
     end
 
     -- parse variable:mode
@@ -160,7 +143,6 @@ end
 -- print("$(host)")
 -- print("$(env PATH)")
 -- print("$(shell echo hello xmake!)")
--- print("$(reg HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\XXXX;Name)")
 --
 function filter:handle(value)
 

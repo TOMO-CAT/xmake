@@ -35,9 +35,6 @@ function _get_configs(package, configs)
     if not items:has("target") then
         table.insert(configs, "target=" .. (package:is_debug() and "debug" or "release"))
     end
-    if not items:has("use_mingw") then
-        table.insert(configs, "use_mingw=" .. (package:is_plat("mingw", "cygwin", "msys") and "yes" or "no"))
-    end
     if not items:has("platform") then
         if package:is_plat("android") then
             local scons_android_arch = "armv7"
@@ -51,8 +48,6 @@ function _get_configs(package, configs)
             table.insert(configs, "ios_arch=" .. package:arch())
         elseif package:is_plat("macosx") then
             table.insert(configs, "platform=osx")
-        elseif package:is_plat("windows", "mingw", "cygwin", "msys") then
-            table.insert(configs, "platform=windows")
         elseif package:is_plat("linux") then
             table.insert(configs, "platform=linux")
         elseif package:is_plat("bsd") then

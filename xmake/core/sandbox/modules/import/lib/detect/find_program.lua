@@ -24,12 +24,10 @@ local sandbox_lib_detect_find_program = sandbox_lib_detect_find_program or {}
 -- load modules
 local os          = require("base/os")
 local path        = require("base/path")
-local option      = require("base/winos")
 local table       = require("base/table")
 local utils       = require("base/utils")
 local option      = require("base/option")
 local profiler    = require("base/profiler")
-local project     = require("project/project")
 local detectcache = require("cache/detectcache")
 local sandbox     = require("sandbox/sandbox")
 local package     = require("package/package")
@@ -197,10 +195,8 @@ function sandbox_lib_detect_find_program._find(name, paths, opt)
     if envpaths then
         table.join2(syspaths, path.splitenv(envpaths))
     end]]
-    if os.host() ~= "windows" or os.is_subhost("msys", "cygwin") then
-        table.insert(syspaths, "/usr/local/bin")
-        table.insert(syspaths, "/usr/bin")
-    end
+    table.insert(syspaths, "/usr/local/bin")
+    table.insert(syspaths, "/usr/bin")
     if #syspaths > 0 then
         program_path = sandbox_lib_detect_find_program._find_from_paths(name, syspaths, opt)
         if program_path then

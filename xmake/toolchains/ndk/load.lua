@@ -310,8 +310,6 @@ function main(toolchain)
                 elseif ndk_cxxstl == "stlport_shared" then
                     toolchain:add("syslinks", "stlport_shared")
                 end
-
-                -- fix 'ld: error: cannot find -lc++' for clang++.exe on r20/windows
                 -- @see https://github.com/xmake-io/xmake/issues/684
                 if ndkver and ndkver >= 20 and (ndk_cxxstl:startswith("c++") or ndk_cxxstl:startswith("llvmstl")) then
                     toolchain:add("ldflags", "-nostdlib++")

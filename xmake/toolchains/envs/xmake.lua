@@ -19,7 +19,7 @@
 --
 
 -- define toolchain
-toolchain("envs")
+toolchain("envs", function()
 
     -- set description
     set_description("Environment variables toolchain")
@@ -36,4 +36,4 @@ toolchain("envs")
     set_toolset("mxx",   "$(env MXX)")
     set_toolset("as",    "$(env AS)")
     set_toolset("sc",    "$(env SC)")
-
+end)

@@ -121,22 +121,6 @@ function _insert_cross_configs(package, file, opt)
         file:print("cpu_family = '%s'", cpu_family)
         file:print("cpu = '%s'", cpu)
         file:print("endian = 'little'")
-    elseif package:is_plat("mingw") then
-        local cpu
-        local cpu_family
-        if package:is_arch("x64", "x86_64") then
-            cpu = "x86_64"
-            cpu_family = "x86_64"
-        elseif package:is_arch("x86", "i386") then
-            cpu = "i686"
-            cpu_family = "x86"
-        else
-            raise("unsupported arch(%s)", package:arch())
-        end
-        file:print("system = 'windows'")
-        file:print("cpu_family = '%s'", cpu_family)
-        file:print("cpu = '%s'", cpu)
-        file:print("endian = 'little'")
     elseif package:is_plat("wasm") then
         file:print("system = 'emscripten'")
         file:print("cpu_family = 'wasm32'")
@@ -204,12 +188,9 @@ function _get_configs_file(package, opt)
         if ld then
             file:print("ld=['%s']", executable_path(ld))
         end
-        -- we cannot pass link.exe to ar for msvc, it will raise `unknown linker`
-        if not package:is_plat("windows") then
-            local ar = package:build_getenv("ar")
-            if ar then
-                file:print("ar=['%s']", executable_path(ar))
-            end
+        local ar = package:build_getenv("ar")
+        if ar then
+            file:print("ar=['%s']", executable_path(ar))
         end
         local strip = package:build_getenv("strip")
         if strip then
@@ -218,12 +199,6 @@ function _get_configs_file(package, opt)
         local ranlib = package:build_getenv("ranlib")
         if ranlib then
             file:print("ranlib=['%s']", executable_path(ranlib))
-        end
-        if package:is_plat("mingw") then
-            local mrc = package:build_getenv("mrc")
-            if mrc then
-                file:print("windres=['%s']", executable_path(mrc))
-            end
         end
         local cmake = find_tool("cmake")
         if cmake then
@@ -315,7 +290,7 @@ function _get_configs(package, configs, opt)
     end
 
     -- add cross file
-    if package:is_cross() or package:is_plat("mingw") then
+    if package:is_cross() then
         table.insert(configs, "--cross-file=" .. _get_configs_file(package, opt))
     elseif package:config("toolchains") then
         if _is_toolchain_compatible_with_host(package) then

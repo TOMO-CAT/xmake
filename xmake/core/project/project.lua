@@ -1290,7 +1290,7 @@ end
 
 -- get allowed platforms
 --
--- set_allowedplats("windows", "mingw", "linux", "macosx")
+-- set_allowedplats("linux", "macosx")
 --
 function project.allowed_plats()
     local allowed_plats_set = project._memcache():get("allowedplats")

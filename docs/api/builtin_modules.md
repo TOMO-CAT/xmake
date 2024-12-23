@@ -144,12 +144,6 @@ $ utils.dump(interpreter._BUILTIN_MODULES)
   tostring = function [C],
   ipairs = function /usr/local/share/xmake/core/sandbox/modules/ipairs.lua:25,
   type = function [C],
-  winos = { 
-    registry_values = function /usr/local/share/xmake/core/base/winos.lua:326,
-    registry_query = function /usr/local/share/xmake/core/base/winos.lua:217,
-    registry_keys = function /usr/local/share/xmake/core/base/winos.lua:253,
-    version = function /usr/local/share/xmake/core/base/winos.lua:115 
-  },
   math = { 
     sin = function [C],
     deg = function [C],
@@ -253,10 +247,8 @@ $ utils.dump(interpreter._BUILTIN_MODULES)
     new = function /usr/local/share/xmake/core/base/path.lua:410,
     islastsep = function /usr/local/share/xmake/core/base/path.lua:371,
     splitenv = function /usr/local/share/xmake/core/base/path.lua:312,
-    cygwin = function /usr/local/share/xmake/core/base/path.lua:166,
     is_absolute = function [C],
     joinenv = function /usr/local/share/xmake/core/base/path.lua:349,
-    cygwin_path = function /usr/local/share/xmake/core/base/path.lua:399,
     pattern = function /usr/local/share/xmake/core/base/path.lua:378,
     _absolute = function [C],
     extension = function /usr/local/share/xmake/core/base/path.lua:261,

@@ -141,8 +141,6 @@ function main(name, opt)
     local plat = opt.plat
     if plat == "macosx" then
         libfiles_native = os.files(path.join(librarydir, "*.dylib"))
-    elseif plat == "windows" or plat == "mingw" then
-        libfiles_native = os.files(path.join(librarydir, "*.lib"))
     else
         libfiles_native = os.files(path.join(librarydir, "*.so"))
     end

@@ -35,8 +35,6 @@ function _dependency_scanner(target)
             dependency_scanner = import("clang.dependency_scanner", {anonymous = true})
         elseif target:has_tool("cxx", "gcc", "gxx") then
             dependency_scanner = import("gcc.dependency_scanner", {anonymous = true})
-        elseif target:has_tool("cxx", "cl") then
-            dependency_scanner = import("msvc.dependency_scanner", {anonymous = true})
         else
             local _, toolname = target:tool("cxx")
             raise("compiler(%s): does not support c++ module!", toolname)
@@ -461,4 +459,3 @@ function get_targetdeps_modules(target)
     end
     return sourcefiles
 end
-

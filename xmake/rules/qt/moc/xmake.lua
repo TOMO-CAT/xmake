@@ -78,10 +78,6 @@ rule("qt.moc")
             for _, item in ipairs(_get_values_from_target(target, pathmap[1])) do
                 local pathitem = path(item, function (p)
                     local item = table.unwrap(compiler.map_flags("cxx", pathmap[2], p))
-                    if item then
-                        -- we always need use '/' to fix it for project generator, because it will use path.translate in cl.lua
-                        item = item:gsub("\\", "/")
-                    end
                     return item
                 end)
                 if not pathitem:empty() then

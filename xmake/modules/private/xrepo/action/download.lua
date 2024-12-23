@@ -55,7 +55,6 @@ function menu_options()
                                        "    - xrepo download /tmp/zlib.lua",
                                        "    - xrepo download -p iphoneos -a arm64 \"zlib >=1.2.0\"",
                                        "    - xrepo download -p android [--ndk=/xxx] -m debug \"pcre2 10.x\"",
-                                       "    - xrepo download -p mingw [--mingw=/xxx] -k shared zlib",
                                        "    - xrepo download conan::zlib/1.2.11 vcpkg::zlib",
                                         values = function (complete, opt) return import("private.xrepo.quick_search.completion")(complete, opt) end}
     }

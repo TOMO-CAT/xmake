@@ -5,8 +5,6 @@
 ```bash
 $ xmake show -l toolchains
 xcode         Xcode IDE
-msvc          Microsoft Visual C/C++ Compiler
-clang-cl      LLVM Clang C/C++ Compiler compatible with msvc
 yasm          The Yasm Modular Assembler
 clang         A C language family frontend for LLVM
 go            Go Programming Language Compiler
@@ -25,7 +23,6 @@ llvm          A collection of modular and reusable compiler and toolchain techno
 cross         Common cross compilation toolchain
 nasm          NASM Assembler
 gcc           GNU Compiler Collection
-mingw         Minimalist GNU for Windows
 gnu-rm        GNU Arm Embedded Toolchain
 envs          Environment variables toolchain
 fasm          Flat Assembler
@@ -39,12 +36,9 @@ fpc           Free Pascal Programming Language Compiler
 wasi          WASI-enabled WebAssembly C/C++ toolchain
 nim           Nim Programming Language Compiler
 circle        A new C++20 compiler
-armcc         ARM Compiler Version 5 of Keil MDK
-armclang      ARM Compiler Version 6 of Keil MDK
 c51           Keil development tools for the 8051 Microcontroller Architecture
 icx           Intel LLVM C/C++ Compiler
 dpcpp         Intel LLVM C++ Compiler for data parallel programming model based on Khronos SYCL
-masm32        The MASM32 SDK
 iverilog      Icarus Verilog
 verilator     Verilator open-source SystemVerilog simulator and lint system
 cosmocc       build-once run-anywhere
@@ -62,9 +56,6 @@ hdk           Harmony SDK
 * WatchOS (armv7k, i386)
 * AppleTVOS (armv7, arm64, i386, x86_64)
 * AppleXROS (arm64, x86_64)
-* MSYS (i386, x86_64)
-* MinGW (i386, x86_64, arm, arm64)
-* Cygwin (i386, x86_64)
 * Wasm (wasm32, wasm64)
 * Haiku (i386, x86_64)
 * Harmony (x86_64, armeabi-v7a, arm64-v8a)
@@ -94,7 +85,7 @@ hdk           Harmony SDK
 ## 分布式编译和缓存
 
 * [x] 跨平台支持
-* [x] 支持 msvc, clang, gcc 和交叉编译工具链
+* [x] 支持 clang, gcc 和交叉编译工具链
 * [x] 支持构建 android, ios, linux, win, macOS 程序
 * [x] 除了编译工具链，无任何其他依赖
 * [x] 支持编译服务器负载均衡调度

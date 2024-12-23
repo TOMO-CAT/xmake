@@ -47,12 +47,6 @@ function menu_options()
                                        "e.g.",
                                        "    - xrepo install -p cross --toolchain=mytool --includes='toolchain1.lua" .. path.envsep() .. "toolchain2.lua'"},
         {category = "Visual Studio SDK Configuration"                        },
-        {nil, "vs",            "kv", nil, "The Microsoft Visual Studio"
-                                        , "  e.g. --vs=2017"                 },
-        {nil, "vs_toolset",    "kv", nil, "The Microsoft Visual Studio Toolset Version"
-                                        , "  e.g. --vs_toolset=14.0"         },
-        {nil, "vs_sdkver",     "kv", nil, "The Windows SDK Version of Visual Studio"
-                                        , "  e.g. --vs_sdkver=10.0.15063.0"  },
         {category = "Android NDK Configuration"                              },
         {nil, "ndk",           "kv", nil, "The NDK directory"                },
         {nil, "ndk_sdkver",    "kv", nil, "The SDK Version for NDK (default: auto)" },
@@ -69,8 +63,6 @@ function menu_options()
         {category = "Cross Compilation Configuration"                        },
         {nil, "sdk",           "kv", nil, "Set the SDK directory of cross toolchain." },
         {nil, "toolchain",     "kv", nil, "Set the toolchain name."          },
-        {category = "MingW Configuration"                                    },
-        {nil, "mingw",         "kv", nil, "Set the MingW SDK directory."     },
         {category = "XCode SDK Configuration"                                },
         {nil, "xcode",         "kv", nil, "The Xcode Application Directory"  },
         {nil, "xcode_sdkver",  "kv", nil, "The SDK Version for Xcode"        },
@@ -89,7 +81,6 @@ function menu_options()
                                        "    - xrepo install /tmp/zlib.lua",
                                        "    - xrepo install -p iphoneos -a arm64 \"zlib >=1.2.0\"",
                                        "    - xrepo install -p android [--ndk=/xxx] -m debug \"pcre2 10.x\"",
-                                       "    - xrepo install -p mingw [--mingw=/xxx] -k shared zlib",
                                        "    - xrepo install conan::zlib/1.2.11 vcpkg::zlib",
                                         values = function (complete, opt) return import("private.xrepo.quick_search.completion")(complete, opt) end}
     }
@@ -203,20 +194,6 @@ function _install_packages(packages)
     end
     if option.get("toolchain") then
         table.insert(config_argv, "--toolchain=" .. option.get("toolchain"))
-    end
-    -- for mingw
-    if option.get("mingw") then
-        table.insert(config_argv, "--mingw=" .. option.get("mingw"))
-    end
-    -- for vs
-    if option.get("vs") then
-        table.insert(config_argv, "--vs=" .. option.get("vs"))
-    end
-    if option.get("vs_toolset") then
-        table.insert(config_argv, "--vs_toolset=" .. option.get("vs_toolset"))
-    end
-    if option.get("vs_sdkver") then
-        table.insert(config_argv, "--vs_sdkver=" .. option.get("vs_sdkver"))
     end
     -- for xcode
     if option.get("xcode") then

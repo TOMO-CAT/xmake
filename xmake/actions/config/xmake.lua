@@ -196,7 +196,6 @@ task("config")
                     {category = "Cross Complation Configuration"},
                     {nil, "cross",      "kv", nil,          "Set cross toolchains prefix"
                                                           , "e.g."
-                                                          , "    - i386-mingw32-"
                                                           , "    - arm-linux-androideabi-"},
                     {nil, "target_os",  "kv", nil,          "Set target os only for cross-complation"},
                     {nil, "bin",        "kv", nil,          "Set cross toolchains bin directory"
@@ -235,7 +234,7 @@ task("config")
                                                             "    - xmake f --trybuild=autoconf -p android --ndk=xxx; xmake",
                                                             "",
                                                             "the third-party buildsystems:"
-                                                        ,   values = {"auto", "make", "autoconf", "cmake", "scons", "meson", "bazel", "ninja", "msbuild", "xcodebuild", "ndkbuild", "xrepo"}},
+                                                        ,   values = {"auto", "make", "autoconf", "cmake", "scons", "meson", "bazel", "ninja", "xcodebuild", "ndkbuild", "xrepo"}},
                     {nil, "tryconfigs", "kv", nil       ,   "Set the extra configurations of the third-party buildsystem for the try-build mode.",
                                                             "e.g.",
                                                             "    - xmake f --trybuild=autoconf --tryconfigs='--enable-shared=no'"},

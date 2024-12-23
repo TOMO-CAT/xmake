@@ -85,9 +85,6 @@ function nf_strip(self, level)
     }
     if self:is_plat("macosx", "iphoneos", "watchos", "appletvos", "applexros") then
         maps.all = {"-Wl,-x", "-Wl,-dead_strip"}
-    elseif self:is_plat("windows") then
-        -- clang does not it on windows, TODO maybe we need test it for gcc
-        maps = {}
     end
     return maps[level]
 end
@@ -108,12 +105,6 @@ function nf_symbol(self, level)
             _g.symbol_maps = maps
         end
         return maps[level .. '_' .. kind] or maps[level]
-    elseif kind == "ld" or kind == "sh" then
-        -- we need to add `-g` to linker to generate pdb symbol file for mingw-gcc, llvm-clang on windows
-        local plat = self:plat()
-        if level == "debug" and (plat == "windows" or (plat == "mingw" and is_host("windows"))) then
-            return "-g"
-        end
     end
 end
 
@@ -354,7 +345,7 @@ function nf_linkgroup(self, linkgroup, opt)
     end
     local flags = {}
     local extra = opt.extra
-    if extra and not self:is_plat("macosx", "windows", "mingw") then
+    if extra and not self:is_plat("macosx") then
         local group = extra.group
         local whole = extra.whole
         if group and whole then
@@ -550,11 +541,6 @@ function linkargv(self, objectfiles, targetkind, targetfile, flags, opt)
         end
     end
 
-    -- add `-Wl,--out-implib,outputdir/libxxx.a` for xxx.dll on mingw/gcc
-    if targetkind == "shared" and self:is_plat("mingw") then
-        table.insert(flags_extra, "-Wl,--out-implib," .. path.join(path.directory(targetfile), path.basename(targetfile) .. ".dll.a"))
-    end
-
     -- init arguments
     opt = opt or {}
     local argv = table.join("-o", targetfile, objectfiles, flags, flags_extra)
@@ -590,12 +576,6 @@ function _has_color_diagnostics(self)
                 -- for clang
                 elseif self:has_flags("-fcolor-diagnostics", "cxflags") then
                     colors_diagnostics = "-fcolor-diagnostics"
-                end
-
-                -- enable color output for windows, @see https://github.com/xmake-io/xmake-vscode/discussions/260
-                if colors_diagnostics and self:name() == "clang" and is_host("windows") and
-                    self:has_flags("-fansi-escape-codes", "cxflags") then
-                    colors_diagnostics = table.join(colors_diagnostics, "-fansi-escape-codes")
                 end
             end
         end

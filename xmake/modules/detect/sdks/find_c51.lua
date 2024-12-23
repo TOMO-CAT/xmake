@@ -13,7 +13,6 @@
 -- limitations under the License.
 --
 -- Copyright (C) 2015-present, TBOOX Open Source Group.
--- Based On template file xmake\modules\detect\sdks\find_mdk.lua
 --
 -- @author      DawnMagnet
 -- @file        find_c51.lua
@@ -38,9 +37,6 @@ function _find_sdkdir(sdkdir)
     if not result then
         -- find it from some logical drives paths
         paths = {}
-        for _, logical_drive in ipairs(winos.logical_drives()) do
-            table.insert(paths, path.join(logical_drive, "Keil_v5", "C51", "BIN"))
-        end
         result = find_path("C51.exe", paths)
     end
     return result
@@ -54,15 +50,6 @@ function _find_c51(sdkdir)
         return nil
     end
     local result = {sdkdir = sdkdir}
-
-    -- get sdk version
-    local sdkver = winos.registry_query("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Keil\\Products\\C51;Version")
-    if sdkver then
-        sdkver = semver.match(sdkver, 1, "V%d+%.%d+")
-        if sdkver then
-            result.sdkver = sdkver:rawstr()
-        end
-    end
 
     -- c51(exe) sdk directory
     if os.isfile(path.join(sdkdir, "bin", "c51.exe")) then

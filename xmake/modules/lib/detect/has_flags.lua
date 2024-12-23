@@ -70,7 +70,7 @@ function main(name, flags, opt)
 
     -- get tool architecture
     --
-    -- some tools select arch by path environment, not be flags, e.g. cl.exe of msvc)
+    -- some tools select arch by path environment, not be flags
     -- so, it will affect the cache result
     --
     local arch = opt.arch or config.get("arch") or os.arch()
@@ -154,4 +154,3 @@ function main(name, flags, opt)
     scheduler.co_unlock(key)
     return result
 end
-
