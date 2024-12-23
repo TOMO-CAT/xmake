@@ -169,7 +169,6 @@
 ### 改进
 
 * [#4928](https://github.com/xmake-io/xmake/issues/4928): 改进构建和链接速度，增量编译时候效果更加明显
-* [#4931](https://github.com/xmake-io/xmake/pull/4931): 更新 pdcurses
 * [#4973](https://github.com/xmake-io/xmake/issues/4973): 改进选择脚本的匹配模式
 
 ### Bugs 修复

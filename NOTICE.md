@@ -13,14 +13,6 @@ which can be obtained at:
   * HOMEPAGE:
     * https://www.kyne.com.au/~mark/software/lua-cjson.php
 
-This product depends on 'pdcurses', an implementation of X/Open curses for multiple platforms,
-which can be obtained at:
-
-  * LICENSE:
-    * Public Domain License
-  * HOMEPAGE:
-    * http://pdcurses.org/
-
 This product depends on 'libsv', Public domain semantic versioning in c,
 which can be obtained at:
 
@@ -68,5 +60,3 @@ which can be obtained at:
     * core/src/tbox/tbox/LICENSE.md (Apache License 2.0)
   * HOMEPAGE:
     * https://tboox.org/
-
-

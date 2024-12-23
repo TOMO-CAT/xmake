@@ -11,9 +11,6 @@ target("xmake")
     if has_config("lua_cjson") then
         add_deps("lua-cjson")
     end
-    if is_plat("windows") and has_config("pdcurses") then
-        add_deps("pdcurses")
-    end
 
     -- add definitions
     add_defines("__tb_prefix__=\"xmake\"")
@@ -44,14 +41,9 @@ target("xmake")
 
     -- add options
     add_options("readline")
-    if is_plat("windows") then
-        add_options("pdcurses")
-    else
-        add_options("curses")
-    end
+    add_options("curses")
 
     -- add definitions
     if is_plat("windows") then
         add_defines("UNICODE", "_UNICODE")
     end
-
