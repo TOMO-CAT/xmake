@@ -130,10 +130,6 @@
 
 ## v1.6.3
 
-### 新特性
-
-* [#24](https://github.com/tboox/tbox/issues/24): 针对windows平台下的协程处理，增加IOCP支持
-
 ### 改进
 
 * 移除docs目录，放置到独立tbox-docs仓库，减少tbox.zip包大小
@@ -144,11 +140,9 @@
 
 ### Bugs修复
 
-* 修复windows环境变量的中文编码问题
 * 修复后台进程退出问题
 * 修复设置环境变量值为空时的崩溃问题
 * 修复协程sleep超时覆写数据的bug
-* 修复windows根路径问题
 * 修复tls线程存储内存泄露问题
 * 修复context切换问题
 * 修复`tb_vsnprintf`栈溢出问题
@@ -257,7 +251,6 @@
 * 修复ltimer定时器不准问题
 * 修复asio部分内存泄露问题
 * 修复asio/httpd在linux下keepalive模式，响应很慢问题
-* 修复windows下路径处理的一些bug
 
 ## v1.5.1
 
@@ -324,7 +317,6 @@
 ### Bugs修复
 
 * 修复string空字符串bug
-* 修复windows下asio的一些bug
 * 修复一些编译问题
 
 ## v1.4.7_rc1

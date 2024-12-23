@@ -350,12 +350,3 @@ tb_long_t tb_poller_wait(tb_poller_ref_t self, tb_poller_event_func_t func, tb_l
 #endif
     return wait;
 }
-tb_void_t tb_poller_attach(tb_poller_ref_t self)
-{
-    // check
-    tb_poller_t* poller = (tb_poller_t*)self;
-    tb_assert_and_check_return(poller);
-
-    // attach the poller to the current thread (only for windows/iocp now)
-    if (poller->attach) poller->attach(poller);
-}

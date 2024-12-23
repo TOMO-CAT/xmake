@@ -142,9 +142,6 @@ tb_int_t tb_demo_platform_poller_client_main(tb_int_t argc, tb_char_t** argv)
         poller = tb_poller_init(tb_null);
         tb_assert_and_check_break(poller);
 
-        // attach poller to the current thread
-        tb_poller_attach(poller);
-
         // init address
         tb_ipaddr_t addr;
         tb_ipaddr_set(&addr, "127.0.0.1", TB_DEMO_PORT, TB_IPADDR_FAMILY_IPV4);

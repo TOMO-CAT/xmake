@@ -60,7 +60,7 @@ typedef enum __tb_file_mode_e
 ,   TB_FILE_MODE_APPEND     = 16    //!< append
 ,   TB_FILE_MODE_TRUNC      = 32    //!< truncate
 ,   TB_FILE_MODE_DIRECT     = 64    //!< direct, no cache, @note data & size must be aligned by TB_FILE_DIRECT_ASIZE
-,   TB_FILE_MODE_EXEC       = 128   //!< executable, only for tb_file_access, not supported when creating files, not supported on windows
+,   TB_FILE_MODE_EXEC       = 128   //!< executable, only for tb_file_access, not supported when creating files
 
 }tb_file_mode_e;
 

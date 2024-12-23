@@ -149,9 +149,6 @@ tb_int_t tb_demo_platform_poller_process_main(tb_int_t argc, tb_char_t** argv)
         poller = tb_poller_init(tb_null);
         tb_assert_and_check_break(poller);
 
-        // attach poller to the current thread
-        tb_poller_attach(poller);
-
         // start processes
         tb_size_t count = COUNT;
         tb_demo_client_ref_t clients[COUNT];

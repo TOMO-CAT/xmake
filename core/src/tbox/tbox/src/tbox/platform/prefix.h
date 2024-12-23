@@ -48,8 +48,6 @@
 
 /*! the iovec size type
  *
- * @note
- * we cannot use tb_size_t because sizeof(tb_size_t) != sizeof(u_long) for windows 64bits
  */
 typedef  tb_size_t          tb_iovec_size_t;
 

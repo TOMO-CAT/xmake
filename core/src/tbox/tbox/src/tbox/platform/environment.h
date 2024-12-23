@@ -224,7 +224,7 @@ tb_size_t               tb_environment_first(tb_char_t const* name, tb_char_t* v
  * @endcode
  *
  * @param name          the variable name
- * @param values        the variable values, separator: windows(';') or other(';')
+ * @param values        the variable values, separator: (';')
  * @param maxn          the variable values maxn
  *
  * @return              the variable values size
@@ -236,7 +236,7 @@ tb_size_t               tb_environment_get(tb_char_t const* name, tb_char_t* val
  * we will set all values and overwrite it
  *
  * @param name          the variable name
- * @param values        the variable values, separator: windows(';') or other(';')
+ * @param values        the variable values, separator: (';')
  *
  * @return              tb_true or tb_false
  */
@@ -245,7 +245,7 @@ tb_bool_t               tb_environment_set(tb_char_t const* name, tb_char_t cons
 /*! add the environment variable values and not overwrite it
  *
  * @param name          the variable name
- * @param values        the variable values, separator: windows(';') or other(';')
+ * @param values        the variable values, separator: (';')
  * @param to_head       add value into the head?
  *
  * @return              tb_true or tb_false

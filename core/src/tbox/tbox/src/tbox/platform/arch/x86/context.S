@@ -44,7 +44,6 @@
 /**
  * translated from x86/context.asm by Alvin
  *
- * - support mingw/cygwin.. on windows
  */
 #if defined(_WIN32)
 
@@ -576,4 +575,3 @@ function(tb_context_jump)
 endfunc
 
 #endif
-

@@ -62,7 +62,7 @@ typedef enum __tb_socket_type_e
     // socket for icmp, only need user permission on macOS/iOS
 ,   TB_SOCKET_TYPE_ICMP                 = TB_SOCKET_TYPE_SOCK_DGRAM  | TB_SOCKET_TYPE_IPPROTO_ICMP
 #else
-    // socket for icmp, need root permission on linux/windows
+    // socket for icmp, need root permission on linux
 ,   TB_SOCKET_TYPE_ICMP                 = TB_SOCKET_TYPE_SOCK_RAW    | TB_SOCKET_TYPE_IPPROTO_ICMP
 #endif
 
@@ -90,7 +90,7 @@ typedef enum __tb_socket_ctrl_e
 ,   TB_SOCKET_CTRL_GET_TCP_NODELAY      = 7
 ,   TB_SOCKET_CTRL_SET_TCP_KEEPINTVL    = 8
 ,   TB_SOCKET_CTRL_SET_KEEPALIVE        = 9
-,   TB_SOCKET_CTRL_SET_NOSIGPIPE        = 10 //!< @note this operation always return true on windows
+,   TB_SOCKET_CTRL_SET_NOSIGPIPE        = 10
 
 }tb_socket_ctrl_e;
 

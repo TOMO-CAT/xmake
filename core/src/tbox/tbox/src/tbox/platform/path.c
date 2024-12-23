@@ -212,14 +212,7 @@ tb_char_t const* tb_path_absolute_to(tb_char_t const* root, tb_char_t const* pat
     // trace
     tb_trace_d("root: %s, size: %lu", data, size);
 
-    // is windows path? skip the drive prefix
     tb_char_t* absolute = data;
-    if (size > 2 && tb_isalpha(absolute[0]) && absolute[1] == ':' && absolute[2] == TB_PATH_SEPARATOR)
-    {
-        // skip it
-        absolute    += 2;
-        size        -= 2;
-    }
 
     // path => data
     tb_char_t const*    p = path;
@@ -385,8 +378,8 @@ tb_char_t const* tb_path_relative_to(tb_char_t const* root, tb_char_t const* pat
         if (*p == TB_PATH_SEPARATOR) last = q - root_absolute;
     }
 
-    // is different directory or outside the windows drive root? using the absolute path
-    if (last <= 0 || (last == 2 && root_absolute[1] == ':' && root_size > 3))
+    // is different directory? using the absolute path
+    if (last <= 0)
     {
         // trace
         tb_trace_d("no common root: %d", last);

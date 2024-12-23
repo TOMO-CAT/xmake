@@ -127,12 +127,6 @@ typedef struct __tb_poller_t
      */
     tb_bool_t                (*modify)(struct __tb_poller_t* poller, tb_poller_object_ref_t object, tb_size_t events, tb_cpointer_t priv);
 
-    /* attach the poller to the current thread (only for windows/iocp now)
-     *
-     * @param poller         the poller
-     */
-    tb_void_t                (*attach)(struct __tb_poller_t* poller);
-
 }tb_poller_t;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
