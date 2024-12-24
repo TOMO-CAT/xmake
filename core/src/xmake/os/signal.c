@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/os/prefix.h"
 #if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
 #   include <unistd.h>
 #   include <signal.h>

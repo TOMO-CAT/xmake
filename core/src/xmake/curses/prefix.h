@@ -14,7 +14,6 @@
  *
  * Copyright (C) 2015-present, TBOOX Open Source Group.
  *
- * @author      uael
  * @file        prefix.h
  *
  */
@@ -24,6 +23,6 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "../prefix.h"
+#include "xmake/prefix.h"
 
 #endif

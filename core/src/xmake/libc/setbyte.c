@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/libc/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -58,5 +58,3 @@ tb_int_t xm_libc_setbyte(lua_State* lua)
     else xm_libc_return_error(lua, "libc.setbyte(invalid value)!");
     return 0;
 }
-
-

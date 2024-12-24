@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/package/prefix.h"
 #ifdef USE_LUAJIT
 #   define XMI_USE_LUAJIT
 #endif
