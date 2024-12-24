@@ -30,20 +30,12 @@
  */
 
 // the separator
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   define TM_ENVIRONMENT_SEP       ';'
-#else
-#   define TM_ENVIRONMENT_SEP       ':'
-#endif
+#define TM_ENVIRONMENT_SEP       ':'
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   include "windows/environment.c"
-#else
-#   include "libc/environment.c"
-#endif
+#include "libc/environment.c"
 tb_environment_ref_t tb_environment_init()
 {
     // init environment

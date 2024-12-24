@@ -28,9 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/virtual_memory.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_MMAP)
+#if defined(TB_CONFIG_POSIX_HAVE_MMAP)
 #   include "posix/virtual_memory.c"
 #else
 tb_pointer_t tb_virtual_memory_malloc(tb_size_t size)
@@ -46,4 +44,3 @@ tb_bool_t tb_virtual_memory_free(tb_pointer_t data)
     return tb_native_memory_free(data);
 }
 #endif
-

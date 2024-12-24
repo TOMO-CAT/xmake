@@ -27,9 +27,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/print.c"
-#elif defined(TB_CONFIG_OS_ANDROID)
+#if defined(TB_CONFIG_OS_ANDROID)
 #   include "android/print.c"
 #elif defined(TB_CONFIG_OS_IOS)
 #   include "mach/ios/print.c"

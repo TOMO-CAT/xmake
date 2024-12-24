@@ -1,29 +1,3 @@
-# Contributing
-
-If you discover issues, have ideas for improvements or new features, or
-want to contribute a new module, please report them to the
-[issue tracker][1] of the repository or submit a pull request. Please,
-try to follow these guidelines when you do so.
-
-## Issue reporting
-
-* Check that the issue has not already been reported.
-* Check that the issue has not already been fixed in the latest code
-  (a.k.a. `master`).
-* Be clear, concise and precise in your description of the problem.
-* Open an issue with a descriptive title and a summary in grammatically correct,
-  complete sentences.
-* Include any relevant code to the issue summary.
-
-## Pull requests
-
-* Use a topic branch to easily amend a pull request later, if necessary.
-* Write good commit messages.
-* Use the same coding conventions as the rest of the project.
-* Ensure your edited codes with four spaces instead of TAB.
-* Please commit code to `dev` branch and we will merge into `master` branch in feature
-* Before adding new features and new modules, please go to issues to submit the relevant feature description first
-
 # 贡献代码
 
 如果你发现一些问题，或者想新增或者改进某些新特性，或者想贡献一个新的模块
@@ -64,6 +38,5 @@ try to follow these guidelines when you do so.
 * 宏定义大写，其他都小写
 * 除非必要，尽量使用`tb_size_t`, `tb_long_t`类型，而不是`tb_int_t`
 * 接口定义、接口实现、宏定义、全局变量、include等布局风格必须一致，风格可参考实际代码
-
 
 [1]: https://github.com/tboox/tbox/issues

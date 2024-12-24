@@ -90,12 +90,6 @@ typedef tb_pointer_t                tb_handle_t;
 // wchar
 #ifdef TB_CONFIG_TYPE_HAVE_WCHAR
     typedef wchar_t                 tb_wchar_t;
-#elif defined(TB_CONFIG_OS_WINDOWS)
-#   if defined(_WCHAR_T_DEFINED) || defined(_NATIVE_WCHAR_T_DEFINED)
-    typedef wchar_t                 tb_wchar_t;
-#   else
-    typedef tb_uint16_t             tb_wchar_t;
-#   endif
 #elif defined(__WCHAR_TYPE__)
 typedef __WCHAR_TYPE__              tb_wchar_t;
 #elif defined(__WCHAR_WIDTH__) && (__WCHAR_WIDTH__ == 2)
@@ -125,13 +119,8 @@ typedef tb_sint64_t                 tb_hong_t;
 typedef tb_uint64_t                 tb_hize_t;
 
 // long and size
-#if defined(TB_CONFIG_OS_WINDOWS) && TB_CPU_BIT64
-typedef tb_int64_t                  tb_long_t;
-typedef tb_uint64_t                 tb_ulong_t;
-#else
 typedef signed long                 tb_long_t;
 typedef unsigned long               tb_ulong_t;
-#endif
 typedef tb_ulong_t                  tb_size_t;
 
 // integer pointer
@@ -174,8 +163,7 @@ typedef tb_atomic32_t                                   tb_atomic_t;
 /// the atomic flag type
 #if (__tb_has_feature__(c_atomic) && !defined(__STDC_NO_ATOMICS__))
 typedef __tb_volatile__ atomic_flag                     tb_atomic_flag_t;
-#elif (defined(TB_COMPILER_IS_GCC) && defined(__ATOMIC_SEQ_CST)) || \
-        (defined(TB_CONFIG_OS_WINDOWS) && defined(TB_CONFIG_WINDOWS_HAVE__INTERLOCKEDEXCHANGE8) && defined(TB_CONFIG_WINDOWS_HAVE__INTERLOCKEDOR8))
+#elif (defined(TB_COMPILER_IS_GCC) && defined(__ATOMIC_SEQ_CST))
 typedef __tb_volatile__ struct __tb_atomic_flag_t
 {
     unsigned char __val;
@@ -292,5 +280,3 @@ typedef union __tb_value_t
 }tb_value_t, *tb_value_ref_t;
 
 #endif
-
-

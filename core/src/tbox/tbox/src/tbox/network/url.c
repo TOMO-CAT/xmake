@@ -187,8 +187,6 @@ tb_bool_t tb_url_init(tb_url_ref_t url)
         // init url
         url->protocol = TB_URL_PROTOCOL_NONE;
         url->is_ssl = 0;
-        url->is_win = 0;
-        url->pwin = 0;
         tb_ipaddr_clear(&url->addr);
         if (!tb_string_init(&url->host)) break;
         if (!tb_string_init(&url->path)) break;
@@ -228,8 +226,6 @@ tb_void_t tb_url_clear(tb_url_ref_t url)
     // clear
     url->protocol = TB_URL_PROTOCOL_NONE;
     url->is_ssl = 0;
-    url->is_win = 0;
-    url->pwin = 0;
     tb_ipaddr_clear(&url->addr);
     tb_string_clear(&url->host);
     tb_string_clear(&url->path);
@@ -251,13 +247,6 @@ tb_char_t const* tb_url_cstr(tb_url_ref_t url)
         {
             // check
             tb_check_return_val(tb_string_size(&url->path), tb_null);
-
-            // add protocol for win
-            if (url->is_win)
-            {
-                tb_assert(url->pwin);
-                tb_string_cstrfcpy(&url->cache, "%c:/", url->pwin);
-            }
 
             // add path
             tb_string_cstrncat(&url->cache, tb_string_cstr(&url->path), tb_string_size(&url->path));
@@ -427,17 +416,6 @@ tb_bool_t tb_url_cstr_set(tb_url_ref_t url, tb_char_t const* cstr)
                 url->is_ssl = 0;
                 if (*p != '/') p += 7;
             }
-            // for windows style path
-            else if (tb_isalpha(p[0]) && p[1] == ':' && (p[2] == '/' || p[2] == '\\'))
-            {
-                url->protocol = TB_URL_PROTOCOL_FILE;
-                url->is_ssl = 0;
-                url->is_win = 1;
-                url->pwin = *p;
-
-                // skip the drive prefix
-                p += 3;
-            }
             else break;
         }
         else
@@ -517,8 +495,6 @@ tb_void_t tb_url_copy(tb_url_ref_t url, tb_url_ref_t copy)
     url->protocol = copy->protocol;
     url->addr = copy->addr;
     url->is_ssl = copy->is_ssl;
-    url->is_win = copy->is_win;
-    url->pwin = copy->pwin;
     tb_string_strcpy(&url->host, &copy->host);
     tb_string_strcpy(&url->path, &copy->path);
     tb_string_strcpy(&url->args, &copy->args);
@@ -599,9 +575,6 @@ tb_size_t tb_url_protocol_probe(tb_char_t const* url)
     {
         // for unix style path
         if ((*p == '/') || (!tb_strnicmp(p, "file://", 7)))
-            protocol = TB_URL_PROTOCOL_FILE;
-        // for windows style path
-        else if (tb_isalpha(p[0]) && p[1] == ':' && (p[2] == '/' || p[2] == '\\'))
             protocol = TB_URL_PROTOCOL_FILE;
     }
     if (protocol == TB_URL_PROTOCOL_NONE)
@@ -724,4 +697,3 @@ tb_void_t tb_url_args_set(tb_url_ref_t url, tb_char_t const* args)
     // parse args
     tb_url_parse_args(&url->args, args);
 }
-

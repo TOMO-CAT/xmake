@@ -27,9 +27,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "windows/time.c"
-#elif defined(TB_CONFIG_LIBC_HAVE_GETTIMEOFDAY)
+#if defined(TB_CONFIG_LIBC_HAVE_GETTIMEOFDAY)
 #   include "posix/time.c"
 #else
 tb_void_t tb_usleep(tb_size_t us)

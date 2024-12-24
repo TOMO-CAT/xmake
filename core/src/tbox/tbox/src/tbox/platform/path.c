@@ -38,18 +38,10 @@
  */
 
 // the path separator
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   define TB_PATH_SEPARATOR            '\\'
-#else
-#   define TB_PATH_SEPARATOR            '/'
-#endif
+#define TB_PATH_SEPARATOR            '/'
 
 // is path separator?
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   define tb_path_is_sep(c)      ('/' == (c) || '\\' == (c))
-#else
-#   define tb_path_is_sep(c)      ('/' == (c))
-#endif
+#define tb_path_is_sep(c)      ('/' == (c))
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -97,37 +89,6 @@ tb_size_t tb_path_translate_to(tb_char_t const* path, tb_size_t size, tb_char_t*
     // copy root path
     tb_char_t* dst       = data;
     tb_char_t const* src = p;
-#ifdef TB_CONFIG_OS_WINDOWS
-    // e.g. c:/
-    if (tb_isalpha(src[0]) && src[1] == ':')
-    {
-        *(dst++) = src[0];
-        *(dst++) = ':';
-        src += 2;
-    }
-    // UNC path, e.g. `\\wsl.localhost`
-    else if (src[0] == '\\' && src[1] == '\\' && (tb_isalpha(src[2]) || tb_isdigit(src[2])))
-    {
-        *(dst++) = src[0];
-        *(dst++) = src[1];
-        src += 2;
-    }
-    // dos device path, e.g. `\\.\`, `\\?\`
-    else if (src[0] == '\\' && src[1] == '\\' && (src[2] == '.' || src[2] == '?') && src[3] == '\\')
-    {
-        *(dst++) = src[0];
-        *(dst++) = src[1];
-        *(dst++) = src[2];
-        *(dst++) = src[3];
-        src += 4;
-    }
-    // the absolute path on the root path of the current drive, e.g. `\Program files`
-    else if (src[0] == '\\' && src[1] != '\\')
-    {
-        *(dst++) = src[0];
-        src += 1;
-    }
-#endif
     tb_char_t const* src_root = src;
     tb_char_t const* dst_root = dst;
     if (tb_path_is_sep(*src))
@@ -197,25 +158,10 @@ tb_bool_t tb_path_is_absolute(tb_char_t const* path)
 {
     // check
     tb_assert_and_check_return_val(path, tb_false);
-
-#ifdef TB_CONFIG_OS_WINDOWS
-    // @see https://learn.microsoft.com/zh-cn/dotnet/standard/io/file-path-formats
-    return (    path[0] == '~'
-            ||  path[0] == '\\' // The absolute path on the root path of the current drive, e.g. `\Program files`
-            ||  (path[0] == '\\' && path[1] == '\\' && (tb_isalpha(path[2]) || tb_isdigit(path[2]))) // UNC path, e.g. `\\Server2\Share\Test\Foo.txt`
-            ||  (path[0] == '\\' && path[1] == '\\' && (path[2] == '.' || path[2] == '?') && path[3] == '\\')  // dos device path, e.g. `\\.\`, `\\?\`
-#   ifdef TB_COMPILER_LIKE_UNIX
-            ||  path[0] == '/'
-            ||  path[0] == '\\'
-            ||  !tb_strnicmp(path, "file:", 5)
-#   endif
-            ||  (tb_isalpha(path[0]) && path[1] == ':'));
-#else
     return (    path[0] == '/'
             ||  path[0] == '\\'
             ||  path[0] == '~'
             ||  !tb_strnicmp(path, "file:", 5));
-#endif
 }
 tb_char_t const* tb_path_absolute(tb_char_t const* path, tb_char_t* data, tb_size_t maxn)
 {
@@ -266,14 +212,7 @@ tb_char_t const* tb_path_absolute_to(tb_char_t const* root, tb_char_t const* pat
     // trace
     tb_trace_d("root: %s, size: %lu", data, size);
 
-    // is windows path? skip the drive prefix
     tb_char_t* absolute = data;
-    if (size > 2 && tb_isalpha(absolute[0]) && absolute[1] == ':' && absolute[2] == TB_PATH_SEPARATOR)
-    {
-        // skip it
-        absolute    += 2;
-        size        -= 2;
-    }
 
     // path => data
     tb_char_t const*    p = path;
@@ -439,8 +378,8 @@ tb_char_t const* tb_path_relative_to(tb_char_t const* root, tb_char_t const* pat
         if (*p == TB_PATH_SEPARATOR) last = q - root_absolute;
     }
 
-    // is different directory or outside the windows drive root? using the absolute path
-    if (last <= 0 || (last == 2 && root_absolute[1] == ':' && root_size > 3))
+    // is different directory? using the absolute path
+    if (last <= 0)
     {
         // trace
         tb_trace_d("no common root: %d", last);

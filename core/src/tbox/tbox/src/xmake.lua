@@ -84,13 +84,8 @@ option("force-utf8")
     set_default(false)
     set_showmenu(true)
     set_category("option")
-    set_description("Forcely regard all tb_char* as utf-8.")
+    set_description("Force regard all tb_char* as utf-8.")
     set_configvar("TB_CONFIG_FORCE_UTF8", 1)
-    before_check(function (option)
-        if is_plat("windows") then
-            option:add("cxflags", "/utf-8")
-        end
-    end)
 option_end()
 
 -- add modules
@@ -108,30 +103,6 @@ for _, name in ipairs({"xml", "zip", "hash", "regex", "object", "charset", "data
             end
         end)
     option_end()
-end
-
--- define options for package
-for _, name in ipairs({"zlib", "mysql", "sqlite3", "openssl", "polarssl", "mbedtls", "pcre2", "pcre"}) do
-    option(name)
-        add_deps("small", "micro")
-        set_default(true)
-        set_showmenu(true)
-        set_description("Enable the " .. name .. " package.")
-        before_check(function (option)
-            if option:dep("small"):enabled() or option:dep("micro"):enabled() then
-                option:enable(false)
-            end
-        end)
-    option_end()
-end
-
--- add requires
-local groups = {nil, nil, nil, "ssl", "ssl", "ssl", "pcre", "pcre"}
-for idx, require_name in ipairs({"zlib", "sqlite3", "mysql", "mbedtls 2.13.*", "openssl 1.1.*", "polarssl", "pcre2", "pcre"}) do
-    local name = require_name:split('%s')[1]
-    if has_config(name) then
-        add_requires(require_name, {optional = true, group = groups[idx]})
-    end
 end
 
 -- include project directories

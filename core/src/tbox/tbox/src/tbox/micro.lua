@@ -1,5 +1,5 @@
 -- add target
-target("tbox")
+target("tbox", function()
 
     -- make as a static library
     set_kind("static")
@@ -100,22 +100,6 @@ target("tbox")
         add_files("libm/isnan.c")
         add_files("libm/isnanf.c")
     end
-
-    -- add the source for the windows
-    if is_os("windows") then
-        add_files("libc/stdlib/mbstowcs.c")
-        add_files("platform/dynamic.c")
-        add_files("platform/atomic64.c")
-        add_files("platform/windows/pipe.c")
-        add_files("platform/windows/windows.c")
-        add_files("platform/windows/interface/ws2_32.c")
-        add_files("platform/windows/interface/mswsock.c")
-        add_files("platform/windows/interface/kernel32.c")
-        if is_mode("debug") then
-            add_files("platform/windows/interface/dbghelp.c")
-        end
-    end
-
     -- add the source files for coroutine
     if has_config("coroutine") then
         add_files("coroutine/stackless/*.c")
@@ -124,3 +108,4 @@ target("tbox")
 
     -- check interfaces
     on_config("check_interfaces")
+end)

@@ -30,9 +30,7 @@
  */
 #include "stdfile.h"
 #include "../utils/utils.h"
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/interface/interface.h"
-#elif defined(TB_CONFIG_POSIX_HAVE_SELECT)
+#if defined(TB_CONFIG_POSIX_HAVE_SELECT)
 #   include <unistd.h>
 #   include <sys/select.h>
 #   include <errno.h>
@@ -67,9 +65,7 @@ tb_stdfile_ref_t tb_stdfile_error()
     return (tb_stdfile_ref_t)tb_singleton_instance(TB_SINGLETON_TYPE_STDFILE_STDERR, tb_stdfile_instance_init, tb_stdfile_instance_exit, tb_null, tb_u2p(TB_STDFILE_TYPE_STDERR));
 }
 
-#if defined(TB_CONFIG_OS_WINDOWS) && defined(TB_CONFIG_MODULE_HAVE_CHARSET)
-#   include "windows/stdfile.c"
-#elif defined(TB_CONFIG_LIBC_HAVE_FREAD) && defined(TB_CONFIG_LIBC_HAVE_FWRITE)
+#if defined(TB_CONFIG_LIBC_HAVE_FREAD) && defined(TB_CONFIG_LIBC_HAVE_FWRITE)
 #   include "libc/stdfile.c"
 #else
 tb_stdfile_ref_t tb_stdfile_init(tb_size_t type)
@@ -128,17 +124,7 @@ tb_bool_t tb_stdfile_puts(tb_stdfile_ref_t file, tb_char_t const* str)
 }
 #endif
 
-#if defined(TB_CONFIG_OS_WINDOWS)
-tb_bool_t tb_stdfile_readable(tb_stdfile_ref_t self)
-{
-#ifdef TB_CONFIG_MODULE_HAVE_CHARSET
-    tb_stdfile_t* stdfile = (tb_stdfile_t*)self;
-    tb_assert_and_check_return_val(stdfile && stdfile->type == TB_STDFILE_TYPE_STDIN, tb_false);
-#endif
-
-    return WaitForSingleObject(GetStdHandle(STD_INPUT_HANDLE), 0) == WAIT_OBJECT_0;
-}
-#elif defined(TB_CONFIG_POSIX_HAVE_SELECT)
+#if defined(TB_CONFIG_POSIX_HAVE_SELECT)
 tb_bool_t tb_stdfile_readable(tb_stdfile_ref_t self)
 {
     // check

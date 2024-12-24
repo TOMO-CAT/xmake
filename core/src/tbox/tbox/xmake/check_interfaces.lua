@@ -167,7 +167,7 @@ function _check_interfaces(target)
         "expf")
 
     -- add the interfaces for posix
-    if not target:is_plat("windows") then
+    if true then
         _check_module_cfuncs(target, "posix", {"poll.h", "sys/socket.h"},         "poll")
         _check_module_cfuncs(target, "posix", {"sys/select.h"},                   "select")
         _check_module_cfuncs(target, "posix", "pthread.h",
@@ -204,66 +204,16 @@ function _check_interfaces(target)
         _check_module_cfuncs(target, "posix", "sys/mman.h",                       "mmap")
         _check_module_cfuncs(target, "posix", "sys/stat.h",                       "futimens", "utimensat")
     end
-    if not target:is_plat("windows", "wasm") then
+    if not target:is_plat("wasm") then
         _check_module_cfuncs(target, "posix", "spawn.h",                          "posix_spawnp", "posix_spawn_file_actions_addchdir_np")
         _check_module_cfuncs(target, "posix", "semaphore.h",                      "sem_init")
     end
 
-    -- add the interfaces for windows/msvc
-    if target:is_plat("windows") then
-        for _, mo in ipairs({"", "_nf", "_acq", "_rel"}) do
-            _check_module_csnippet(target, "windows", "windows.h", "_InterlockedExchange" .. mo, format([[
-                LONG _InterlockedExchange%s(LONG volatile* Destination, LONG Value);
-                #pragma intrinsic(_InterlockedExchange%s)
-                void test() {
-                    _InterlockedExchange%s(0, 0);
-                }]], mo, mo, mo))
-            _check_module_csnippet(target, "windows", "windows.h", "_InterlockedExchange8" .. mo, format([[
-                CHAR _InterlockedExchange8%s(CHAR volatile* Destination, CHAR Value);
-                #pragma intrinsic(_InterlockedExchange8%s)
-                void test() {
-                    _InterlockedExchange8%s(0, 0);
-                }]], mo, mo, mo))
-            _check_module_csnippet(target, "windows", "windows.h", "_InterlockedOr8" .. mo, format([[
-                CHAR _InterlockedOr8%s(CHAR volatile* Destination, CHAR Value);
-                #pragma intrinsic(_InterlockedOr8%s)
-                void test() {
-                    _InterlockedOr8%s(0, 0);
-                }]], mo, mo, mo))
-            _check_module_csnippet(target, "windows", "windows.h", "_InterlockedExchangeAdd" .. mo, format([[
-                LONG _InterlockedExchangeAdd%s(LONG volatile* Destination, LONG Value);
-                #pragma intrinsic(_InterlockedExchangeAdd%s)
-                void test() {
-                    _InterlockedExchangeAdd%s(0, 0);
-                }]], mo, mo, mo))
-            _check_module_csnippet(target, "windows", "windows.h", "_InterlockedExchangeAdd64" .. mo, format([[
-                __int64 _InterlockedExchangeAdd64%s(__int64 volatile* Destination, __int64 Value);
-                #pragma intrinsic(_InterlockedExchangeAdd64%s)
-                void test() {
-                    _InterlockedExchangeAdd64%s(0, 0);
-                }]], mo, mo, mo))
-            _check_module_csnippet(target, "windows", "windows.h", "_InterlockedCompareExchange" .. mo, format([[
-                LONG _InterlockedCompareExchange%s(LONG volatile* Destination, LONG Exchange, LONG Comperand);
-                #pragma intrinsic(_InterlockedCompareExchange%s)
-                void test() {
-                    _InterlockedCompareExchange%s(0, 0, 0);
-                }]], mo, mo, mo))
-            _check_module_csnippet(target, "windows", "windows.h", "_InterlockedCompareExchange64" .. mo, format([[
-                __int64 _InterlockedCompareExchange64%s(__int64 volatile* Destination, __int64 Exchange, __int64 Comperand);
-                #pragma intrinsic(_InterlockedCompareExchange64%s)
-                void test() {
-                    _InterlockedCompareExchange64%s(0, 0, 0);
-                }]], mo, mo, mo))
-        end
-    end
-
     -- add the interfaces for bsd
-    if not target:is_plat("windows") then
-        _check_module_cfuncs(target, "bsd", {"sys/file.h", "fcntl.h"}, "flock")
-    end
+    _check_module_cfuncs(target, "bsd", {"sys/file.h", "fcntl.h"}, "flock")
 
     -- add the interfaces for systemv
-    if not target:is_plat("windows", "wasm") then
+    if not target:is_plat("wasm") then
         _check_module_cfuncs(target, "systemv", {"sys/sem.h", "sys/ipc.h"}, "semget", "semtimedop")
     end
 

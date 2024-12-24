@@ -27,8 +27,5 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include "windows/syserror.c"
-#else
-#   include "libc/syserror.c"
-#endif
+
+#include "libc/syserror.c"

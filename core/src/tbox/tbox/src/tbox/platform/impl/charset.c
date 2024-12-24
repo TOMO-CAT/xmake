@@ -33,11 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS) && defined(TB_CONFIG_MODULE_HAVE_CHARSET)
-#   include "../windows/charset.c"
-#else
 tb_long_t tb_charset_conv_impl(tb_size_t ftype, tb_size_t ttype, tb_static_stream_ref_t fst, tb_static_stream_ref_t tst)
 {
     return -1;
 }
-#endif

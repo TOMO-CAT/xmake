@@ -291,9 +291,6 @@ tb_co_scheduler_io_ref_t tb_co_scheduler_io_init(tb_co_scheduler_t* scheduler)
         scheduler_io->poller = tb_poller_init(scheduler_io);
         tb_assert_and_check_break(scheduler_io->poller);
 
-        // attach poller
-        tb_poller_attach(scheduler_io->poller);
-
         // init poller object data pool
         scheduler_io->pollerdata_pool = tb_fixed_pool_init(tb_null, TB_SCHEDULER_IO_POLLERDATA_GROW, sizeof(tb_co_pollerdata_io_t), tb_null, tb_null, tb_null);
         tb_assert_and_check_break(scheduler_io->pollerdata_pool);
@@ -756,4 +753,3 @@ tb_co_scheduler_io_ref_t tb_co_scheduler_io_self()
     // get the current io scheduler
     return scheduler? (tb_co_scheduler_io_ref_t)scheduler->scheduler_io : tb_null;
 }
-

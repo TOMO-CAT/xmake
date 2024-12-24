@@ -26,9 +26,6 @@
 #include "../pipe.h"
 #include "../thread_local.h"
 #include "../../libc/libc.h"
-#ifdef TB_CONFIG_OS_WINDOWS
-#    include "../windows/windows.h"
-#endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
@@ -37,15 +34,6 @@
 #   define TB_POLLERDATA_GROW     (64)
 #else
 #   define TB_POLLERDATA_GROW     (256)
-#endif
-
-/* //////////////////////////////////////////////////////////////////////////////////////
- * declaration
- */
-#ifdef TB_CONFIG_OS_WINDOWS
-__tb_extern_c_enter__
-HANDLE tb_pipe_file_handle(tb_pipe_file_ref_t file);
-__tb_extern_c_leave__
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -58,13 +46,7 @@ static tb_long_t tb_pollerdata_object2fd(tb_poller_object_ref_t object)
 
     // get the fd
     tb_long_t fd;
-#ifdef TB_CONFIG_OS_WINDOWS
-    if (object->type == TB_POLLER_OBJECT_PIPE)
-        fd = (tb_long_t)tb_pipe_file_handle(object->ref.pipe);
-    else fd = tb_ptr2fd(object->ref.ptr);
-#else
     fd = tb_ptr2fd(object->ref.ptr);
-#endif
     tb_assert(fd > 0 && fd < TB_MAXS16);
 
     return fd;

@@ -33,9 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/fwatcher_iocp.c"
-#elif defined(TB_CONFIG_LINUX_HAVE_INOTIFY_INIT)
+#if defined(TB_CONFIG_LINUX_HAVE_INOTIFY_INIT)
 #   include "linux/fwatcher_inotify.c"
 #elif defined(TB_CONFIG_OS_MACOSX)
 #   include "mach/fwatcher_fsevent.c"

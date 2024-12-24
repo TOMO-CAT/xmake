@@ -138,9 +138,6 @@ tb_int_t tb_demo_platform_poller_pipe_main(tb_int_t argc, tb_char_t** argv)
         poller = tb_poller_init(tb_null);
         tb_assert_and_check_break(poller);
 
-        // attach poller to the current thread
-        tb_poller_attach(poller);
-
         // attempt to open clients
         tb_demo_poller_open(poller);
 

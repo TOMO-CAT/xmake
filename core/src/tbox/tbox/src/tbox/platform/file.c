@@ -35,9 +35,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   include "windows/file.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_OPEN)
+#if defined(TB_CONFIG_POSIX_HAVE_OPEN)
 #   include "posix/file.c"
 #else
 tb_file_ref_t tb_file_init(tb_char_t const* path, tb_size_t mode)
@@ -189,4 +187,3 @@ tb_long_t tb_file_fscase(tb_char_t const* path)
     }
     else return -1;
 }
-

@@ -30,14 +30,6 @@ target("tbox", function()
         add_frameworks("CoreFoundation", "CoreServices", {public = true})
     end
 
-    -- add packages
-    for _, name in ipairs({"mbedtls", "polarssl", "openssl", "pcre2", "pcre", "zlib", "mysql", "sqlite3"}) do
-        add_packages(name)
-        if has_package(name) then
-            set_configvar("TB_CONFIG_PACKAGE_HAVE_" .. name:upper(), 1)
-        end
-    end
-
     -- add options
     add_options("info", "float", "wchar", "exception", "force-utf8", "deprecated")
 
@@ -77,19 +69,13 @@ target("tbox", function()
     -- add the source files for the hash module
     if has_config("hash") then
         add_files("hash/*.c")
-        if not is_plat("windows") then
-            add_files("hash/arch/crc32.S")
-        end
+        add_files("hash/arch/crc32.S")
     end
 
     -- add the source files for the coroutine module
     if has_config("coroutine") then
         add_files("platform/context.c")
-        if is_plat("windows") then
-            add_files("platform/arch/$(arch)/context.asm")
-        else
-            add_files("platform/arch/context.S")
-        end
+        add_files("platform/arch/context.S")
         add_files("coroutine/**.c")
     end
 
@@ -134,19 +120,6 @@ target("tbox", function()
         add_files("database/*.c")
         if has_package("mysql") then add_files("database/impl/mysql.c") end
         if has_package("sqlite3") then add_files("database/impl/sqlite3.c") end
-    end
-
-    -- add the source files for the ssl package
-    if has_package("mbedtls") then add_files("network/impl/ssl/mbedtls.c")
-    elseif has_package("polarssl") then add_files("network/impl/ssl/polarssl.c")
-    elseif has_package("openssl") then add_files("network/impl/ssl/openssl.c") end
-
-    -- add the source files for the windows
-    if is_os("windows") then
-        add_files("platform/windows/windows.c")
-        add_files("platform/windows/iocp_object.c")
-        add_files("platform/windows/socket_pool.c")
-        add_files("platform/windows/interface/*.c")
     end
 
     -- add the source files for the ios

@@ -25,26 +25,14 @@
  */
 #include "prefix.h"
 #include "../../network/network.h"
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include <ws2tcpip.h>
-#else
-#   include <netinet/in.h>
-#   include <sys/un.h>
-#   include <sys/socket.h>
-#endif
+#include <netinet/in.h>
+#include <sys/un.h>
+#include <sys/socket.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * types
  */
-#ifdef TB_CONFIG_OS_WINDOWS
-typedef struct __tb_sockaddr_un_t
-{
-    ADDRESS_FAMILY sun_family;
-    tb_char_t      sun_path[108];
-}tb_sockaddr_un_t, *tb_sockaddr_un_ref_t;
-#else
 typedef struct sockaddr_un tb_sockaddr_un_t, *tb_sockaddr_un_ref_t;
-#endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * extern

@@ -1268,14 +1268,9 @@ tb_long_t tb_stream_bwrit_line(tb_stream_ref_t self, tb_char_t* data, tb_size_t 
         writ = p - data;
     }
 
-    // writ "\r\n" or "\n"
-#ifdef TB_CONFIG_OS_WINDOWS
-    tb_char_t le[] = "\r\n";
-    tb_size_t ln = 2;
-#else
+    // writ "\n"
     tb_char_t le[] = "\n";
     tb_size_t ln = 1;
-#endif
     if (!tb_stream_bwrit(self, (tb_byte_t*)le, ln)) return -1;
     writ += ln;
 

@@ -28,9 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/cpu.c"
-#elif defined(TB_CONFIG_POSIX_HAVE_SYSCONF)
+#if defined(TB_CONFIG_POSIX_HAVE_SYSCONF)
 #   include "posix/cpu.c"
 #else
 tb_size_t tb_cpu_count()
@@ -38,4 +36,3 @@ tb_size_t tb_cpu_count()
     return 1;
 }
 #endif
-

@@ -68,7 +68,6 @@ typedef struct __tb_thread_local_t
     /* the private data space for implementation
      *
      * - sizeof(pthread_key_t) * 2 for pthread key
-     * - sizeof(DWORD) * 2 for windows key
      */
     tb_byte_t               priv[16];
 

@@ -38,7 +38,6 @@
 /**
  * translated from x64/context.asm by Alvin
  *
- * - support mingw/cygwin on windows
  */
 #ifdef _WIN32
 

@@ -51,11 +51,6 @@ typedef struct __tb_stream_sock_t
     // the sock
     tb_socket_ref_t         sock;
 
-#ifdef TB_SSL_ENABLE
-    // the ssl
-    tb_ssl_ref_t            hssl;
-#endif
-
     // the sock type
     tb_uint32_t             type : 22;
 
@@ -106,7 +101,6 @@ static tb_bool_t tb_stream_sock_open(tb_stream_ref_t stream)
     tb_url_ref_t url = tb_stream_url(stream);
     tb_assert_and_check_return_val(url, tb_false);
 
-#ifndef TB_SSL_ENABLE
     // ssl? not supported
     if (tb_url_ssl(url))
     {
@@ -117,7 +111,6 @@ static tb_bool_t tb_stream_sock_open(tb_stream_ref_t stream)
         tb_stream_state_set(stream, TB_STATE_SOCK_SSL_NOT_SUPPORTED);
         return tb_false;
     }
-#endif
 
     // get address from the url
     tb_ipaddr_ref_t addr = tb_url_addr(url);
@@ -202,38 +195,7 @@ static tb_bool_t tb_stream_sock_open(tb_stream_ref_t stream)
             if (ok)
             {
                 // ssl? init it
-                if (tb_url_ssl(url))
-                {
-#ifdef TB_SSL_ENABLE
-                    // done
-                    ok = tb_false;
-                    do
-                    {
-                        // init ssl
-                        if (!stream_sock->hssl) stream_sock->hssl = tb_ssl_init(tb_false);
-                        tb_assert_and_check_break(stream_sock->hssl);
-
-                        // init bio
-                        tb_ssl_set_bio_sock(stream_sock->hssl, stream_sock->sock);
-
-                        // init timeout
-                        tb_ssl_set_timeout(stream_sock->hssl, tb_stream_timeout(stream));
-
-                        // open ssl
-                        if (!tb_ssl_open(stream_sock->hssl)) break;
-
-                        // ok
-                        ok = tb_true;
-
-                    } while (0);
-
-                    // trace
-                    tb_trace_d("sock(%p): ssl: %s", stream_sock->sock, ok? "ok" : "no");
-
-                    // ssl failed? save state
-                    if (!ok) tb_stream_state_set(stream, stream_sock->hssl? tb_ssl_state(stream_sock->hssl) : TB_STATE_SOCK_SSL_FAILED);
-#endif
-                }
+                tb_url_ssl(url);
             }
         }
         break;
@@ -267,12 +229,6 @@ static tb_bool_t tb_stream_sock_open(tb_stream_ref_t stream)
     // open failed? close ssl and socket
     if (!ok)
     {
-#ifdef TB_SSL_ENABLE
-        // exit ssl
-        if (stream_sock->hssl) tb_ssl_exit(stream_sock->hssl);
-        stream_sock->hssl = tb_null;
-#endif
-
         // exit sock
         if (stream_sock->sock) tb_socket_exit(stream_sock->sock);
         stream_sock->sock = tb_null;
@@ -297,7 +253,6 @@ static tb_bool_t tb_stream_sock_open_ref(tb_stream_ref_t stream)
     tb_url_ref_t url = tb_stream_url(stream);
     tb_assert_and_check_return_val(url, tb_false);
 
-#ifndef TB_SSL_ENABLE
     // ssl? not supported
     if (tb_url_ssl(url))
     {
@@ -308,7 +263,6 @@ static tb_bool_t tb_stream_sock_open_ref(tb_stream_ref_t stream)
         tb_stream_state_set(stream, TB_STATE_SOCK_SSL_NOT_SUPPORTED);
         return tb_false;
     }
-#endif
 
     // done
     tb_bool_t ok = tb_false;
@@ -319,33 +273,6 @@ static tb_bool_t tb_stream_sock_open_ref(tb_stream_ref_t stream)
             // ssl? init it
             if (tb_url_ssl(url))
             {
-#ifdef TB_SSL_ENABLE
-                do
-                {
-                    // init ssl
-                    if (!stream_sock->hssl) stream_sock->hssl = tb_ssl_init(tb_false);
-                    tb_assert_and_check_break(stream_sock->hssl);
-
-                    // init bio
-                    tb_ssl_set_bio_sock(stream_sock->hssl, stream_sock->sock);
-
-                    // init timeout
-                    tb_ssl_set_timeout(stream_sock->hssl, tb_stream_timeout(stream));
-
-                    // open ssl
-                    if (!tb_ssl_open(stream_sock->hssl)) break;
-
-                    // ok
-                    ok = tb_true;
-
-                } while (0);
-
-                // trace
-                tb_trace_d("sock(%p): ssl: %s", stream_sock->sock, ok? "ok" : "no");
-
-                // ssl failed? save state
-                if (!ok) tb_stream_state_set(stream, stream_sock->hssl? tb_ssl_state(stream_sock->hssl) : TB_STATE_SOCK_SSL_FAILED);
-#endif
             }
             else ok = tb_true;
         }
@@ -380,11 +307,6 @@ static tb_bool_t tb_stream_sock_open_ref(tb_stream_ref_t stream)
     // open failed? close ssl and socket
     if (!ok)
     {
-#ifdef TB_SSL_ENABLE
-        // exit ssl
-        if (stream_sock->hssl) tb_ssl_exit(stream_sock->hssl);
-        stream_sock->hssl = tb_null;
-#endif
     }
 
     // ok?
@@ -395,12 +317,6 @@ static tb_bool_t tb_stream_sock_clos(tb_stream_ref_t stream)
     // check
     tb_stream_sock_t* stream_sock = tb_stream_sock_cast(stream);
     tb_assert_and_check_return_val(stream_sock, tb_false);
-
-#ifdef TB_SSL_ENABLE
-    // close ssl
-    if (tb_url_ssl(tb_stream_url(stream)) && stream_sock->hssl)
-        tb_ssl_close(stream_sock->hssl);
-#endif
 
     // keep alive? not close it
     tb_check_return_val(!stream_sock->keep_alive, tb_true);
@@ -426,12 +342,6 @@ static tb_void_t tb_stream_sock_exit(tb_stream_ref_t stream)
     // check
     tb_stream_sock_t* stream_sock = tb_stream_sock_cast(stream);
     tb_assert_and_check_return(stream_sock);
-
-#ifdef TB_SSL_ENABLE
-    // exit ssl
-    if (stream_sock->hssl) tb_ssl_exit(stream_sock->hssl);
-    stream_sock->hssl = tb_null;
-#endif
 
     // exit sock
     if (stream_sock->sock && stream_sock->owner) tb_socket_exit(stream_sock->sock);
@@ -475,24 +385,6 @@ static tb_long_t tb_stream_sock_read(tb_stream_ref_t stream, tb_byte_t* data, tb
     {
     case TB_SOCKET_TYPE_TCP:
         {
-#ifdef TB_SSL_ENABLE
-            // ssl?
-            if (tb_url_ssl(url))
-            {
-                // check
-                tb_assert_and_check_return_val(stream_sock->hssl, -1);
-
-                // read data
-                real = tb_ssl_read(stream_sock->hssl, data, size);
-
-                // trace
-                tb_trace_d("sock(%p): read: %ld <? %lu", stream_sock->sock, real, size);
-
-                // failed or closed?
-                tb_check_return_val(real >= 0, -1);
-            }
-            else
-#endif
             {
                 // read data
                 real = tb_socket_recv(stream_sock->sock, data, size);
@@ -562,24 +454,6 @@ static tb_long_t tb_stream_sock_writ(tb_stream_ref_t stream, tb_byte_t const* da
     {
     case TB_SOCKET_TYPE_TCP:
         {
-#ifdef TB_SSL_ENABLE
-            // ssl?
-            if (tb_url_ssl(url))
-            {
-                // check
-                tb_assert_and_check_return_val(stream_sock->hssl, -1);
-
-                // writ data
-                real = tb_ssl_writ(stream_sock->hssl, data, size);
-
-                // trace
-                tb_trace_d("sock(%p): writ: %ld <? %lu", stream_sock->sock, real, size);
-
-                // failed or closed?
-                tb_check_return_val(real >= 0, -1);
-            }
-            else
-#endif
             {
                 // writ data
                 real = tb_socket_send(stream_sock->sock, data, size);
@@ -641,21 +515,6 @@ static tb_long_t tb_stream_sock_wait(tb_stream_ref_t stream, tb_size_t wait, tb_
     tb_stream_sock_t* stream_sock = tb_stream_sock_cast(stream);
     tb_assert_and_check_return_val(stream_sock && stream_sock->sock, -1);
 
-#ifdef TB_SSL_ENABLE
-    // ssl?
-    if (tb_url_ssl(tb_stream_url(stream)))
-    {
-        // check
-        tb_assert_and_check_return_val(stream_sock->hssl, -1);
-
-        // wait
-        stream_sock->wait = tb_ssl_wait(stream_sock->hssl, wait, timeout);
-
-        // timeout or failed? save state
-        if (stream_sock->wait <= 0) tb_stream_state_set(stream, tb_ssl_state(stream_sock->hssl));
-    }
-    else
-#endif
     {
         // wait
         stream_sock->wait = tb_socket_wait(stream_sock->sock, wait, timeout);

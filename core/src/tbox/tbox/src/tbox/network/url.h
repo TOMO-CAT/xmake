@@ -60,12 +60,6 @@ typedef struct __tb_url_t
     // is ssl?
     tb_uint16_t         is_ssl:   1;
 
-    // is win?
-    tb_uint16_t         is_win:   1;
-
-    // the windows prefix
-    tb_uint16_t         pwin:     8;
-
     // the addr
     tb_ipaddr_t         addr;
 

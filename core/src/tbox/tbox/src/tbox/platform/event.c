@@ -32,9 +32,6 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/event.c"
-#else
 tb_event_ref_t tb_event_init()
 {
     return (tb_event_ref_t)tb_semaphore_init(0);
@@ -59,6 +56,3 @@ tb_long_t tb_event_wait(tb_event_ref_t event, tb_long_t timeout)
     // wait
     return tb_semaphore_wait((tb_semaphore_ref_t)event, timeout);
 }
-
-#endif
-

@@ -30,9 +30,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#if defined(TB_CONFIG_OS_WINDOWS)
-#   include "windows/semaphore.c"
-#elif defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
+#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
 #   include "mach/semaphore.c"
 #elif defined(TB_CONFIG_POSIX_HAVE_SEM_INIT)
 #   include "posix/semaphore.c"
@@ -126,4 +124,3 @@ tb_long_t tb_semaphore_wait(tb_semaphore_ref_t self, tb_long_t timeout)
     return r;
 }
 #endif
-
