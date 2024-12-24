@@ -29,14 +29,10 @@
  * includes
  */
 #ifdef XM_CONFIG_API_HAVE_CURSES
-#include "prefix.h"
+#include "xmake/curses/prefix.h"
 #include <stdlib.h>
 #define NCURSES_MOUSE_VERSION 2
-#ifdef TB_COMPILER_IS_MINGW
-#   include <ncursesw/curses.h>
-#else
-#   include <curses.h>
-#endif
+#include <curses.h>
 #if defined(NCURSES_VERSION)
 #   include <locale.h>
 #endif

@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/libc/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -54,5 +54,3 @@ tb_int_t xm_libc_byteof(lua_State* lua)
     lua_pushinteger(lua, ((tb_byte_t const*)data)[offset]);
     return 1;
 }
-
-

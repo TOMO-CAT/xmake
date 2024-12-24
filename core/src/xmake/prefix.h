@@ -24,8 +24,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix/config.h"
-#include "prefix/version.h"
+#include "xmake/prefix/config.h"
+#include "xmake/prefix/version.h"
 #include "luaconf.h"
 
 #ifdef USE_LUAJIT

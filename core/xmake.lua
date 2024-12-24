@@ -7,6 +7,9 @@ set_version("3.0.4", {build = "%Y%m%d"})
 -- set xmake min version
 set_xmakever("2.8.5")
 
+-- includedirs
+add_includedirs("src", {public = true})
+
 -- set all warnings as errors
 set_warnings("all", "error")
 

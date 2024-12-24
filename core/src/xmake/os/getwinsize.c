@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/os/prefix.h"
 #include <sys/ioctl.h>
 #include <errno.h>  // for errno
 #include <unistd.h> // for STDOUT_FILENO

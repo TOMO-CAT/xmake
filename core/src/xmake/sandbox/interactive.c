@@ -35,7 +35,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/sandbox/prefix.h"
 #ifdef XM_CONFIG_API_HAVE_READLINE
 #   include <readline/history.h>
 #   include <readline/readline.h>

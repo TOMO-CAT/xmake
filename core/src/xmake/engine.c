@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake.h"
+#include "xmake/xmake.h"
 #if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
 #    include <mach-o/dyld.h>
 #    include <signal.h>
@@ -882,7 +882,7 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
         tb_assert_and_check_break(engine->lua);
 
 #if XM_HOOK_LUA_MEMALLOC
-        // hook lua memmory
+        // hook lua memory
         lua_setallocf(engine->lua, xm_engine_lua_realloc, engine->lua);
 #endif
 

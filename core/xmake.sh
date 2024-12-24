@@ -3,6 +3,9 @@
 set_project "xmake"
 set_version "3.0.4" "%Y%m%d"
 
+# add includedirs
+add_includedirs "src" "{public}"
+
 # set warning all
 set_warnings "all"
 
