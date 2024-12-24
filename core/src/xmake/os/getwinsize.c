@@ -28,14 +28,10 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   include <windows.h>
-#else
-#   include <sys/ioctl.h>
-#   include <errno.h>  // for errno
-#   include <unistd.h> // for STDOUT_FILENO
-#endif
+#include "xmake/os/prefix.h"
+#include <sys/ioctl.h>
+#include <errno.h>  // for errno
+#include <unistd.h> // for STDOUT_FILENO
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -51,21 +47,12 @@ tb_int_t xm_os_getwinsize(lua_State* lua)
     tb_int_t w = TB_MAXS16, h = TB_MAXS16;
 
     // get winsize
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
-    {
-        w = (tb_int_t)csbi.dwSize.X;
-        h = (tb_int_t)csbi.dwSize.Y;
-    }
-#else
     struct winsize size;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0)
     {
         w = (tb_int_t)size.ws_col;
         h = (tb_int_t)size.ws_row;
     }
-#endif
 
     /* local winsize = os.getwinsize()
      *

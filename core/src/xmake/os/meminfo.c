@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/os/prefix.h"
 #if defined(TB_CONFIG_OS_MACOSX)
 #   include <mach/mach.h>
 #   include <mach/machine.h>
@@ -38,8 +38,6 @@
 #elif defined(TB_CONFIG_OS_LINUX)
 #   include <stdio.h>
 #   include <sys/sysinfo.h>
-#elif defined(TB_CONFIG_OS_WINDOWS)
-#   include <windows.h>
 #elif defined(TB_CONFIG_OS_BSD)
 #   include <sys/types.h>
 #   include <sys/sysctl.h>
@@ -125,15 +123,6 @@ static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
             *pavailsize = (tb_int_t)((info.freeram + info.bufferram/* + cache size */) / (1024 * 1024));
             return tb_true;
         }
-    }
-#elif defined(TB_CONFIG_OS_WINDOWS)
-    MEMORYSTATUSEX statex;
-    statex.dwLength = sizeof(statex);
-    if (GlobalMemoryStatusEx(&statex))
-    {
-        *ptotalsize = (tb_int_t)(statex.ullTotalPhys / (1024 * 1024));
-        *pavailsize = (tb_int_t)(statex.ullAvailPhys / (1024 * 1024));
-        return tb_true;
     }
 #elif defined(TB_CONFIG_OS_BSD) && !defined(__OpenBSD__)
     unsigned long totalsize;

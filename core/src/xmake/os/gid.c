@@ -28,17 +28,13 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
-#ifndef TB_CONFIG_OS_WINDOWS
-#   include <unistd.h>
-#   include <errno.h>
-#endif
+#include "xmake/os/prefix.h"
+#include <unistd.h>
+#include <errno.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-#ifndef TB_CONFIG_OS_WINDOWS
-
 // get & set gid
 tb_int_t xm_os_gid(lua_State* lua)
 {
@@ -147,5 +143,3 @@ tb_int_t xm_os_gid(lua_State* lua)
     // ok
     return 1;
 }
-
-#endif

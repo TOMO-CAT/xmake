@@ -28,13 +28,9 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include <windows.h>
-#else
-#   include <unistd.h>
-#   include <errno.h>
-#endif
+#include "xmake/os/prefix.h"
+#include <unistd.h>
+#include <errno.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -43,12 +39,6 @@ tb_int_t xm_os_getpid(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
-
-#ifdef TB_CONFIG_OS_WINDOWS
-    lua_pushinteger(lua, (tb_int_t)GetCurrentProcessId());
-#else
     lua_pushinteger(lua, (tb_int_t)getpid());
-#endif
     return 1;
 }
-

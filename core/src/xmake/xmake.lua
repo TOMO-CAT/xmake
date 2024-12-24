@@ -1,4 +1,4 @@
-target("xmake")
+target("xmake", function()
     set_kind("static")
 
     -- add deps
@@ -34,16 +34,9 @@ target("xmake")
     add_headerfiles("$(buildir)/$(plat)/$(arch)/$(mode)/xmake.config.h", {prefixdir = "xmake"})
 
     -- add the common source files
-    add_files("**.c|winos/*.c")
-    if is_plat("windows", "msys", "mingw", "cygwin") then
-        add_files("winos/*.c")
-    end
+    add_files("**.c")
 
     -- add options
     add_options("readline")
     add_options("curses")
-
-    -- add definitions
-    if is_plat("windows") then
-        add_defines("UNICODE", "_UNICODE")
-    end
+end)

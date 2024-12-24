@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/os/prefix.h"
 #if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
 #   include <unistd.h>
 #   include <signal.h>
@@ -77,14 +77,7 @@ static tb_void_t xm_os_signal_handler_impl(tb_int_t signo)
     }
 }
 
-#if defined(TB_CONFIG_OS_WINDOWS)
-static BOOL WINAPI xm_os_signal_handler(DWORD ctrl_type)
-{
-    if (ctrl_type == CTRL_C_EVENT)
-        xm_os_signal_handler_impl(XM_OS_SIGINT);
-    return TRUE;
-}
-#elif defined(SIGINT)
+#if defined(SIGINT)
 static tb_void_t xm_os_signal_handler(tb_int_t signo_native)
 {
     tb_int_t signo = -1;
@@ -127,25 +120,7 @@ tb_int_t xm_os_signal(lua_State* lua)
         lua_setglobal(lua, name);
     }
 
-#if defined(TB_CONFIG_OS_WINDOWS)
-    if (signo != XM_OS_SIGINT)
-        return 0;
-
-    switch (handler)
-    {
-        case XM_OS_SIGFUN:
-            SetConsoleCtrlHandler(xm_os_signal_handler, TRUE);
-            break;
-        case XM_OS_SIGDFL:
-            SetConsoleCtrlHandler(NULL, FALSE);
-            break;
-        case XM_OS_SIGIGN:
-            SetConsoleCtrlHandler(NULL, TRUE);
-            break;
-        default:
-            break;
-    }
-#elif defined(SIGINT)
+#if defined(SIGINT)
     switch (signo)
     {
     case XM_OS_SIGINT:
