@@ -35,11 +35,7 @@
  */
 
 // file to fd
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   define xm_io_file2fd(file)            (lua_Number)((tb_size_t)(file))
-#else
-#   define xm_io_file2fd(file)            (lua_Number)tb_file2fd(file)
-#endif
+#define xm_io_file2fd(file)            (lua_Number)tb_file2fd(file)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation

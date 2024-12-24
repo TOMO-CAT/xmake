@@ -29,17 +29,12 @@
  * includes
  */
 #include "prefix.h"
-#ifndef TB_CONFIG_OS_WINDOWS
-#   include <unistd.h>
-#   include <sys/stat.h>
-#endif
+#include <unistd.h>
+#include <sys/stat.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-
-#ifndef TB_CONFIG_OS_WINDOWS
-
 // get owner by a given path
 tb_int_t xm_os_getown(lua_State* lua)
 {
@@ -67,5 +62,3 @@ tb_int_t xm_os_getown(lua_State* lua)
     // ok
     return 1;
 }
-
-#endif

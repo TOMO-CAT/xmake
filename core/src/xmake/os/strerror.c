@@ -29,12 +29,8 @@
  * includes
  */
 #include "prefix.h"
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   include <windows.h>
-#else
-#   include <errno.h>
-#   include <string.h>
-#endif
+#include <errno.h>
+#include <string.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -69,13 +65,7 @@ tb_int_t xm_os_strerror(lua_State* lua)
     }
     else
     {
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-        tb_char_t strerr[128] = {0};
-        tb_snprintf(strerr, sizeof(strerr), "Unknown Error (%lu)", (tb_size_t)GetLastError());
-        lua_pushstring(lua, strerr);
-#else
         lua_pushstring(lua, strerror(errno));
-#endif
     }
     return 1;
 }

@@ -35,11 +35,7 @@
  */
 
 // the separator
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   define XM_OS_ENV_SEP                    ';'
-#else
-#   define XM_OS_ENV_SEP                    ':'
-#endif
+#define XM_OS_ENV_SEP                    ':'
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation

@@ -29,11 +29,7 @@
  * includes
  */
 #include "xmake.h"
-#if defined(TB_CONFIG_OS_WINDOWS)
-#    include <fcntl.h>
-#    include <io.h>
-#    include <windows.h>
-#elif defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
+#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
 #    include <mach-o/dyld.h>
 #    include <signal.h>
 #    include <unistd.h>
@@ -124,11 +120,9 @@ tb_int_t xm_os_strerror(lua_State* lua);
 tb_int_t xm_os_getwinsize(lua_State* lua);
 tb_int_t xm_os_getpid(lua_State* lua);
 tb_int_t xm_os_signal(lua_State* lua);
-#ifndef TB_CONFIG_OS_WINDOWS
 tb_int_t xm_os_uid(lua_State* lua);
 tb_int_t xm_os_gid(lua_State* lua);
 tb_int_t xm_os_getown(lua_State* lua);
-#endif
 
 // the io/file functions
 tb_int_t xm_io_stdfile(lua_State* lua);
@@ -227,20 +221,6 @@ tb_int_t xm_bloom_filter_size(lua_State* lua);
 tb_int_t xm_bloom_filter_get(lua_State* lua);
 tb_int_t xm_bloom_filter_set(lua_State* lua);
 tb_int_t xm_bloom_filter_data_set(lua_State* lua);
-
-// the windows functions
-#ifdef TB_CONFIG_OS_WINDOWS
-tb_int_t xm_winos_cp_info(lua_State* lua);
-tb_int_t xm_winos_console_cp(lua_State* lua);
-tb_int_t xm_winos_console_output_cp(lua_State* lua);
-tb_int_t xm_winos_ansi_cp(lua_State* lua);
-tb_int_t xm_winos_oem_cp(lua_State* lua);
-tb_int_t xm_winos_logical_drives(lua_State* lua);
-tb_int_t xm_winos_registry_query(lua_State* lua);
-tb_int_t xm_winos_registry_keys(lua_State* lua);
-tb_int_t xm_winos_registry_values(lua_State* lua);
-tb_int_t xm_winos_short_path(lua_State* lua);
-#endif
 
 // the string functions
 tb_int_t xm_string_trim(lua_State* lua);
@@ -346,30 +326,11 @@ __tb_extern_c_leave__
                                               {"filesize", xm_os_filesize},
                                               {"getwinsize", xm_os_getwinsize},
                                               {"getpid", xm_os_getpid},
-                                              {"signal", xm_os_signal}
-#ifndef TB_CONFIG_OS_WINDOWS
-                                              ,
+                                              {"signal", xm_os_signal},
                                               {"uid", xm_os_uid},
                                               {"gid", xm_os_gid},
-                                              {"getown", xm_os_getown}
-#endif
-                                              ,
+                                              {"getown", xm_os_getown},
                                               {tb_null, tb_null}};
-
-// the windows functions
-#ifdef TB_CONFIG_OS_WINDOWS
-static luaL_Reg const g_winos_functions[] = {{"cp_info", xm_winos_cp_info},
-                                             {"console_cp", xm_winos_console_cp},
-                                             {"console_output_cp", xm_winos_console_output_cp},
-                                             {"oem_cp", xm_winos_oem_cp},
-                                             {"ansi_cp", xm_winos_ansi_cp},
-                                             {"logical_drives", xm_winos_logical_drives},
-                                             {"registry_query", xm_winos_registry_query},
-                                             {"registry_keys", xm_winos_registry_keys},
-                                             {"registry_values", xm_winos_registry_values},
-                                             {"short_path", xm_winos_short_path},
-                                             {tb_null, tb_null}};
-#endif
 
 // the io functions
 static luaL_Reg const g_io_functions[] = {{"stdfile", xm_io_stdfile},
@@ -520,10 +481,6 @@ static tb_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb
     // check
     tb_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, tb_false);
 
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-    tb_wchar_t** argvw = CommandLineToArgvW(GetCommandLineW(), &argc);
-#endif
-
     // put a new table into the stack
     lua_newtable(engine->lua);
 
@@ -543,14 +500,7 @@ static tb_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb
     tb_int_t i = 0;
     for (i = 1; i < argc; i++)
     {
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-        tb_char_t argvbuf[4096] = {0};
-        tb_wcstombs(argvbuf, argvw[i], tb_arrayn(argvbuf));
-        // table_new[table.getn(table_new) + 1] = argv[i]
-        lua_pushstring(engine->lua, argvbuf);
-#else
         lua_pushstring(engine->lua, argv[i]);
-#endif
         lua_rawseti(engine->lua, -2, (int)lua_objlen(engine->lua, -2) + 1);
     }
 
@@ -574,21 +524,7 @@ static tb_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
             break;
         }
 
-#if defined(TB_CONFIG_OS_WINDOWS)
-        // get the executale file path as program directory
-        tb_wchar_t buf[TB_PATH_MAXN] = {0};
-        tb_size_t  size              = (tb_size_t)GetModuleFileNameW(tb_null, buf, (DWORD)TB_PATH_MAXN);
-        tb_assert_and_check_break(size < TB_PATH_MAXN);
-        // end
-        buf[size] = L'\0';
-        size      = tb_wcstombs(path, buf, maxn);
-        tb_assert_and_check_break(size < maxn);
-        path[size] = '\0';
-
-        // ok
-        ok = tb_true;
-
-#elif defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
+#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
         /*
          * _NSGetExecutablePath() copies the path of the main executable into the buffer. The bufsize parameter
          * should initially be the size of the buffer.  The function returns 0 if the path was successfully copied,
@@ -602,7 +538,7 @@ static tb_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
         tb_uint32_t bufsize = (tb_uint32_t)maxn;
         if (!_NSGetExecutablePath(path, &bufsize)) ok = tb_true;
 #elif defined(XM_PROC_SELF_FILE)
-        // get the executale file path as program directory
+        // get the executable file path as program directory
         ssize_t size = readlink(XM_PROC_SELF_FILE, path, (size_t)maxn);
         if (size > 0 && size < maxn)
         {
@@ -684,7 +620,7 @@ static tb_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
         if (programfile)
         {
             // get real program file path from the symbol link
-#if !defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_CONFIG_OS_IOS)
+#if !defined(TB_CONFIG_OS_IOS)
             tb_char_t programpath[TB_PATH_MAXN];
             tb_long_t size = readlink(programfile, programpath, sizeof(programpath));
             if (size >= 0 && size < sizeof(programpath))
@@ -786,7 +722,7 @@ static tb_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t*
     return ok;
 }
 
-#if defined(TB_CONFIG_OS_WINDOWS) || defined(SIGINT)
+#if defined(SIGINT)
 static tb_void_t xm_engine_dump_traceback(lua_State* lua)
 {
     // @note it's not safe, but it doesn't matter, we're just trying to get the stack backtrace for debugging
@@ -799,17 +735,7 @@ static tb_void_t xm_engine_dump_traceback(lua_State* lua)
 }
 #endif
 
-#if defined(TB_CONFIG_OS_WINDOWS)
-static BOOL WINAPI xm_engine_signal_handler(DWORD signo)
-{
-    if (signo == CTRL_C_EVENT && g_lua)
-    {
-        xm_engine_dump_traceback(g_lua);
-        tb_abort();
-    }
-    return TRUE;
-}
-#elif defined(SIGINT)
+#if defined(SIGINT)
 static tb_void_t xm_engine_signal_handler(tb_int_t signo)
 {
     if (signo == SIGINT && g_lua)
@@ -827,9 +753,7 @@ static tb_void_t xm_engine_init_host(xm_engine_t* engine)
 
     // init system host
     tb_char_t const* syshost = tb_null;
-#if defined(TB_CONFIG_OS_WINDOWS)
-    syshost = "windows";
-#elif defined(TB_CONFIG_OS_MACOSX)
+#if defined(TB_CONFIG_OS_MACOSX)
     syshost = "macosx";
 #elif defined(TB_CONFIG_OS_LINUX)
     syshost = "linux";
@@ -847,27 +771,6 @@ static tb_void_t xm_engine_init_host(xm_engine_t* engine)
 
     // init subsystem host
     tb_char_t const* subhost = syshost;
-#if defined(TB_CONFIG_OS_WINDOWS)
-#    if defined(TB_COMPILER_ON_MSYS)
-    subhost = "msys";
-#    elif defined(TB_COMPILER_ON_CYGWIN)
-    subhost = "cygwin";
-#    else
-    {
-        tb_char_t data[64] = {0};
-        if (tb_environment_first("MSYSTEM", data, sizeof(data)))
-        {
-            // on msys?
-            if (!tb_strnicmp(data, "mingw", 5) // mingw32/64 on msys2
-                || !tb_strnicmp(data, "clang",
-                                5) // clang32/64 on msys2, @see https://github.com/xmake-io/xmake/issues/3060
-                || !tb_stricmp(data, "ucrt64") // ucrt64 https://www.msys2.org/docs/environments/
-                || !tb_stricmp(data, "msys"))  // on msys2
-                subhost = "msys";
-        }
-    }
-#    endif
-#endif
     lua_pushstring(engine->lua, subhost ? subhost : "unknown");
     lua_setglobal(engine->lua, "_SUBHOST");
 }
@@ -875,17 +778,7 @@ static tb_void_t xm_engine_init_host(xm_engine_t* engine)
 static __tb_inline__ tb_char_t const* xm_engine_xmake_arch()
 {
     tb_char_t const* arch = tb_null;
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#    if defined(TB_ARCH_x64)
-    arch = "x64";
-#    elif defined(TB_ARCH_ARM64)
-    arch    = "arm64";
-#    elif defined(TB_ARCH_ARM)
-    arch = "arm";
-#    else
-    arch = "x86";
-#    endif
-#elif defined(TB_ARCH_x64)
+#if defined(TB_ARCH_x64)
     arch = "x86_64";
 #elif defined(TB_ARCH_x86)
     arch = "i386";
@@ -909,49 +802,12 @@ static tb_void_t xm_engine_init_arch(xm_engine_t* engine)
 
     // init system architecture
     tb_char_t const* sysarch = tb_null;
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-    // the GetNativeSystemInfo function type
-    typedef void(WINAPI * GetNativeSystemInfo_t)(LPSYSTEM_INFO);
-
-    // get system info
-    SYSTEM_INFO           systeminfo           = {0};
-    GetNativeSystemInfo_t pGetNativeSystemInfo = tb_null;
-    tb_dynamic_ref_t      kernel32             = tb_dynamic_init("kernel32.dll");
-    if (kernel32) pGetNativeSystemInfo = (GetNativeSystemInfo_t)tb_dynamic_func(kernel32, "GetNativeSystemInfo");
-    if (pGetNativeSystemInfo)
-        pGetNativeSystemInfo(&systeminfo);
-    else
-        GetSystemInfo(&systeminfo);
-
-    // init architecture
-    switch (systeminfo.wProcessorArchitecture)
-    {
-    case PROCESSOR_ARCHITECTURE_AMD64: sysarch = "x64"; break;
-#    if defined(PROCESSOR_ARCHITECTURE_ARM64)
-    case PROCESSOR_ARCHITECTURE_ARM64: sysarch = "arm64"; break;
-#    endif
-    case PROCESSOR_ARCHITECTURE_ARM: sysarch = "arm"; break;
-    case PROCESSOR_ARCHITECTURE_INTEL: sysarch = "x86"; break;
-    default: break;
-    }
-#endif
     if (!sysarch) sysarch = xmakearch;
     lua_pushstring(engine->lua, sysarch);
     lua_setglobal(engine->lua, "_ARCH");
 
     // init subsystem architecture
     tb_char_t const* subarch = sysarch;
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-    // get architecture from msys environment
-    tb_char_t data[64] = {0};
-    if (tb_environment_first("MSYSTEM_CARCH", data, sizeof(data)))
-    {
-        if (!tb_strcmp(data, "i686"))
-            subarch = "i386";
-        else
-            subarch = data;
-    }
-#endif
     lua_pushstring(engine->lua, subarch);
     lua_setglobal(engine->lua, "_SUBARCH");
 }
@@ -966,20 +822,12 @@ static tb_void_t xm_engine_init_features(xm_engine_t* engine)
 
     // get path seperator
     lua_pushstring(engine->lua, "path_sep");
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-    lua_pushstring(engine->lua, "\\");
-#else
     lua_pushstring(engine->lua, "/");
-#endif
     lua_settable(engine->lua, -3);
 
     // get environment path seperator
     lua_pushstring(engine->lua, "path_envsep");
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-    lua_pushstring(engine->lua, ";");
-#else
     lua_pushstring(engine->lua, ":");
-#endif
     lua_settable(engine->lua, -3);
 
     lua_setglobal(engine->lua, "_FEATURES");
@@ -992,9 +840,7 @@ static tb_void_t xm_engine_init_signal(xm_engine_t* engine)
     if (!tb_environment_first("XMAKE_PROFILE", data, sizeof(data)) || tb_strcmp(data, "stuck")) return;
 
     g_lua = engine->lua;
-#if defined(TB_CONFIG_OS_WINDOWS)
-    SetConsoleCtrlHandler(xm_engine_signal_handler, TRUE);
-#elif defined(SIGINT)
+#if defined(SIGINT)
     signal(SIGINT, xm_engine_signal_handler);
 #endif
 }
@@ -1075,11 +921,6 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
 
         // bind sandbox functions
         xm_lua_register(engine->lua, "sandbox", g_sandbox_functions);
-
-        // bind windows functions
-#ifdef TB_CONFIG_OS_WINDOWS
-        xm_lua_register(engine->lua, "winos", g_winos_functions);
-#endif
 
 #ifdef XM_CONFIG_API_HAVE_READLINE
         // bind readline functions
@@ -1168,20 +1009,6 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
         lua_newtable(engine->lua);
         if (lni_initalizer) lni_initalizer((xm_engine_ref_t)engine, engine->lua);
         lua_setglobal(engine->lua, "_lni");
-
-#ifdef TB_CONFIG_OS_WINDOWS
-        // enable terminal colors output for windows cmd
-        HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
-        if (output != INVALID_HANDLE_VALUE)
-        {
-            DWORD mode;
-            if (GetConsoleMode(output, &mode))
-            {
-                // attempt to enable 0x4: ENABLE_VIRTUAL_TERMINAL_PROCESSING
-                if (SetConsoleMode(output, mode | 0x4)) tb_environment_set("COLORTERM", "color256");
-            }
-        }
-#endif
         ok = tb_true;
 
     } while (0);
@@ -1211,11 +1038,6 @@ tb_int_t xm_engine_main(xm_engine_ref_t self, tb_int_t argc, tb_char_t** argv, t
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
     tb_assert_and_check_return_val(engine && engine->lua, -1);
-
-#if defined(TB_CONFIG_OS_WINDOWS) && defined(TB_COMPILER_IS_MSVC)
-    // set "stdin" to have unicode mode
-    if (_isatty(_fileno(stdin))) _setmode(_fileno(stdin), _O_U16TEXT);
-#endif
 
     // save main arguments to the global variable: _ARGV
     if (!xm_engine_save_arguments(engine, argc, argv, taskargv)) return -1;

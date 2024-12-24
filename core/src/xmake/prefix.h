@@ -24,14 +24,10 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix/prefix.h"
+#include "prefix/config.h"
+#include "prefix/version.h"
 #include "luaconf.h"
-#if defined(TB_CONFIG_OS_WINDOWS) && defined(__cplusplus)
-#   undef LUA_API
-#   undef LUALIB_API
-#   define LUA_API extern "C"
-#   define LUALIB_API	LUA_API
-#endif
+
 #ifdef USE_LUAJIT
 #   include "luajit.h"
 #   include "lualib.h"
@@ -140,5 +136,3 @@ static __tb_inline__ tb_int_t xm_lua_isinteger(lua_State* lua, int idx)
 }
 
 #endif
-
-

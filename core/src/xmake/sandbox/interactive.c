@@ -36,7 +36,6 @@
  * includes
  */
 #include "prefix.h"
-#include "../winos/ansi.h"
 #ifdef XM_CONFIG_API_HAVE_READLINE
 #   include <readline/history.h>
 #   include <readline/readline.h>

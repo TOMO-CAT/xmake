@@ -72,51 +72,7 @@ static tb_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, tb_byte_t c
 {
     // check
     tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
-
-#ifdef TB_CONFIG_OS_WINDOWS
-
-    // write cached data first
-    tb_byte_t const* odata = tb_buffer_data(&file->wcache);
-    tb_size_t        osize = tb_buffer_size(&file->wcache);
-    if (odata && osize)
-    {
-        if (!tb_stream_bwrit(file->u.file_ref, odata, osize)) return ;
-        tb_buffer_clear(&file->wcache);
-    }
-
-    // write data by lines
-    tb_char_t const* p = (tb_char_t const*)data;
-    tb_char_t const* e = p + size;
-    tb_char_t const* lf = tb_null;
-    while (p < e)
-    {
-        lf = tb_strnchr(p, e - p, '\n');
-        if (lf)
-        {
-            if (lf > p && lf[-1] == '\r')
-            {
-                if (!tb_stream_bwrit(file->u.file_ref, (tb_byte_t const*)p, lf + 1 - p)) break;
-            }
-            else
-            {
-                if (lf > p && !tb_stream_bwrit(file->u.file_ref, (tb_byte_t const*)p, lf - p)) break;
-                if (!tb_stream_bwrit(file->u.file_ref, (tb_byte_t const*)"\r\n", 2)) break;
-            }
-
-            // next line
-            p = lf + 1;
-        }
-        else
-        {
-            // cache the left data
-            tb_buffer_memncat(&file->wcache, (tb_byte_t const*)p, e - p);
-            p = e;
-            break;
-        }
-    }
-#else
     return xm_io_file_write_file_directly(file, data, size);
-#endif
 }
 static tb_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
 {

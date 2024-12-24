@@ -29,15 +29,11 @@
  * includes
  */
 #include "prefix.h"
-#ifdef TB_CONFIG_OS_WINDOWS
-#   include <io.h>
-#   include "iscygpty.c"
-#else
-#    include <stdio.h>
-#    include <unistd.h>
-#    include <sys/types.h>
-#    include <sys/stat.h>
-#endif
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
@@ -54,29 +50,13 @@
 static tb_size_t xm_io_stdfile_isatty(tb_size_t type)
 {
     tb_bool_t answer = tb_false;
-#if defined(TB_CONFIG_OS_WINDOWS)
-    DWORD  mode;
-    HANDLE console_handle = tb_null;
-    switch (type)
-    {
-    case XM_IO_FILE_TYPE_STDIN: console_handle = GetStdHandle(STD_INPUT_HANDLE); break;
-    case XM_IO_FILE_TYPE_STDOUT: console_handle = GetStdHandle(STD_OUTPUT_HANDLE); break;
-    case XM_IO_FILE_TYPE_STDERR: console_handle = GetStdHandle(STD_ERROR_HANDLE); break;
-    }
-    answer = GetConsoleMode(console_handle, &mode);
-    /* we cannot call is_cygpty for stdin, because it will cause io.readable is always true
-     * https://github.com/xmake-io/xmake/issues/2504#issuecomment-1170130756
-     */
-    if (!answer && type != XM_IO_FILE_TYPE_STDIN)
-        answer = is_cygpty(console_handle);
-#else
+
     switch (type)
     {
     case XM_IO_FILE_TYPE_STDIN: answer = isatty(fileno(stdin)); break;
     case XM_IO_FILE_TYPE_STDOUT: answer = isatty(fileno(stdout)); break;
     case XM_IO_FILE_TYPE_STDERR: answer = isatty(fileno(stderr)); break;
     }
-#endif
 
     if (answer) type |= XM_IO_FILE_FLAG_TTY;
     return type;
@@ -85,13 +65,11 @@ static tb_size_t xm_io_stdfile_isatty(tb_size_t type)
 // @see https://github.com/xmake-io/xmake/issues/2580
 static tb_void_t xm_io_stdfile_init_buffer(tb_size_t type)
 {
-#if !defined(TB_CONFIG_OS_WINDOWS)
     struct stat stats;
     tb_int_t size = BUFSIZ;
     if (fstat(fileno(stdout), &stats) != -1)
         size = stats.st_blksize;
     setvbuf(stdout, tb_null, _IOLBF, size);
-#endif
 }
 
 static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, tb_size_t type)
@@ -152,5 +130,3 @@ tb_int_t xm_io_stdfile(lua_State* lua)
     if (file) return 1;
     else xm_io_return_error(lua, "invalid stdfile type!");
 }
-
-

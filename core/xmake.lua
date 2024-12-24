@@ -67,13 +67,8 @@ option_end()
 option("curses")
     set_description("Enable or disable curses library")
     before_check(function (option)
-        if is_plat("mingw") then
-            option:add("cincludes", "ncursesw/curses.h")
-            option:add("links", "ncursesw")
-        else
-            option:add("cincludes", "curses.h")
-            option:add("links", "curses")
-        end
+        option:add("cincludes", "curses.h")
+        option:add("links", "curses")
     end)
     add_defines("XM_CONFIG_API_HAVE_CURSES")
 option_end()
