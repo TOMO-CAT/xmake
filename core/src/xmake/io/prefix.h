@@ -24,7 +24,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "../prefix.h"
+#include "xmake/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
@@ -57,7 +57,7 @@ typedef enum __xm_io_file_type_e
 
 } xm_io_file_type_e;
 
-/* use negetive numbers for this enum, its a extension for tb_charset_type_e
+/* use negative numbers for this enum, its a extension for tb_charset_type_e
  * before adding new values, make sure they have not conflicts with values in tb_charset_type_e
  */
 typedef enum __xm_io_file_encoding_e
@@ -95,5 +95,3 @@ typedef struct __xm_io_file_t
 } xm_io_file_t;
 
 #endif
-
-

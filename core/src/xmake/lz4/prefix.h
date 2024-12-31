@@ -24,7 +24,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "../prefix.h"
+#include "xmake/prefix.h"
 #include "lz4frame.h"
 #include "lz4.h"
 #include "lz4hc.h"
@@ -311,5 +311,3 @@ static __tb_inline__ tb_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, tb_
 }
 
 #endif
-
-

@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/hash/prefix.h"
 #define XXH_NAMESPACE XM_
 #define XXH_STATIC_LINKING_ONLY
 #define XXH_IMPLEMENTATION
@@ -64,7 +64,7 @@ tb_int_t xm_hash_xxhash(lua_State* lua)
         }
         tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
-        // compuate hash
+        // compute hash
         tb_byte_t const* buffer;
         XXH64_hash_t value64;
         XXH128_hash_t value128;
@@ -134,7 +134,7 @@ tb_int_t xm_hash_xxhash(lua_State* lua)
                 else break;
             }
 
-            // compuate hash
+            // compute hash
             tb_byte_t const* buffer;
             XXH64_hash_t value64;
             XXH128_hash_t value128;

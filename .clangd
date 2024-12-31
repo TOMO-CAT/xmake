@@ -1,0 +1,6 @@
+
+CompileFlags:
+  Remove: [--use_fast_math, --expt-relaxed-constexpr, --extended-lambda, -rdc=true, -ccbin=gcc, -gencode*]
+
+Diagnostics:
+  Suppress: ['-Wunused-function']

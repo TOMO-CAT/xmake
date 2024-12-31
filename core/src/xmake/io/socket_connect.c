@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/io/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * interfaces
@@ -76,4 +76,3 @@ tb_int_t xm_io_socket_connect(lua_State* lua)
     lua_pushnumber(lua, (tb_int_t)tb_socket_connect(sock, &addr));
     return 1;
 }
-

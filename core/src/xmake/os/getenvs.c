@@ -28,30 +28,22 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   include <windows.h>
-#endif
+#include "xmake/os/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
  */
 
 // the separator
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-#   define XM_OS_ENV_SEP                    ';'
-#else
-#   define XM_OS_ENV_SEP                    ':'
-#endif
+#define XM_OS_ENV_SEP                    ':'
+
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * globals
  */
 
 // the user environment
-#if !defined(TB_CONFIG_OS_WINDOWS) || defined(TB_COMPILER_LIKE_UNIX)
 extern tb_char_t** environ;
-#endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -64,52 +56,6 @@ tb_int_t xm_os_getenvs(lua_State* lua)
     // init table
     lua_newtable(lua);
 
-#if defined(TB_CONFIG_OS_WINDOWS) && !defined(TB_COMPILER_LIKE_UNIX)
-    tb_wchar_t const* p = (tb_wchar_t const*)GetEnvironmentStringsW();
-    if (p)
-    {
-        tb_int_t    i = 1;
-        tb_char_t*  data = tb_null;
-        tb_size_t   maxn = 0;
-        tb_char_t   line[TB_PATH_MAXN];
-        tb_size_t   n = 0;
-        while (*p)
-        {
-            n = tb_wcslen(p);
-            if (n + 1 <  tb_arrayn(line))
-            {
-                if (tb_wtoa(line, p, tb_arrayn(line)) >= 0)
-                {
-                    lua_pushstring(lua, line);
-                    lua_rawseti(lua, -2, i++);
-                }
-            }
-            else
-            {
-                if (!data)
-                {
-                    maxn = n + 1;
-                    data = (tb_char_t*)tb_malloc(maxn);
-                }
-                else if (n >= maxn)
-                {
-                    maxn = n + TB_PATH_MAXN + 1;
-                    data = (tb_char_t*)tb_ralloc(data, maxn);
-                }
-                tb_assert_and_check_break(data);
-
-                if (tb_wtoa(data, p, maxn) >= 0)
-                {
-                    lua_pushstring(lua, data);
-                    lua_rawseti(lua, -2, i++);
-                }
-            }
-            p += n + 1;
-        }
-        if (data && data != line) tb_free(data);
-        data = tb_null;
-    }
-#else
     tb_char_t const** p = (tb_char_t const**)environ;
     if (p)
     {
@@ -126,7 +72,6 @@ tb_int_t xm_os_getenvs(lua_State* lua)
             p++;
         }
     }
-#endif
 
     // ok
     return 1;

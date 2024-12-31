@@ -28,7 +28,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
+#include "xmake/io/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
@@ -140,10 +140,6 @@ static tb_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t
             charset = TB_CHARSET_TYPE_UTF8;
             break;
         }
-
-#ifdef TB_CONFIG_OS_WINDOWS
-        charset = TB_CHARSET_TYPE_ANSI;
-#endif
 
     } while (0);
 

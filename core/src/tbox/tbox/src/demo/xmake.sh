@@ -107,15 +107,7 @@ target "demo"
         add_files "database/sql.c"
     fi
 
-    # link mingw/libgcc
-    if is_plat "mingw" "msys" "cygwin"; then
-        add_ldflags "-static-libgcc"
-    fi
-
     # link backtrace/execinfo for bsd
     if is_plat "freebsd" "bsd"; then
         add_syslinks "execinfo"
     fi
-
-
-

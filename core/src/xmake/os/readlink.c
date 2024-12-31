@@ -28,10 +28,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
-#ifndef TB_CONFIG_OS_WINDOWS
-#   include <unistd.h>
-#endif
+#include "xmake/os/prefix.h"
+#include <unistd.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -46,9 +44,6 @@ tb_int_t xm_os_readlink(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // is link?
-#if defined(TB_CONFIG_OS_WINDOWS)
-    lua_pushnil(lua);
-#else
     tb_char_t srcpath[TB_PATH_MAXN];
     tb_long_t size = readlink(path, srcpath, TB_PATH_MAXN);
     if (size == TB_PATH_MAXN)
@@ -73,7 +68,6 @@ tb_int_t xm_os_readlink(lua_State* lua)
         lua_pushstring(lua, srcpath);
     }
     else lua_pushnil(lua);
-#endif
 
     // ok
     return 1;
