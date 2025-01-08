@@ -337,7 +337,7 @@ function get_batchjobs(targetnames, group_pattern)
     end
 
     -- make sure static/shared/binary target's `build_root` job waits until all of it's direct and indirect
-    -- dependent `afrer_build` tasks are compiled
+    -- dependent `after_build` tasks are compiled
     for _, target in ipairs(project.ordertargets()) do
         local target_kind = target:kind()
         local non_object_kind = target_kind == "static" or target_kind ==
