@@ -37,6 +37,8 @@ jobs:
           sudo apt install -y build-essential llvm
           sudo apt install -y libgl1-mesa-dev libglu1-mesa-dev
           sudo apt install -y ccache
+          # `-stdlib=libc++` cxxflags report `/usr/bin/ld: cannot find -lc++` error
+          sudo apt install libc++-dev libc++abi-dev
 
       - name: Tests
         env:

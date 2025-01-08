@@ -5,6 +5,7 @@
 ### 新特性
 
 * [#131](https://github.com/TOMO-CAT/xmake/issues/131): 支持传递参数控制是否编译 luajit 版本
+* [#140](https://github.com/TOMO-CAT/xmake/issues/140): 支持 io.popen 调用, 运行带管道符的复杂 shell 命令
 
 ### Bugs 修复
 

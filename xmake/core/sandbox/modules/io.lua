@@ -223,6 +223,16 @@ function sandbox_io.stdfile(filepath)
     return file
 end
 
+-- open the program prog in a separate process
+function sandbox_io.popen(command, mode)
+    assert(command)
+    local process, errors = io.popen(command, mode)
+    if not process then
+        raise(errors)
+    end
+    return process
+end
+
 -- open file
 function sandbox_io.open(filepath, mode, opt)
     assert(filepath)
@@ -375,4 +385,3 @@ setmetatable(sandbox_io, { __index = function (tbl, key)
 
 -- return module
 return sandbox_io
-

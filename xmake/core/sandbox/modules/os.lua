@@ -292,6 +292,15 @@ function sandbox_os.vrunv(program, argv, opt)
     end
 end
 
+-- run command with pipes and return output
+-- @see https://github.com/TOMO-CAT/xmake/issues/140
+function sandbox_os.iorun_with_pipes(cmd, mode)
+    local handle = io.popen(cmd, module)
+    local result = handle:read("*a")
+    handle:close()
+    return result
+end
+
 -- run command and return output and error data
 function sandbox_os.iorun(cmd, ...)
     cmd = vformat(cmd, ...)
