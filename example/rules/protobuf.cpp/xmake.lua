@@ -13,7 +13,7 @@ target("foo.proto", function()
     -- 这里增加一个不存在的 -I protoc 参数来模拟报错
     add_files("foo/proto/*.proto", { proto_public = true, proto_rootdir = "foo", extra_flags = "-Ino-exist-folder" })
     add_rules("protobuf.cpp")
-    add_packages("protobuf-cpp")
+    add_packages("protobuf-cpp", {public = true})
     set_policy('build.fence', true)
 end)
 
