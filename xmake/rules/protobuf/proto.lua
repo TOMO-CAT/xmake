@@ -27,6 +27,15 @@ import("utils.progress")
 import("private.utils.batchcmds")
 import("private.async.buildjobs")
 
+-- covert prefixdir
+function _convert_prefixdir(target, prefixdir)
+    -- convert it to the correct relative path
+    -- @see https://github.com/TOMO-CAT/xmake/issues/145
+    if prefixdir and not path.is_absolute(prefixdir) then
+        return path.relative(path.join(target:scriptdir(), prefixdir))
+    end
+end
+
 -- get protoc
 function _get_protoc(target, sourcekind)
     -- find protoc
@@ -74,10 +83,11 @@ function load(target, sourcekind)
         local fileconfig = target:fileconfig(sourcefile_proto)
         if fileconfig then
             public = fileconfig.proto_public
-            prefixdir = fileconfig.proto_rootdir
+            prefixdir = _convert_prefixdir(target, fileconfig.proto_rootdir)
             autogendir = fileconfig.proto_autogendir
             grpc_cpp_plugin = fileconfig.proto_grpc_cpp_plugin
         end
+
         local rootdir = autogendir and autogendir or path.join(target:autogendir(), "rules", "protobuf")
         local filename = path.basename(sourcefile_proto) .. ".pb" .. (sourcekind == "cxx" and ".cc" or "-c.c")
         local sourcefile_cx = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename })
@@ -112,7 +122,7 @@ function buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, sourcekind, p
     local fileconfig = target:fileconfig(sourcefile_proto)
     if fileconfig then
         public = fileconfig.proto_public
-        prefixdir = fileconfig.proto_rootdir
+        prefixdir = _convert_prefixdir(target, fileconfig.proto_rootdir)
         -- custom autogen directory to access the generated header files
         -- @see https://github.com/xmake-io/xmake/issues/3678
         autogendir = fileconfig.proto_autogendir
@@ -121,6 +131,7 @@ function buildcmd_pfiles(target, batchcmds, sourcefile_proto, opt, sourcekind, p
         -- @see https://github.com/TOMO-CAT/xmake/issues/23
         extra_flags = fileconfig.extra_flags
     end
+
     local rootdir = autogendir and autogendir or path.join(target:autogendir(), "rules", "protobuf")
     local filename = path.basename(sourcefile_proto) .. ".pb" .. (sourcekind == "cxx" and ".cc" or "-c.c")
     local sourcefile_cx = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename })
@@ -195,12 +206,13 @@ function buildcmd_cxfiles(target, batchcmds, sourcefile_proto, opt, sourcekind)
         -- @see https://github.com/xmake-io/xmake/issues/828
         -- https://github.com/xmake-io/xmake/issues/1844
         -- https://github.com/TOMO-CAT/xmake/issues/22
-        prefixdir = fileconfig.proto_rootdir
+        prefixdir = _convert_prefixdir(target, fileconfig.proto_rootdir)
         -- custom autogen directory to access the generated header files
         -- @see https://github.com/xmake-io/xmake/issues/3678
         autogendir = fileconfig.proto_autogendir
         grpc_cpp_plugin = fileconfig.proto_grpc_cpp_plugin
     end
+
     local rootdir = autogendir and autogendir or path.join(target:autogendir(), "rules", "protobuf")
     local filename = path.basename(sourcefile_proto) .. ".pb" .. (sourcekind == "cxx" and ".cc" or "-c.c")
     local sourcefile_cx = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename })
@@ -262,7 +274,7 @@ function build_cxfile_objects(target, batchjobs, opt, sourcekind)
         local fileconfig = target:fileconfig(sourcefile_proto)
         if fileconfig then
             public = fileconfig.proto_public
-            prefixdir = fileconfig.proto_rootdir
+            prefixdir = _convert_prefixdir(target, fileconfig.proto_rootdir)
             -- custom autogen directory to access the generated header files
             -- @see https://github.com/xmake-io/xmake/issues/3678
             autogendir = fileconfig.proto_autogendir
@@ -312,7 +324,7 @@ function build_cxfile(target, sourcefile_proto, opt, sourcekind)
     local fileconfig = target:fileconfig(sourcefile_proto)
     if fileconfig then
         public = fileconfig.proto_public
-        prefixdir = fileconfig.proto_rootdir
+        prefixdir = _convert_prefixdir(target, fileconfig.proto_rootdir)
         -- custom autogen directory to access the generated header files
         -- @see https://github.com/xmake-io/xmake/issues/3678
         autogendir = fileconfig.proto_autogendir
@@ -375,7 +387,7 @@ function get_proto_dep_files(target, sourcefile_proto, proto_dep_files_cache, pr
     local fileconfig = target:fileconfig(sourcefile_proto)
     local proto_rootdir = "."
     if fileconfig and fileconfig.proto_rootdir then
-        proto_rootdir = fileconfig.proto_rootdir
+        proto_rootdir = _convert_prefixdir(target, fileconfig.proto_rootdir)
     end
 
     local lines = io.lines(sourcefile_proto)
