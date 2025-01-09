@@ -393,18 +393,18 @@ function get_proto_dep_files(target, sourcefile_proto, proto_dep_files_cache, pr
                 table.insert(proto_dep_files_cache[sourcefile_proto], imported_file_path)
                 get_proto_dep_files(target, imported_file_path, proto_dep_files_cache, proto_includedirs, visited)
             else
-                local find_improted_file = false
+                local find_imported_file = false
                 -- try to find the imported file from proto_includedirs
                 for _, proto_includedir in ipairs(proto_includedirs) do
                     local imported_file_path = path.join(proto_includedir, imported_file)
                     if os.exists(imported_file_path) then
-                        find_improted_file = true
+                        find_imported_file = true
                         table.insert(proto_dep_files_cache[sourcefile_proto], imported_file_path)
                         get_proto_dep_files(target, imported_file_path, proto_dep_files_cache, proto_includedirs, visited)
                         break
                     end
                 end
-                if not find_improted_file then
+                if not find_imported_file then
                     cprint(
                         "${bright red}[rules@protobuf][error]${clear} cannot find imported file [" ..
                         imported_file .. "] for source proto [" .. sourcefile_proto .. "]")
