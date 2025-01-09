@@ -6,9 +6,19 @@
 
 对于 proto target / codgen target 而言，它们会通过代码生成 *.h 头文件，而依赖它们的 target 启动编译需要这些头文件。假设 target A 依赖一个 proto target B，那么我们会在 proto target B 上将 `build.fence` 设置为 true，从而令 target A 的 `before_build` job 等待 proto target B 的 `after_build` job 运行完后再执行。
 
+> 例子可见: example/rules/protobuf.cpp/xmake.lua
+
 ### 2. build.across_targets_in_parallel
 
 设置了 `build.across_targets_in_parallel` 为 false 后，它会限制父 target 和它的所有依赖的子 target 的并行度，这意味对于父 target 为 root的子依赖图，假设任意一个其中的 target A 依赖 target B，那么 target A 的 `before_build` job 会等待 target B 的 `after_build` job 运行，导致 CPU 利用率较低。
+
+> 默认是开启的，目前没有必要关闭，所以不用关心。
+
+### 3. build.high_priority
+
+想象一种场景，在大型项目中，有一个编译时间很长（假设编译时间是 x）的 A.cc 文件。由于 cc 文件的编译独立性，我们可以将这个 A.cc 前置编译独占一个核，从而提高 CPU 利用率。假设剩余的其他 cc 文件总的编译时间是 y，那么最终的编译时间是 `std::max(x, y)`。
+
+> 例子可见：example/policy/build.high_priority/xmake.lua
 
 ## batchjobs graph 构建流程
 
@@ -188,7 +198,7 @@ end
 
 ```lua
 -- make sure static/shared/binary target waits until all of it's direct and indirect
--- dependent `afrer_build` tasks are compiled
+-- dependent `after_build` tasks are compiled
 for _, target in ipairs(project.ordertargets()) do
     local target_kind = target:kind()
     local non_object_kind = target_kind == "static" or target_kind == "shared" or target_kind == "binary"
@@ -202,4 +212,54 @@ for _, target in ipairs(project.ordertargets()) do
 end
 ```
 
-> 后续这里补充一张图。
+以 `example/policy/build.across_targets_in_parallel/xmake.lua` 为例，假设 binary target A 依赖 object target B，而 B 又依赖 static target C。那么我们必须保证 A 的 `link` job 必须在 C 的 `link` job 后，否则可能出现 bug。
+
+我们在构造了一棵尽可能并行的树后，对于非 object target，让它们的 `link` job 必须强制直接和间接依赖的 `after_build` job 完成。最终其依赖图如下所示：
+
+![buildjob graph](buildjobs-graph.png)
+
+### 2. build fence
+
+前面提到了 `build.fence` policy，对于 proto target / codgen target 而言，依赖他们的 target 需要等到 `*.h / *.hpp` 文件生成后才能触发编译。因此我们通过 `build.fence` policy 来构建编译屏障。
+
+```lua
+target("foo.proto", function()
+    set_kind("object")
+
+    add_files("foo/proto/*.proto", { proto_public = true, proto_rootdir = "foo"})
+    add_rules("protobuf.cpp")
+    add_packages("protobuf-cpp")
+    set_policy('build.fence', true)  -- target `main` 会等到 target foo.proto 编译完后才触发编译
+end)
+
+target("main", function()
+    set_kind("binary")
+    add_files("main.cc")
+    add_deps("foo.proto")
+end)
+```
+
+![build fence policy](build-fence-policy.png)
+
+### 3. 依赖图剪枝
+
+构造依赖图是通过 `xmake/modules/private/async/jobpool.lua` 实现的，它主要提供的添加依赖关系的接口是：
+
+```lua
+-- add job to the given job node
+--
+-- @param job       the job
+-- @param rootjob   the root job node (optional)
+--
+function jobpool:add(job, rootjob)
+    ...
+end
+```
+
+从 root 节点出发逐渐添加完全部的 target，之后我们还会根据前面提到的 policy 增加 / 改变依赖关系，可能会出现冗余的依赖关系。
+
+举个例子，假设 Job A 依赖 Job B 和 Job C，而且 Job B 也依赖 Job C，那么 Job A 依赖 Job C 就是一个冗余依赖，也就是虚线部分，我们应该对齐剪枝。简单描述一下，就是如果两个 Job 之间同时存在直接依赖和简洁依赖关系，那么应该剔除掉间接依赖关系。
+
+> 以我们的一个大型代码库为例，它共有 400+ targets，其中 300 个是单测 binary target，如果运行 `xmake b --dry-run --all` 空跑的话需要 20 秒以上，因此对依赖图剪枝就有一定的必要性。
+
+![prune redundant edges](prune-redundant-edges.png)
