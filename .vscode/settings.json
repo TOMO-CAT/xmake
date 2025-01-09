@@ -182,6 +182,7 @@
         "nocolor",
         "nodeps",
         "nopkgs",
+        "norun",
         "nostdinc",
         "nostdlib",
         "NSIS",

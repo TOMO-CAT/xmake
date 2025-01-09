@@ -10,6 +10,7 @@
 ### Bugs 修复
 
 * [#132](https://github.com/TOMO-CAT/xmake/issues/132): 存在 local package 时将 install package 并发度降为 1
+* [#145](https://github.com/TOMO-CAT/xmake/issues/145): 修复 protobuf rule 中 proto_rootdir 的错误相对路径问题
 
 ## v3.0.4
 
