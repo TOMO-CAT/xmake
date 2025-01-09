@@ -1,0 +1,1 @@
+-- 描述域 API: xmake/core/project/option.lua
