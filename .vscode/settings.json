@@ -136,6 +136,7 @@
         "ldflags",
         "ldpath",
         "libcxx",
+        "libgflags",
         "libgl",
         "libglu",
         "libogg",
