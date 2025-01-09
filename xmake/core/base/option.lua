@@ -482,7 +482,6 @@ function option.show_logo(logo, opt)
      >  <  | \__/ | /_| |   <  ___/
     /_/\_\_|_|  |_|\__ \|_|\_\____|
 
-                         by ruki, xmake.io
     ]]
 
     -- make rainbow for logo
