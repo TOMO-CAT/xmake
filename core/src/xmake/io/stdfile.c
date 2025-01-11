@@ -47,7 +47,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_size_t xm_io_stdfile_isatty(tb_size_t type)
+static xm_size_t xm_io_stdfile_isatty(xm_size_t type)
 {
     xm_bool_t answer = tb_false;
 
@@ -63,7 +63,7 @@ static tb_size_t xm_io_stdfile_isatty(tb_size_t type)
 }
 
 // @see https://github.com/xmake-io/xmake/issues/2580
-static xm_void_t xm_io_stdfile_init_buffer(tb_size_t type)
+static xm_void_t xm_io_stdfile_init_buffer(xm_size_t type)
 {
     struct stat stats;
     tb_int_t size = BUFSIZ;
@@ -72,7 +72,7 @@ static xm_void_t xm_io_stdfile_init_buffer(tb_size_t type)
     setvbuf(stdout, tb_null, _IOLBF, size);
 }
 
-static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, tb_size_t type)
+static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xm_size_t type)
 {
     // init stdfile
     tb_stdfile_ref_t fp = tb_null;

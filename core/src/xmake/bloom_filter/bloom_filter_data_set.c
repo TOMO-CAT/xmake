@@ -47,10 +47,10 @@ tb_int_t xm_bloom_filter_data_set(lua_State* lua)
     tb_check_return_val(filter, 0);
 
     // get data and size
-    tb_size_t        size = 0;
+    xm_size_t        size = 0;
     tb_byte_t const* data = tb_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(tb_size_t)(tb_long_t)lua_tointeger(lua, 2);
-    if (xm_lua_isinteger(lua, 3)) size = (tb_size_t)lua_tointeger(lua, 3);
+    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xm_size_t)(tb_long_t)lua_tointeger(lua, 2);
+    if (xm_lua_isinteger(lua, 3)) size = (xm_size_t)lua_tointeger(lua, 3);
     if (!data || !size)
     {
         lua_pushinteger(lua, -1);

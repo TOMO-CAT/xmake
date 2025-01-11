@@ -509,7 +509,7 @@ static xm_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb
     return tb_true;
 }
 
-static tb_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path, tb_size_t maxn)
+static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn)
 {
     // check
     tb_assert_and_check_return_val(engine && path && maxn, tb_false);
@@ -572,7 +572,7 @@ static tb_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
         }
 #else
         static tb_char_t const* s_paths[] = {"~/.local/bin/xmake", "/usr/local/bin/xmake", "/usr/bin/xmake"};
-        for (tb_size_t i = 0; i < tb_arrayn(s_paths); i++)
+        for (xm_size_t i = 0; i < tb_arrayn(s_paths); i++)
         {
             tb_char_t const* p = s_paths[i];
             if (tb_file_info(p, tb_null))
@@ -599,7 +599,7 @@ static tb_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
     return ok;
 }
 
-static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t* path, tb_size_t maxn,
+static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn,
                                                  tb_char_t const* programfile)
 {
     // check
@@ -653,7 +653,7 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
             tb_snprintf(sharedir, sizeof(sharedir), "../share/%s", engine->name);
 
             // find the program (lua) directory
-            tb_size_t        i;
+            xm_size_t        i;
             tb_file_info_t   info;
             tb_char_t        scriptpath[TB_PATH_MAXN];
             tb_char_t const* subdirs[] = {".", sharedir};
@@ -687,7 +687,7 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
     return ok;
 }
 
-static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t* path, tb_size_t maxn)
+static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn)
 {
     // check
     tb_assert_and_check_return_val(engine && path && maxn, tb_false);
@@ -852,9 +852,9 @@ static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data,
     if (nsize == 0 && data)
         tb_free(data);
     else if (!data)
-        ptr = tb_malloc((tb_size_t)nsize);
+        ptr = tb_malloc((xm_size_t)nsize);
     else if (nsize != osize)
-        ptr = tb_ralloc(data, (tb_size_t)nsize);
+        ptr = tb_ralloc(data, (xm_size_t)nsize);
     else
         ptr = data;
     return ptr;

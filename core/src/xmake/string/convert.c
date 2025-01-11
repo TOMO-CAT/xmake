@@ -38,7 +38,7 @@
 typedef struct __xm_charset_entry_t
 {
     // the charset type
-    tb_size_t           type;
+    xm_size_t           type;
 
     // the charset name
     tb_char_t const*    name;
@@ -79,7 +79,7 @@ static xm_charset_entry_ref_t xm_string_charset_find_by_name(tb_char_t const* na
     tb_assert_and_check_return_val(iterator, tb_null);
 
     // find it by the binary search
-    tb_size_t itor = tb_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
+    xm_size_t itor = tb_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
     if (itor != tb_iterator_tail(iterator))
         return (xm_charset_entry_ref_t)tb_iterator_item(iterator, itor);
     else return tb_null;
@@ -125,9 +125,9 @@ tb_int_t xm_string_convert(lua_State* lua)
     {
         // convert string
         tb_long_t   dst_size = 0;
-        tb_size_t   dst_maxn = (tb_size_t)src_size << 2;
+        xm_size_t   dst_maxn = (xm_size_t)src_size << 2;
         tb_byte_t*  dst_data = tb_malloc_bytes(dst_maxn);
-        if (dst_data && dst_maxn && (dst_size = tb_charset_conv_data(fcharset->type, tcharset->type, (tb_byte_t const*)src_cstr, (tb_size_t)src_size, dst_data, dst_maxn)) >= 0 && dst_size < dst_maxn)
+        if (dst_data && dst_maxn && (dst_size = tb_charset_conv_data(fcharset->type, tcharset->type, (tb_byte_t const*)src_cstr, (xm_size_t)src_size, dst_data, dst_maxn)) >= 0 && dst_size < dst_maxn)
         {
             lua_pushlstring(lua, (tb_char_t const *)dst_data, dst_size);
         }

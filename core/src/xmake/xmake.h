@@ -67,7 +67,7 @@ extern "C"
     }
  * @endcode
  */
-#define xm_init()     xm_init_((tb_size_t)(__xm_mode_debug__ | __xm_mode_small__), XM_VERSION_BUILD)
+#define xm_init()     xm_init_((xm_size_t)(__xm_mode_debug__ | __xm_mode_small__), XM_VERSION_BUILD)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * interfaces
@@ -80,7 +80,7 @@ extern "C"
  *
  * @return          tb_true or tb_false
  */
-xm_bool_t           xm_init_(tb_size_t mode, tb_hize_t build);
+xm_bool_t           xm_init_(xm_size_t mode, tb_hize_t build);
 
 /// exit the xmake library
 xm_void_t           xm_exit(xm_noarg_t);

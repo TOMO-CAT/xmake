@@ -43,10 +43,10 @@ tb_int_t xm_io_socket_open(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get socket type
-    tb_size_t socktype = (tb_size_t)luaL_checknumber(lua, 1);
+    xm_size_t socktype = (xm_size_t)luaL_checknumber(lua, 1);
 
     // get address family
-    tb_size_t family = (tb_size_t)luaL_checknumber(lua, 2);
+    xm_size_t family = (xm_size_t)luaL_checknumber(lua, 2);
 
     // map socket type
     switch (socktype)

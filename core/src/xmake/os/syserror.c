@@ -40,7 +40,7 @@ tb_int_t xm_os_syserror(lua_State* lua)
 
     // get syserror state
     tb_int_t  err = 0;
-    tb_size_t syserror = tb_syserror_state();
+    xm_size_t syserror = tb_syserror_state();
     switch (syserror)
     {
     case TB_STATE_SYSERROR_NOT_PERM:            err = 1; break;

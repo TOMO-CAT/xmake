@@ -58,7 +58,7 @@ tb_int_t xm_io_poller_modify(lua_State* lua)
     tb_check_return_val(cdata, 0);
 
     // get events
-    tb_size_t events = (tb_size_t)luaL_checknumber(lua, 3);
+    xm_size_t events = (xm_size_t)luaL_checknumber(lua, 3);
 
     // modify events in poller
     tb_poller_object_t object;

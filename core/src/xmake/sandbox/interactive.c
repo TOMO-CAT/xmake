@@ -145,7 +145,7 @@ static tb_int_t xm_sandbox_incomplete(lua_State *lua, tb_int_t status)
     return 0;
 }
 // read line
-static tb_size_t xm_sandbox_readline(tb_char_t* data, tb_size_t maxn, tb_char_t const* prompt)
+static xm_size_t xm_sandbox_readline(tb_char_t* data, xm_size_t maxn, tb_char_t const* prompt)
 {
 #ifdef XM_CONFIG_API_HAVE_READLINE
     // get line
@@ -156,7 +156,7 @@ static tb_size_t xm_sandbox_readline(tb_char_t* data, tb_size_t maxn, tb_char_t 
         add_history(line);
 
         // copy line to data
-        tb_size_t size = tb_strlcpy(data, line, maxn);
+        xm_size_t size = tb_strlcpy(data, line, maxn);
 
         // free line
         free((void*)line);
@@ -187,7 +187,7 @@ static tb_int_t xm_sandbox_pushline(lua_State* lua, tb_char_t const* prompt2)
 {
     // read line
     tb_char_t data[LUA_PROMPT_BUFSIZE];
-    tb_size_t size = xm_sandbox_readline(data, sizeof(data), prompt2);
+    xm_size_t size = xm_sandbox_readline(data, sizeof(data), prompt2);
     if (size)
     {
         // split line '\0'
@@ -225,7 +225,7 @@ static tb_int_t xm_sandbox_loadline(lua_State* lua, tb_int_t top)
     // read first line
     tb_int_t  status;
     tb_char_t data[LUA_PROMPT_BUFSIZE];
-    tb_size_t size = xm_sandbox_readline(data + 7, sizeof(data) - 7, prompt);
+    xm_size_t size = xm_sandbox_readline(data + 7, sizeof(data) - 7, prompt);
     if (size)
     {
         // split line '\0'

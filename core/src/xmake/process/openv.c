@@ -67,7 +67,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     tb_check_return_val(argn >= 0, 0);
 
     // get arguments
-    tb_size_t           argi = 0;
+    xm_size_t           argi = 0;
     tb_char_t const**   argv = tb_nalloc0_type(1 + argn + 1, tb_char_t const*);
     tb_check_return_val(argv, 0);
 
@@ -109,7 +109,7 @@ tb_int_t xm_process_openv(lua_State* lua)
 
     // get option arguments
     xm_bool_t          exclusive = tb_false;
-    tb_size_t          envn = 0;
+    xm_size_t          envn = 0;
     tb_char_t const*   envs[1024] = {0};
     tb_char_t const*   inpath  = tb_null;
     tb_char_t const*   outpath = tb_null;
@@ -220,10 +220,10 @@ tb_int_t xm_process_openv(lua_State* lua)
         if (lua_istable(lua, -1))
         {
             // get environment variables count
-            tb_size_t count = (tb_size_t)lua_objlen(lua, -1);
+            xm_size_t count = (xm_size_t)lua_objlen(lua, -1);
 
             // get all passed environment variables
-            tb_size_t i;
+            xm_size_t i;
             for (i = 0; i < count; i++)
             {
                 // get envs[i]

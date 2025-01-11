@@ -44,7 +44,7 @@ tb_int_t xm_os_cpdir(lua_State* lua)
     tb_check_return_val(src && dst, 0);
 
     // init copy flags
-    tb_size_t flags = TB_FILE_COPY_NONE;
+    xm_size_t flags = TB_FILE_COPY_NONE;
     xm_bool_t is_symlink = lua_toboolean(lua, 3);
     if (is_symlink)
         flags |= TB_FILE_COPY_LINK;

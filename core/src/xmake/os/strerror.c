@@ -41,7 +41,7 @@ tb_int_t xm_os_strerror(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get syserror state
-    tb_size_t syserror = tb_syserror_state();
+    xm_size_t syserror = tb_syserror_state();
     if (syserror != TB_STATE_SYSERROR_UNKNOWN_ERROR)
     {
         tb_char_t const* strerr = "Unknown";

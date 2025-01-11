@@ -55,13 +55,13 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
     tb_long_t mode = tuple[2].l;
 
     // the count
-    tb_size_t* pcount = &(tuple[3].ul);
+    xm_size_t* pcount = &(tuple[3].ul);
 
     // trace
     tb_trace_d("path[%c]: %s", info->type == TB_FILE_TYPE_DIRECTORY? 'd' : 'f', path);
 
     // we can ignore it directly if this path is file, but we need directory
-    tb_size_t needtype = (mode == 1)? TB_FILE_TYPE_DIRECTORY : ((mode == 0)? TB_FILE_TYPE_FILE : (TB_FILE_TYPE_FILE | TB_FILE_TYPE_DIRECTORY));
+    xm_size_t needtype = (mode == 1)? TB_FILE_TYPE_DIRECTORY : ((mode == 0)? TB_FILE_TYPE_FILE : (TB_FILE_TYPE_FILE | TB_FILE_TYPE_DIRECTORY));
     if (info->type == TB_FILE_TYPE_FILE && needtype == TB_FILE_TYPE_DIRECTORY)
         return TB_DIRECTORY_WALK_CODE_CONTINUE;
 

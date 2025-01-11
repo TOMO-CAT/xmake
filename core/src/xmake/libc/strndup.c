@@ -41,7 +41,7 @@ tb_int_t xm_libc_strndup(lua_State* lua)
     // do strndup
     tb_char_t const* s = tb_null;
     if (lua_isnumber(lua, 1))
-        s = (tb_char_t const*)(tb_size_t)lua_tointeger(lua, 1);
+        s = (tb_char_t const*)(xm_size_t)lua_tointeger(lua, 1);
     else if (lua_isstring(lua, 2))
         s = lua_tostring(lua, 2);
     else xm_libc_return_error(lua, "libc.strndup(invalid args)!");

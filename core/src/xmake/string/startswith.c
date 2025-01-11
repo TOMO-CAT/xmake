@@ -45,7 +45,7 @@ tb_int_t xm_string_startswith(lua_State* lua)
     tb_check_return_val(string && prefix, 0);
 
     // string:startswith(prefix)?
-    lua_pushboolean(lua, !tb_strncmp(string, prefix, (tb_size_t)prefix_size));
+    lua_pushboolean(lua, !tb_strncmp(string, prefix, (xm_size_t)prefix_size));
 
     // ok
     return 1;

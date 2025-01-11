@@ -39,13 +39,13 @@ tb_int_t xm_hash_sha(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get mode
-    tb_size_t mode = (tb_size_t)lua_tointeger(lua, 1);
+    xm_size_t mode = (xm_size_t)lua_tointeger(lua, 1);
 
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 2) && xm_lua_isinteger(lua, 3))
     {
-        tb_byte_t const* data = (tb_byte_t const*)(tb_size_t)(tb_long_t)lua_tointeger(lua, 2);
-        tb_size_t size = (tb_size_t)lua_tointeger(lua, 3);
+        tb_byte_t const* data = (tb_byte_t const*)(xm_size_t)(tb_long_t)lua_tointeger(lua, 2);
+        xm_size_t size = (xm_size_t)lua_tointeger(lua, 3);
         if (!data || !size)
         {
             lua_pushnil(lua);
@@ -62,8 +62,8 @@ tb_int_t xm_hash_sha(lua_State* lua)
         tb_sha_exit(&sha, buffer, sizeof(buffer));
 
         // make sha string
-        tb_size_t i = 0;
-        tb_size_t n = sha.digest_len << 2;
+        xm_size_t i = 0;
+        xm_size_t n = sha.digest_len << 2;
         tb_char_t s[256] = {0};
         for (i = 0; i < n; ++i) tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
@@ -116,8 +116,8 @@ tb_int_t xm_hash_sha(lua_State* lua)
             tb_sha_exit(&sha, buffer, sizeof(buffer));
 
             // make sha string
-            tb_size_t i = 0;
-            tb_size_t n = sha.digest_len << 2;
+            xm_size_t i = 0;
+            xm_size_t n = sha.digest_len << 2;
             tb_char_t s[256] = {0};
             for (i = 0; i < n; ++i) tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 

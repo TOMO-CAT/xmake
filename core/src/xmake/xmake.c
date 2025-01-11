@@ -27,7 +27,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static __tb_inline__ xm_bool_t xm_check_mode(tb_size_t mode)
+static __tb_inline__ xm_bool_t xm_check_mode(xm_size_t mode)
 {
 #ifdef __xm_debug__
     if (!(mode & TB_MODE_DEBUG))
@@ -84,7 +84,7 @@ static __tb_inline__ xm_bool_t xm_version_check(tb_hize_t build)
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-xm_bool_t xm_init_(tb_size_t mode, tb_hize_t build)
+xm_bool_t xm_init_(xm_size_t mode, tb_hize_t build)
 {
     // trace
     tb_trace_d("init: ..");

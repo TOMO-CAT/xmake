@@ -49,7 +49,7 @@ tb_int_t xm_io_socket_listen(lua_State* lua)
     tb_check_return_val(sock, 0);
 
     // get backlog
-    tb_size_t backlog = (tb_size_t)luaL_checknumber(lua, 2);
+    xm_size_t backlog = (xm_size_t)luaL_checknumber(lua, 2);
 
     // listen socket
     lua_pushnumber(lua, (tb_int_t)tb_socket_listen(sock, backlog));

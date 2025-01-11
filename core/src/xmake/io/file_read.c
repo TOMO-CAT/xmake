@@ -63,7 +63,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
             tb_char_t const* e = tb_strnchr((tb_char_t const*)data, real, '\n');
             if (e)
             {
-                tb_size_t n = (tb_byte_t const*)e + 1 - data;
+                xm_size_t n = (tb_byte_t const*)e + 1 - data;
                 if (!tb_stream_skip(stream, n)) return -1;
                 tb_buffer_memncat(line, data, n);
                 break;
@@ -91,7 +91,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     }
 
     // ok?
-    tb_size_t linesize = tb_buffer_size(line);
+    xm_size_t linesize = tb_buffer_size(line);
     if (linesize) return linesize;
     else return (eof || tb_stream_beof(stream))? -1 : 0;
 }
@@ -117,7 +117,7 @@ static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
     // translate line data
     tb_int_t    result = PL_FAIL;
     tb_char_t*  data = tb_null;
-    tb_size_t   conlen = tb_strlen(continuation);
+    xm_size_t   conlen = tb_strlen(continuation);
     do
     {
         // eof?
@@ -321,20 +321,20 @@ static tb_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, tb_char_t 
     return 1;
 }
 
-static tb_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, tb_char_t const* continuation, xm_bool_t keep_crlf)
+static xm_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, tb_char_t const* continuation, xm_bool_t keep_crlf)
 {
     // check
     tb_assert(buf && file && continuation && xm_io_file_is_std(file));
 
     // get input buffer
     tb_char_t strbuf[8192];
-    tb_size_t buflen = 0;
-    tb_size_t result = PL_FAIL;
+    xm_size_t buflen = 0;
+    xm_size_t result = PL_FAIL;
     if (tb_stdfile_gets(file->u.std_ref, strbuf, tb_arrayn(strbuf) - 1))
         buflen = tb_strlen(strbuf);
     else return PL_EOF;
 
-    tb_size_t conlen = tb_strlen(continuation);
+    xm_size_t conlen = tb_strlen(continuation);
     if (buflen > 0 && strbuf[buflen - 1] != '\n')
     {
         // end of file, no lf found
@@ -465,11 +465,11 @@ static tb_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, tb_cha
     }
 
     // get line buffer
-    tb_byte_t* buf_ptr = tb_buffer_resize(&file->rcache, (tb_size_t)n);
+    tb_byte_t* buf_ptr = tb_buffer_resize(&file->rcache, (xm_size_t)n);
     tb_assert(buf_ptr);
 
     // io.read(n)
-    if (tb_stdfile_read(file->u.std_ref, buf_ptr, (tb_size_t)n))
+    if (tb_stdfile_read(file->u.std_ref, buf_ptr, (xm_size_t)n))
         lua_pushlstring(lua, (tb_char_t const*)buf_ptr, (size_t)n);
     else lua_pushnil(lua);
     return 1;

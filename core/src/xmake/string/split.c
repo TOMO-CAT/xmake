@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xm_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t const* cdls, tb_size_t ndls, xm_bool_t strict, tb_int_t limit)
+static xm_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, xm_size_t nstr, tb_char_t const* cdls, xm_size_t ndls, xm_bool_t strict, tb_int_t limit)
 {
     tb_int_t num = 0;
     tb_char_t const* end = cstr + nstr;
@@ -63,7 +63,7 @@ static xm_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, tb_s
         lua_rawseti(lua, -2, ++num);
     }
 }
-static xm_void_t xm_string_split_chr(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t ch, xm_bool_t strict, tb_int_t limit)
+static xm_void_t xm_string_split_chr(lua_State* lua, tb_char_t const* cstr, xm_size_t nstr, tb_char_t ch, xm_bool_t strict, tb_int_t limit)
 {
     tb_int_t num = 0;
     tb_char_t const* end = cstr + nstr;
@@ -126,7 +126,7 @@ tb_int_t xm_string_split(lua_State* lua)
 
     // split it
     lua_newtable(lua);
-    if (ndls == 1) xm_string_split_chr(lua, cstr, (tb_size_t)nstr, cdls[0], strict, limit);
-    else xm_string_split_str(lua, cstr, (tb_size_t)nstr, cdls, ndls, strict, limit);
+    if (ndls == 1) xm_string_split_chr(lua, cstr, (xm_size_t)nstr, cdls[0], strict, limit);
+    else xm_string_split_str(lua, cstr, (xm_size_t)nstr, cdls, ndls, strict, limit);
     return 1;
 }

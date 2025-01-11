@@ -60,7 +60,7 @@ tb_int_t xm_os_getenvs(lua_State* lua)
     if (p)
     {
         tb_int_t  i = 1;
-        tb_size_t n = 0;
+        xm_size_t n = 0;
         while (*p)
         {
             n = tb_strlen(*p);

@@ -47,7 +47,7 @@ tb_int_t xm_bloom_filter_size(lua_State* lua)
     tb_check_return_val(filter, 0);
 
     // get size
-    tb_size_t size = tb_bloom_filter_size(filter);
+    xm_size_t size = tb_bloom_filter_size(filter);
     lua_pushinteger(lua, (tb_int_t)size);
     return 1;
 }

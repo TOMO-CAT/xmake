@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xm_void_t tb_os_args_append(tb_string_ref_t result, tb_char_t const* cstr, tb_size_t size, xm_bool_t escape, xm_bool_t nowrap)
+static xm_void_t tb_os_args_append(tb_string_ref_t result, tb_char_t const* cstr, xm_size_t size, xm_bool_t escape, xm_bool_t nowrap)
 {
     // check
     tb_assert_and_check_return(size < TB_PATH_MAXN);
@@ -107,8 +107,8 @@ tb_int_t xm_os_args(lua_State* lua)
     // make string from arguments list
     if (lua_istable(lua, 1))
     {
-        tb_size_t i = 0;
-        tb_size_t n = (tb_size_t)lua_objlen(lua, 1);
+        xm_size_t i = 0;
+        xm_size_t n = (xm_size_t)lua_objlen(lua, 1);
         for (i = 1; i <= n; i++)
         {
             // add space
@@ -146,7 +146,7 @@ tb_int_t xm_os_args(lua_State* lua)
     }
 
     // return result
-    tb_size_t size = tb_string_size(&result);
+    xm_size_t size = tb_string_size(&result);
     if (size) lua_pushlstring(lua, tb_string_cstr(&result), size);
     else lua_pushliteral(lua, "");
     tb_string_exit(&result);

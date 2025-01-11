@@ -78,7 +78,7 @@ static xm_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t f
     // ok
     return tb_true;
 }
-static xm_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t fromidx, semver_t* semver, tb_char_t const* version_str, tb_size_t version_len)
+static xm_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t fromidx, semver_t* semver, tb_char_t const* version_str, xm_size_t version_len)
 {
     lua_Integer i = 0;
     luaL_checktype(lua, fromidx, LUA_TTABLE);
@@ -88,7 +88,7 @@ static xm_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t f
         lua_gettable(lua, fromidx);
 
         tb_char_t const* source_str = luaL_checkstring(lua, -1);
-        tb_size_t source_len = tb_strlen(source_str);
+        xm_size_t source_len = tb_strlen(source_str);
         lua_pop(lua, 1);
         if (source_len == version_len && tb_strncmp(source_str, version_str, version_len) == 0)
         {
@@ -102,7 +102,7 @@ static xm_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t f
     }
     return tb_false;
 }
-static xm_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx, tb_char_t const* range_str, tb_size_t range_len)
+static xm_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx, tb_char_t const* range_str, xm_size_t range_len)
 {
     lua_Integer i = 0;
     luaL_checktype(lua, fromidx, LUA_TTABLE);
@@ -112,7 +112,7 @@ static xm_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx
         lua_gettable(lua, fromidx);
 
         tb_char_t const* source_str = luaL_checkstring(lua, -1);
-        tb_size_t source_len = tb_strlen(source_str);
+        xm_size_t source_len = tb_strlen(source_str);
         lua_pop(lua, 1);
         if (source_len == range_len && tb_memcmp(source_str, range_str, source_len) == 0)
         {
@@ -193,7 +193,7 @@ tb_int_t xm_semver_select(lua_State* lua)
         tb_check_break(range_str);
 
         // get the range string length
-        tb_size_t range_len = tb_strlen(range_str);
+        xm_size_t range_len = tb_strlen(range_str);
 
         // parse the version range string
         is_range = semver_rangen(&range, range_str, range_len) == 0;
