@@ -27,10 +27,10 @@
 #include "xmake/prefix.h"
 #include "xmake/engine.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
- * extern
- */
-__tb_extern_c_enter__
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
@@ -83,17 +83,16 @@ __tb_extern_c_enter__
 xm_bool_t           xm_init_(tb_size_t mode, tb_hize_t build);
 
 /// exit the xmake library
-xm_void_t           xm_exit(tb_noarg_t);
+xm_void_t           xm_exit(xm_noarg_t);
 
 /*! the xmake version
  *
  * @return          the xmake version
  */
-tb_version_t const* xm_version(tb_noarg_t);
+tb_version_t const* xm_version(xm_noarg_t);
 
-/* //////////////////////////////////////////////////////////////////////////////////////
- * extern
- */
-__tb_extern_c_leave__
+#ifdef __cplusplus
+}
+#endif
 
 #endif
