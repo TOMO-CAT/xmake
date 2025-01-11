@@ -83,7 +83,7 @@ __tb_extern_c_enter__
 xm_bool_t           xm_init_(tb_size_t mode, tb_hize_t build);
 
 /// exit the xmake library
-tb_void_t           xm_exit(tb_noarg_t);
+xm_void_t           xm_exit(tb_noarg_t);
 
 /*! the xmake version
  *

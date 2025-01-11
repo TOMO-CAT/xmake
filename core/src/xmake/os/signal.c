@@ -63,7 +63,7 @@ static lua_State* g_lua = tb_null;
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_os_signal_handler_impl(tb_int_t signo)
+static xm_void_t xm_os_signal_handler_impl(tb_int_t signo)
 {
     // do callback(signo)
     lua_State* lua = g_lua;
@@ -78,7 +78,7 @@ static tb_void_t xm_os_signal_handler_impl(tb_int_t signo)
 }
 
 #if defined(SIGINT)
-static tb_void_t xm_os_signal_handler(tb_int_t signo_native)
+static xm_void_t xm_os_signal_handler(tb_int_t signo_native)
 {
     tb_int_t signo = -1;
     switch (signo_native)

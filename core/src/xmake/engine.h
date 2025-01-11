@@ -39,7 +39,7 @@ __tb_extern_c_enter__
 typedef struct {tb_int_t dummy;} const* xm_engine_ref_t;
 
 /// the lni initializer callback type
-typedef tb_void_t (*xm_engine_lni_initalizer_cb_t)(xm_engine_ref_t engine, lua_State* lua);
+typedef xm_void_t (*xm_engine_lni_initalizer_cb_t)(xm_engine_ref_t engine, lua_State* lua);
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * interfaces
@@ -58,7 +58,7 @@ xm_engine_ref_t             xm_engine_init(tb_char_t const* name, xm_engine_lni_
  *
  * @param engine            the engine
  */
-tb_void_t                   xm_engine_exit(xm_engine_ref_t engine);
+xm_void_t                   xm_engine_exit(xm_engine_ref_t engine);
 
 /*! do the main entry of the engine
  *
@@ -77,7 +77,7 @@ tb_int_t                    xm_engine_main(xm_engine_ref_t engine, tb_int_t argc
  * @param module            the lni module name
  * @param funcs             the lni module functions
  */
-tb_void_t                   xm_engine_register(xm_engine_ref_t engine, tb_char_t const* module, luaL_Reg const funcs[]);
+xm_void_t                   xm_engine_register(xm_engine_ref_t engine, tb_char_t const* module, luaL_Reg const funcs[]);
 
 /*! run main entry of the engine singleton
  *

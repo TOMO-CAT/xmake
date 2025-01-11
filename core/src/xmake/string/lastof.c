@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t const* csubstr, tb_size_t nsubstr)
+static xm_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t const* csubstr, tb_size_t nsubstr)
 {
     // find it
     tb_char_t const* curr = tb_null;
@@ -53,7 +53,7 @@ static tb_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, tb_
     if (curr) lua_pushinteger(lua, curr - cstr + 1);
     else lua_pushnil(lua);
 }
-static tb_void_t xm_string_lastof_chr(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t ch)
+static xm_void_t xm_string_lastof_chr(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t ch)
 {
     tb_char_t const* pos = tb_strrchr(cstr, ch); // faster than tb_strnrchr()
     if (pos) lua_pushinteger(lua, pos - cstr + 1);

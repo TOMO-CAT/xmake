@@ -80,7 +80,7 @@ typedef struct __xm_lz4_dstream_t
  * interfaces
  */
 
-static __tb_inline__ tb_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
+static __tb_inline__ xm_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
 {
     if (stream)
     {
@@ -187,7 +187,7 @@ static __tb_inline__ tb_long_t xm_lz4_cstream_read(xm_lz4_cstream_t* stream, tb_
     return read;
 }
 
-static __tb_inline__ tb_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
+static __tb_inline__ xm_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
 {
     if (stream)
     {

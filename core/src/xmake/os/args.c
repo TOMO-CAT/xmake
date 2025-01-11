@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t tb_os_args_append(tb_string_ref_t result, tb_char_t const* cstr, tb_size_t size, xm_bool_t escape, xm_bool_t nowrap)
+static xm_void_t tb_os_args_append(tb_string_ref_t result, tb_char_t const* cstr, tb_size_t size, xm_bool_t escape, xm_bool_t nowrap)
 {
     // check
     tb_assert_and_check_return(size < TB_PATH_MAXN);

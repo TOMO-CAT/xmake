@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_string_trim_space(tb_char_t const** psstr, tb_char_t const** pestr, tb_int_t mode)
+static xm_void_t xm_string_trim_space(tb_char_t const** psstr, tb_char_t const** pestr, tb_int_t mode)
 {
     // check
     tb_assert(psstr && pestr && *psstr && *pestr);

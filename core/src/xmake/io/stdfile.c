@@ -63,7 +63,7 @@ static tb_size_t xm_io_stdfile_isatty(tb_size_t type)
 }
 
 // @see https://github.com/xmake-io/xmake/issues/2580
-static tb_void_t xm_io_stdfile_init_buffer(tb_size_t type)
+static xm_void_t xm_io_stdfile_init_buffer(tb_size_t type)
 {
     struct stat stats;
     tb_int_t size = BUFSIZ;

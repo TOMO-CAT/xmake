@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
+static xm_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
 {
     // check
     tb_assert(file && xm_io_file_is_file(file) && file->u.file_ref);
@@ -63,18 +63,18 @@ static tb_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
         break;
     }
 }
-static tb_void_t xm_io_file_write_file_directly(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
+static xm_void_t xm_io_file_write_file_directly(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
 {
     tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     tb_stream_bwrit(file->u.file_ref, data, size);
 }
-static tb_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
+static xm_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
 {
     // check
     tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     return xm_io_file_write_file_directly(file, data, size);
 }
-static tb_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
+static xm_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
 {
     // check
     tb_assert(file && data && xm_io_file_is_std(file));

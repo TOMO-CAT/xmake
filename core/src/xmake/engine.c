@@ -723,7 +723,7 @@ static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t*
 }
 
 #if defined(SIGINT)
-static tb_void_t xm_engine_dump_traceback(lua_State* lua)
+static xm_void_t xm_engine_dump_traceback(lua_State* lua)
 {
     // @note it's not safe, but it doesn't matter, we're just trying to get the stack backtrace for debugging
     lua_getglobal(lua, "debug");
@@ -736,7 +736,7 @@ static tb_void_t xm_engine_dump_traceback(lua_State* lua)
 #endif
 
 #if defined(SIGINT)
-static tb_void_t xm_engine_signal_handler(tb_int_t signo)
+static xm_void_t xm_engine_signal_handler(tb_int_t signo)
 {
     if (signo == SIGINT && g_lua)
     {
@@ -746,7 +746,7 @@ static tb_void_t xm_engine_signal_handler(tb_int_t signo)
 }
 #endif
 
-static tb_void_t xm_engine_init_host(xm_engine_t* engine)
+static xm_void_t xm_engine_init_host(xm_engine_t* engine)
 {
     // check
     tb_assert_and_check_return(engine && engine->lua);
@@ -790,7 +790,7 @@ static __tb_inline__ tb_char_t const* xm_engine_xmake_arch()
     return arch;
 }
 
-static tb_void_t xm_engine_init_arch(xm_engine_t* engine)
+static xm_void_t xm_engine_init_arch(xm_engine_t* engine)
 {
     // check
     tb_assert_and_check_return(engine && engine->lua);
@@ -812,7 +812,7 @@ static tb_void_t xm_engine_init_arch(xm_engine_t* engine)
     lua_setglobal(engine->lua, "_SUBARCH");
 }
 
-static tb_void_t xm_engine_init_features(xm_engine_t* engine)
+static xm_void_t xm_engine_init_features(xm_engine_t* engine)
 {
     // check
     tb_assert_and_check_return(engine && engine->lua);
@@ -833,7 +833,7 @@ static tb_void_t xm_engine_init_features(xm_engine_t* engine)
     lua_setglobal(engine->lua, "_FEATURES");
 }
 
-static tb_void_t xm_engine_init_signal(xm_engine_t* engine)
+static xm_void_t xm_engine_init_signal(xm_engine_t* engine)
 {
     // we enable it to catch the current lua stack in ctrl-c signal handler if XMAKE_PROFILE=stuck
     tb_char_t data[64] = {0};
@@ -1020,7 +1020,7 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
     }
     return (xm_engine_ref_t)engine;
 }
-tb_void_t xm_engine_exit(xm_engine_ref_t self)
+xm_void_t xm_engine_exit(xm_engine_ref_t self)
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
@@ -1087,7 +1087,7 @@ tb_int_t xm_engine_main(xm_engine_ref_t self, tb_int_t argc, tb_char_t** argv, t
     // get the error code
     return (tb_int_t)lua_tonumber(engine->lua, -1);
 }
-tb_void_t xm_engine_register(xm_engine_ref_t self, tb_char_t const* module, luaL_Reg const funcs[])
+xm_void_t xm_engine_register(xm_engine_ref_t self, tb_char_t const* module, luaL_Reg const funcs[])
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;

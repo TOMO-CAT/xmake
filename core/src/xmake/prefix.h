@@ -52,7 +52,7 @@
  * @note we cannot lua_newuserdata() because we need pass this pointer to the external lua code
  * in poller_wait()/event_callback, but lua_pushuserdata does not exists
  */
-static __tb_inline__ tb_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
+static __tb_inline__ xm_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
 {
     tb_uint64_t ptrval = (tb_uint64_t)ptr;
     if ((ptrval >> 47) == 0)
@@ -91,7 +91,7 @@ static __tb_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx)
    return xm_lua_topointer2(lua, idx, tb_null);
 }
 #else
-static __tb_inline__ tb_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
+static __tb_inline__ xm_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
 {
     lua_pushlightuserdata(lua, ptr);
 }
@@ -110,7 +110,7 @@ static __tb_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx)
 }
 #endif
 
-static __tb_inline__ tb_void_t xm_lua_register(lua_State *lua, tb_char_t const* libname, luaL_Reg const* l)
+static __tb_inline__ xm_void_t xm_lua_register(lua_State *lua, tb_char_t const* libname, luaL_Reg const* l)
 {
 #if LUA_VERSION_NUM >= 504
     lua_getglobal(lua, libname);

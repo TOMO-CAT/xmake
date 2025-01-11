@@ -109,7 +109,7 @@ xm_bool_t xm_init_(tb_size_t mode, tb_hize_t build)
     // ok
     return tb_true;
 }
-tb_void_t xm_exit()
+xm_void_t xm_exit()
 {
     // exit tbox
     tb_exit();

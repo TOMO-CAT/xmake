@@ -42,7 +42,7 @@ __tb_extern_c_enter__
  * @param semver    the semver struct
  *
  */
-tb_void_t lua_pushsemver(lua_State *lua, semver_t const* semver);
+xm_void_t lua_pushsemver(lua_State *lua, semver_t const* semver);
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * leave

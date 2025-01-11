@@ -60,7 +60,7 @@
  */
 
 // report results
-static tb_void_t xm_sandbox_report(lua_State *lua)
+static xm_void_t xm_sandbox_report(lua_State *lua)
 {
     if (!lua_isnil(lua, -1))
     {

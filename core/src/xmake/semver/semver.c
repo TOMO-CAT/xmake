@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-tb_void_t lua_pushsemver(lua_State *lua, semver_t const* semver)
+xm_void_t lua_pushsemver(lua_State *lua, semver_t const* semver)
 {
     // check
     tb_assert(lua && semver);
