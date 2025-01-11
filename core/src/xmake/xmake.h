@@ -37,13 +37,13 @@ extern "C"
  */
 
 #ifdef __xm_debug__
-#   define __xm_mode_debug__    TB_MODE_DEBUG
+#   define __xm_mode_debug__    XM_MODE_DEBUG
 #else
 #   define __xm_mode_debug__    (0)
 #endif
 
 #ifdef __xm_small__
-#   define __xm_mode_small__    TB_MODE_SMALL
+#   define __xm_mode_small__    XM_MODE_SMALL
 #else
 #   define __xm_mode_small__    (0)
 #endif

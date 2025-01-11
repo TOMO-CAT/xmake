@@ -79,13 +79,13 @@ static __tb_inline__ tb_bool_t tb_check_order_double()
 static __tb_inline__ tb_bool_t tb_check_mode(tb_size_t mode)
 {
 #ifdef __tb_debug__
-    if (!(mode & TB_MODE_DEBUG))
+    if (!(mode & XM_MODE_DEBUG))
     {
         tb_trace_e("libtbox.a has __tb_debug__ but tbox/tbox.h not");
         return tb_false;
     }
 #else
-    if (mode & TB_MODE_DEBUG)
+    if (mode & XM_MODE_DEBUG)
     {
         tb_trace_e("tbox/tbox.h has __tb_debug__ but libtbox.a not");
         return tb_false;
@@ -93,13 +93,13 @@ static __tb_inline__ tb_bool_t tb_check_mode(tb_size_t mode)
 #endif
 
 #ifdef __tb_small__
-    if (!(mode & TB_MODE_SMALL))
+    if (!(mode & XM_MODE_SMALL))
     {
         tb_trace_e("libtbox.a has __tb_small__ but tbox/tbox.h not");
         return tb_false;
     }
 #else
-    if (mode & TB_MODE_SMALL)
+    if (mode & XM_MODE_SMALL)
     {
         tb_trace_e("tbox/tbox.h has __tb_small__ but libtbox.a not");
         return tb_false;
