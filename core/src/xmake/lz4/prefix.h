@@ -101,7 +101,7 @@ static __tb_inline__ tb_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
 static __tb_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
 {
     tb_size_t ret;
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     xm_lz4_cstream_t* stream = tb_null;
     LZ4F_preferences_t const* prefsPtr = tb_null;
     do
@@ -136,7 +136,7 @@ static __tb_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
     return stream;
 }
 
-static __tb_inline__ tb_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb_byte_t const* idata, tb_size_t isize, tb_bool_t end)
+static __tb_inline__ tb_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb_byte_t const* idata, tb_size_t isize, xm_bool_t end)
 {
     // check
     tb_assert_and_check_return_val(stream && stream->cctx && idata && isize, -1);
@@ -208,7 +208,7 @@ static __tb_inline__ tb_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
 static __tb_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
 {
     LZ4F_errorCode_t ret;
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     xm_lz4_dstream_t* stream = tb_null;
     do
     {
@@ -231,7 +231,7 @@ static __tb_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
     return stream;
 }
 
-static __tb_inline__ tb_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb_byte_t const* idata, tb_size_t isize, tb_bool_t end)
+static __tb_inline__ tb_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb_byte_t const* idata, tb_size_t isize, xm_bool_t end)
 {
     // check
     tb_assert_and_check_return_val(stream && stream->dctx && idata && isize, -1);

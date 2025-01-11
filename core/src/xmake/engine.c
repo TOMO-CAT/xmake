@@ -476,7 +476,7 @@ static lua_State* g_lua = tb_null;
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv)
+static xm_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv)
 {
     // check
     tb_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, tb_false);
@@ -514,7 +514,7 @@ static tb_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
     // check
     tb_assert_and_check_return_val(engine && path && maxn, tb_false);
 
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     do
     {
         // get it from the environment variable first
@@ -599,13 +599,13 @@ static tb_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
     return ok;
 }
 
-static tb_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t* path, tb_size_t maxn,
+static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t* path, tb_size_t maxn,
                                                  tb_char_t const* programfile)
 {
     // check
     tb_assert_and_check_return_val(engine && path && maxn, tb_false);
 
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     do
     {
         // get it from the environment variable first
@@ -687,12 +687,12 @@ static tb_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
     return ok;
 }
 
-static tb_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t* path, tb_size_t maxn)
+static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t* path, tb_size_t maxn)
 {
     // check
     tb_assert_and_check_return_val(engine && path && maxn, tb_false);
 
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     do
     {
         // attempt to get it from the environment variable first
@@ -866,7 +866,7 @@ static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data,
  */
 xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer)
 {
-    tb_bool_t    ok     = tb_false;
+    xm_bool_t    ok     = tb_false;
     xm_engine_t* engine = tb_null;
     do
     {

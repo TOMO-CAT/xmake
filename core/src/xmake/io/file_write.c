@@ -109,7 +109,7 @@ tb_int_t xm_io_file_write(lua_State* lua)
     tb_int_t narg = lua_gettop(lua);
     if (narg > 1)
     {
-        tb_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
+        xm_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
         for (tb_int_t i = 2; i <= narg; i++)
         {
             // get data

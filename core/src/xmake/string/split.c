@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t const* cdls, tb_size_t ndls, tb_bool_t strict, tb_int_t limit)
+static tb_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t const* cdls, tb_size_t ndls, xm_bool_t strict, tb_int_t limit)
 {
     tb_int_t num = 0;
     tb_char_t const* end = cstr + nstr;
@@ -63,7 +63,7 @@ static tb_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, tb_s
         lua_rawseti(lua, -2, ++num);
     }
 }
-static tb_void_t xm_string_split_chr(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t ch, tb_bool_t strict, tb_int_t limit)
+static tb_void_t xm_string_split_chr(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t ch, xm_bool_t strict, tb_int_t limit)
 {
     tb_int_t num = 0;
     tb_char_t const* end = cstr + nstr;
@@ -119,7 +119,7 @@ tb_int_t xm_string_split(lua_State* lua)
     tb_char_t const* cdls = luaL_checklstring(lua, 2, &ndls);
 
     // is strict?
-    tb_bool_t const  strict = (tb_bool_t)lua_toboolean(lua, 3);
+    xm_bool_t const  strict = (xm_bool_t)lua_toboolean(lua, 3);
 
     // get limit count
     tb_int_t const   limit  = (tb_int_t)luaL_optinteger(lua, 4, -1);

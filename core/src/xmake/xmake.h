@@ -80,7 +80,7 @@ __tb_extern_c_enter__
  *
  * @return          tb_true or tb_false
  */
-tb_bool_t           xm_init_(tb_size_t mode, tb_hize_t build);
+xm_bool_t           xm_init_(tb_size_t mode, tb_hize_t build);
 
 /// exit the xmake library
 tb_void_t           xm_exit(tb_noarg_t);

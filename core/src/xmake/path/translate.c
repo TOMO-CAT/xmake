@@ -44,7 +44,7 @@ tb_int_t xm_path_translate(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // get the option argument, e.g. {normalize = true}
-    tb_bool_t normalize = tb_false;
+    xm_bool_t normalize = tb_false;
     if (lua_istable(lua, 2))
     {
         lua_pushstring(lua, "normalize");

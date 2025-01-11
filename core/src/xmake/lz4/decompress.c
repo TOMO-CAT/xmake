@@ -52,7 +52,7 @@ tb_int_t xm_lz4_decompress(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // do decompress
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     LZ4F_errorCode_t code;
     LZ4F_decompressionContext_t ctx = tb_null;
     tb_buffer_t result;
@@ -64,7 +64,7 @@ tb_int_t xm_lz4_decompress(lua_State* lua)
         if (LZ4F_isError(code)) break;
 
         tb_byte_t buffer[8192];
-        tb_bool_t failed = tb_false;
+        xm_bool_t failed = tb_false;
         while (1)
         {
             size_t advance = (size_t)size;

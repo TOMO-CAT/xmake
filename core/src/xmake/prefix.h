@@ -64,7 +64,7 @@ static __tb_inline__ tb_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t p
         lua_pushlstring(lua, str, len);
     }
 }
-static __tb_inline__ tb_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
+static __tb_inline__ xm_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
 {
     return lua_isuserdata(lua, idx) || lua_isstring(lua, idx);
 }
@@ -95,7 +95,7 @@ static __tb_inline__ tb_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t p
 {
     lua_pushlightuserdata(lua, ptr);
 }
-static __tb_inline__ tb_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
+static __tb_inline__ xm_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
 {
     return lua_isuserdata(lua, idx);
 }

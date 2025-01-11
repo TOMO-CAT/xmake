@@ -53,7 +53,7 @@ tb_int_t xm_fwatcher_remove(lua_State* lua)
     tb_check_return_val(watchdir, 0);
 
     // remove watchdir
-    tb_bool_t ok = tb_fwatcher_remove(fwatcher, watchdir);
+    xm_bool_t ok = tb_fwatcher_remove(fwatcher, watchdir);
 
     // save result
     lua_pushboolean(lua, ok);

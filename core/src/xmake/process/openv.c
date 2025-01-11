@@ -108,7 +108,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     tb_process_attr_t attr = {0};
 
     // get option arguments
-    tb_bool_t          exclusive = tb_false;
+    xm_bool_t          exclusive = tb_false;
     tb_size_t          envn = 0;
     tb_char_t const*   envs[1024] = {0};
     tb_char_t const*   inpath  = tb_null;

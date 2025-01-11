@@ -60,7 +60,7 @@ tb_int_t xm_bloom_filter_data_set(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // set data
-    tb_bool_t ok = tb_bloom_filter_data_set(filter, data, size);
+    xm_bool_t ok = tb_bloom_filter_data_set(filter, data, size);
     lua_pushboolean(lua, ok);
     return 1;
 }

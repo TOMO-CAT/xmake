@@ -191,7 +191,7 @@ tb_int_t xm_io_file_open(lua_State* lua)
     // get file encoding
     tb_long_t       bomoff = 0;
     tb_stream_ref_t stream = tb_null;
-    tb_bool_t       update = !!tb_strchr(modestr, '+');
+    xm_bool_t       update = !!tb_strchr(modestr, '+');
     tb_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
         encoding = XM_IO_FILE_ENCODING_BINARY;
@@ -228,12 +228,12 @@ tb_int_t xm_io_file_open(lua_State* lua)
     tb_assert_and_check_return_val(encoding != XM_IO_FILE_ENCODING_UNKNOWN, 0);
 
     // write data with utf bom? e.g. utf8bom, utf16lebom, utf16bom
-    tb_bool_t utfbom = tb_false;
+    xm_bool_t utfbom = tb_false;
     if (tb_strstr(modestr, "bom"))
         utfbom = tb_true;
 
     // open file
-    tb_bool_t       open_ok = tb_false;
+    xm_bool_t       open_ok = tb_false;
     tb_stream_ref_t file_ref = tb_null;
     tb_stream_ref_t fstream = tb_null;
     do
@@ -243,7 +243,7 @@ tb_int_t xm_io_file_open(lua_State* lua)
         tb_assert_and_check_break(stream);
 
         // is transcode?
-        tb_bool_t is_transcode = encoding != TB_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
+        xm_bool_t is_transcode = encoding != TB_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
         if (is_transcode)
         {
             if (modestr[0] == 'r')

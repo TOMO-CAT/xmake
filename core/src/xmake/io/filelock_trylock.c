@@ -45,13 +45,13 @@ tb_int_t xm_io_filelock_trylock(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get option argument
-    tb_bool_t is_shared = tb_false;
+    xm_bool_t is_shared = tb_false;
     if (lua_istable(lua, 2))
     {
         // is shared lock?
         lua_pushstring(lua, "shared");
         lua_gettable(lua, 2);
-        is_shared = (tb_bool_t)lua_toboolean(lua, -1);
+        is_shared = (xm_bool_t)lua_toboolean(lua, -1);
         lua_pop(lua, 1);
     }
 
@@ -64,7 +64,7 @@ tb_int_t xm_io_filelock_trylock(lua_State* lua)
     tb_check_return_val(lock, 0);
 
     // try to lock it
-    tb_bool_t ok = tb_filelock_enter_try(lock, is_shared? TB_FILELOCK_MODE_SH : TB_FILELOCK_MODE_EX);
+    xm_bool_t ok = tb_filelock_enter_try(lock, is_shared? TB_FILELOCK_MODE_SH : TB_FILELOCK_MODE_EX);
     lua_pushboolean(lua, ok);
     return 1;
 }

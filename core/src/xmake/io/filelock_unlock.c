@@ -49,7 +49,7 @@ tb_int_t xm_io_filelock_unlock(lua_State* lua)
     tb_check_return_val(lock, 0);
 
     // unlock it
-    tb_bool_t ok = tb_filelock_leave(lock);
+    xm_bool_t ok = tb_filelock_leave(lock);
     lua_pushboolean(lua, ok);
     return 1;
 }

@@ -48,12 +48,12 @@ tb_int_t xm_lz4_decompress_file(lua_State* lua)
     tb_check_return_val(stream_lz4, 0);
 
     // do decompress
-    tb_bool_t       ok = tb_false;
+    xm_bool_t       ok = tb_false;
     tb_stream_ref_t istream = tb_stream_init_from_file(srcpath, TB_FILE_MODE_RO);
     tb_stream_ref_t ostream = tb_stream_init_from_file(dstpath, TB_FILE_MODE_RW | TB_FILE_MODE_CREAT | TB_FILE_MODE_TRUNC);
     if (istream && ostream && tb_stream_open(istream) && tb_stream_open(ostream))
     {
-        tb_bool_t write_ok = tb_false;
+        xm_bool_t write_ok = tb_false;
         tb_byte_t idata[TB_STREAM_BLOCK_MAXN];
         tb_byte_t odata[TB_STREAM_BLOCK_MAXN];
         while (!tb_stream_beof(istream))

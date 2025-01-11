@@ -77,12 +77,12 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
     }
 
     // match ok?
-    tb_bool_t matched = tb_false;
-    tb_bool_t skip_recursion = tb_false;
+    xm_bool_t matched = tb_false;
+    xm_bool_t skip_recursion = tb_false;
     if (lua_isstring(lua, -1) && !tb_strcmp(path, lua_tostring(lua, -1)))
     {
         // exists excludes?
-        tb_bool_t excluded = tb_false;
+        xm_bool_t excluded = tb_false;
         if (lua_istable(lua, 5))
         {
             // the root directory
@@ -149,7 +149,7 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
                     lua_call(lua, 2, 1);
 
                     // is continue?
-                    tb_bool_t is_continue = lua_toboolean(lua, -1);
+                    xm_bool_t is_continue = lua_toboolean(lua, -1);
                     lua_pop(lua, 1);
                     if (!is_continue) return TB_DIRECTORY_WALK_CODE_END;
                 }

@@ -45,7 +45,7 @@ tb_int_t xm_os_cpfile(lua_State* lua)
 
     // init copy flags
     tb_size_t flags = TB_FILE_COPY_NONE;
-    tb_bool_t is_symlink = lua_toboolean(lua, 3);
+    xm_bool_t is_symlink = lua_toboolean(lua, 3);
     if (is_symlink)
         flags |= TB_FILE_COPY_LINK;
 

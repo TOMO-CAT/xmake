@@ -53,10 +53,10 @@ tb_int_t xm_fwatcher_add(lua_State* lua)
     tb_check_return_val(watchdir, 0);
 
     // get recursion
-    tb_bool_t recursion = lua_toboolean(lua, 3);
+    xm_bool_t recursion = lua_toboolean(lua, 3);
 
     // add watchdir
-    tb_bool_t ok = tb_fwatcher_add(fwatcher, watchdir, recursion);
+    xm_bool_t ok = tb_fwatcher_add(fwatcher, watchdir, recursion);
 
     // save result
     lua_pushboolean(lua, ok);

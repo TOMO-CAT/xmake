@@ -33,13 +33,13 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_bool_t xm_io_std_flush_impl(xm_io_file_t* file)
+static xm_bool_t xm_io_std_flush_impl(xm_io_file_t* file)
 {
     tb_assert_and_check_return_val(xm_io_file_is_std(file), tb_false);
     return (file->u.std_ref != tb_stdfile_input())? tb_stdfile_flush(file->u.std_ref) : tb_false;
 }
 
-static tb_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
+static xm_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
 {
     // check
     tb_assert_and_check_return_val(xm_io_file_is_file(file), tb_false);
@@ -65,7 +65,7 @@ tb_int_t xm_io_file_flush(lua_State* lua)
     tb_check_return_val(file, 0);
 
     // flush file
-    tb_bool_t ok = xm_io_file_is_file(file)? xm_io_file_flush_impl(file) : xm_io_std_flush_impl(file);
+    xm_bool_t ok = xm_io_file_is_file(file)? xm_io_file_flush_impl(file) : xm_io_std_flush_impl(file);
     if (ok)
     {
         lua_pushboolean(lua, tb_true);

@@ -77,7 +77,7 @@ tb_int_t xm_hash_sha(lua_State* lua)
     tb_check_return_val(filename, 0);
 
     // load data from file
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     tb_stream_ref_t stream = tb_stream_init_from_file(filename, TB_FILE_MODE_RO);
     if (stream)
     {

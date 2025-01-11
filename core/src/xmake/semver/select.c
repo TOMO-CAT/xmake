@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t fromidx, semver_t* semver, semver_range_t const* range, semvers_t* matches)
+static xm_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t fromidx, semver_t* semver, semver_range_t const* range, semvers_t* matches)
 {
     // clear matches
     semvers_pclear(matches);
@@ -78,7 +78,7 @@ static tb_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t f
     // ok
     return tb_true;
 }
-static tb_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t fromidx, semver_t* semver, tb_char_t const* version_str, tb_size_t version_len)
+static xm_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t fromidx, semver_t* semver, tb_char_t const* version_str, tb_size_t version_len)
 {
     lua_Integer i = 0;
     luaL_checktype(lua, fromidx, LUA_TTABLE);
@@ -102,7 +102,7 @@ static tb_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t f
     }
     return tb_false;
 }
-static tb_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx, tb_char_t const* range_str, tb_size_t range_len)
+static xm_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx, tb_char_t const* range_str, tb_size_t range_len)
 {
     lua_Integer i = 0;
     luaL_checktype(lua, fromidx, LUA_TTABLE);
@@ -126,7 +126,7 @@ static tb_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx
     }
     return tb_false;
 }
-static tb_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_int_t fromidx, semver_t* semver, semvers_t* matches)
+static xm_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_int_t fromidx, semver_t* semver, semvers_t* matches)
 {
     // clear matches
     semvers_pclear(matches);
@@ -180,8 +180,8 @@ tb_int_t xm_semver_select(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // select version
-    tb_bool_t ok               = tb_false;
-    tb_bool_t is_range         = tb_false;
+    xm_bool_t ok               = tb_false;
+    xm_bool_t is_range         = tb_false;
     tb_char_t const* range_str = tb_null;
     semver_t semver            = {0};
     semvers_t matches          = {0};

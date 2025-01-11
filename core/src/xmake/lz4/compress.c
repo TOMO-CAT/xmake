@@ -52,7 +52,7 @@ tb_int_t xm_lz4_compress(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // do compress
-    tb_bool_t ok = tb_false;
+    xm_bool_t ok = tb_false;
     tb_char_t const* error = tb_null;
     tb_byte_t* output_data = tb_null;
     tb_byte_t buffer[8192];

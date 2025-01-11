@@ -51,7 +51,7 @@ tb_int_t xm_bloom_filter_get(lua_State* lua)
     tb_assert_and_check_return_val(item, 0);
 
     // get item
-    tb_bool_t ok = tb_bloom_filter_get(filter, item);
+    xm_bool_t ok = tb_bloom_filter_get(filter, item);
     lua_pushboolean(lua, ok);
     return 1;
 }

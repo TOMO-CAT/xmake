@@ -55,7 +55,7 @@ static tb_int64_t xm_os_meminfo_get_value(tb_char_t const* buffer, tb_char_t con
 #endif
 
 // get the used memory size (MB)
-static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
+static xm_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
 {
 #if defined(TB_CONFIG_OS_MACOSX)
     vm_statistics64_data_t vmstat;
@@ -83,7 +83,7 @@ static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
      */
     if (tb_file_info("/proc/meminfo", tb_null))
     {
-        tb_bool_t ok = tb_false;
+        xm_bool_t ok = tb_false;
         FILE* fp = fopen("/proc/meminfo", "r");
         if (fp)
         {
