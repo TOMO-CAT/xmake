@@ -479,7 +479,7 @@ static lua_State* g_lua = tb_null;
 static xm_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv)
 {
     // check
-    tb_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, tb_false);
+    tb_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, xm_false);
 
     // put a new table into the stack
     lua_newtable(engine->lua);
@@ -506,21 +506,21 @@ static xm_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb
 
     // _ARGV = table_new
     lua_setglobal(engine->lua, "_ARGV");
-    return tb_true;
+    return xm_true;
 }
 
 static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, tb_false);
+    tb_assert_and_check_return_val(engine && path && maxn, xm_false);
 
-    xm_bool_t ok = tb_false;
+    xm_bool_t ok = xm_false;
     do
     {
         // get it from the environment variable first
         if (tb_environment_first("XMAKE_PROGRAM_FILE", path, maxn) && tb_file_info(path, tb_null))
         {
-            ok = tb_true;
+            ok = xm_true;
             break;
         }
 
@@ -536,14 +536,14 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
          * needed could be more than MAXPATHLEN.
          */
         tb_uint32_t bufsize = (tb_uint32_t)maxn;
-        if (!_NSGetExecutablePath(path, &bufsize)) ok = tb_true;
+        if (!_NSGetExecutablePath(path, &bufsize)) ok = xm_true;
 #elif defined(XM_PROC_SELF_FILE)
         // get the executable file path as program directory
         ssize_t size = readlink(XM_PROC_SELF_FILE, path, (size_t)maxn);
         if (size > 0 && size < maxn)
         {
             path[size] = '\0';
-            ok         = tb_true;
+            ok         = xm_true;
         }
 #elif defined(TB_CONFIG_OS_BSD) && defined(KERN_PROC_PATHNAME)
         // only for FreeBSD and OpenBSD, https://github.com/xmake-io/xmake/issues/2948
@@ -556,7 +556,7 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
         if (sysctl(mib, 4, path, &size, tb_null, 0) == 0 && size < maxn)
         {
             path[size] = '\0';
-            ok         = tb_true;
+            ok         = xm_true;
         }
 #elif defined(TB_CONFIG_OS_HAIKU)
         int32      cookie = 0;
@@ -566,7 +566,7 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
             if (info.type == B_APP_IMAGE)
             {
                 tb_strlcpy(path, info.name, maxn);
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
         }
@@ -578,7 +578,7 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
             if (tb_file_info(p, tb_null))
             {
                 tb_strlcpy(path, p, maxn);
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
         }
@@ -603,16 +603,16 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
                                                  tb_char_t const* programfile)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, tb_false);
+    tb_assert_and_check_return_val(engine && path && maxn, xm_false);
 
-    xm_bool_t ok = tb_false;
+    xm_bool_t ok = xm_false;
     do
     {
         // get it from the environment variable first
         tb_char_t data[TB_PATH_MAXN] = {0};
         if (tb_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && tb_path_absolute(data, path, maxn))
         {
-            ok = tb_true;
+            ok = xm_true;
             break;
         }
 
@@ -664,7 +664,7 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
                     tb_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
                     tb_file_info(scriptpath, &info) && info.type == TB_FILE_TYPE_FILE)
                 {
-                    ok = tb_true;
+                    ok = xm_true;
                     break;
                 }
             }
@@ -690,9 +690,9 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
 static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, tb_false);
+    tb_assert_and_check_return_val(engine && path && maxn, xm_false);
 
-    xm_bool_t ok = tb_false;
+    xm_bool_t ok = xm_false;
     do
     {
         // attempt to get it from the environment variable first
@@ -711,7 +711,7 @@ static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t*
         lua_setglobal(engine->lua, "_PROJECT_DIR");
 
         // ok
-        ok = tb_true;
+        ok = xm_true;
 
     } while (0);
 
@@ -866,7 +866,7 @@ static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data,
  */
 xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer)
 {
-    xm_bool_t    ok     = tb_false;
+    xm_bool_t    ok     = xm_false;
     xm_engine_t* engine = tb_null;
     do
     {
@@ -992,9 +992,9 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
 
         // use luajit as runtime?
 #ifdef USE_LUAJIT
-        lua_pushboolean(engine->lua, tb_true);
+        lua_pushboolean(engine->lua, xm_true);
 #else
-        lua_pushboolean(engine->lua, tb_false);
+        lua_pushboolean(engine->lua, xm_false);
 #endif
         lua_setglobal(engine->lua, "_LUAJIT");
 
@@ -1009,7 +1009,7 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
         lua_newtable(engine->lua);
         if (lni_initalizer) lni_initalizer((xm_engine_ref_t)engine, engine->lua);
         lua_setglobal(engine->lua, "_lni");
-        ok = tb_true;
+        ok = xm_true;
 
     } while (0);
 

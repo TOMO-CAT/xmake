@@ -35,15 +35,15 @@
  */
 static xm_bool_t xm_io_std_flush_impl(xm_io_file_t* file)
 {
-    tb_assert_and_check_return_val(xm_io_file_is_std(file), tb_false);
-    return (file->u.std_ref != tb_stdfile_input())? tb_stdfile_flush(file->u.std_ref) : tb_false;
+    tb_assert_and_check_return_val(xm_io_file_is_std(file), xm_false);
+    return (file->u.std_ref != tb_stdfile_input())? tb_stdfile_flush(file->u.std_ref) : xm_false;
 }
 
 static xm_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
 {
     // check
-    tb_assert_and_check_return_val(xm_io_file_is_file(file), tb_false);
-    return tb_stream_sync(file->u.file_ref, tb_false);
+    tb_assert_and_check_return_val(xm_io_file_is_file(file), xm_false);
+    return tb_stream_sync(file->u.file_ref, xm_false);
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ tb_int_t xm_io_file_flush(lua_State* lua)
     xm_bool_t ok = xm_io_file_is_file(file)? xm_io_file_flush_impl(file) : xm_io_std_flush_impl(file);
     if (ok)
     {
-        lua_pushboolean(lua, tb_true);
+        lua_pushboolean(lua, xm_true);
         return 1;
     }
     else xm_io_return_error(lua, "failed to flush file");

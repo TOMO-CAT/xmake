@@ -228,12 +228,12 @@ tb_int_t xm_io_file_open(lua_State* lua)
     tb_assert_and_check_return_val(encoding != XM_IO_FILE_ENCODING_UNKNOWN, 0);
 
     // write data with utf bom? e.g. utf8bom, utf16lebom, utf16bom
-    xm_bool_t utfbom = tb_false;
+    xm_bool_t utfbom = xm_false;
     if (tb_strstr(modestr, "bom"))
-        utfbom = tb_true;
+        utfbom = xm_true;
 
     // open file
-    xm_bool_t       open_ok = tb_false;
+    xm_bool_t       open_ok = xm_false;
     tb_stream_ref_t file_ref = tb_null;
     tb_stream_ref_t fstream = tb_null;
     do
@@ -264,7 +264,7 @@ tb_int_t xm_io_file_open(lua_State* lua)
         if (bomoff > 0 && !tb_stream_seek(stream, bomoff)) break;
 
         // ok
-        open_ok = tb_true;
+        open_ok = xm_true;
 
     } while (0);
 

@@ -82,7 +82,7 @@ tb_int_t xm_package_loadxmi(lua_State* lua)
 
     // setup lua interfaces
     static xmi_lua_ops_t s_luaops = {0};
-    static xm_bool_t     s_luaops_inited = tb_false;
+    static xm_bool_t     s_luaops_inited = xm_false;
     if (!s_luaops_inited)
     {
         // get functions
@@ -218,7 +218,7 @@ tb_int_t xm_package_loadxmi(lua_State* lua)
         s_luaops._luaL_execresult       = &luaL_execresult;
         s_luaops._luaL_setfuncs         = &luaL_setfuncs;
 
-        s_luaops_inited                 = tb_true;
+        s_luaops_inited                 = xm_true;
     }
     xmisetup_func(&s_luaops);
 

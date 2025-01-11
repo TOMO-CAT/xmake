@@ -56,7 +56,7 @@ static xm_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t f
     }
 
     // no matches?
-    tb_check_return_val(matches->length, tb_false);
+    tb_check_return_val(matches->length, xm_false);
 
     // sort matches
     semvers_psort(matches);
@@ -76,7 +76,7 @@ static xm_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t f
     semver_dtor(&top);
 
     // ok
-    return tb_true;
+    return xm_true;
 }
 static xm_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t fromidx, semver_t* semver, tb_char_t const* version_str, xm_size_t version_len)
 {
@@ -97,10 +97,10 @@ static xm_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t f
             lua_setfield(lua, -2, "version");
             lua_pushstring(lua, fromidx == 2? "version" : "tag");
             lua_setfield(lua, -2, "source");
-            return tb_true;
+            return xm_true;
         }
     }
-    return tb_false;
+    return xm_false;
 }
 static xm_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx, tb_char_t const* range_str, xm_size_t range_len)
 {
@@ -121,10 +121,10 @@ static xm_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx
             lua_setfield(lua, -2, "version");
             lua_pushstring(lua, "branch");
             lua_setfield(lua, -2, "source");
-            return tb_true;
+            return xm_true;
         }
     }
-    return tb_false;
+    return xm_false;
 }
 static xm_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_int_t fromidx, semver_t* semver, semvers_t* matches)
 {
@@ -145,7 +145,7 @@ static xm_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_i
 
         lua_pop(lua, 1);
     }
-    tb_check_return_val(matches->length, tb_false);
+    tb_check_return_val(matches->length, xm_false);
 
     // sort matches
     semvers_psort(matches);
@@ -162,7 +162,7 @@ static xm_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_i
     lua_setfield(lua, -2, "source");
 
     semver_dtor(&top);
-    return tb_true;
+    return xm_true;
 }
 
 
@@ -180,8 +180,8 @@ tb_int_t xm_semver_select(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // select version
-    xm_bool_t ok               = tb_false;
-    xm_bool_t is_range         = tb_false;
+    xm_bool_t ok               = xm_false;
+    xm_bool_t is_range         = xm_false;
     tb_char_t const* range_str = tb_null;
     semver_t semver            = {0};
     semvers_t matches          = {0};
@@ -202,14 +202,14 @@ tb_int_t xm_semver_select(lua_State* lua)
             // attempt to select version from the versions list first
             if (xm_semver_select_from_versions_tags1(lua, 2, &semver, &range, &matches))
             {
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
 
             // attempt to select version from the tags list
             if (xm_semver_select_from_versions_tags1(lua, 3, &semver, &range, &matches))
             {
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
         }
@@ -218,14 +218,14 @@ tb_int_t xm_semver_select(lua_State* lua)
             // attempt to select version from the versions list first
             if (xm_semver_select_from_versions_tags2(lua, 2, &semver, range_str, range_len))
             {
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
 
             // attempt to select version from the tags list
             if (xm_semver_select_from_versions_tags2(lua, 3, &semver, range_str, range_len))
             {
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
         }
@@ -233,7 +233,7 @@ tb_int_t xm_semver_select(lua_State* lua)
         // attempt to select version from the branches
         if (xm_semver_select_from_branches(lua, 4, range_str, range_len))
         {
-            ok = tb_true;
+            ok = xm_true;
             break;
         }
 
@@ -243,14 +243,14 @@ tb_int_t xm_semver_select(lua_State* lua)
             // attempt to select latest version from the versions list
             if (xm_semver_select_latest_from_versions_tags(lua, 2, &semver, &matches))
             {
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
 
             // attempt to select latest version from the tags list
             if (xm_semver_select_latest_from_versions_tags(lua, 3, &semver, &matches))
             {
-                ok = tb_true;
+                ok = xm_true;
                 break;
             }
         }

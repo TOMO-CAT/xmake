@@ -46,7 +46,7 @@ tb_int_t xm_os_mkdir(lua_State* lua)
     tb_file_info_t info = {0};
     if (!tb_file_info(path, &info) || (info.type != TB_FILE_TYPE_DIRECTORY))
         lua_pushboolean(lua, tb_directory_create(path));
-    else lua_pushboolean(lua, tb_true);
+    else lua_pushboolean(lua, xm_true);
 
     // ok
     return 1;

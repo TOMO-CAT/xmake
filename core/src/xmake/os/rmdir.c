@@ -43,7 +43,7 @@ static tb_long_t xm_os_rmdir_empty(tb_char_t const* path, tb_file_info_t const* 
     if (info->type == TB_FILE_TYPE_DIRECTORY || info->type == TB_FILE_TYPE_FILE)
     {
         // not emptydir
-        *is_emptydir = tb_false;
+        *is_emptydir = xm_false;
         return TB_DIRECTORY_WALK_CODE_END;
     }
     return TB_DIRECTORY_WALK_CODE_CONTINUE;
@@ -57,8 +57,8 @@ static tb_long_t xm_os_rmdir_remove(tb_char_t const* path, tb_file_info_t const*
     if (info->type == TB_FILE_TYPE_DIRECTORY)
     {
         // is emptydir?
-        xm_bool_t is_emptydir = tb_true;
-        tb_directory_walk(path, tb_false, tb_true, xm_os_rmdir_empty, &is_emptydir);
+        xm_bool_t is_emptydir = xm_true;
+        tb_directory_walk(path, xm_false, xm_true, xm_os_rmdir_empty, &is_emptydir);
 
         // trace
         tb_trace_d("path: %s, emptydir: %u", path, is_emptydir);
@@ -86,11 +86,11 @@ tb_int_t xm_os_rmdir(lua_State* lua)
     if (rmempty)
     {
         // remove all empty directories
-        tb_directory_walk(path, tb_true, tb_false, xm_os_rmdir_remove, tb_null);
+        tb_directory_walk(path, xm_true, xm_false, xm_os_rmdir_remove, tb_null);
 
         // remove empty root directory
-        xm_bool_t is_emptydir = tb_true;
-        tb_directory_walk(path, tb_false, tb_true, xm_os_rmdir_empty, &is_emptydir);
+        xm_bool_t is_emptydir = xm_true;
+        tb_directory_walk(path, xm_false, xm_true, xm_os_rmdir_empty, &is_emptydir);
         if (is_emptydir) tb_directory_remove(path);
 
         // trace

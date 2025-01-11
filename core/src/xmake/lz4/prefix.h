@@ -101,7 +101,7 @@ static __tb_inline__ xm_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
 static __tb_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
 {
     xm_size_t ret;
-    xm_bool_t ok = tb_false;
+    xm_bool_t ok = xm_false;
     xm_lz4_cstream_t* stream = tb_null;
     LZ4F_preferences_t const* prefsPtr = tb_null;
     do
@@ -124,7 +124,7 @@ static __tb_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
 
         stream->header_size = ret;
 
-        ok = tb_true;
+        ok = xm_true;
 
     } while (0);
 
@@ -208,7 +208,7 @@ static __tb_inline__ xm_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
 static __tb_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
 {
     LZ4F_errorCode_t ret;
-    xm_bool_t ok = tb_false;
+    xm_bool_t ok = xm_false;
     xm_lz4_dstream_t* stream = tb_null;
     do
     {
@@ -219,7 +219,7 @@ static __tb_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
         if (LZ4F_isError(ret))
             break;
 
-        ok = tb_true;
+        ok = xm_true;
 
     } while (0);
 

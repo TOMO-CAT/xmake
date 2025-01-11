@@ -108,7 +108,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     tb_process_attr_t attr = {0};
 
     // get option arguments
-    xm_bool_t          exclusive = tb_false;
+    xm_bool_t          exclusive = xm_false;
     xm_size_t          envn = 0;
     tb_char_t const*   envs[1024] = {0};
     tb_char_t const*   inpath  = tb_null;
@@ -133,7 +133,7 @@ tb_int_t xm_process_openv(lua_State* lua)
         lua_pushstring(lua, "exclusive");
         lua_gettable(lua, 3);
         if (lua_toboolean(lua, -1))
-            exclusive = tb_true;
+            exclusive = xm_true;
         lua_pop(lua, 1);
 
         // get curdir

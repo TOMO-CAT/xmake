@@ -61,7 +61,7 @@ tb_int_t xm_lz4_block_decompress(lua_State* lua)
     }
 
     // do decompress
-    xm_bool_t ok = tb_false;
+    xm_bool_t ok = xm_false;
     tb_byte_t* output_data = tb_null;
     tb_byte_t buffer[8192];
     do
@@ -73,7 +73,7 @@ tb_int_t xm_lz4_block_decompress(lua_State* lua)
         tb_assert_and_check_break(r > 0);
 
         lua_pushlstring(lua, (tb_char_t const*)output_data, r);
-        ok = tb_true;
+        ok = xm_true;
     } while (0);
 
     if (output_data && output_data != buffer)

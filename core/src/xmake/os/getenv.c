@@ -61,12 +61,12 @@ tb_int_t xm_os_getenv(lua_State* lua)
         if (tb_environment_load(environment, name))
         {
             // make values
-            xm_bool_t is_first = tb_true;
+            xm_bool_t is_first = xm_true;
             tb_for_all_if (tb_char_t const*, value, environment, value)
             {
                 // append separator
                 if (!is_first) tb_string_chrcat(&values, XM_OS_ENV_SEP);
-                else is_first = tb_false;
+                else is_first = xm_false;
 
                 // append value
                 tb_string_cstrcat(&values, value);

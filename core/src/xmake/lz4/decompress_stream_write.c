@@ -65,7 +65,7 @@ tb_int_t xm_lz4_decompress_stream_write(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // write data
-    tb_long_t real = xm_lz4_dstream_write(stream, data, size, tb_false);
+    tb_long_t real = xm_lz4_dstream_write(stream, data, size, xm_false);
     lua_pushinteger(lua, (tb_int_t)real);
     return 1;
 }

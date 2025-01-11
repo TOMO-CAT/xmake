@@ -50,7 +50,7 @@ extern "C"
 
 /*! init xmake
  *
- * @return          tb_true or tb_false
+ * @return          xm_true or xm_false
  *
  * @code
     #include "xmake/xmake.h"
@@ -78,7 +78,7 @@ extern "C"
  * @param mode      the compile mode for check __tb_small__ and __tb_debug__
  * @param build     the build version
  *
- * @return          tb_true or tb_false
+ * @return          xm_true or xm_false
  */
 xm_bool_t           xm_init_(xm_size_t mode, tb_hize_t build);
 

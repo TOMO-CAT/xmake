@@ -49,7 +49,7 @@
  */
 static xm_size_t xm_io_stdfile_isatty(xm_size_t type)
 {
-    xm_bool_t answer = tb_false;
+    xm_bool_t answer = xm_false;
 
     switch (type)
     {

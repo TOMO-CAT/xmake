@@ -45,7 +45,7 @@ tb_int_t xm_io_filelock_lock(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get option argument
-    xm_bool_t is_shared = tb_false;
+    xm_bool_t is_shared = xm_false;
     if (lua_istable(lua, 2))
     {
         // is shared lock?

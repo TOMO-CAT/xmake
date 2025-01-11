@@ -50,6 +50,6 @@ tb_int_t xm_bloom_filter_close(lua_State* lua)
     tb_bloom_filter_exit(filter);
 
     // save result: ok
-    lua_pushboolean(lua, tb_true);
+    lua_pushboolean(lua, xm_true);
     return 1;
 }

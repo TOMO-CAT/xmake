@@ -33,13 +33,13 @@ static __tb_inline__ xm_bool_t xm_check_mode(xm_size_t mode)
     if (!(mode & TB_MODE_DEBUG))
     {
         tb_trace_e("libxmake.a has __tb_debug__ but xmake/xmake.h not");
-        return tb_false;
+        return xm_false;
     }
 #else
     if (mode & TB_MODE_DEBUG)
     {
         tb_trace_e("xmake/xmake.h has __tb_debug__ but libxmake.a not");
-        return tb_false;
+        return xm_false;
     }
 #endif
 
@@ -47,18 +47,18 @@ static __tb_inline__ xm_bool_t xm_check_mode(xm_size_t mode)
     if (!(mode & TB_MODE_SMALL))
     {
         tb_trace_e("libxmake.a has __tb_small__ but xmake/xmake.h not");
-        return tb_false;
+        return xm_false;
     }
 #else
     if (mode & TB_MODE_SMALL)
     {
         tb_trace_e("xmake/xmake.h has __tb_small__ but libxmake.a not");
-        return tb_false;
+        return xm_false;
     }
 #endif
 
     // ok
-    return tb_true;
+    return xm_true;
 }
 static __tb_inline__ xm_bool_t xm_version_check(tb_hize_t build)
 {
@@ -70,7 +70,7 @@ static __tb_inline__ xm_bool_t xm_version_check(tb_hize_t build)
     if ((build / 100) == (XM_VERSION_BUILD / 100))
     {
         tb_trace_d("version: %s", XM_VERSION_STRING);
-        return tb_true;
+        return xm_true;
     }
     else
     {
@@ -78,7 +78,7 @@ static __tb_inline__ xm_bool_t xm_version_check(tb_hize_t build)
     }
 
     // no
-    return tb_false;
+    return xm_false;
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -90,24 +90,24 @@ xm_bool_t xm_init_(xm_size_t mode, tb_hize_t build)
     tb_trace_d("init: ..");
 
     // check mode
-    if (!xm_check_mode(mode)) return tb_false;
+    if (!xm_check_mode(mode)) return xm_false;
 
     // check version
     xm_version_check(build);
 
 #if 0
     // init tbox, we always use the tbox's default allocator
-    if (!tb_init(tb_null, tb_default_allocator(tb_null, 0))) return tb_false;
+    if (!tb_init(tb_null, tb_default_allocator(tb_null, 0))) return xm_false;
 #else
     // init tbox, since small compilation mode is enabled, it still uses the native allocator
-    if (!tb_init(tb_null, tb_null)) return tb_false;
+    if (!tb_init(tb_null, tb_null)) return xm_false;
 #endif
 
     // trace
     tb_trace_d("init: ok");
 
     // ok
-    return tb_true;
+    return xm_true;
 }
 xm_void_t xm_exit()
 {

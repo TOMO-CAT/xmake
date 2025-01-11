@@ -77,7 +77,7 @@ tb_int_t xm_hash_sha(lua_State* lua)
     tb_check_return_val(filename, 0);
 
     // load data from file
-    xm_bool_t ok = tb_false;
+    xm_bool_t ok = xm_false;
     tb_stream_ref_t stream = tb_stream_init_from_file(filename, TB_FILE_MODE_RO);
     if (stream)
     {
@@ -125,7 +125,7 @@ tb_int_t xm_hash_sha(lua_State* lua)
 	        lua_pushstring(lua, s);
 
             // ok
-            ok = tb_true;
+            ok = xm_true;
         }
 
         // exit stream

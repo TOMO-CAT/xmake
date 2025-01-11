@@ -52,6 +52,6 @@ tb_int_t xm_fwatcher_close(lua_State* lua)
     tb_fwatcher_exit(fwatcher);
 
     // save result: ok
-    lua_pushboolean(lua, tb_true);
+    lua_pushboolean(lua, xm_true);
     return 1;
 }

@@ -77,12 +77,12 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
     }
 
     // match ok?
-    xm_bool_t matched = tb_false;
-    xm_bool_t skip_recursion = tb_false;
+    xm_bool_t matched = xm_false;
+    xm_bool_t skip_recursion = xm_false;
     if (lua_isstring(lua, -1) && !tb_strcmp(path, lua_tostring(lua, -1)))
     {
         // exists excludes?
-        xm_bool_t excluded = tb_false;
+        xm_bool_t excluded = xm_false;
         if (lua_istable(lua, 5))
         {
             // the root directory
@@ -153,11 +153,11 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
                     lua_pop(lua, 1);
                     if (!is_continue) return TB_DIRECTORY_WALK_CODE_END;
                 }
-                matched = tb_true;
+                matched = xm_true;
             }
         }
         // we do not recurse sub-directories if this path has been excluded and it's directory
-        else skip_recursion = tb_true;
+        else skip_recursion = xm_true;
     }
     if (!matched) lua_pop(lua, 1);
     return skip_recursion? TB_DIRECTORY_WALK_CODE_SKIP_RECURSION : TB_DIRECTORY_WALK_CODE_CONTINUE;
@@ -196,7 +196,7 @@ tb_int_t xm_os_find(lua_State* lua)
     tuple[1].cstr   = pattern;
     tuple[2].l      = mode;
     tuple[3].ul     = 0;
-    tb_directory_walk(rootdir, recursion, tb_true, xm_os_find_walk, tuple);
+    tb_directory_walk(rootdir, recursion, xm_true, xm_os_find_walk, tuple);
 
     // pop string package
     lua_pop(lua, 1);

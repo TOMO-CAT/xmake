@@ -134,7 +134,7 @@ tb_int_t xm_io_file_write(lua_State* lua)
                 lua_pop(lua, 1);
 
                 // mark as binary data
-                is_binary = tb_true;
+                is_binary = xm_true;
             }
 
             tb_check_continue(datasize);
@@ -151,13 +151,13 @@ tb_int_t xm_io_file_write(lua_State* lua)
                 if (file->utfbom)
                 {
                     xm_io_file_write_file_utfbom(file);
-                    file->utfbom = tb_false;
+                    file->utfbom = xm_false;
                 }
                 xm_io_file_write_file_transcrlf(file, data, (xm_size_t)datasize);
             }
         }
     }
     lua_settop(lua, 1);
-    lua_pushboolean(lua, tb_true);
+    lua_pushboolean(lua, xm_true);
     return 1;
 }

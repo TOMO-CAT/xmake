@@ -42,8 +42,8 @@ static tb_long_t xm_os_emptydir_walk(tb_char_t const* path, tb_file_info_t const
     // is emptydir?
     if (info->type == TB_FILE_TYPE_FILE || info->type == TB_FILE_TYPE_DIRECTORY)
     {
-        *is_emptydir = tb_false;
-        return tb_false;
+        *is_emptydir = xm_false;
+        return xm_false;
     }
     return TB_DIRECTORY_WALK_CODE_CONTINUE;
 }
@@ -61,8 +61,8 @@ tb_int_t xm_os_emptydir(lua_State* lua)
     tb_check_return_val(dir, 0);
 
     // os.emptydir(dir)
-    xm_bool_t is_emptydir = tb_true;
-    tb_directory_walk(dir, tb_true, tb_true, xm_os_emptydir_walk, &is_emptydir);
+    xm_bool_t is_emptydir = xm_true;
+    tb_directory_walk(dir, xm_true, xm_true, xm_os_emptydir_walk, &is_emptydir);
 
     // is emptydir?
     lua_pushboolean(lua, is_emptydir);

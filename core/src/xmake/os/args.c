@@ -41,12 +41,12 @@ static xm_void_t tb_os_args_append(tb_string_ref_t result, tb_char_t const* cstr
     // need wrap quote?
     tb_char_t ch;
     tb_char_t const* p = cstr;
-    xm_bool_t wrap_quote = tb_false;
+    xm_bool_t wrap_quote = xm_false;
     if (!nowrap)
     {
         while ((ch = *p))
         {
-            if (ch == ' ') wrap_quote = tb_true;
+            if (ch == ' ') wrap_quote = xm_true;
             p++;
         }
     }
@@ -79,7 +79,7 @@ tb_int_t xm_os_args(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // escape '\\' characters in global?
-    xm_bool_t escape = tb_false;
+    xm_bool_t escape = xm_false;
     if (lua_istable(lua, 2))
     {
         // is escape?
@@ -90,7 +90,7 @@ tb_int_t xm_os_args(lua_State* lua)
     }
 
     // disable to wrap quote characters in global?
-    xm_bool_t nowrap = tb_false;
+    xm_bool_t nowrap = xm_false;
     if (lua_istable(lua, 2))
     {
         // is nowrap?

@@ -65,7 +65,7 @@ tb_int_t xm_lz4_compress_stream_write(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // is end?
-    xm_bool_t end = tb_false;
+    xm_bool_t end = xm_false;
     if (lua_isboolean(lua, 4)) end = lua_toboolean(lua, 4);
 
     // write data
