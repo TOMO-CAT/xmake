@@ -263,3 +263,16 @@ end
 > 以我们的一个大型代码库为例，它共有 400+ targets，其中 300 个是单测 binary target，如果运行 `xmake b --dry-run --all` 空跑的话需要 20 秒以上，因此对依赖图剪枝就有一定的必要性。
 
 ![prune redundant edges](prune-redundant-edges.png)
+
+### 4. buildcmd_file 和 build_file 的区别
+
+`buildcmd_file` 主要用于 project generator，也可以支持 xmake 运行构建。但是它的缺点在于无法融入 batchjobs 做并发编译。
+
+`build_file` 会直接添加到 batchjobs 中从而支持并发编译提高构建速度，而且一旦配置了 `build_file` 就会优先使用它，没配置的话再 fallback 到 `buildcmd_file`。
+
+目前对于 protobuf rule 同时配置了 `buildcmd_file` 和 `build_file`，运行构建的时候 `build_file` 会覆盖 `buildcmd_file`，project generator 会直接使用 `buildcmd_file`，原因在于：
+
+* `build_file` 可以提高构建速度
+* `buildcmd_file` 可以生成 `compile_commands.json` 用于代码跳转
+
+对于这种 codegen rule 同时都写的还是比较麻烦，后续再研究一下能否统一。
