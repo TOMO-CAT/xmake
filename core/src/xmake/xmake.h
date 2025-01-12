@@ -18,8 +18,7 @@
  * @file        xmake.h
  *
  */
-#ifndef XM_XMAKE_H
-#define XM_XMAKE_H
+#pragma once
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -93,6 +92,4 @@ tb_version_t const* xm_version(xm_noarg_t);
 
 #ifdef __cplusplus
 }
-#endif
-
 #endif
