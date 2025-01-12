@@ -63,7 +63,7 @@ static __tb_inline__ xm_bool_t xm_check_mode(xm_size_t mode)
 static __tb_inline__ xm_bool_t xm_version_check(xm_hize_t build)
 {
     // the version oly for link the static vtag string
-    tb_version_t const* version = xm_version();
+    xm_version_t const* version = xm_version();
     tb_used(version);
 
     // ok
@@ -114,14 +114,14 @@ xm_void_t xm_exit()
     // exit tbox
     tb_exit();
 }
-tb_version_t const* xm_version()
+xm_version_t const* xm_version()
 {
     // init version tag for binary search
     static __tb_volatile__ tb_char_t const* s_vtag = "[xmake]: [vtag]: " XM_VERSION_STRING;
     tb_used(s_vtag);
 
     // init version
-    static tb_version_t s_version = {0};
+    static xm_version_t s_version = {0};
     if (!s_version.major)
     {
         s_version.major = XM_VERSION_MAJOR;

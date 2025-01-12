@@ -963,7 +963,7 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
         xm_engine_init_signal(engine);
 
         // get version
-        tb_version_t const* version = xm_version();
+        xm_version_t const* version = xm_version();
         tb_assert_and_check_break(version);
 
         // init version string

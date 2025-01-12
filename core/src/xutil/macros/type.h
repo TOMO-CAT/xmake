@@ -57,6 +57,22 @@ typedef xm_pointer_t     xm_handle_t;
 #endif
 
 /* *******************************************************
+ *  wchar
+ * *******************************************************
+ */
+#ifdef XM_CONFIG_TYPE_HAVE_WCHAR
+    typedef wchar_t                 xm_wchar_t;
+#elif defined(__WCHAR_TYPE__)
+typedef __WCHAR_TYPE__              xm_wchar_t;
+#elif defined(__WCHAR_WIDTH__) && (__WCHAR_WIDTH__ == 2)
+typedef xm_int16_t                  xm_wchar_t;
+#elif defined(__WCHAR_WIDTH__) && (__WCHAR_WIDTH__ == 4)
+typedef xm_int32_t                  xm_wchar_t;
+#else
+typedef xm_int32_t                  xm_wchar_t;
+#endif
+
+/* *******************************************************
  *  atomic type
  * *******************************************************
  */
@@ -138,3 +154,60 @@ typedef xm_hong_t xm_time_t;
 
 // the suseconds type
 typedef xm_long_t xm_suseconds_t;
+
+// the timezone type
+typedef struct __xm_timezone_t
+{
+    xm_int_t                        tz_minuteswest;
+    xm_int_t                        tz_dsttime;
+
+}xm_timezone_t;
+
+// the version type
+typedef struct __xm_version_t
+{
+    xm_byte_t                       major;
+    xm_byte_t                       minor;
+    xm_byte_t                       alter;
+    xm_hize_t                       build;
+
+}xm_version_t;
+
+// the value type
+typedef union __xm_value_t
+{
+    xm_uint8_t                      u8;
+    xm_sint8_t                      s8;
+    xm_char_t                       c;
+    xm_wchar_t                      wc;
+    xm_bool_t                       b;
+    xm_uint16_t                     u16;
+    xm_sint16_t                     s16;
+    xm_uint32_t                     u32;
+    xm_sint32_t                     s32;
+    xm_uint64_t                     u64;
+    xm_sint64_t                     s64;
+    xm_size_t                       ul;
+    xm_long_t                       l;
+    xm_time_t                       t;
+    xm_pointer_t                    ptr;
+    xm_cpointer_t                   cptr;
+    xm_socket_ref_t                 sock;
+    xm_file_ref_t                   file;
+    xm_handle_t                     handle;
+    xm_char_t*                      str;
+    xm_char_t const*                cstr;
+    xm_wchar_t*                     wstr;
+    xm_wchar_t const*               wcstr;
+    xm_atomic_t                     a;
+    xm_atomic_t                     a64;
+    xm_spinlock_t                   lock;
+    xm_stream_ref_t                 stream;
+    xm_async_stream_ref_t           astream;
+
+#ifdef xm_CONFIG_TYPE_HAVE_FLOAT
+    xm_float_t                      f;
+    xm_double_t                     d;
+#endif
+
+}xm_value_t, *xm_value_ref_t;
