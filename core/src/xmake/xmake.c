@@ -32,13 +32,13 @@ static __tb_inline__ xm_bool_t xm_check_mode(xm_size_t mode)
 #ifdef __xm_debug__
     if (!(mode & XM_MODE_DEBUG))
     {
-        tb_trace_e("libxmake.a has __tb_debug__ but xmake/xmake.h not");
+        tb_trace_e("libxmake.a has __xm_debug__ but xmake/xmake.h not");
         return xm_false;
     }
 #else
     if (mode & XM_MODE_DEBUG)
     {
-        tb_trace_e("xmake/xmake.h has __tb_debug__ but libxmake.a not");
+        tb_trace_e("xmake/xmake.h has __xm_debug__ but libxmake.a not");
         return xm_false;
     }
 #endif
@@ -46,13 +46,13 @@ static __tb_inline__ xm_bool_t xm_check_mode(xm_size_t mode)
 #ifdef __xm_small__
     if (!(mode & XM_MODE_SMALL))
     {
-        tb_trace_e("libxmake.a has __tb_small__ but xmake/xmake.h not");
+        tb_trace_e("libxmake.a has __xm_small__ but xmake/xmake.h not");
         return xm_false;
     }
 #else
     if (mode & XM_MODE_SMALL)
     {
-        tb_trace_e("xmake/xmake.h has __tb_small__ but libxmake.a not");
+        tb_trace_e("xmake/xmake.h has __xm_small__ but libxmake.a not");
         return xm_false;
     }
 #endif

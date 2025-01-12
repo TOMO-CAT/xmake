@@ -74,7 +74,7 @@ extern "C"
 
 /*! init the xmake library
  *
- * @param mode      the compile mode for check __tb_small__ and __tb_debug__
+ * @param mode      the compile mode for check __xm_small__ and __xm_debug__
  * @param build     the build version
  *
  * @return          xm_true or xm_false
