@@ -79,7 +79,7 @@ extern "C"
  *
  * @return          xm_true or xm_false
  */
-xm_bool_t           xm_init_(xm_size_t mode, tb_hize_t build);
+xm_bool_t           xm_init_(xm_size_t mode, xm_hize_t build);
 
 /// exit the xmake library
 xm_void_t           xm_exit(xm_noarg_t);

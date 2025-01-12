@@ -60,7 +60,7 @@ static __tb_inline__ xm_bool_t xm_check_mode(xm_size_t mode)
     // ok
     return xm_true;
 }
-static __tb_inline__ xm_bool_t xm_version_check(tb_hize_t build)
+static __tb_inline__ xm_bool_t xm_version_check(xm_hize_t build)
 {
     // the version oly for link the static vtag string
     tb_version_t const* version = xm_version();
@@ -84,7 +84,7 @@ static __tb_inline__ xm_bool_t xm_version_check(tb_hize_t build)
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-xm_bool_t xm_init_(xm_size_t mode, tb_hize_t build)
+xm_bool_t xm_init_(xm_size_t mode, xm_hize_t build)
 {
     // trace
     tb_trace_d("init: ..");
@@ -127,7 +127,7 @@ tb_version_t const* xm_version()
         s_version.major = XM_VERSION_MAJOR;
         s_version.minor = XM_VERSION_MINOR;
         s_version.alter = XM_VERSION_ALTER;
-        s_version.build = (tb_hize_t)tb_atoll(XM_VERSION_BUILD_STRING);
+        s_version.build = (xm_hize_t)tb_atoll(XM_VERSION_BUILD_STRING);
     }
 
     return &s_version;

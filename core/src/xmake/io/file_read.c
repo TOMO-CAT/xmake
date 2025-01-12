@@ -52,7 +52,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
 
     // read line and reserve crlf
     xm_bool_t   eof = xm_false;
-    tb_hize_t   offset = 0;
+    xm_hize_t   offset = 0;
     tb_byte_t*  data = tb_null;
     tb_hong_t   size = tb_stream_size(stream);
     while (size < 0 || (offset = tb_stream_offset(stream)) < size)
