@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "compress_stream_write"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "compress_stream_write"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -52,10 +52,10 @@ tb_int_t xm_lz4_compress_stream_write(lua_State* lua)
     tb_check_return_val(stream, 0);
 
     // get data and size
-    xm_size_t        size = 0;
+    xu_size_t        size = 0;
     tb_byte_t const* data = tb_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xm_size_t)(tb_long_t)lua_tointeger(lua, 2);
-    if (xm_lua_isinteger(lua, 3)) size = (xm_size_t)lua_tointeger(lua, 3);
+    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
+    if (xm_lua_isinteger(lua, 3)) size = (xu_size_t)lua_tointeger(lua, 3);
     if (!data || !size)
     {
         lua_pushinteger(lua, -1);
@@ -65,7 +65,7 @@ tb_int_t xm_lz4_compress_stream_write(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // is end?
-    xm_bool_t end = xm_false;
+    xu_bool_t end = xu_false;
     if (lua_isboolean(lua, 4)) end = lua_toboolean(lua, 4);
 
     // write data

@@ -52,6 +52,6 @@ tb_int_t xm_process_close(lua_State* lua)
     tb_process_exit(process);
 
     // save result: ok
-    lua_pushboolean(lua, xm_true);
+    lua_pushboolean(lua, xu_true);
     return 1;
 }

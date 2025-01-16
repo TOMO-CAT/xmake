@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "string_split"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "string_split"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -33,24 +33,24 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xm_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, xm_size_t nstr, tb_char_t const* cdls, xm_size_t ndls, xm_bool_t strict, tb_int_t limit)
+static xu_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t const* cdls,
+                                     xu_size_t ndls, xu_bool_t strict, tb_int_t limit)
 {
-    tb_int_t num = 0;
+    tb_int_t         num = 0;
     tb_char_t const* end = cstr + nstr;
     tb_char_t const* pos = tb_strstr(cstr, cdls); // faster than tb_strnstr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
         {
-            if (limit > 0 && num + 1 >= limit)
-                break;
+            if (limit > 0 && num + 1 >= limit) break;
 
             lua_pushlstring(lua, cstr, pos - cstr);
             lua_rawseti(lua, -2, ++num);
         }
 
         cstr = pos + ndls;
-        pos = tb_strstr(cstr, cdls);
+        pos  = tb_strstr(cstr, cdls);
     }
     if (cstr < end)
     {
@@ -63,24 +63,24 @@ static xm_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, xm_s
         lua_rawseti(lua, -2, ++num);
     }
 }
-static xm_void_t xm_string_split_chr(lua_State* lua, tb_char_t const* cstr, xm_size_t nstr, tb_char_t ch, xm_bool_t strict, tb_int_t limit)
+static xu_void_t xm_string_split_chr(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t ch,
+                                     xu_bool_t strict, tb_int_t limit)
 {
-    tb_int_t num = 0;
+    tb_int_t         num = 0;
     tb_char_t const* end = cstr + nstr;
     tb_char_t const* pos = tb_strchr(cstr, ch); // faster than tb_strnchr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
         {
-            if (limit > 0 && num + 1 >= limit)
-                break;
+            if (limit > 0 && num + 1 >= limit) break;
 
             lua_pushlstring(lua, cstr, pos - cstr);
             lua_rawseti(lua, -2, ++num);
         }
 
         cstr = pos + 1;
-        pos = tb_strchr(cstr, ch);
+        pos  = tb_strchr(cstr, ch);
     }
     if (cstr < end)
     {
@@ -119,14 +119,16 @@ tb_int_t xm_string_split(lua_State* lua)
     tb_char_t const* cdls = luaL_checklstring(lua, 2, &ndls);
 
     // is strict?
-    xm_bool_t const  strict = (xm_bool_t)lua_toboolean(lua, 3);
+    xu_bool_t const strict = (xu_bool_t)lua_toboolean(lua, 3);
 
     // get limit count
-    tb_int_t const   limit  = (tb_int_t)luaL_optinteger(lua, 4, -1);
+    tb_int_t const limit = (tb_int_t)luaL_optinteger(lua, 4, -1);
 
     // split it
     lua_newtable(lua);
-    if (ndls == 1) xm_string_split_chr(lua, cstr, (xm_size_t)nstr, cdls[0], strict, limit);
-    else xm_string_split_str(lua, cstr, (xm_size_t)nstr, cdls, ndls, strict, limit);
+    if (ndls == 1)
+        xm_string_split_chr(lua, cstr, (xu_size_t)nstr, cdls[0], strict, limit);
+    else
+        xm_string_split_str(lua, cstr, (xu_size_t)nstr, cdls, ndls, strict, limit);
     return 1;
 }

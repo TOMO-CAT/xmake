@@ -22,14 +22,14 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "poller_modify"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "poller_modify"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake/io/prefix.h"
 #include "poller.h"
+#include "xmake/io/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * interfaces
@@ -44,7 +44,7 @@ tb_int_t xm_io_poller_modify(lua_State* lua)
     // is pointer?
     if (!xm_lua_ispointer(lua, 2))
     {
-        lua_pushboolean(lua, xm_false);
+        lua_pushboolean(lua, xu_false);
         lua_pushfstring(lua, "invalid poller object!");
         return 2;
     }
@@ -54,11 +54,11 @@ tb_int_t xm_io_poller_modify(lua_State* lua)
 
     // get cdata
     tb_char_t const* cdata_str = tb_null;
-    tb_pointer_t     cdata = (tb_pointer_t)xm_lua_topointer2(lua, 2, &cdata_str);
+    tb_pointer_t     cdata     = (tb_pointer_t)xm_lua_topointer2(lua, 2, &cdata_str);
     tb_check_return_val(cdata, 0);
 
     // get events
-    xm_size_t events = (xm_size_t)luaL_checknumber(lua, 3);
+    xu_size_t events = (xu_size_t)luaL_checknumber(lua, 3);
 
     // modify events in poller
     tb_poller_object_t object;

@@ -7,23 +7,6 @@ option("demo")
     set_description("Enable or disable the demo module")
 option_end()
 
--- option: micro
-option("micro")
-    set_default(false)
-    set_showmenu(true)
-    set_category("option")
-    set_description("Compile micro core library for the embed system.")
-    set_configvar("TB_CONFIG_MICRO_ENABLE", 1)
-option_end()
-
--- option: small
-option("small")
-    set_default(true)
-    set_showmenu(true)
-    set_category("option")
-    set_description("Enable the small compile mode and disable all modules.")
-option_end()
-
 -- option: wchar
 option("wchar")
     add_ctypes("wchar_t")

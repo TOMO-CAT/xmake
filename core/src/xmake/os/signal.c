@@ -22,38 +22,41 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "signal"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "signal"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
 #include "xmake/os/prefix.h"
 #if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
-#   include <unistd.h>
-#   include <signal.h>
-#elif defined(TB_CONFIG_OS_LINUX) || defined(TB_CONFIG_OS_BSD) || defined(TB_CONFIG_OS_ANDROID) || defined(TB_CONFIG_OS_HAIKU)
-#   include <unistd.h>
-#   include <signal.h>
+#    include <signal.h>
+#    include <unistd.h>
+#elif defined(TB_CONFIG_OS_LINUX) || defined(TB_CONFIG_OS_BSD) || defined(TB_CONFIG_OS_ANDROID) ||                     \
+    defined(TB_CONFIG_OS_HAIKU)
+#    include <signal.h>
+#    include <unistd.h>
 #endif
 #ifdef TB_CONFIG_OS_BSD
-#   include <sys/types.h>
-#   include <sys/sysctl.h>
-#   include <signal.h>
+#    include <signal.h>
+#    include <sys/sysctl.h>
+#    include <sys/types.h>
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * types
  */
-typedef enum __xm_os_signal_e {
+typedef enum __xm_os_signal_e
+{
     XM_OS_SIGINT = 2
-}xm_os_signal_e;
+} xm_os_signal_e;
 
-typedef enum __xm_os_signal_handler_e {
+typedef enum __xm_os_signal_handler_e
+{
     XM_OS_SIGFUN = 0,
     XM_OS_SIGDFL = 1,
     XM_OS_SIGIGN = 2,
-}xm_os_signal_handler_e;
+} xm_os_signal_handler_e;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * globals
@@ -63,7 +66,7 @@ static lua_State* g_lua = tb_null;
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xm_void_t xm_os_signal_handler_impl(tb_int_t signo)
+static xu_void_t xm_os_signal_handler_impl(tb_int_t signo)
 {
     // do callback(signo)
     lua_State* lua = g_lua;
@@ -78,19 +81,15 @@ static xm_void_t xm_os_signal_handler_impl(tb_int_t signo)
 }
 
 #if defined(SIGINT)
-static xm_void_t xm_os_signal_handler(tb_int_t signo_native)
+static xu_void_t xm_os_signal_handler(tb_int_t signo_native)
 {
     tb_int_t signo = -1;
     switch (signo_native)
     {
-    case SIGINT:
-        signo = XM_OS_SIGINT;
-        break;
-    default:
-        break;
+    case SIGINT: signo = XM_OS_SIGINT; break;
+    default: break;
     }
-    if (signo >= 0)
-        xm_os_signal_handler_impl(signo);
+    if (signo >= 0) xm_os_signal_handler_impl(signo);
 }
 #endif
 
@@ -101,12 +100,12 @@ tb_int_t xm_os_signal(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
-    g_lua = lua;
+    g_lua            = lua;
     tb_int_t handler = XM_OS_SIGFUN;
 
     // check signal handler
     if (lua_isnumber(lua, 2))
-        handler = (tb_int_t) luaL_checkinteger(lua, 2);
+        handler = (tb_int_t)luaL_checkinteger(lua, 2);
     else if (!lua_isfunction(lua, 2))
         return 0;
 
@@ -123,26 +122,16 @@ tb_int_t xm_os_signal(lua_State* lua)
 #if defined(SIGINT)
     switch (signo)
     {
-    case XM_OS_SIGINT:
-        signo = SIGINT;
-        break;
-    default:
-        return 0;
+    case XM_OS_SIGINT: signo = SIGINT; break;
+    default: return 0;
     }
 
     switch (handler)
     {
-        case XM_OS_SIGFUN:
-            signal(signo, xm_os_signal_handler);
-            break;
-        case XM_OS_SIGDFL:
-            signal(signo, SIG_DFL);
-            break;
-        case XM_OS_SIGIGN:
-            signal(signo, SIG_IGN);
-            break;
-        default:
-            break;
+    case XM_OS_SIGFUN: signal(signo, xm_os_signal_handler); break;
+    case XM_OS_SIGDFL: signal(signo, SIG_DFL); break;
+    case XM_OS_SIGIGN: signal(signo, SIG_IGN); break;
+    default: break;
     }
 #endif
     return 0;

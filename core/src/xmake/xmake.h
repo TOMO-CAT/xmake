@@ -3,33 +3,33 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake/prefix.h"
 #include "xmake/engine.h"
+#include "xmake/prefix.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
- * macros
- */
+    /* //////////////////////////////////////////////////////////////////////////////////////
+     * macros
+     */
 
 #ifdef __xm_debug__
-#   define __xm_mode_debug__    XM_MODE_DEBUG
+#    define __xm_mode_debug__ XM_MODE_DEBUG
 #else
-#   define __xm_mode_debug__    (0)
+#    define __xm_mode_debug__ (0)
 #endif
 
 #ifdef __xm_small__
-#   define __xm_mode_small__    XM_MODE_SMALL
+#    define __xm_mode_small__ XM_MODE_SMALL
 #else
-#   define __xm_mode_small__    (0)
+#    define __xm_mode_small__ (0)
 #endif
 
 /*! init xmake
  *
- * @return          xm_true or xm_false
+ * @return          xu_true or xu_false
  *
  * @code
     #include "xmake/xmake.h"
@@ -46,29 +46,29 @@ extern "C"
     }
  * @endcode
  */
-#define xm_init()     xm_init_((xm_size_t)(__xm_mode_debug__ | __xm_mode_small__), XM_VERSION_BUILD)
+#define xm_init() xm_init_((xu_size_t)(__xm_mode_debug__ | __xm_mode_small__), XM_VERSION_BUILD)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
- * interfaces
- */
+    /* //////////////////////////////////////////////////////////////////////////////////////
+     * interfaces
+     */
 
-/*! init the xmake library
- *
- * @param mode      the compile mode for check __xm_small__ and __xm_debug__
- * @param build     the build version
- *
- * @return          xm_true or xm_false
- */
-xm_bool_t           xm_init_(xm_size_t mode, xm_hize_t build);
+    /*! init the xmake library
+     *
+     * @param mode      the compile mode for check __xm_small__ and __xm_debug__
+     * @param build     the build version
+     *
+     * @return          xu_true or xu_false
+     */
+    xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build);
 
-/// exit the xmake library
-xm_void_t           xm_exit(xm_noarg_t);
+    /// exit the xmake library
+    xu_void_t xm_exit(xu_noarg_t);
 
-/*! the xmake version
- *
- * @return          the xmake version
- */
-xm_version_t const* xm_version(xm_noarg_t);
+    /*! the xmake version
+     *
+     * @return          the xmake version
+     */
+    xu_version_t const* xm_version(xu_noarg_t);
 
 #ifdef __cplusplus
 }

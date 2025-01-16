@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "cpfile"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "cpfile"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -44,10 +44,9 @@ tb_int_t xm_os_cpfile(lua_State* lua)
     tb_check_return_val(src && dst, 0);
 
     // init copy flags
-    xm_size_t flags = TB_FILE_COPY_NONE;
-    xm_bool_t is_symlink = lua_toboolean(lua, 3);
-    if (is_symlink)
-        flags |= TB_FILE_COPY_LINK;
+    xu_size_t flags      = TB_FILE_COPY_NONE;
+    xu_bool_t is_symlink = lua_toboolean(lua, 3);
+    if (is_symlink) flags |= TB_FILE_COPY_LINK;
 
     // do copy
     lua_pushboolean(lua, tb_file_copy(src, dst, flags));

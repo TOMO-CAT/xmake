@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "md5"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "md5"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -41,8 +41,8 @@ tb_int_t xm_hash_md5(lua_State* lua)
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 1) && xm_lua_isinteger(lua, 2))
     {
-        tb_byte_t const* data = (tb_byte_t const*)(xm_size_t)(tb_long_t)lua_tointeger(lua, 1);
-        xm_size_t size = (xm_size_t)lua_tointeger(lua, 2);
+        tb_byte_t const* data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 1);
+        xu_size_t        size = (xu_size_t)lua_tointeger(lua, 2);
         if (!data || !size)
         {
             lua_pushnil(lua);
@@ -56,9 +56,10 @@ tb_int_t xm_hash_md5(lua_State* lua)
         tb_md5_make(data, size, buffer, sizeof(buffer));
 
         // make md5 string
-        xm_size_t i = 0;
+        xu_size_t i      = 0;
         tb_char_t s[256] = {0};
-        for (i = 0; i < 16; ++i) tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+        for (i = 0; i < 16; ++i)
+            tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
         // save result
         lua_pushstring(lua, s);
@@ -70,7 +71,7 @@ tb_int_t xm_hash_md5(lua_State* lua)
     tb_check_return_val(filename, 0);
 
     // load data from file
-    xm_bool_t ok = xm_false;
+    xu_bool_t       ok     = xu_false;
     tb_stream_ref_t stream = tb_stream_init_from_file(filename, TB_FILE_MODE_RO);
     if (stream)
     {
@@ -101,7 +102,8 @@ tb_int_t xm_hash_md5(lua_State* lua)
                     tb_assert_and_check_break(real & TB_STREAM_WAIT_READ);
                 }
                 // failed or end?
-                else break;
+                else
+                    break;
             }
 
             // exit md5
@@ -109,15 +111,16 @@ tb_int_t xm_hash_md5(lua_State* lua)
             tb_md5_exit(&md5, buffer, sizeof(buffer));
 
             // make md5 string
-            xm_size_t i = 0;
+            xu_size_t i      = 0;
             tb_char_t s[256] = {0};
-            for (i = 0; i < 16; ++i) tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+            for (i = 0; i < 16; ++i)
+                tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
             // save result
-	        lua_pushstring(lua, s);
+            lua_pushstring(lua, s);
 
             // ok
-            ok = xm_true;
+            ok = xu_true;
         }
 
         // exit stream

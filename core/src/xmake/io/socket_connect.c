@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_connect"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "socket_connect"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -63,7 +63,7 @@ tb_int_t xm_io_socket_connect(lua_State* lua)
     tb_ipaddr_t addr;
     if (family == TB_IPADDR_FAMILY_UNIX)
     {
-        xm_bool_t is_abstract = (xm_bool_t)lua_toboolean(lua, 3);
+        xu_bool_t is_abstract = (xu_bool_t)lua_toboolean(lua, 3);
         tb_ipaddr_unix_set_cstr(&addr, address, is_abstract);
     }
     else

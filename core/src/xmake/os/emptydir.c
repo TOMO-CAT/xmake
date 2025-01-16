@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "emptydir"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "emptydir"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -36,14 +36,14 @@
 static tb_long_t xm_os_emptydir_walk(tb_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
-    xm_bool_t* is_emptydir = (xm_bool_t*)priv;
+    xu_bool_t* is_emptydir = (xu_bool_t*)priv;
     tb_assert_and_check_return_val(path && info && is_emptydir, TB_DIRECTORY_WALK_CODE_END);
 
     // is emptydir?
     if (info->type == TB_FILE_TYPE_FILE || info->type == TB_FILE_TYPE_DIRECTORY)
     {
-        *is_emptydir = xm_false;
-        return xm_false;
+        *is_emptydir = xu_false;
+        return xu_false;
     }
     return TB_DIRECTORY_WALK_CODE_CONTINUE;
 }
@@ -61,8 +61,8 @@ tb_int_t xm_os_emptydir(lua_State* lua)
     tb_check_return_val(dir, 0);
 
     // os.emptydir(dir)
-    xm_bool_t is_emptydir = xm_true;
-    tb_directory_walk(dir, xm_true, xm_true, xm_os_emptydir_walk, &is_emptydir);
+    xu_bool_t is_emptydir = xu_true;
+    tb_directory_walk(dir, xu_true, xu_true, xm_os_emptydir_walk, &is_emptydir);
 
     // is emptydir?
     lua_pushboolean(lua, is_emptydir);

@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "filelock_lock"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "filelock_lock"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -45,26 +45,25 @@ tb_int_t xm_io_filelock_lock(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get option argument
-    xm_bool_t is_shared = xm_false;
+    xu_bool_t is_shared = xu_false;
     if (lua_istable(lua, 2))
     {
         // is shared lock?
         lua_pushstring(lua, "shared");
         lua_gettable(lua, 2);
-        is_shared = (xm_bool_t)lua_toboolean(lua, -1);
+        is_shared = (xu_bool_t)lua_toboolean(lua, -1);
         lua_pop(lua, 1);
     }
 
     // check lock?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get lock
     tb_filelock_ref_t lock = (tb_filelock_ref_t)xm_lua_topointer(lua, 1);
     tb_check_return_val(lock, 0);
 
     // lock it
-    xm_bool_t ok = tb_filelock_enter(lock, is_shared? TB_FILELOCK_MODE_SH : TB_FILELOCK_MODE_EX);
+    xu_bool_t ok = tb_filelock_enter(lock, is_shared ? TB_FILELOCK_MODE_SH : TB_FILELOCK_MODE_EX);
     lua_pushboolean(lua, ok);
     return 1;
 }

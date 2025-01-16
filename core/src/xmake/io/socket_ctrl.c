@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_ctrl"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "socket_ctrl"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -53,10 +53,10 @@ tb_int_t xm_io_socket_ctrl(lua_State* lua)
     tb_check_return_val(sock, 0);
 
     // get code
-    xm_size_t code = (xm_size_t)luaL_checkinteger(lua, 2);
+    xu_size_t code = (xu_size_t)luaL_checkinteger(lua, 2);
 
     // get value
-    xm_size_t value = (xm_size_t)luaL_checkinteger(lua, 3);
+    xu_size_t value = (xu_size_t)luaL_checkinteger(lua, 3);
 
     // control socket
     lua_pushboolean(lua, tb_socket_ctrl(sock, code, value));

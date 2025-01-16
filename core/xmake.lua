@@ -26,9 +26,10 @@ end
 add_rules("plugin.compile_commands.autoupdate", {outputdir = "."})
 
 -- disable some compiler errors
-add_cxflags("-Wno-error=deprecated-declarations", "-fno-strict-aliasing",
-            "-Wno-error=nullability-completeness",
-            "-Wno-error=parentheses-equality")
+add_cxflags("-Wno-error=deprecated-declarations", "-fno-strict-aliasing")
+if is_arch("arm.*") then
+    add_cxflags("-Wno-pointer-to-int-cast")
+end
 
 -- add definitions
 add_defines("_GNU_SOURCE=1", "_FILE_OFFSET_BITS=64", "_LARGEFILE_SOURCE")
@@ -81,6 +82,31 @@ end)
 option("onlylib", function()
     set_default(false)
     set_description("Only build xmake libraries for development")
+end)
+
+-- option: ut
+option("ut", function()
+    set_default(false)
+    set_showmenu(true)
+    set_category("option")
+    set_description("Enable or disable the unit-test")
+end)
+
+-- option: micro
+option("micro", function()
+    set_default(false)
+    set_showmenu(true)
+    set_category("option")
+    set_description("Compile micro core library for the embed system.")
+    set_configvar("XU_CONFIG_MICRO_ENABLE", 1)
+end)
+
+-- option: small
+option("small", function()
+    set_default(false)
+    set_showmenu(true)
+    set_category("option")
+    set_description("Enable the small compile mode and disable all modules.")
 end)
 
 -- add projects

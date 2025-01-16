@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "translate"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "translate"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -40,24 +40,25 @@ tb_int_t xm_path_translate(lua_State* lua)
 
     // get the path
     size_t           path_size = 0;
-    tb_char_t const* path = luaL_checklstring(lua, 1, &path_size);
+    tb_char_t const* path      = luaL_checklstring(lua, 1, &path_size);
     tb_check_return_val(path, 0);
 
     // get the option argument, e.g. {normalize = true}
-    xm_bool_t normalize = xm_false;
+    xu_bool_t normalize = xu_false;
     if (lua_istable(lua, 2))
     {
         lua_pushstring(lua, "normalize");
         lua_gettable(lua, 2);
-        if (lua_toboolean(lua, -1))
-            normalize = xm_true;
+        if (lua_toboolean(lua, -1)) normalize = xu_true;
         lua_pop(lua, 1);
     }
 
     // do path:translate()
     tb_char_t data[TB_PATH_MAXN];
-    xm_size_t size = tb_path_translate_to(path, (xm_size_t)path_size, data, sizeof(data), normalize);
-    if (size) lua_pushlstring(lua, data, (size_t)size);
-    else lua_pushnil(lua);
+    xu_size_t size = tb_path_translate_to(path, (xu_size_t)path_size, data, sizeof(data), normalize);
+    if (size)
+        lua_pushlstring(lua, data, (size_t)size);
+    else
+        lua_pushnil(lua);
     return 1;
 }

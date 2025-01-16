@@ -22,16 +22,17 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "process.openv"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "process.openv"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake/process/prefix.h"
 #include "../io/prefix.h"
-#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_LINUX) || defined(TB_CONFIG_OS_BSD) || defined(TB_CONFIG_OS_HAIKU)
-#   include <signal.h>
+#include "xmake/process/prefix.h"
+#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_LINUX) || defined(TB_CONFIG_OS_BSD) ||                        \
+    defined(TB_CONFIG_OS_HAIKU)
+#    include <signal.h>
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +60,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     }
 
     // get shellname
-    tb_char_t const* shellname  = lua_tostring(lua, 1);
+    tb_char_t const* shellname = lua_tostring(lua, 1);
     tb_check_return_val(shellname, 0);
 
     // get the arguments count
@@ -67,8 +68,8 @@ tb_int_t xm_process_openv(lua_State* lua)
     tb_check_return_val(argn >= 0, 0);
 
     // get arguments
-    xm_size_t           argi = 0;
-    tb_char_t const**   argv = tb_nalloc0_type(1 + argn + 1, tb_char_t const*);
+    xu_size_t         argi = 0;
+    tb_char_t const** argv = tb_nalloc0_type(1 + argn + 1, tb_char_t const*);
     tb_check_return_val(argv, 0);
 
     // fill arguments
@@ -108,32 +109,30 @@ tb_int_t xm_process_openv(lua_State* lua)
     tb_process_attr_t attr = {0};
 
     // get option arguments
-    xm_bool_t          exclusive = xm_false;
-    xm_size_t          envn = 0;
+    xu_bool_t          exclusive  = xu_false;
+    xu_size_t          envn       = 0;
     tb_char_t const*   envs[1024] = {0};
-    tb_char_t const*   inpath  = tb_null;
-    tb_char_t const*   outpath = tb_null;
-    tb_char_t const*   errpath = tb_null;
-    xm_io_file_t*      infile  = tb_null;
-    xm_io_file_t*      outfile = tb_null;
-    xm_io_file_t*      errfile = tb_null;
-    tb_pipe_file_ref_t inpipe  = tb_null;
-    tb_pipe_file_ref_t outpipe = tb_null;
-    tb_pipe_file_ref_t errpipe = tb_null;
+    tb_char_t const*   inpath     = tb_null;
+    tb_char_t const*   outpath    = tb_null;
+    tb_char_t const*   errpath    = tb_null;
+    xm_io_file_t*      infile     = tb_null;
+    xm_io_file_t*      outfile    = tb_null;
+    xm_io_file_t*      errfile    = tb_null;
+    tb_pipe_file_ref_t inpipe     = tb_null;
+    tb_pipe_file_ref_t outpipe    = tb_null;
+    tb_pipe_file_ref_t errpipe    = tb_null;
     if (lua_istable(lua, 3))
     {
         // is detached?
         lua_pushstring(lua, "detach");
         lua_gettable(lua, 3);
-        if (lua_toboolean(lua, -1))
-            attr.flags |= TB_PROCESS_FLAG_DETACH;
+        if (lua_toboolean(lua, -1)) attr.flags |= TB_PROCESS_FLAG_DETACH;
         lua_pop(lua, 1);
 
         // is exclusive?
         lua_pushstring(lua, "exclusive");
         lua_gettable(lua, 3);
-        if (lua_toboolean(lua, -1))
-            exclusive = xm_true;
+        if (lua_toboolean(lua, -1)) exclusive = xu_true;
         lua_pop(lua, 1);
 
         // get curdir
@@ -220,10 +219,10 @@ tb_int_t xm_process_openv(lua_State* lua)
         if (lua_istable(lua, -1))
         {
             // get environment variables count
-            xm_size_t count = (xm_size_t)lua_objlen(lua, -1);
+            xu_size_t count = (xu_size_t)lua_objlen(lua, -1);
 
             // get all passed environment variables
-            xm_size_t i;
+            xu_size_t i;
             for (i = 0; i < count; i++)
             {
                 // get envs[i]
@@ -239,14 +238,16 @@ tb_int_t xm_process_openv(lua_State* lua)
                     else
                     {
                         // error
-                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (tb_int_t)envn, tb_arrayn(envs) - 1);
+                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (tb_int_t)envn,
+                                        tb_arrayn(envs) - 1);
                         lua_error(lua);
                     }
                 }
                 else
                 {
                     // error
-                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (tb_int_t)i, luaL_typename(lua, -1));
+                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (tb_int_t)i,
+                                    luaL_typename(lua, -1));
                     lua_error(lua);
                 }
 
@@ -329,9 +330,9 @@ tb_int_t xm_process_openv(lua_State* lua)
     // set the new environments
     if (envn > 0) attr.envp = envs;
 
-    /* we need to ignore SIGINT and SIGQUIT if we enter exclusive mode
-     * @see https://github.com/xmake-io/xmake/discussions/2893
-     */
+        /* we need to ignore SIGINT and SIGQUIT if we enter exclusive mode
+         * @see https://github.com/xmake-io/xmake/discussions/2893
+         */
 #if defined(SIGINT)
     if (exclusive) signal(SIGINT, SIG_IGN);
 #endif
@@ -341,8 +342,10 @@ tb_int_t xm_process_openv(lua_State* lua)
 
     // init process
     tb_process_ref_t process = (tb_process_ref_t)tb_process_init(shellname, argv, &attr);
-    if (process) xm_lua_pushpointer(lua, (tb_pointer_t)process);
-    else lua_pushnil(lua);
+    if (process)
+        xm_lua_pushpointer(lua, (tb_pointer_t)process);
+    else
+        lua_pushnil(lua);
 
     // exit argv
     if (argv) tb_free(argv);

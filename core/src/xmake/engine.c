@@ -292,45 +292,20 @@ __tb_extern_c_leave__
      */
 
     // the os functions
-    static luaL_Reg const g_os_functions[] = {{"argv", xm_os_argv},
-                                              {"args", xm_os_args},
-                                              {"find", xm_os_find},
-                                              {"link", xm_os_link},
-                                              {"isdir", xm_os_isdir},
-                                              {"rmdir", xm_os_rmdir},
-                                              {"mkdir", xm_os_mkdir},
-                                              {"cpdir", xm_os_cpdir},
-                                              {"chdir", xm_os_chdir},
-                                              {"mtime", xm_os_mtime},
-                                              {"sleep", xm_os_sleep},
-                                              {"mclock", xm_os_mclock},
-                                              {"curdir", xm_os_curdir},
-                                              {"tmpdir", xm_os_tmpdir},
-                                              {"islink", xm_os_islink},
-                                              {"isfile", xm_os_isfile},
-                                              {"touch", xm_os_touch},
-                                              {"rmfile", xm_os_rmfile},
-                                              {"cpfile", xm_os_cpfile},
-                                              {"fscase", xm_os_fscase},
-                                              {"rename", xm_os_rename},
-                                              {"exists", xm_os_exists},
-                                              {"setenv", xm_os_setenv},
-                                              {"getenv", xm_os_getenv},
-                                              {"getenvs", xm_os_getenvs},
-                                              {"cpuinfo", xm_os_cpuinfo},
-                                              {"meminfo", xm_os_meminfo},
-                                              {"readlink", xm_os_readlink},
-                                              {"emptydir", xm_os_emptydir},
-                                              {"strerror", xm_os_strerror},
-                                              {"syserror", xm_os_syserror},
-                                              {"filesize", xm_os_filesize},
-                                              {"getwinsize", xm_os_getwinsize},
-                                              {"getpid", xm_os_getpid},
-                                              {"signal", xm_os_signal},
-                                              {"uid", xm_os_uid},
-                                              {"gid", xm_os_gid},
-                                              {"getown", xm_os_getown},
-                                              {tb_null, tb_null}};
+    static luaL_Reg const g_os_functions[] = {
+        {"argv", xm_os_argv},         {"args", xm_os_args},         {"find", xm_os_find},
+        {"link", xm_os_link},         {"isdir", xm_os_isdir},       {"rmdir", xm_os_rmdir},
+        {"mkdir", xm_os_mkdir},       {"cpdir", xm_os_cpdir},       {"chdir", xm_os_chdir},
+        {"mtime", xm_os_mtime},       {"sleep", xm_os_sleep},       {"mclock", xm_os_mclock},
+        {"curdir", xm_os_curdir},     {"tmpdir", xm_os_tmpdir},     {"islink", xm_os_islink},
+        {"isfile", xm_os_isfile},     {"touch", xm_os_touch},       {"rmfile", xm_os_rmfile},
+        {"cpfile", xm_os_cpfile},     {"fscase", xm_os_fscase},     {"rename", xm_os_rename},
+        {"exists", xm_os_exists},     {"setenv", xm_os_setenv},     {"getenv", xm_os_getenv},
+        {"getenvs", xm_os_getenvs},   {"cpuinfo", xm_os_cpuinfo},   {"meminfo", xm_os_meminfo},
+        {"readlink", xm_os_readlink}, {"emptydir", xm_os_emptydir}, {"strerror", xm_os_strerror},
+        {"syserror", xm_os_syserror}, {"filesize", xm_os_filesize}, {"getwinsize", xm_os_getwinsize},
+        {"getpid", xm_os_getpid},     {"signal", xm_os_signal},     {"uid", xm_os_uid},
+        {"gid", xm_os_gid},           {"getown", xm_os_getown},     {tb_null, tb_null}};
 
 // the io functions
 static luaL_Reg const g_io_functions[] = {{"stdfile", xm_io_stdfile},
@@ -476,10 +451,10 @@ static lua_State* g_lua = tb_null;
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xm_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv)
+static xu_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv)
 {
     // check
-    tb_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, xm_false);
+    tb_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, xu_false);
 
     // put a new table into the stack
     lua_newtable(engine->lua);
@@ -506,21 +481,21 @@ static xm_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, tb
 
     // _ARGV = table_new
     lua_setglobal(engine->lua, "_ARGV");
-    return xm_true;
+    return xu_true;
 }
 
-static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn)
+static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path, xu_size_t maxn)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, xm_false);
+    tb_assert_and_check_return_val(engine && path && maxn, xu_false);
 
-    xm_bool_t ok = xm_false;
+    xu_bool_t ok = xu_false;
     do
     {
         // get it from the environment variable first
         if (tb_environment_first("XMAKE_PROGRAM_FILE", path, maxn) && tb_file_info(path, tb_null))
         {
-            ok = xm_true;
+            ok = xu_true;
             break;
         }
 
@@ -536,14 +511,14 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
          * needed could be more than MAXPATHLEN.
          */
         tb_uint32_t bufsize = (tb_uint32_t)maxn;
-        if (!_NSGetExecutablePath(path, &bufsize)) ok = xm_true;
+        if (!_NSGetExecutablePath(path, &bufsize)) ok = xu_true;
 #elif defined(XM_PROC_SELF_FILE)
         // get the executable file path as program directory
         ssize_t size = readlink(XM_PROC_SELF_FILE, path, (size_t)maxn);
         if (size > 0 && size < maxn)
         {
             path[size] = '\0';
-            ok         = xm_true;
+            ok         = xu_true;
         }
 #elif defined(TB_CONFIG_OS_BSD) && defined(KERN_PROC_PATHNAME)
         // only for FreeBSD and OpenBSD, https://github.com/xmake-io/xmake/issues/2948
@@ -556,7 +531,7 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
         if (sysctl(mib, 4, path, &size, tb_null, 0) == 0 && size < maxn)
         {
             path[size] = '\0';
-            ok         = xm_true;
+            ok         = xu_true;
         }
 #elif defined(TB_CONFIG_OS_HAIKU)
         int32      cookie = 0;
@@ -566,19 +541,19 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
             if (info.type == B_APP_IMAGE)
             {
                 tb_strlcpy(path, info.name, maxn);
-                ok = xm_true;
+                ok = xu_true;
                 break;
             }
         }
 #else
         static tb_char_t const* s_paths[] = {"~/.local/bin/xmake", "/usr/local/bin/xmake", "/usr/bin/xmake"};
-        for (xm_size_t i = 0; i < tb_arrayn(s_paths); i++)
+        for (xu_size_t i = 0; i < tb_arrayn(s_paths); i++)
         {
             tb_char_t const* p = s_paths[i];
             if (tb_file_info(p, tb_null))
             {
                 tb_strlcpy(path, p, maxn);
-                ok = xm_true;
+                ok = xu_true;
                 break;
             }
         }
@@ -599,20 +574,20 @@ static xm_size_t xm_engine_get_program_file(xm_engine_t* engine, tb_char_t* path
     return ok;
 }
 
-static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn,
+static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t* path, xu_size_t maxn,
                                                  tb_char_t const* programfile)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, xm_false);
+    tb_assert_and_check_return_val(engine && path && maxn, xu_false);
 
-    xm_bool_t ok = xm_false;
+    xu_bool_t ok = xu_false;
     do
     {
         // get it from the environment variable first
         tb_char_t data[TB_PATH_MAXN] = {0};
         if (tb_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && tb_path_absolute(data, path, maxn))
         {
-            ok = xm_true;
+            ok = xu_true;
             break;
         }
 
@@ -640,7 +615,7 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
             else
                 tb_strlcpy(programpath, programfile, sizeof(programpath));
 #else
-            tb_char_t const* programpath              = programfile;
+            tb_char_t const* programpath = programfile;
 #endif
 
             // get the root directory
@@ -653,7 +628,7 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
             tb_snprintf(sharedir, sizeof(sharedir), "../share/%s", engine->name);
 
             // find the program (lua) directory
-            xm_size_t        i;
+            xu_size_t        i;
             tb_file_info_t   info;
             tb_char_t        scriptpath[TB_PATH_MAXN];
             tb_char_t const* subdirs[] = {".", sharedir};
@@ -664,7 +639,7 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
                     tb_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
                     tb_file_info(scriptpath, &info) && info.type == TB_FILE_TYPE_FILE)
                 {
-                    ok = xm_true;
+                    ok = xu_true;
                     break;
                 }
             }
@@ -687,12 +662,12 @@ static xm_bool_t xm_engine_get_program_directory(xm_engine_t* engine, tb_char_t*
     return ok;
 }
 
-static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t* path, xm_size_t maxn)
+static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t* path, xu_size_t maxn)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, xm_false);
+    tb_assert_and_check_return_val(engine && path && maxn, xu_false);
 
-    xm_bool_t ok = xm_false;
+    xu_bool_t ok = xu_false;
     do
     {
         // attempt to get it from the environment variable first
@@ -711,7 +686,7 @@ static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t*
         lua_setglobal(engine->lua, "_PROJECT_DIR");
 
         // ok
-        ok = xm_true;
+        ok = xu_true;
 
     } while (0);
 
@@ -723,7 +698,7 @@ static xm_bool_t xm_engine_get_project_directory(xm_engine_t* engine, tb_char_t*
 }
 
 #if defined(SIGINT)
-static xm_void_t xm_engine_dump_traceback(lua_State* lua)
+static xu_void_t xm_engine_dump_traceback(lua_State* lua)
 {
     // @note it's not safe, but it doesn't matter, we're just trying to get the stack backtrace for debugging
     lua_getglobal(lua, "debug");
@@ -736,7 +711,7 @@ static xm_void_t xm_engine_dump_traceback(lua_State* lua)
 #endif
 
 #if defined(SIGINT)
-static xm_void_t xm_engine_signal_handler(tb_int_t signo)
+static xu_void_t xm_engine_signal_handler(tb_int_t signo)
 {
     if (signo == SIGINT && g_lua)
     {
@@ -746,7 +721,7 @@ static xm_void_t xm_engine_signal_handler(tb_int_t signo)
 }
 #endif
 
-static xm_void_t xm_engine_init_host(xm_engine_t* engine)
+static xu_void_t xm_engine_init_host(xm_engine_t* engine)
 {
     // check
     tb_assert_and_check_return(engine && engine->lua);
@@ -790,7 +765,7 @@ static __tb_inline__ tb_char_t const* xm_engine_xmake_arch()
     return arch;
 }
 
-static xm_void_t xm_engine_init_arch(xm_engine_t* engine)
+static xu_void_t xm_engine_init_arch(xm_engine_t* engine)
 {
     // check
     tb_assert_and_check_return(engine && engine->lua);
@@ -812,7 +787,7 @@ static xm_void_t xm_engine_init_arch(xm_engine_t* engine)
     lua_setglobal(engine->lua, "_SUBARCH");
 }
 
-static xm_void_t xm_engine_init_features(xm_engine_t* engine)
+static xu_void_t xm_engine_init_features(xm_engine_t* engine)
 {
     // check
     tb_assert_and_check_return(engine && engine->lua);
@@ -833,7 +808,7 @@ static xm_void_t xm_engine_init_features(xm_engine_t* engine)
     lua_setglobal(engine->lua, "_FEATURES");
 }
 
-static xm_void_t xm_engine_init_signal(xm_engine_t* engine)
+static xu_void_t xm_engine_init_signal(xm_engine_t* engine)
 {
     // we enable it to catch the current lua stack in ctrl-c signal handler if XMAKE_PROFILE=stuck
     tb_char_t data[64] = {0};
@@ -852,9 +827,9 @@ static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data,
     if (nsize == 0 && data)
         tb_free(data);
     else if (!data)
-        ptr = tb_malloc((xm_size_t)nsize);
+        ptr = tb_malloc((xu_size_t)nsize);
     else if (nsize != osize)
-        ptr = tb_ralloc(data, (xm_size_t)nsize);
+        ptr = tb_ralloc(data, (xu_size_t)nsize);
     else
         ptr = data;
     return ptr;
@@ -866,7 +841,7 @@ static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data,
  */
 xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer)
 {
-    xm_bool_t    ok     = xm_false;
+    xu_bool_t    ok     = xu_false;
     xm_engine_t* engine = tb_null;
     do
     {
@@ -963,7 +938,7 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
         xm_engine_init_signal(engine);
 
         // get version
-        xm_version_t const* version = xm_version();
+        xu_version_t const* version = xm_version();
         tb_assert_and_check_break(version);
 
         // init version string
@@ -987,14 +962,15 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
         lua_setglobal(engine->lua, "_NAME");
 
         // init git source
-        lua_pushstring(engine->lua, tb_strcmp(XM_CONFIG_VERSION_GIT_SOURCE, "") ? XM_CONFIG_VERSION_GIT_SOURCE : "gitee.com");
+        lua_pushstring(engine->lua,
+                       tb_strcmp(XM_CONFIG_VERSION_GIT_SOURCE, "") ? XM_CONFIG_VERSION_GIT_SOURCE : "gitee.com");
         lua_setglobal(engine->lua, "_GIT_SOURCE");
 
         // use luajit as runtime?
 #ifdef USE_LUAJIT
-        lua_pushboolean(engine->lua, xm_true);
+        lua_pushboolean(engine->lua, xu_true);
 #else
-        lua_pushboolean(engine->lua, xm_false);
+        lua_pushboolean(engine->lua, xu_false);
 #endif
         lua_setglobal(engine->lua, "_LUAJIT");
 
@@ -1009,7 +985,7 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
         lua_newtable(engine->lua);
         if (lni_initalizer) lni_initalizer((xm_engine_ref_t)engine, engine->lua);
         lua_setglobal(engine->lua, "_lni");
-        ok = xm_true;
+        ok = xu_true;
 
     } while (0);
 
@@ -1020,7 +996,7 @@ xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_c
     }
     return (xm_engine_ref_t)engine;
 }
-xm_void_t xm_engine_exit(xm_engine_ref_t self)
+xu_void_t xm_engine_exit(xm_engine_ref_t self)
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
@@ -1087,7 +1063,7 @@ tb_int_t xm_engine_main(xm_engine_ref_t self, tb_int_t argc, tb_char_t** argv, t
     // get the error code
     return (tb_int_t)lua_tonumber(engine->lua, -1);
 }
-xm_void_t xm_engine_register(xm_engine_ref_t self, tb_char_t const* module, luaL_Reg const funcs[])
+xu_void_t xm_engine_register(xm_engine_ref_t self, tb_char_t const* module, luaL_Reg const funcs[])
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;

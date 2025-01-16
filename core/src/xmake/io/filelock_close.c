@@ -52,7 +52,7 @@ tb_int_t xm_io_filelock_close(lua_State* lua)
     tb_filelock_exit(lock);
 
     // save result: ok
-    lua_pushboolean(lua, xm_true);
+    lua_pushboolean(lua, xu_true);
 
     // ok
     return 1;

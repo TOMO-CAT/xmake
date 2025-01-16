@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_wait"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "socket_wait"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -41,15 +41,14 @@ tb_int_t xm_io_socket_wait(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // check socket?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
     tb_check_return_val(sock, 0);
 
     // get events
-    xm_size_t events = (xm_size_t)luaL_checknumber(lua, 2);
+    xu_size_t events = (xu_size_t)luaL_checknumber(lua, 2);
 
     // get timeout
     tb_long_t timeout = (tb_long_t)luaL_checknumber(lua, 3);

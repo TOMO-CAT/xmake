@@ -22,14 +22,14 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "poller_support"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "poller_support"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake/io/prefix.h"
 #include "poller.h"
+#include "xmake/io/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * interfaces
@@ -42,7 +42,7 @@ tb_int_t xm_io_poller_support(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get events
-    xm_size_t events = (xm_size_t)luaL_checknumber(lua, 1);
+    xu_size_t events = (xu_size_t)luaL_checknumber(lua, 1);
 
     // support events for poller
     lua_pushboolean(lua, tb_poller_support(xm_io_poller(), events));

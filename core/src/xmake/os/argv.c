@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "os.argv"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "os.argv"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -43,7 +43,7 @@ tb_int_t xm_os_argv(lua_State* lua)
     tb_check_return_val(args, 0);
 
     // split only? do not escape
-    xm_bool_t splitonly = xm_false;
+    xu_bool_t splitonly = xu_false;
     if (lua_istable(lua, 2))
     {
         lua_pushstring(lua, "splitonly");
@@ -63,23 +63,35 @@ tb_int_t xm_os_argv(lua_State* lua)
         if (!tb_string_init(&arg)) break;
 
         // parse command to the arguments
-        tb_int_t            i = 1;
-        tb_int_t            skip = 0;
-        tb_int_t            escape = 0;
-        tb_char_t           quote = 0;
-        tb_char_t           ch = 0;
-        tb_char_t const*    p = args;
+        tb_int_t         i      = 1;
+        tb_int_t         skip   = 0;
+        tb_int_t         escape = 0;
+        tb_char_t        quote  = 0;
+        tb_char_t        ch     = 0;
+        tb_char_t const* p      = args;
         while ((ch = *p))
         {
             // no escape now?
             if (!escape)
             {
                 // enter quote?
-                if (!quote && (ch == '\"' || ch == '\'')) { quote = ch; skip = 1; }
+                if (!quote && (ch == '\"' || ch == '\''))
+                {
+                    quote = ch;
+                    skip  = 1;
+                }
                 // leave quote?
-                else if (ch == quote) { quote = 0; skip = 1; }
+                else if (ch == quote)
+                {
+                    quote = 0;
+                    skip  = 1;
+                }
                 // escape charactor? only escape \\, \"
-                else if (ch == '\\' && (p[1] == '\\' || p[1] == '\"')) { escape = 1; skip = 1; }
+                else if (ch == '\\' && (p[1] == '\\' || p[1] == '\"'))
+                {
+                    escape = 1;
+                    skip   = 1;
+                }
                 // is argument end with ' '?
                 else if (!quote && tb_isspace(ch))
                 {
@@ -101,8 +113,10 @@ tb_int_t xm_os_argv(lua_State* lua)
             if (splitonly || !skip) tb_string_chrcat(&arg, ch);
 
             // step and cancel escape
-            if (escape == 1) escape++;
-            else if (escape == 2) escape = 0;
+            if (escape == 1)
+                escape++;
+            else if (escape == 2)
+                escape = 0;
 
             // clear skip
             skip = 0;

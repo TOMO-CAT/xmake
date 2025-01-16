@@ -46,8 +46,6 @@ fi
 
 # options
 option "demo"       "Enable or disable the demo module." true
-option "small"      "Enable the small compile mode and disable all modules." true
-option "micro"      "Compile micro core library for the embed system." false
 option "float"      "Enable or disable the float type" true
 option "info"       "Enable or disable to get some info, .e.g version .." true
 option "exception"  "Enable or disable the exception." false

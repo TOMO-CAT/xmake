@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "base64"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "base64"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -39,7 +39,7 @@ tb_int_t xm_base64_decode(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the string
-    size_t size = 0;
+    size_t           size = 0;
     tb_char_t const* cstr = luaL_checklstring(lua, 1, &size);
     tb_check_return_val(cstr && size, 0);
 
@@ -47,7 +47,7 @@ tb_int_t xm_base64_decode(lua_State* lua)
     tb_byte_t buff[8192];
     if (size < sizeof(buff))
     {
-        xm_size_t real = tb_base64_decode(cstr, size, buff, sizeof(buff));
+        xu_size_t real = tb_base64_decode(cstr, size, buff, sizeof(buff));
         if (real > 0)
         {
             lua_pushlstring(lua, (tb_char_t const*)buff, (tb_int_t)real);

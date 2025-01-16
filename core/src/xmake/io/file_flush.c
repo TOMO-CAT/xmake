@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "file_flush"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "file_flush"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -33,17 +33,17 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xm_bool_t xm_io_std_flush_impl(xm_io_file_t* file)
+static xu_bool_t xm_io_std_flush_impl(xm_io_file_t* file)
 {
-    tb_assert_and_check_return_val(xm_io_file_is_std(file), xm_false);
-    return (file->u.std_ref != tb_stdfile_input())? tb_stdfile_flush(file->u.std_ref) : xm_false;
+    tb_assert_and_check_return_val(xm_io_file_is_std(file), xu_false);
+    return (file->u.std_ref != tb_stdfile_input()) ? tb_stdfile_flush(file->u.std_ref) : xu_false;
 }
 
-static xm_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
+static xu_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
 {
     // check
-    tb_assert_and_check_return_val(xm_io_file_is_file(file), xm_false);
-    return tb_stream_sync(file->u.file_ref, xm_false);
+    tb_assert_and_check_return_val(xm_io_file_is_file(file), xu_false);
+    return tb_stream_sync(file->u.file_ref, xu_false);
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -57,19 +57,19 @@ tb_int_t xm_io_file_flush(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // is user data?
-    if (!lua_isuserdata(lua, 1))
-        xm_io_return_error(lua, "flush(invalid file)!");
+    if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "flush(invalid file)!");
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
     tb_check_return_val(file, 0);
 
     // flush file
-    xm_bool_t ok = xm_io_file_is_file(file)? xm_io_file_flush_impl(file) : xm_io_std_flush_impl(file);
+    xu_bool_t ok = xm_io_file_is_file(file) ? xm_io_file_flush_impl(file) : xm_io_std_flush_impl(file);
     if (ok)
     {
-        lua_pushboolean(lua, xm_true);
+        lua_pushboolean(lua, xu_true);
         return 1;
     }
-    else xm_io_return_error(lua, "failed to flush file");
+    else
+        xm_io_return_error(lua, "failed to flush file");
 }

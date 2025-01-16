@@ -40,14 +40,14 @@
  */
 
 // the allocator
-__tb_extern_c__ tb_allocator_ref_t  g_allocator = tb_null;
+__tb_extern_c__ tb_allocator_ref_t  g_tb_allocator = tb_null;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
 tb_allocator_ref_t tb_allocator()
 {
-    return g_allocator;
+    return g_tb_allocator;
 }
 tb_size_t tb_allocator_type(tb_allocator_ref_t allocator)
 {

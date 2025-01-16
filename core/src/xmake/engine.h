@@ -31,15 +31,18 @@
  */
 __tb_extern_c_enter__
 
-/* //////////////////////////////////////////////////////////////////////////////////////
- * types
- */
+    /* //////////////////////////////////////////////////////////////////////////////////////
+     * types
+     */
 
-/// the xmake engine type
-typedef struct {tb_int_t dummy;} const* xm_engine_ref_t;
+    /// the xmake engine type
+    typedef struct
+{
+    tb_int_t dummy;
+} const* xm_engine_ref_t;
 
 /// the lni initializer callback type
-typedef xm_void_t (*xm_engine_lni_initalizer_cb_t)(xm_engine_ref_t engine, lua_State* lua);
+typedef xu_void_t (*xm_engine_lni_initalizer_cb_t)(xm_engine_ref_t engine, lua_State* lua);
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * interfaces
@@ -52,24 +55,25 @@ typedef xm_void_t (*xm_engine_lni_initalizer_cb_t)(xm_engine_ref_t engine, lua_S
  *
  * @return                  the engine
  */
-xm_engine_ref_t             xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer);
+xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer);
 
 /*! exit the engine
  *
  * @param engine            the engine
  */
-xm_void_t                   xm_engine_exit(xm_engine_ref_t engine);
+xu_void_t xm_engine_exit(xm_engine_ref_t engine);
 
 /*! do the main entry of the engine
  *
  * @param engine            the engine
  * @param argc              the argument count of the console
  * @param argv              the argument list of the console
- * @param taskargv          the argument list of sub-task, e.g. taskargv(lua -vD lua.main) for xmake lua -vD lua.main arg1 arg2 ..
+ * @param taskargv          the argument list of sub-task, e.g. taskargv(lua -vD lua.main) for xmake lua -vD lua.main
+ * arg1 arg2 ..
  *
  * @return                  the error code of main()
  */
-tb_int_t                    xm_engine_main(xm_engine_ref_t engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv);
+tb_int_t xm_engine_main(xm_engine_ref_t engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv);
 
 /*! register lni modules in the engine, @note we need to call it in lni_initalizer()
  *
@@ -77,19 +81,21 @@ tb_int_t                    xm_engine_main(xm_engine_ref_t engine, tb_int_t argc
  * @param module            the lni module name
  * @param funcs             the lni module functions
  */
-xm_void_t                   xm_engine_register(xm_engine_ref_t engine, tb_char_t const* module, luaL_Reg const funcs[]);
+xu_void_t xm_engine_register(xm_engine_ref_t engine, tb_char_t const* module, luaL_Reg const funcs[]);
 
 /*! run main entry of the engine singleton
  *
  * @param name              the engine name
  * @param argc              the argument count of the console
  * @param argv              the argument list of the console
- * @param taskargv          the argument list of sub-task, e.g. taskargv(lua -vD lua.main) for xmake lua -vD lua.main arg1 arg2 ..
+ * @param taskargv          the argument list of sub-task, e.g. taskargv(lua -vD lua.main) for xmake lua -vD lua.main
+ * arg1 arg2 ..
  * @param lni_initalizer    the lni initializer
  *
  * @return                  the error code of main()
  */
-tb_int_t                    xm_engine_run(tb_char_t const* name, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv, xm_engine_lni_initalizer_cb_t lni_initalizer);
+tb_int_t xm_engine_run(tb_char_t const* name, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv,
+                       xm_engine_lni_initalizer_cb_t lni_initalizer);
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * extern

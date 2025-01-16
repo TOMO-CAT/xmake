@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_open"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "socket_open"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -43,28 +43,24 @@ tb_int_t xm_io_socket_open(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get socket type
-    xm_size_t socktype = (xm_size_t)luaL_checknumber(lua, 1);
+    xu_size_t socktype = (xu_size_t)luaL_checknumber(lua, 1);
 
     // get address family
-    xm_size_t family = (xm_size_t)luaL_checknumber(lua, 2);
+    xu_size_t family = (xu_size_t)luaL_checknumber(lua, 2);
 
     // map socket type
     switch (socktype)
     {
-    case 2:
-        socktype = TB_SOCKET_TYPE_UDP;
-        break;
-    case 3:
-        socktype = TB_SOCKET_TYPE_ICMP;
-        break;
-    default:
-        socktype = TB_SOCKET_TYPE_TCP;
-        break;
+    case 2: socktype = TB_SOCKET_TYPE_UDP; break;
+    case 3: socktype = TB_SOCKET_TYPE_ICMP; break;
+    default: socktype = TB_SOCKET_TYPE_TCP; break;
     }
 
     // init socket
     tb_socket_ref_t sock = tb_socket_init(socktype, family);
-    if (sock) xm_lua_pushpointer(lua, (tb_pointer_t)sock);
-    else lua_pushnil(lua);
+    if (sock)
+        xm_lua_pushpointer(lua, (tb_pointer_t)sock);
+    else
+        lua_pushnil(lua);
     return 1;
 }
