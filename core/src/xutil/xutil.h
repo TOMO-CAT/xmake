@@ -9,6 +9,7 @@
 #include "xutil/platform/socket.h"
 #include "xutil/utils/state.h"
 #include "xutil/utils/trace.h"
+#include "xutil/utils/used.h"
 
 /* *******************************************************
  *  macros
