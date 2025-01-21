@@ -1,0 +1,16 @@
+{
+    "diagnostics": {
+        "disable": [
+            "undefined-global",
+            "missing-parameter",
+            "need-import"
+        ]
+    },
+    "workspace": {
+        "ignoreDir": [
+            "xmake/templates",
+            "tests",
+            "core"
+        ]
+    }
+}

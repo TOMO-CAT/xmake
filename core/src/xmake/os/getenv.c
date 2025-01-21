@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "getenv"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "getenv"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -35,7 +35,7 @@
  */
 
 // the separator
-#define XM_OS_ENV_SEP                    ':'
+#define XM_OS_ENV_SEP ':'
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -61,12 +61,14 @@ tb_int_t xm_os_getenv(lua_State* lua)
         if (tb_environment_load(environment, name))
         {
             // make values
-            tb_bool_t is_first = tb_true;
-            tb_for_all_if (tb_char_t const*, value, environment, value)
+            xu_bool_t is_first = xu_true;
+            tb_for_all_if(tb_char_t const*, value, environment, value)
             {
                 // append separator
-                if (!is_first) tb_string_chrcat(&values, XM_OS_ENV_SEP);
-                else is_first = tb_false;
+                if (!is_first)
+                    tb_string_chrcat(&values, XM_OS_ENV_SEP);
+                else
+                    is_first = xu_false;
 
                 // append value
                 tb_string_cstrcat(&values, value);
@@ -78,8 +80,10 @@ tb_int_t xm_os_getenv(lua_State* lua)
     }
 
     // save result
-    if (tb_string_size(&values)) lua_pushstring(lua, tb_string_cstr(&values));
-    else lua_pushnil(lua);
+    if (tb_string_size(&values))
+        lua_pushstring(lua, tb_string_cstr(&values));
+    else
+        lua_pushnil(lua);
 
     // exit values
     tb_string_exit(&values);

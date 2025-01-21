@@ -11,7 +11,7 @@ includes "tbox/src"
 
 hide_options() {
     local name=""
-    local options="demo small micro float info exception deprecated force_utf8 xml zip hash regex object charset database coroutine"
+    local options="demo float info exception deprecated force_utf8 xml zip hash regex object charset database coroutine"
     for name in $options; do
         option "${name}"
             set_showmenu false

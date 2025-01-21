@@ -50,6 +50,6 @@ tb_int_t xm_lz4_decompress_stream_close(lua_State* lua)
     xm_lz4_dstream_exit(stream);
 
     // save result: ok
-    lua_pushboolean(lua, tb_true);
+    lua_pushboolean(lua, xu_true);
     return 1;
 }

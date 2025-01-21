@@ -57,7 +57,7 @@ tb_int_t xm_io_file_close(lua_State* lua)
         // flush filter stream cache, TODO we should fix it in tbox/stream
         if ((file->mode & TB_FILE_MODE_RW) == TB_FILE_MODE_RW && file->fstream)
         {
-            if (!tb_stream_sync(file->u.file_ref, tb_false)) return tb_false;
+            if (!tb_stream_sync(file->u.file_ref, xu_false)) return xu_false;
         }
 
         // close file
@@ -80,7 +80,7 @@ tb_int_t xm_io_file_close(lua_State* lua)
         // ...
 
         // ok
-        lua_pushboolean(lua, tb_true);
+        lua_pushboolean(lua, xu_true);
         return 1;
     }
     else // for stdfile (gc/close)
@@ -93,7 +93,7 @@ tb_int_t xm_io_file_close(lua_State* lua)
         // ...
 
         // ok
-        lua_pushboolean(lua, tb_true);
+        lua_pushboolean(lua, xu_true);
         return 1;
     }
 }

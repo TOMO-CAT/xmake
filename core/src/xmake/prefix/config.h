@@ -26,6 +26,7 @@
  */
 #include "xmake/config.h"
 #include "tbox/tbox.h"
+#include "xutil/xutil.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
@@ -43,7 +44,7 @@
  *
  * debug mode
  */
-#ifdef __tb_debug__
+#ifdef __xm_debug__
 #   define __xm_debug__
 #endif
 

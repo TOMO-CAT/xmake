@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "file_open"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "file_open"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -35,26 +35,25 @@
  */
 
 // num of bytes read to guess encoding
-#define CHECK_SIZE          (1024)
+#define CHECK_SIZE (1024)
 
 // is utf-8 tail character
-#define IS_UTF8_TAIL(c)     (c >= 0x80 && c < 0xc0)
+#define IS_UTF8_TAIL(c) (c >= 0x80 && c < 0xc0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t size)
+static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t size)
 {
     // check
     tb_assert(data_ptr && *data_ptr);
 
     tb_byte_t const* data    = *data_ptr;
-    tb_size_t        charset = XM_IO_FILE_ENCODING_BINARY;
+    xu_size_t        charset = XM_IO_FILE_ENCODING_BINARY;
     do
     {
         // is luajit bitcode? open as binary
-        if (size >= 3 && data[0] == 27 && data[1] == 'L' && data[2] == 'J')
-            break;
+        if (size >= 3 && data[0] == 27 && data[1] == 'L' && data[2] == 'J') break;
 
         // utf-8 with bom
         if (size >= 3 && data[0] == 239 && data[1] == 187 && data[2] == 191)
@@ -109,7 +108,8 @@ static tb_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t
                 utf8_conf++;
             else if (data[i] >= 0xe0 && data[i] < 0xf0 && IS_UTF8_TAIL(data[i + 1]) && IS_UTF8_TAIL(data[i + 2]))
                 utf8_conf++;
-            else if (data[i] >= 0xf0 && data[i] < 0xf8 && IS_UTF8_TAIL(data[i + 1]) && IS_UTF8_TAIL(data[i + 2]) && IS_UTF8_TAIL(data[i + 3]))
+            else if (data[i] >= 0xf0 && data[i] < 0xf8 && IS_UTF8_TAIL(data[i + 1]) && IS_UTF8_TAIL(data[i + 2]) &&
+                     IS_UTF8_TAIL(data[i + 3]))
                 utf8_conf++;
             else
                 utf8_conf = TB_MINS16;
@@ -146,20 +146,20 @@ static tb_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t
     *data_ptr = data;
     return charset;
 }
-static tb_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* pbomoff)
+static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* pbomoff)
 {
     // check
     tb_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
 
     // detect encoding
-    tb_byte_t*  data = tb_null;
-    tb_size_t   encoding = XM_IO_FILE_ENCODING_BINARY;
-    tb_long_t   size = tb_stream_peek(stream, &data, CHECK_SIZE);
+    tb_byte_t* data     = tb_null;
+    xu_size_t  encoding = XM_IO_FILE_ENCODING_BINARY;
+    tb_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
     if (size > 0)
     {
         tb_byte_t const* p = data;
-        encoding = xm_io_file_detect_charset(&p, size);
-        *pbomoff = p - data;
+        encoding           = xm_io_file_detect_charset(&p, size);
+        *pbomoff           = p - data;
     }
     return encoding;
 }
@@ -180,19 +180,20 @@ tb_int_t xm_io_file_open(lua_State* lua)
     tb_assert_and_check_return_val(path && modestr, 0);
 
     // get file mode value
-    tb_size_t mode;
+    xu_size_t mode;
     switch (modestr[0])
     {
     case 'w': mode = TB_FILE_MODE_RW | TB_FILE_MODE_CREAT | TB_FILE_MODE_TRUNC; break;
     case 'a': mode = TB_FILE_MODE_RW | TB_FILE_MODE_APPEND | TB_FILE_MODE_CREAT; break;
-    case 'r': default: mode = TB_FILE_MODE_RO; break;
+    case 'r':
+    default: mode = TB_FILE_MODE_RO; break;
     }
 
     // get file encoding
-    tb_long_t       bomoff = 0;
-    tb_stream_ref_t stream = tb_null;
-    tb_bool_t       update = !!tb_strchr(modestr, '+');
-    tb_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
+    tb_long_t       bomoff   = 0;
+    tb_stream_ref_t stream   = tb_null;
+    xu_bool_t       update   = !!tb_strchr(modestr, '+');
+    xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
         encoding = XM_IO_FILE_ENCODING_BINARY;
     else if (tb_strstr(modestr, "utf8") || tb_strstr(modestr, "utf-8"))
@@ -224,26 +225,26 @@ tb_int_t xm_io_file_open(lua_State* lua)
             xm_io_return_error(lua, "file not found!");
         }
     }
-    else xm_io_return_error(lua, "invalid open mode!");
+    else
+        xm_io_return_error(lua, "invalid open mode!");
     tb_assert_and_check_return_val(encoding != XM_IO_FILE_ENCODING_UNKNOWN, 0);
 
     // write data with utf bom? e.g. utf8bom, utf16lebom, utf16bom
-    tb_bool_t utfbom = tb_false;
-    if (tb_strstr(modestr, "bom"))
-        utfbom = tb_true;
+    xu_bool_t utfbom = xu_false;
+    if (tb_strstr(modestr, "bom")) utfbom = xu_true;
 
     // open file
-    tb_bool_t       open_ok = tb_false;
+    xu_bool_t       open_ok  = xu_false;
     tb_stream_ref_t file_ref = tb_null;
-    tb_stream_ref_t fstream = tb_null;
+    tb_stream_ref_t fstream  = tb_null;
     do
     {
         // init stream from file
-        stream = stream? stream : tb_stream_init_from_file(path, mode);
+        stream = stream ? stream : tb_stream_init_from_file(path, mode);
         tb_assert_and_check_break(stream);
 
         // is transcode?
-        tb_bool_t is_transcode = encoding != TB_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
+        xu_bool_t is_transcode = encoding != TB_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
         if (is_transcode)
         {
             if (modestr[0] == 'r')
@@ -255,7 +256,8 @@ tb_int_t xm_io_file_open(lua_State* lua)
             // use fstream as file
             file_ref = fstream;
         }
-        else file_ref = stream;
+        else
+            file_ref = stream;
 
         // open file stream
         if (!tb_stream_open(file_ref)) break;
@@ -264,7 +266,7 @@ tb_int_t xm_io_file_open(lua_State* lua)
         if (bomoff > 0 && !tb_stream_seek(stream, bomoff)) break;
 
         // ok
-        open_ok = tb_true;
+        open_ok = xu_true;
 
     } while (0);
 

@@ -22,25 +22,25 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "meminfo"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "meminfo"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
 #include "xmake/os/prefix.h"
 #if defined(TB_CONFIG_OS_MACOSX)
-#   include <mach/mach.h>
-#   include <mach/machine.h>
-#   include <mach/vm_statistics.h>
-#   include <mach-o/dyld.h>
-#   include <mach-o/nlist.h>
+#    include <mach-o/dyld.h>
+#    include <mach-o/nlist.h>
+#    include <mach/mach.h>
+#    include <mach/machine.h>
+#    include <mach/vm_statistics.h>
 #elif defined(TB_CONFIG_OS_LINUX)
-#   include <stdio.h>
-#   include <sys/sysinfo.h>
+#    include <stdio.h>
+#    include <sys/sysinfo.h>
 #elif defined(TB_CONFIG_OS_BSD)
-#   include <sys/types.h>
-#   include <sys/sysctl.h>
+#    include <sys/sysctl.h>
+#    include <sys/types.h>
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -50,20 +50,22 @@
 static tb_int64_t xm_os_meminfo_get_value(tb_char_t const* buffer, tb_char_t const* name)
 {
     tb_char_t const* p = tb_strstr(buffer, name);
-    return p? tb_stoi64(p + tb_strlen(name)) : 0;
+    return p ? tb_stoi64(p + tb_strlen(name)) : 0;
 }
 #endif
 
 // get the used memory size (MB)
-static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
+static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
 {
 #if defined(TB_CONFIG_OS_MACOSX)
     vm_statistics64_data_t vmstat;
     mach_msg_type_number_t count = HOST_VM_INFO64_COUNT;
-    if (host_statistics64(mach_host_self(), HOST_VM_INFO64, (host_info_t) &vmstat, &count) == KERN_SUCCESS)
+    if (host_statistics64(mach_host_self(), HOST_VM_INFO64, (host_info_t)&vmstat, &count) == KERN_SUCCESS)
     {
-        tb_int_t pagesize = (tb_int_t)tb_page_size();
-        tb_int64_t totalsize = (tb_int64_t)(vmstat.inactive_count + vmstat.free_count + vmstat.active_count + vmstat.wire_count + vmstat.compressor_page_count) * pagesize;
+        tb_int_t   pagesize  = (tb_int_t)tb_page_size();
+        tb_int64_t totalsize = (tb_int64_t)(vmstat.inactive_count + vmstat.free_count + vmstat.active_count +
+                                            vmstat.wire_count + vmstat.compressor_page_count) *
+                               pagesize;
         /*
          * NB: speculative pages are already accounted for in "free_count",
          * so "speculative_count" is the number of "free" pages that are
@@ -71,10 +73,11 @@ static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
          * haven't actually been used by anyone so far.
          *
          */
-        tb_int64_t availsize = (tb_int64_t)(vmstat.inactive_count + vmstat.free_count - vmstat.speculative_count) * pagesize;
+        tb_int64_t availsize =
+            (tb_int64_t)(vmstat.inactive_count + vmstat.free_count - vmstat.speculative_count) * pagesize;
         *ptotalsize = (tb_int_t)(totalsize / (1024 * 1024));
         *pavailsize = (tb_int_t)(availsize / (1024 * 1024));
-        return tb_true;
+        return xu_true;
     }
 #elif defined(TB_CONFIG_OS_LINUX)
     /* we get meminfo from /proc/meminfo
@@ -83,13 +86,13 @@ static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
      */
     if (tb_file_info("/proc/meminfo", tb_null))
     {
-        tb_bool_t ok = tb_false;
-        FILE* fp = fopen("/proc/meminfo", "r");
+        xu_bool_t ok = xu_false;
+        FILE*     fp = fopen("/proc/meminfo", "r");
         if (fp)
         {
             // 8192 should be enough for the foreseeable future.
             tb_char_t buffer[8192];
-            size_t len = fread(buffer, 1, sizeof(buffer) - 1, fp);
+            size_t    len = fread(buffer, 1, sizeof(buffer) - 1, fp);
             if (!ferror(fp) && len)
             {
                 tb_int64_t totalsize = xm_os_meminfo_get_value(buffer, "MemTotal:");
@@ -107,7 +110,7 @@ static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
                 {
                     *ptotalsize = (tb_int_t)(totalsize / 1024);
                     *pavailsize = (tb_int_t)(availsize / 1024);
-                    ok = tb_true;
+                    ok          = xu_true;
                 }
             }
             fclose(fp);
@@ -120,32 +123,29 @@ static tb_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
         if (sysinfo(&info) == 0)
         {
             *ptotalsize = (tb_int_t)(info.totalram / (1024 * 1024));
-            *pavailsize = (tb_int_t)((info.freeram + info.bufferram/* + cache size */) / (1024 * 1024));
-            return tb_true;
+            *pavailsize = (tb_int_t)((info.freeram + info.bufferram /* + cache size */) / (1024 * 1024));
+            return xu_true;
         }
     }
 #elif defined(TB_CONFIG_OS_BSD) && !defined(__OpenBSD__)
     unsigned long totalsize;
-    size_t size = sizeof(totalsize);
-    if (sysctlbyname("hw.physmem", &totalsize, &size, tb_null, 0) != 0)
-        return tb_false;
+    size_t        size = sizeof(totalsize);
+    if (sysctlbyname("hw.physmem", &totalsize, &size, tb_null, 0) != 0) return xu_false;
 
     // http://web.mit.edu/freebsd/head/usr.bin/systat/vmstat.c
     tb_uint32_t v_free_count;
     size = sizeof(v_free_count);
-    if (sysctlbyname("vm.stats.vm.v_free_count", &v_free_count, &size, tb_null, 0) != 0)
-        return tb_false;
+    if (sysctlbyname("vm.stats.vm.v_free_count", &v_free_count, &size, tb_null, 0) != 0) return xu_false;
 
     tb_uint32_t v_inactive_count;
     size = sizeof(v_inactive_count);
-    if (sysctlbyname("vm.stats.vm.v_inactive_count", &v_inactive_count, &size, tb_null, 0) != 0)
-        return tb_false;
+    if (sysctlbyname("vm.stats.vm.v_inactive_count", &v_inactive_count, &size, tb_null, 0) != 0) return xu_false;
 
     *ptotalsize = (tb_int_t)(totalsize / (1024 * 1024));
     *pavailsize = (tb_int_t)(((tb_int64_t)(v_free_count + v_inactive_count) * tb_page_size()) / (1024 * 1024));
-    return tb_true;
+    return xu_true;
 #endif
-    return tb_false;
+    return xu_false;
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////

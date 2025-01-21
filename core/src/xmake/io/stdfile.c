@@ -22,34 +22,33 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "stdfile"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "stdfile"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
 #include "xmake/io/prefix.h"
 #include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-
+#include <sys/types.h>
+#include <unistd.h>
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * macros
  */
 
 // the singleton type of stdfile
-#define XM_IO_STDFILE_STDIN      (TB_SINGLETON_TYPE_USER + 1)
-#define XM_IO_STDFILE_STDOUT     (TB_SINGLETON_TYPE_USER + 2)
-#define XM_IO_STDFILE_STDERR     (TB_SINGLETON_TYPE_USER + 3)
+#define XM_IO_STDFILE_STDIN (TB_SINGLETON_TYPE_USER + 1)
+#define XM_IO_STDFILE_STDOUT (TB_SINGLETON_TYPE_USER + 2)
+#define XM_IO_STDFILE_STDERR (TB_SINGLETON_TYPE_USER + 3)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_size_t xm_io_stdfile_isatty(tb_size_t type)
+static xu_size_t xm_io_stdfile_isatty(xu_size_t type)
 {
-    tb_bool_t answer = tb_false;
+    xu_bool_t answer = xu_false;
 
     switch (type)
     {
@@ -63,30 +62,23 @@ static tb_size_t xm_io_stdfile_isatty(tb_size_t type)
 }
 
 // @see https://github.com/xmake-io/xmake/issues/2580
-static tb_void_t xm_io_stdfile_init_buffer(tb_size_t type)
+static xu_void_t xm_io_stdfile_init_buffer(xu_size_t type)
 {
     struct stat stats;
-    tb_int_t size = BUFSIZ;
-    if (fstat(fileno(stdout), &stats) != -1)
-        size = stats.st_blksize;
+    tb_int_t    size = BUFSIZ;
+    if (fstat(fileno(stdout), &stats) != -1) size = stats.st_blksize;
     setvbuf(stdout, tb_null, _IOLBF, size);
 }
 
-static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, tb_size_t type)
+static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 {
     // init stdfile
     tb_stdfile_ref_t fp = tb_null;
     switch (type)
     {
-    case XM_IO_FILE_TYPE_STDIN:
-        fp = tb_stdfile_input();
-        break;
-    case XM_IO_FILE_TYPE_STDOUT:
-        fp = tb_stdfile_output();
-        break;
-    case XM_IO_FILE_TYPE_STDERR:
-        fp = tb_stdfile_error();
-        break;
+    case XM_IO_FILE_TYPE_STDIN: fp = tb_stdfile_input(); break;
+    case XM_IO_FILE_TYPE_STDOUT: fp = tb_stdfile_output(); break;
+    case XM_IO_FILE_TYPE_STDERR: fp = tb_stdfile_error(); break;
     }
 
     // new file
@@ -94,11 +86,11 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, tb_size_t type)
     tb_assert_and_check_return_val(file, tb_null);
 
     // init file
-    file->u.std_ref  = fp;
-    file->stream     = tb_null;
-    file->fstream    = tb_null;
-    file->type       = xm_io_stdfile_isatty(type);
-    file->encoding   = TB_CHARSET_TYPE_UTF8;
+    file->u.std_ref = fp;
+    file->stream    = tb_null;
+    file->fstream   = tb_null;
+    file->type      = xm_io_stdfile_isatty(type);
+    file->encoding  = TB_CHARSET_TYPE_UTF8;
 
     // init stdio buffer
     xm_io_stdfile_init_buffer(type);
@@ -124,9 +116,12 @@ tb_int_t xm_io_stdfile(lua_State* lua)
 
     /* push a new stdfile
      *
-     * @note we need to ensure that it is a singleton in the external lua script, and will only be created once, e.g. io.stdin, io.stdout, io.stderr
+     * @note we need to ensure that it is a singleton in the external lua script, and will only be created once, e.g.
+     * io.stdin, io.stdout, io.stderr
      */
     xm_io_file_t* file = xm_io_stdfile_new(lua, type);
-    if (file) return 1;
-    else xm_io_return_error(lua, "invalid stdfile type!");
+    if (file)
+        return 1;
+    else
+        xm_io_return_error(lua, "invalid stdfile type!");
 }

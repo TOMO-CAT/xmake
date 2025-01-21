@@ -2,7 +2,7 @@ target("xmake", function()
     set_kind("static")
 
     -- add deps
-    add_deps("sv", "lz4", "tbox")
+    add_deps("sv", "lz4", "tbox", "xutil")
     if is_config("runtime", "luajit") then
         add_deps("luajit")
     else
@@ -15,8 +15,9 @@ target("xmake", function()
     -- add definitions
     add_defines("__tb_prefix__=\"xmake\"")
     if is_mode("debug") then
-        add_defines("__tb_debug__", {public = true})
+        add_defines("__xm_debug__", {public = true})
     end
+    add_defines("__xm_prefix__=\"xmake\"")
 
     -- set the auto-generated config.h
     set_configdir("$(buildir)/$(plat)/$(arch)/$(mode)")

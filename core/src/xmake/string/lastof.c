@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "string_lastof"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "string_lastof"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -33,7 +33,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t const* csubstr, tb_size_t nsubstr)
+static xu_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t const* csubstr,
+                                      xu_size_t nsubstr)
 {
     // find it
     tb_char_t const* curr = tb_null;
@@ -50,14 +51,18 @@ static tb_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, tb_
     } while (!next);
 
     // found?
-    if (curr) lua_pushinteger(lua, curr - cstr + 1);
-    else lua_pushnil(lua);
+    if (curr)
+        lua_pushinteger(lua, curr - cstr + 1);
+    else
+        lua_pushnil(lua);
 }
-static tb_void_t xm_string_lastof_chr(lua_State* lua, tb_char_t const* cstr, tb_size_t nstr, tb_char_t ch)
+static xu_void_t xm_string_lastof_chr(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t ch)
 {
     tb_char_t const* pos = tb_strrchr(cstr, ch); // faster than tb_strnrchr()
-    if (pos) lua_pushinteger(lua, pos - cstr + 1);
-    else lua_pushnil(lua);
+    if (pos)
+        lua_pushinteger(lua, pos - cstr + 1);
+    else
+        lua_pushnil(lua);
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +89,9 @@ tb_int_t xm_string_lastof(lua_State* lua)
 
     // lastof it
     lua_newtable(lua);
-    if (nsubstr == 1) xm_string_lastof_chr(lua, cstr, (tb_size_t)nstr, csubstr[0]);
-    else xm_string_lastof_str(lua, cstr, (tb_size_t)nstr, csubstr, nsubstr);
+    if (nsubstr == 1)
+        xm_string_lastof_chr(lua, cstr, (xu_size_t)nstr, csubstr[0]);
+    else
+        xm_string_lastof_str(lua, cstr, (xu_size_t)nstr, csubstr, nsubstr);
     return 1;
 }

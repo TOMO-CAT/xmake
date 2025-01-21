@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "file_readable"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "file_readable"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -40,17 +40,18 @@ tb_int_t xm_io_file_readable(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // is user data?
-    if (!lua_isuserdata(lua, 1))
-        xm_io_return_error(lua, "read(invalid file)!");
+    if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "read(invalid file)!");
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
     tb_check_return_val(file, 0);
 
     // has readable data?
-    tb_bool_t ok = tb_false;
-    if (xm_io_file_is_file(file)) ok = tb_stream_left(file->u.file_ref) > 0;
-    else ok = tb_stdfile_readable(file->u.std_ref);
+    xu_bool_t ok = xu_false;
+    if (xm_io_file_is_file(file))
+        ok = tb_stream_left(file->u.file_ref) > 0;
+    else
+        ok = tb_stdfile_readable(file->u.std_ref);
     lua_pushboolean(lua, ok);
     return 1;
 }

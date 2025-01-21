@@ -24,18 +24,18 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
+#include "luaconf.h"
 #include "xmake/prefix/config.h"
 #include "xmake/prefix/version.h"
-#include "luaconf.h"
 
 #ifdef USE_LUAJIT
-#   include "luajit.h"
-#   include "lualib.h"
-#   include "lauxlib.h"
+#    include "lauxlib.h"
+#    include "luajit.h"
+#    include "lualib.h"
 #else
-#   include "lua.h"
-#   include "lualib.h"
-#   include "lauxlib.h"
+#    include "lauxlib.h"
+#    include "lua.h"
+#    include "lualib.h"
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@
  */
 
 // this issue has been fixed, @see https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
-#if 0//TB_CPU_BIT64
+#if 0 // TB_CPU_BIT64
 /* we use this interface instead of lua_pushlightuserdata() to fix bad light userdata pointer bug
  *
  * @see https://github.com/xmake-io/xmake/issues/914
@@ -52,7 +52,7 @@
  * @note we cannot lua_newuserdata() because we need pass this pointer to the external lua code
  * in poller_wait()/event_callback, but lua_pushuserdata does not exists
  */
-static __tb_inline__ tb_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
+static __tb_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
 {
     tb_uint64_t ptrval = (tb_uint64_t)ptr;
     if ((ptrval >> 47) == 0)
@@ -64,7 +64,7 @@ static __tb_inline__ tb_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t p
         lua_pushlstring(lua, str, len);
     }
 }
-static __tb_inline__ tb_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
+static __tb_inline__ xu_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
 {
     return lua_isuserdata(lua, idx) || lua_isstring(lua, idx);
 }
@@ -91,26 +91,17 @@ static __tb_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx)
    return xm_lua_topointer2(lua, idx, tb_null);
 }
 #else
-static __tb_inline__ tb_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
-{
-    lua_pushlightuserdata(lua, ptr);
-}
-static __tb_inline__ tb_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
-{
-    return lua_isuserdata(lua, idx);
-}
+static __tb_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr) { lua_pushlightuserdata(lua, ptr); }
+static __tb_inline__ xu_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx) { return lua_isuserdata(lua, idx); }
 static __tb_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx, tb_char_t const** pstr)
 {
     if (pstr) *pstr = tb_null;
     return lua_touserdata(lua, idx);
 }
-static __tb_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx)
-{
-    return lua_touserdata(lua, idx);
-}
+static __tb_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx) { return lua_touserdata(lua, idx); }
 #endif
 
-static __tb_inline__ tb_void_t xm_lua_register(lua_State *lua, tb_char_t const* libname, luaL_Reg const* l)
+static __tb_inline__ xu_void_t xm_lua_register(lua_State* lua, tb_char_t const* libname, luaL_Reg const* l)
 {
 #if LUA_VERSION_NUM >= 504
     lua_getglobal(lua, libname);

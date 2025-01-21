@@ -26,7 +26,7 @@ add_cxflags("-Wno-error=deprecated-declarations", "-fno-strict-aliasing", "-Wno-
 add_mxflags("-Wno-error=deprecated-declarations", "-fno-strict-aliasing", "-Wno-error=expansion-to-defined", "-Wno-error=empty-body")
 if has_config("coroutine") then
     -- https://github.com/tboox/tbox/issues/218
-    add_cxflags("gcc::-Wno-error=dangling-pointer")
+    -- add_cxflags("gcc::-Wno-error=dangling-pointer")
 end
 
 -- set wasm toolchain

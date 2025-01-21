@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "block_decompress"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "block_decompress"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -39,10 +39,10 @@ tb_int_t xm_lz4_block_decompress(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get data and size
-    tb_size_t        size = 0;
+    xu_size_t        size = 0;
     tb_byte_t const* data = tb_null;
-    if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(tb_size_t)(tb_long_t)lua_tointeger(lua, 1);
-    if (xm_lua_isinteger(lua, 2)) size = (tb_size_t)lua_tointeger(lua, 2);
+    if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 1);
+    if (xm_lua_isinteger(lua, 2)) size = (xu_size_t)lua_tointeger(lua, 2);
     if (!data || !size)
     {
         lua_pushnil(lua);
@@ -61,19 +61,19 @@ tb_int_t xm_lz4_block_decompress(lua_State* lua)
     }
 
     // do decompress
-    tb_bool_t ok = tb_false;
+    xu_bool_t  ok          = xu_false;
     tb_byte_t* output_data = tb_null;
-    tb_byte_t buffer[8192];
+    tb_byte_t  buffer[8192];
     do
     {
-        output_data = real <= sizeof(buffer)? buffer : (tb_byte_t*)tb_malloc(real);
+        output_data = real <= sizeof(buffer) ? buffer : (tb_byte_t*)tb_malloc(real);
         tb_assert_and_check_break(output_data);
 
         tb_int_t r = LZ4_decompress_safe((tb_char_t const*)data, (tb_char_t*)output_data, (tb_int_t)size, real);
         tb_assert_and_check_break(r > 0);
 
         lua_pushlstring(lua, (tb_char_t const*)output_data, r);
-        ok = tb_true;
+        ok = xu_true;
     } while (0);
 
     if (output_data && output_data != buffer)

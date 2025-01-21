@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "decompress_stream_write"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "decompress_stream_write"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -52,10 +52,10 @@ tb_int_t xm_lz4_decompress_stream_write(lua_State* lua)
     tb_check_return_val(stream, 0);
 
     // get data and size
-    tb_size_t        size = 0;
+    xu_size_t        size = 0;
     tb_byte_t const* data = tb_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(tb_size_t)(tb_long_t)lua_tointeger(lua, 2);
-    if (xm_lua_isinteger(lua, 3)) size = (tb_size_t)lua_tointeger(lua, 3);
+    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
+    if (xm_lua_isinteger(lua, 3)) size = (xu_size_t)lua_tointeger(lua, 3);
     if (!data || !size)
     {
         lua_pushinteger(lua, -1);
@@ -65,7 +65,7 @@ tb_int_t xm_lz4_decompress_stream_write(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // write data
-    tb_long_t real = xm_lz4_dstream_write(stream, data, size, tb_false);
+    tb_long_t real = xm_lz4_dstream_write(stream, data, size, xu_false);
     lua_pushinteger(lua, (tb_int_t)real);
     return 1;
 }

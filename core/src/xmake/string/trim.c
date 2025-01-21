@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "string_trim"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "string_trim"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_string_trim_space(tb_char_t const** psstr, tb_char_t const** pestr, tb_int_t mode)
+static xu_void_t xm_string_trim_space(tb_char_t const** psstr, tb_char_t const** pestr, tb_int_t mode)
 {
     // check
     tb_assert(psstr && pestr && *psstr && *pestr);
@@ -60,7 +60,8 @@ static tb_void_t xm_string_trim_space(tb_char_t const** psstr, tb_char_t const**
     *pestr = e;
 }
 
-static tb_char_t const* xm_string_ltrim(tb_char_t const* sstr, tb_char_t const* estr, tb_char_t const* ctrim, size_t ntrim)
+static tb_char_t const* xm_string_ltrim(tb_char_t const* sstr, tb_char_t const* estr, tb_char_t const* ctrim,
+                                        size_t ntrim)
 {
     // check
     tb_assert(sstr && estr && ctrim);
@@ -71,7 +72,8 @@ static tb_char_t const* xm_string_ltrim(tb_char_t const* sstr, tb_char_t const* 
     return p;
 }
 
-static tb_char_t const* xm_string_rtrim(tb_char_t const* sstr, tb_char_t const* estr, tb_char_t const* ctrim, size_t ntrim)
+static tb_char_t const* xm_string_rtrim(tb_char_t const* sstr, tb_char_t const* estr, tb_char_t const* ctrim,
+                                        size_t ntrim)
 {
     // check
     tb_assert(sstr && estr && ctrim);

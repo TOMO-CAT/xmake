@@ -55,17 +55,17 @@ __tb_extern_c_enter__
  */
 
 // the compile mode
-#define TB_MODE_DEBUG           (1)
-#define TB_MODE_SMALL           (2)
+#define XM_MODE_DEBUG           (1)
+#define XM_MODE_SMALL           (2)
 
 #ifdef __tb_debug__
-#   define __tb_mode_debug__    TB_MODE_DEBUG
+#   define __tb_mode_debug__    XM_MODE_DEBUG
 #else
 #   define __tb_mode_debug__    (0)
 #endif
 
 #ifdef __tb_small__
-#   define __tb_mode_small__    TB_MODE_SMALL
+#   define __tb_mode_small__    XM_MODE_SMALL
 #else
 #   define __tb_mode_small__    (0)
 #endif

@@ -82,7 +82,7 @@ tb_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // get file size
-    tb_hize_t filesize = tb_file_size(rawfile);
+    xu_hize_t filesize = tb_file_size(rawfile);
     if (!filesize)
     {
         lua_pushinteger(lua, -1);

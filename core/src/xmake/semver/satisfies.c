@@ -56,7 +56,7 @@ tb_int_t xm_semver_satisfies(lua_State* lua)
         semver_t range_semver = {0};
         if (!tb_strcmp(version_str, range_str))
         {
-            lua_pushboolean(lua, tb_true);
+            lua_pushboolean(lua, xu_true);
             return 1;
         }
         // range is a single version? try to compare it

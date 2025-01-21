@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "file_write"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "file_write"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
+static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
 {
     // check
     tb_assert(file && xm_io_file_is_file(file) && file->u.file_ref);
@@ -42,45 +42,44 @@ static tb_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
     switch (file->encoding)
     {
     case TB_CHARSET_TYPE_UTF8:
-        {
-            static tb_byte_t bom[] = {0xef, 0xbb, 0xbf};
-            tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
-        }
-        break;
+    {
+        static tb_byte_t bom[] = {0xef, 0xbb, 0xbf};
+        tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
+    }
+    break;
     case TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE:
-        {
-            static tb_byte_t bom[] = {0xff, 0xfe};
-            tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
-        }
-        break;
+    {
+        static tb_byte_t bom[] = {0xff, 0xfe};
+        tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
+    }
+    break;
     case TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE:
-        {
-            static tb_byte_t bom[] = {0xfe, 0xff};
-            tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
-        }
-        break;
-    default:
-        break;
+    {
+        static tb_byte_t bom[] = {0xfe, 0xff};
+        tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
+    }
+    break;
+    default: break;
     }
 }
-static tb_void_t xm_io_file_write_file_directly(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
+static xu_void_t xm_io_file_write_file_directly(xm_io_file_t* file, tb_byte_t const* data, xu_size_t size)
 {
     tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     tb_stream_bwrit(file->u.file_ref, data, size);
 }
-static tb_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
+static xu_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, tb_byte_t const* data, xu_size_t size)
 {
     // check
     tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     return xm_io_file_write_file_directly(file, data, size);
 }
-static tb_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data, tb_size_t size)
+static xu_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data, xu_size_t size)
 {
     // check
     tb_assert(file && data && xm_io_file_is_std(file));
 
     // check type
-    tb_size_t type = (file->type & ~XM_IO_FILE_FLAG_TTY);
+    xu_size_t type = (file->type & ~XM_IO_FILE_FLAG_TTY);
     tb_check_return(type != XM_IO_FILE_TYPE_STDIN);
 
     // write data to stdout/stderr
@@ -98,8 +97,7 @@ tb_int_t xm_io_file_write(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // is user data?
-    if (!lua_isuserdata(lua, 1))
-        xm_io_return_error(lua, "write(invalid file)!");
+    if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "write(invalid file)!");
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
@@ -109,12 +107,12 @@ tb_int_t xm_io_file_write(lua_State* lua)
     tb_int_t narg = lua_gettop(lua);
     if (narg > 1)
     {
-        tb_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
+        xu_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
         for (tb_int_t i = 2; i <= narg; i++)
         {
             // get data
-            size_t datasize = 0;
-            tb_byte_t const* data = tb_null;
+            size_t           datasize = 0;
+            tb_byte_t const* data     = tb_null;
             if (lua_isstring(lua, i))
                 data = (tb_byte_t const*)luaL_checklstring(lua, i, &datasize);
             else if (lua_istable(lua, i))
@@ -122,19 +120,17 @@ tb_int_t xm_io_file_write(lua_State* lua)
                 // get bytes data
                 lua_pushstring(lua, "data");
                 lua_gettable(lua, i);
-                if (xm_lua_isinteger(lua, -1))
-                    data = (tb_byte_t const*)(tb_size_t)(tb_long_t)lua_tointeger(lua, -1);
+                if (xm_lua_isinteger(lua, -1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, -1);
                 lua_pop(lua, 1);
                 tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
                 lua_pushstring(lua, "size");
                 lua_gettable(lua, i);
-                if (xm_lua_isinteger(lua, -1))
-                    datasize = (tb_size_t)lua_tointeger(lua, -1);
+                if (xm_lua_isinteger(lua, -1)) datasize = (xu_size_t)lua_tointeger(lua, -1);
                 lua_pop(lua, 1);
 
                 // mark as binary data
-                is_binary = tb_true;
+                is_binary = xu_true;
             }
 
             tb_check_continue(datasize);
@@ -142,22 +138,22 @@ tb_int_t xm_io_file_write(lua_State* lua)
 
             // write data to std or file
             if (xm_io_file_is_std(file))
-                xm_io_file_write_std(file, data, (tb_size_t)datasize);
+                xm_io_file_write_std(file, data, (xu_size_t)datasize);
             else if (is_binary)
-                xm_io_file_write_file_directly(file, data, (tb_size_t)datasize);
+                xm_io_file_write_file_directly(file, data, (xu_size_t)datasize);
             else
             {
                 // write utf bom first?
                 if (file->utfbom)
                 {
                     xm_io_file_write_file_utfbom(file);
-                    file->utfbom = tb_false;
+                    file->utfbom = xu_false;
                 }
-                xm_io_file_write_file_transcrlf(file, data, (tb_size_t)datasize);
+                xm_io_file_write_file_transcrlf(file, data, (xu_size_t)datasize);
             }
         }
     }
     lua_settop(lua, 1);
-    lua_pushboolean(lua, tb_true);
+    lua_pushboolean(lua, xu_true);
     return 1;
 }

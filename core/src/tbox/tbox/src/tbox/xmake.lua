@@ -30,6 +30,8 @@ target("tbox", function()
         add_frameworks("CoreFoundation", "CoreServices", {public = true})
     end
 
+    add_cxflags("-Wno-error=misleading-indentation")
+
     -- add options
     add_options("info", "float", "wchar", "exception", "force-utf8", "deprecated")
 

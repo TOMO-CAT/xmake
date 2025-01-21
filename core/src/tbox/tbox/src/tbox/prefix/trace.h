@@ -315,5 +315,3 @@ tb_void_t       tb_trace_tail(tb_char_t const* format, ...);
 __tb_extern_c_leave__
 
 #endif
-
-

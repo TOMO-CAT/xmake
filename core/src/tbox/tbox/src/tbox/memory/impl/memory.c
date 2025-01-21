@@ -38,7 +38,7 @@
  */
 
 // the allocator
-__tb_extern_c__ extern tb_allocator_ref_t   g_allocator;
+__tb_extern_c__ extern tb_allocator_ref_t   g_tb_allocator;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -58,11 +58,11 @@ tb_bool_t tb_memory_init_env(tb_allocator_ref_t allocator)
         // init the allocator
 #if defined(TB_CONFIG_MICRO_ENABLE) || \
         (defined(__tb_small__) && !defined(__tb_debug__))
-        g_allocator = allocator? allocator : tb_native_allocator();
+        g_tb_allocator = allocator? allocator : tb_native_allocator();
 #else
-        g_allocator = allocator? allocator : tb_default_allocator(tb_null, 0);
+        g_tb_allocator = allocator? allocator : tb_default_allocator(tb_null, 0);
 #endif
-        tb_assert_and_check_break(g_allocator);
+        tb_assert_and_check_break(g_tb_allocator);
 
         // ok
         ok = tb_true;

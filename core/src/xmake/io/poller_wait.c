@@ -22,27 +22,28 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "poller_wait"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "poller_wait"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake/io/prefix.h"
 #include "poller.h"
+#include "xmake/io/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * globals
  */
 
 // we need only one global lua state/poller in main thread, so it is thread-safe.
-static lua_State* g_lua = tb_null;
+static lua_State* g_lua          = tb_null;
 static tb_int_t   g_events_count = 0;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref_t object, tb_long_t events, tb_cpointer_t priv)
+static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref_t object, tb_long_t events,
+                                    tb_cpointer_t priv)
 {
     // check
     tb_assert_and_check_return(g_lua);
@@ -51,8 +52,10 @@ static tb_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
     lua_newtable(g_lua);
     lua_pushinteger(g_lua, (tb_int_t)object->type);
     lua_rawseti(g_lua, -2, 1);
-    if (priv) lua_pushstring(g_lua, (tb_char_t const*)priv);
-    else lua_pushlightuserdata(g_lua, object->ref.ptr);
+    if (priv)
+        lua_pushstring(g_lua, (tb_char_t const*)priv);
+    else
+        lua_pushlightuserdata(g_lua, object->ref.ptr);
     lua_rawseti(g_lua, -2, 2);
     if (object->type == TB_POLLER_OBJECT_FWATCHER)
     {
@@ -69,7 +72,8 @@ static tb_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
             lua_settable(g_lua, -3);
         }
     }
-    else lua_pushinteger(g_lua, (tb_int_t)events);
+    else
+        lua_pushinteger(g_lua, (tb_int_t)events);
     lua_rawseti(g_lua, -2, 3);
     lua_rawseti(g_lua, -2, ++g_events_count);
 }
@@ -88,7 +92,7 @@ tb_int_t xm_io_poller_wait(lua_State* lua)
     tb_long_t timeout = (tb_long_t)luaL_checknumber(lua, 1);
 
     // pass lua and count to the events callback
-    g_lua = lua;
+    g_lua          = lua;
     g_events_count = 0;
 
     // wait it

@@ -29,14 +29,25 @@ else
     if ! is_kind "shared"; then
         set_symbols "hidden"
     fi
-    set_optimizes "smallest"
+    set_optimizes "smallest"  # TODO: "fatest"
 fi
+
+#-----------------------------------------------------------------------------
+# project custom options
+#
 
 # the runtime option, lua or luajit
 option "runtime" "Use luajit or lua runtime" "lua"
-
 # always use external dependencies
 option "external" "Always use external dependencies" false
+# the small option
+option "small" "Enable the small compile mode and disable all modules." false
+# the micro option
+option "micro" "Compile micro core library for the embed system." false
+
+#-----------------------------------------------------------------------------
+# project autoconf options
+#
 
 # the readline option
 option "readline"
@@ -229,6 +240,7 @@ if ! has_config "external"; then
     includes "src/lz4"
     includes "src/sv"
     includes "src/tbox"
+    includes "src/xutil"
 fi
 includes "src/xmake"
 includes "src/demo"

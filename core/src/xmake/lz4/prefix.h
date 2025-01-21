@@ -24,10 +24,10 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake/prefix.h"
-#include "lz4frame.h"
 #include "lz4.h"
+#include "lz4frame.h"
 #include "lz4hc.h"
+#include "xmake/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * types
@@ -35,18 +35,18 @@
 
 // we need to define LZ4_byte if < 1.9.3
 #if defined(LZ4_VERSION_NUMBER) && LZ4_VERSION_NUMBER < (1 * 100 * 100 + 9 * 100 + 3)
-#   if defined(__cplusplus) || (defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) /* C99 */)
-#       include <stdint.h>
-        typedef int8_t  LZ4_i8;
-        typedef uint8_t  LZ4_byte;
-        typedef uint16_t LZ4_u16;
-        typedef uint32_t LZ4_u32;
-#   else
-        typedef signed char  LZ4_i8;
-        typedef unsigned char  LZ4_byte;
-        typedef unsigned short LZ4_u16;
-        typedef unsigned int   LZ4_u32;
-#   endif
+#    if defined(__cplusplus) || (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) /* C99 */)
+#        include <stdint.h>
+typedef int8_t   LZ4_i8;
+typedef uint8_t  LZ4_byte;
+typedef uint16_t LZ4_u16;
+typedef uint32_t LZ4_u32;
+#    else
+typedef signed char    LZ4_i8;
+typedef unsigned char  LZ4_byte;
+typedef unsigned short LZ4_u16;
+typedef unsigned int   LZ4_u32;
+#    endif
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -56,31 +56,31 @@
 // the lz4 compress stream type
 typedef struct __xm_lz4_cstream_t
 {
-    LZ4F_cctx*          cctx;
-    LZ4_byte*           buffer;
-    tb_size_t           buffer_size;
-    tb_size_t           buffer_maxn;
-    tb_size_t           write_maxn;
-    tb_size_t           header_size;
-    LZ4_byte            header[LZ4F_HEADER_SIZE_MAX];
-}xm_lz4_cstream_t;
+    LZ4F_cctx* cctx;
+    LZ4_byte*  buffer;
+    xu_size_t  buffer_size;
+    xu_size_t  buffer_maxn;
+    xu_size_t  write_maxn;
+    xu_size_t  header_size;
+    LZ4_byte   header[LZ4F_HEADER_SIZE_MAX];
+} xm_lz4_cstream_t;
 
 // the lz4 decompress stream type
 typedef struct __xm_lz4_dstream_t
 {
-    LZ4F_dctx*          dctx;
-    LZ4_byte*           buffer;
-    tb_size_t           buffer_size;
-    tb_size_t           buffer_maxn;
-    tb_size_t           header_size;
-    LZ4_byte            header[LZ4F_HEADER_SIZE_MAX];
-}xm_lz4_dstream_t;
+    LZ4F_dctx* dctx;
+    LZ4_byte*  buffer;
+    xu_size_t  buffer_size;
+    xu_size_t  buffer_maxn;
+    xu_size_t  header_size;
+    LZ4_byte   header[LZ4F_HEADER_SIZE_MAX];
+} xm_lz4_dstream_t;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * interfaces
  */
 
-static __tb_inline__ tb_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
+static __tb_inline__ xu_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
 {
     if (stream)
     {
@@ -100,31 +100,29 @@ static __tb_inline__ tb_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
 
 static __tb_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
 {
-    tb_size_t ret;
-    tb_bool_t ok = tb_false;
-    xm_lz4_cstream_t* stream = tb_null;
+    xu_size_t                 ret;
+    xu_bool_t                 ok       = xu_false;
+    xm_lz4_cstream_t*         stream   = tb_null;
     LZ4F_preferences_t const* prefsPtr = tb_null;
     do
     {
         stream = tb_malloc0_type(xm_lz4_cstream_t);
         tb_assert_and_check_break(stream);
 
-        stream->write_maxn = 64 * 1024;
+        stream->write_maxn  = 64 * 1024;
         stream->buffer_maxn = LZ4F_compressBound(stream->write_maxn, prefsPtr);
-        stream->buffer = (LZ4_byte*)tb_malloc(stream->buffer_maxn);
+        stream->buffer      = (LZ4_byte*)tb_malloc(stream->buffer_maxn);
         tb_assert_and_check_break(stream->buffer);
 
         ret = LZ4F_createCompressionContext(&stream->cctx, LZ4F_getVersion());
-        if (LZ4F_isError(ret))
-            break;
+        if (LZ4F_isError(ret)) break;
 
         ret = LZ4F_compressBegin(stream->cctx, stream->header, LZ4F_HEADER_SIZE_MAX, prefsPtr);
-        if (LZ4F_isError(ret))
-            break;
+        if (LZ4F_isError(ret)) break;
 
         stream->header_size = ret;
 
-        ok = tb_true;
+        ok = xu_true;
 
     } while (0);
 
@@ -136,25 +134,24 @@ static __tb_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
     return stream;
 }
 
-static __tb_inline__ tb_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb_byte_t const* idata, tb_size_t isize, tb_bool_t end)
+static __tb_inline__ tb_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb_byte_t const* idata, xu_size_t isize,
+                                                    xu_bool_t end)
 {
     // check
     tb_assert_and_check_return_val(stream && stream->cctx && idata && isize, -1);
     tb_assert_and_check_return_val(isize <= stream->write_maxn, -1);
     tb_assert_and_check_return_val(stream->buffer_size + isize < stream->buffer_maxn, -1);
 
-    tb_size_t real = LZ4F_compressUpdate(stream->cctx, stream->buffer + stream->buffer_size,
-        stream->buffer_maxn - stream->buffer_size, idata, isize, tb_null);
-    if (LZ4F_isError(real))
-        return -1;
+    xu_size_t real = LZ4F_compressUpdate(stream->cctx, stream->buffer + stream->buffer_size,
+                                         stream->buffer_maxn - stream->buffer_size, idata, isize, tb_null);
+    if (LZ4F_isError(real)) return -1;
     stream->buffer_size += real;
 
     if (end)
     {
-        tb_size_t ret = LZ4F_compressEnd(stream->cctx, stream->buffer + stream->buffer_size,
-            stream->buffer_maxn - stream->buffer_size, tb_null);
-        if (LZ4F_isError(ret))
-            return -1;
+        xu_size_t ret = LZ4F_compressEnd(stream->cctx, stream->buffer + stream->buffer_size,
+                                         stream->buffer_maxn - stream->buffer_size, tb_null);
+        if (LZ4F_isError(ret)) return -1;
 
         real += ret;
         stream->buffer_size += ret;
@@ -163,13 +160,13 @@ static __tb_inline__ tb_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb
     return isize;
 }
 
-static __tb_inline__ tb_long_t xm_lz4_cstream_read(xm_lz4_cstream_t* stream, tb_byte_t* odata, tb_size_t osize)
+static __tb_inline__ tb_long_t xm_lz4_cstream_read(xm_lz4_cstream_t* stream, tb_byte_t* odata, xu_size_t osize)
 {
     // check
     tb_assert_and_check_return_val(stream && stream->cctx && odata && osize, -1);
     tb_assert_and_check_return_val(osize >= stream->header_size, -1);
 
-    tb_size_t read = 0;
+    xu_size_t read = 0;
     if (stream->header_size)
     {
         tb_memcpy(odata, stream->header, stream->header_size);
@@ -178,16 +175,15 @@ static __tb_inline__ tb_long_t xm_lz4_cstream_read(xm_lz4_cstream_t* stream, tb_
         stream->header_size = 0;
     }
 
-    tb_size_t need = tb_min(stream->buffer_size, osize);
+    xu_size_t need = tb_min(stream->buffer_size, osize);
     tb_memcpy(odata + read, stream->buffer, need);
-    if (need < stream->buffer_size)
-        tb_memmov(stream->buffer, stream->buffer + need, stream->buffer_size - need);
+    if (need < stream->buffer_size) tb_memmov(stream->buffer, stream->buffer + need, stream->buffer_size - need);
     stream->buffer_size -= need;
     read += need;
     return read;
 }
 
-static __tb_inline__ tb_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
+static __tb_inline__ xu_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
 {
     if (stream)
     {
@@ -207,8 +203,8 @@ static __tb_inline__ tb_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
 
 static __tb_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
 {
-    LZ4F_errorCode_t ret;
-    tb_bool_t ok = tb_false;
+    LZ4F_errorCode_t  ret;
+    xu_bool_t         ok     = xu_false;
     xm_lz4_dstream_t* stream = tb_null;
     do
     {
@@ -216,10 +212,9 @@ static __tb_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
         tb_assert_and_check_break(stream);
 
         ret = LZ4F_createDecompressionContext(&stream->dctx, LZ4F_getVersion());
-        if (LZ4F_isError(ret))
-            break;
+        if (LZ4F_isError(ret)) break;
 
-        ok = tb_true;
+        ok = xu_true;
 
     } while (0);
 
@@ -231,16 +226,17 @@ static __tb_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
     return stream;
 }
 
-static __tb_inline__ tb_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb_byte_t const* idata, tb_size_t isize, tb_bool_t end)
+static __tb_inline__ tb_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb_byte_t const* idata, xu_size_t isize,
+                                                    xu_bool_t end)
 {
     // check
     tb_assert_and_check_return_val(stream && stream->dctx && idata && isize, -1);
 
     // read header first
-    const tb_size_t header_size = sizeof(stream->header);
+    const xu_size_t header_size = sizeof(stream->header);
     if (stream->header_size < header_size)
     {
-        tb_size_t size = tb_min(header_size - stream->header_size, isize);
+        xu_size_t size = tb_min(header_size - stream->header_size, isize);
         tb_memcpy(stream->header + stream->header_size, idata, size);
         stream->header_size += size;
         idata += size;
@@ -250,28 +246,18 @@ static __tb_inline__ tb_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb
         if (stream->header_size == header_size)
         {
             LZ4F_frameInfo_t info;
-            size_t consumed_size = header_size;
-            LZ4F_errorCode_t ret = LZ4F_getFrameInfo(stream->dctx, &info, stream->header, &consumed_size);
-            if (LZ4F_isError(ret))
-                return -1;
+            size_t           consumed_size = header_size;
+            LZ4F_errorCode_t ret           = LZ4F_getFrameInfo(stream->dctx, &info, stream->header, &consumed_size);
+            if (LZ4F_isError(ret)) return -1;
 
             switch (info.blockSizeID)
             {
             case LZ4F_default:
-            case LZ4F_max64KB:
-                stream->buffer_maxn = 64 * 1024;
-                break;
-            case LZ4F_max256KB:
-                stream->buffer_maxn = 256 * 1024;
-                break;
-            case LZ4F_max1MB:
-                stream->buffer_maxn = 1 * 1024 * 1024;
-                break;
-            case LZ4F_max4MB:
-                stream->buffer_maxn = 4 * 1024 * 1024;
-                break;
-            default:
-                return -1;
+            case LZ4F_max64KB: stream->buffer_maxn = 64 * 1024; break;
+            case LZ4F_max256KB: stream->buffer_maxn = 256 * 1024; break;
+            case LZ4F_max1MB: stream->buffer_maxn = 1 * 1024 * 1024; break;
+            case LZ4F_max4MB: stream->buffer_maxn = 4 * 1024 * 1024; break;
+            default: return -1;
             }
 
             stream->buffer = (LZ4_byte*)tb_malloc(stream->buffer_maxn);
@@ -290,18 +276,17 @@ static __tb_inline__ tb_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb
     return isize;
 }
 
-static __tb_inline__ tb_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, tb_byte_t* odata, tb_size_t osize)
+static __tb_inline__ tb_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, tb_byte_t* odata, xu_size_t osize)
 {
     // check
     tb_assert_and_check_return_val(stream && stream->dctx && stream->buffer && odata && osize, -1);
     tb_check_return_val(stream->buffer_size, 0);
 
     // do decompress
-    size_t srcsize = stream->buffer_size;
-    size_t dstsize = osize;
-    tb_size_t ret = LZ4F_decompress(stream->dctx, odata, &dstsize, stream->buffer, &srcsize, tb_null);
-    if (LZ4F_isError(ret))
-        return -1;
+    size_t    srcsize = stream->buffer_size;
+    size_t    dstsize = osize;
+    xu_size_t ret     = LZ4F_decompress(stream->dctx, odata, &dstsize, stream->buffer, &srcsize, tb_null);
+    if (LZ4F_isError(ret)) return -1;
 
     // move the left input data
     if (srcsize < stream->buffer_size)

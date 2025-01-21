@@ -22,14 +22,14 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "process.open"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "process.open"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "xmake/process/prefix.h"
 #include "../io/prefix.h"
+#include "xmake/process/prefix.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -47,32 +47,31 @@ tb_int_t xm_process_open(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get command
-    size_t              command_size = 0;
-    tb_char_t const*    command = luaL_checklstring(lua, 1, &command_size);
+    size_t           command_size = 0;
+    tb_char_t const* command      = luaL_checklstring(lua, 1, &command_size);
     tb_check_return_val(command, 0);
 
     // init attributes
     tb_process_attr_t attr = {0};
 
     // get option arguments
-    tb_size_t          envn = 0;
+    xu_size_t          envn       = 0;
     tb_char_t const*   envs[1024] = {0};
-    tb_char_t const*   inpath  = tb_null;
-    tb_char_t const*   outpath = tb_null;
-    tb_char_t const*   errpath = tb_null;
-    xm_io_file_t*      infile  = tb_null;
-    xm_io_file_t*      outfile = tb_null;
-    xm_io_file_t*      errfile = tb_null;
-    tb_pipe_file_ref_t inpipe  = tb_null;
-    tb_pipe_file_ref_t outpipe = tb_null;
-    tb_pipe_file_ref_t errpipe = tb_null;
+    tb_char_t const*   inpath     = tb_null;
+    tb_char_t const*   outpath    = tb_null;
+    tb_char_t const*   errpath    = tb_null;
+    xm_io_file_t*      infile     = tb_null;
+    xm_io_file_t*      outfile    = tb_null;
+    xm_io_file_t*      errfile    = tb_null;
+    tb_pipe_file_ref_t inpipe     = tb_null;
+    tb_pipe_file_ref_t outpipe    = tb_null;
+    tb_pipe_file_ref_t errpipe    = tb_null;
     if (lua_istable(lua, 2))
     {
         // is detached?
         lua_pushstring(lua, "detach");
         lua_gettable(lua, 2);
-        if (lua_toboolean(lua, -1))
-            attr.flags |= TB_PROCESS_FLAG_DETACH;
+        if (lua_toboolean(lua, -1)) attr.flags |= TB_PROCESS_FLAG_DETACH;
         lua_pop(lua, 1);
 
         // get curdir
@@ -159,10 +158,10 @@ tb_int_t xm_process_open(lua_State* lua)
         if (lua_istable(lua, -1))
         {
             // get environment variables count
-            tb_size_t count = (tb_size_t)lua_objlen(lua, -1);
+            xu_size_t count = (xu_size_t)lua_objlen(lua, -1);
 
             // get all passed environment variables
-            tb_size_t i;
+            xu_size_t i;
             for (i = 0; i < count; i++)
             {
                 // get envs[i]
@@ -178,14 +177,16 @@ tb_int_t xm_process_open(lua_State* lua)
                     else
                     {
                         // error
-                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (tb_int_t)envn, tb_arrayn(envs) - 1);
+                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (tb_int_t)envn,
+                                        tb_arrayn(envs) - 1);
                         lua_error(lua);
                     }
                 }
                 else
                 {
                     // error
-                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (tb_int_t)i, luaL_typename(lua, -1));
+                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (tb_int_t)i,
+                                    luaL_typename(lua, -1));
                     lua_error(lua);
                 }
 
@@ -218,7 +219,6 @@ tb_int_t xm_process_open(lua_State* lua)
         attr.in.pipe = inpipe;
         attr.intype  = TB_PROCESS_REDIRECT_TYPE_PIPE;
     }
-
 
     // redirect stdout?
     if (outpath)
@@ -271,7 +271,9 @@ tb_int_t xm_process_open(lua_State* lua)
 
     // init process
     tb_process_ref_t process = (tb_process_ref_t)tb_process_init_cmd(command, &attr);
-    if (process) xm_lua_pushpointer(lua, (tb_pointer_t)process);
-    else lua_pushnil(lua);
+    if (process)
+        xm_lua_pushpointer(lua, (tb_pointer_t)process);
+    else
+        lua_pushnil(lua);
     return 1;
 }

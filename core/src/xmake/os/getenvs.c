@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "getenvs"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "getenvs"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -35,8 +35,7 @@
  */
 
 // the separator
-#define XM_OS_ENV_SEP                    ':'
-
+#define XM_OS_ENV_SEP ':'
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * globals
@@ -60,7 +59,7 @@ tb_int_t xm_os_getenvs(lua_State* lua)
     if (p)
     {
         tb_int_t  i = 1;
-        tb_size_t n = 0;
+        xu_size_t n = 0;
         while (*p)
         {
             n = tb_strlen(*p);

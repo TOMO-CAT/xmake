@@ -22,8 +22,8 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "convert"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "convert"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
@@ -38,31 +38,28 @@
 typedef struct __xm_charset_entry_t
 {
     // the charset type
-    tb_size_t           type;
+    xu_size_t type;
 
     // the charset name
-    tb_char_t const*    name;
+    tb_char_t const* name;
 
-}xm_charset_entry_t, *xm_charset_entry_ref_t;
+} xm_charset_entry_t, *xm_charset_entry_ref_t;
 
 // the charsets, @note: type & name is sorted
-static xm_charset_entry_t g_charsets[] =
-{
-    {TB_CHARSET_TYPE_ANSI,                          "ansi"    }
-,   {TB_CHARSET_TYPE_ASCII,                         "ascii"   }
-,   {TB_CHARSET_TYPE_GB2312,                        "gb2312"  }
-,   {TB_CHARSET_TYPE_GBK,                           "gbk"     }
-,   {TB_CHARSET_TYPE_ISO8859,                       "iso8859" }
-,   {TB_CHARSET_TYPE_UCS2  | TB_CHARSET_TYPE_NE,    "ucs2"    }
-,   {TB_CHARSET_TYPE_UCS4  | TB_CHARSET_TYPE_NE,    "ucs4"    }
-,   {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_NE,    "utf16"   }
-,   {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE,    "utf16be" }
-,   {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE,    "utf16le" }
-,   {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_NE,    "utf32"   }
-,   {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_BE,    "utf32be" }
-,   {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_LE,    "utf32le" }
-,   {TB_CHARSET_TYPE_UTF8,                          "utf8"    }
-};
+static xm_charset_entry_t g_charsets[] = {{TB_CHARSET_TYPE_ANSI, "ansi"},
+                                          {TB_CHARSET_TYPE_ASCII, "ascii"},
+                                          {TB_CHARSET_TYPE_GB2312, "gb2312"},
+                                          {TB_CHARSET_TYPE_GBK, "gbk"},
+                                          {TB_CHARSET_TYPE_ISO8859, "iso8859"},
+                                          {TB_CHARSET_TYPE_UCS2 | TB_CHARSET_TYPE_NE, "ucs2"},
+                                          {TB_CHARSET_TYPE_UCS4 | TB_CHARSET_TYPE_NE, "ucs4"},
+                                          {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_NE, "utf16"},
+                                          {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE, "utf16be"},
+                                          {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE, "utf16le"},
+                                          {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_NE, "utf32"},
+                                          {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_BE, "utf32be"},
+                                          {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_LE, "utf32le"},
+                                          {TB_CHARSET_TYPE_UTF8, "utf8"}};
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * finder
@@ -75,14 +72,16 @@ static xm_charset_entry_ref_t xm_string_charset_find_by_name(tb_char_t const* na
 {
     // make iterator
     tb_array_iterator_t array_iterator;
-    tb_iterator_ref_t   iterator = tb_array_iterator_init_mem(&array_iterator, g_charsets, tb_arrayn(g_charsets), sizeof(xm_charset_entry_t));
+    tb_iterator_ref_t   iterator =
+        tb_array_iterator_init_mem(&array_iterator, g_charsets, tb_arrayn(g_charsets), sizeof(xm_charset_entry_t));
     tb_assert_and_check_return_val(iterator, tb_null);
 
     // find it by the binary search
-    tb_size_t itor = tb_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
+    xu_size_t itor = tb_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
     if (itor != tb_iterator_tail(iterator))
         return (xm_charset_entry_ref_t)tb_iterator_item(iterator, itor);
-    else return tb_null;
+    else
+        return tb_null;
 }
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -120,18 +119,23 @@ tb_int_t xm_string_convert(lua_State* lua)
     tb_check_return_val(fcharset && tcharset, 0);
 
     // empty string?
-    if (!src_size) lua_pushstring(lua, "");
+    if (!src_size)
+        lua_pushstring(lua, "");
     else
     {
         // convert string
-        tb_long_t   dst_size = 0;
-        tb_size_t   dst_maxn = (tb_size_t)src_size << 2;
-        tb_byte_t*  dst_data = tb_malloc_bytes(dst_maxn);
-        if (dst_data && dst_maxn && (dst_size = tb_charset_conv_data(fcharset->type, tcharset->type, (tb_byte_t const*)src_cstr, (tb_size_t)src_size, dst_data, dst_maxn)) >= 0 && dst_size < dst_maxn)
+        tb_long_t  dst_size = 0;
+        xu_size_t  dst_maxn = (xu_size_t)src_size << 2;
+        tb_byte_t* dst_data = tb_malloc_bytes(dst_maxn);
+        if (dst_data && dst_maxn &&
+            (dst_size = tb_charset_conv_data(fcharset->type, tcharset->type, (tb_byte_t const*)src_cstr,
+                                             (xu_size_t)src_size, dst_data, dst_maxn)) >= 0 &&
+            dst_size < dst_maxn)
         {
-            lua_pushlstring(lua, (tb_char_t const *)dst_data, dst_size);
+            lua_pushlstring(lua, (tb_char_t const*)dst_data, dst_size);
         }
-        else lua_pushnil(lua);
+        else
+            lua_pushnil(lua);
         tb_free(dst_data);
     }
 

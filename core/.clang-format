@@ -69,6 +69,14 @@ IncludeCategories:
     Priority:        1
 IncludeIsMainRegex: '(Test)?$'
 IndentCaseLabels: false
+
+# https://github.com/llvm/llvm-project/issues/36620
+# 避免 extern "C" 后的缩进
+# BraceWrapping:
+#   AfterExternBlock: false
+# BreakBeforeBraces: Custom
+# IndentExternBlock: false
+
 IndentPPDirectives: AfterHash
 IndentWidth:     4
 IndentWrappedFunctionNames: false
@@ -108,4 +116,3 @@ Standard:        Cpp11
 TabWidth:        4
 UseTab:          Never
 ...
-
