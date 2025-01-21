@@ -14,6 +14,7 @@ target("xmake", function()
 
     -- add definitions
     add_defines("__tb_prefix__=\"xmake\"")
+    add_defines("__xu_prefix__=\"xmake\"")
     if is_mode("debug") then
         add_defines("__xm_debug__", {public = true})
     end
