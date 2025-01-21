@@ -4,7 +4,6 @@
  * implementation
  * *******************************************************
  */
-
 xu_bool_t xu_predicate_eq(xu_iterator_ref_t iterator, xu_cpointer_t item, xu_cpointer_t value)
 {
     // check
