@@ -19,15 +19,17 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
+ * *******************************************************
  */
 #include "xmake/xmake.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
+ * *******************************************************
  */
-static __tb_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
+static __xu_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
 {
 #ifdef __xm_debug__
     if (!(mode & XM_MODE_DEBUG))
@@ -60,7 +62,7 @@ static __tb_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
     // ok
     return xu_true;
 }
-static __tb_inline__ xu_bool_t xm_version_check(xu_hize_t build)
+static __xu_inline__ xu_bool_t xm_version_check(xu_hize_t build)
 {
     // the version oly for link the static vtag string
     xu_version_t const* version = xm_version();

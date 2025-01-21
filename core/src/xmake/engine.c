@@ -750,7 +750,7 @@ static xu_void_t xm_engine_init_host(xm_engine_t* engine)
     lua_setglobal(engine->lua, "_SUBHOST");
 }
 
-static __tb_inline__ tb_char_t const* xm_engine_xmake_arch()
+static __xu_inline__ tb_char_t const* xm_engine_xmake_arch()
 {
     tb_char_t const* arch = tb_null;
 #if defined(TB_ARCH_x64)
