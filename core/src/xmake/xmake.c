@@ -83,8 +83,9 @@ static __xu_inline__ xu_bool_t xm_version_check(xu_hize_t build)
     return xu_false;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
+ * *******************************************************
  */
 xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 {
