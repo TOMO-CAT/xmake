@@ -92,7 +92,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
         FILE* fp = fopen("/proc/stat", "r");
         if (fp)
         {
-            tb_char_t line[8192];
+            xu_char_t line[8192];
             static tb_int64_t total_prev = 0;
             static tb_int64_t active_prev = 0;
             while (!feof(fp))

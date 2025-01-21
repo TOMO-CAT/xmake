@@ -33,12 +33,12 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xu_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t const* cdls,
+static xu_void_t xm_string_split_str(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t const* cdls,
                                      xu_size_t ndls, xu_bool_t strict, tb_int_t limit)
 {
     tb_int_t         num = 0;
-    tb_char_t const* end = cstr + nstr;
-    tb_char_t const* pos = tb_strstr(cstr, cdls); // faster than tb_strnstr()
+    xu_char_t const* end = cstr + nstr;
+    xu_char_t const* pos = tb_strstr(cstr, cdls); // faster than tb_strnstr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
@@ -63,12 +63,12 @@ static xu_void_t xm_string_split_str(lua_State* lua, tb_char_t const* cstr, xu_s
         lua_rawseti(lua, -2, ++num);
     }
 }
-static xu_void_t xm_string_split_chr(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t ch,
+static xu_void_t xm_string_split_chr(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t ch,
                                      xu_bool_t strict, tb_int_t limit)
 {
     tb_int_t         num = 0;
-    tb_char_t const* end = cstr + nstr;
-    tb_char_t const* pos = tb_strchr(cstr, ch); // faster than tb_strnchr()
+    xu_char_t const* end = cstr + nstr;
+    xu_char_t const* pos = tb_strchr(cstr, ch); // faster than tb_strnchr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
@@ -112,11 +112,11 @@ tb_int_t xm_string_split(lua_State* lua)
 
     // get string
     size_t           nstr = 0;
-    tb_char_t const* cstr = luaL_checklstring(lua, 1, &nstr);
+    xu_char_t const* cstr = luaL_checklstring(lua, 1, &nstr);
 
     // get delimiter
     size_t           ndls = 0;
-    tb_char_t const* cdls = luaL_checklstring(lua, 2, &ndls);
+    xu_char_t const* cdls = luaL_checklstring(lua, 2, &ndls);
 
     // is strict?
     xu_bool_t const strict = (xu_bool_t)lua_toboolean(lua, 3);

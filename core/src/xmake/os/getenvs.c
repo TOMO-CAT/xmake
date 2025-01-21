@@ -42,7 +42,7 @@
  */
 
 // the user environment
-extern tb_char_t** environ;
+extern xu_char_t** environ;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
@@ -55,7 +55,7 @@ tb_int_t xm_os_getenvs(lua_State* lua)
     // init table
     lua_newtable(lua);
 
-    tb_char_t const** p = (tb_char_t const**)environ;
+    xu_char_t const** p = (xu_char_t const**)environ;
     if (p)
     {
         tb_int_t  i = 1;

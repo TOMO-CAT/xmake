@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_long_t xm_os_rmdir_empty(tb_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
+static tb_long_t xm_os_rmdir_empty(xu_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     xu_bool_t* is_emptydir = (xu_bool_t*)priv;
@@ -48,7 +48,7 @@ static tb_long_t xm_os_rmdir_empty(tb_char_t const* path, tb_file_info_t const* 
     }
     return TB_DIRECTORY_WALK_CODE_CONTINUE;
 }
-static tb_long_t xm_os_rmdir_remove(tb_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
+static tb_long_t xm_os_rmdir_remove(xu_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     tb_assert_and_check_return_val(path, TB_DIRECTORY_WALK_CODE_END);
@@ -78,7 +78,7 @@ tb_int_t xm_os_rmdir(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the path
-    tb_char_t const* path = luaL_checkstring(lua, 1);
+    xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
     // only remove empty directory?

@@ -55,7 +55,7 @@ typedef xu_void_t (*xm_engine_lni_initalizer_cb_t)(xm_engine_ref_t engine, lua_S
  *
  * @return                  the engine
  */
-xm_engine_ref_t xm_engine_init(tb_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer);
+xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer);
 
 /*! exit the engine
  *
@@ -73,7 +73,7 @@ xu_void_t xm_engine_exit(xm_engine_ref_t engine);
  *
  * @return                  the error code of main()
  */
-tb_int_t xm_engine_main(xm_engine_ref_t engine, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv);
+tb_int_t xm_engine_main(xm_engine_ref_t engine, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv);
 
 /*! register lni modules in the engine, @note we need to call it in lni_initalizer()
  *
@@ -81,7 +81,7 @@ tb_int_t xm_engine_main(xm_engine_ref_t engine, tb_int_t argc, tb_char_t** argv,
  * @param module            the lni module name
  * @param funcs             the lni module functions
  */
-xu_void_t xm_engine_register(xm_engine_ref_t engine, tb_char_t const* module, luaL_Reg const funcs[]);
+xu_void_t xm_engine_register(xm_engine_ref_t engine, xu_char_t const* module, luaL_Reg const funcs[]);
 
 /*! run main entry of the engine singleton
  *
@@ -94,7 +94,7 @@ xu_void_t xm_engine_register(xm_engine_ref_t engine, tb_char_t const* module, lu
  *
  * @return                  the error code of main()
  */
-tb_int_t xm_engine_run(tb_char_t const* name, tb_int_t argc, tb_char_t** argv, tb_char_t** taskargv,
+tb_int_t xm_engine_run(xu_char_t const* name, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv,
                        xm_engine_lni_initalizer_cb_t lni_initalizer);
 
 /* //////////////////////////////////////////////////////////////////////////////////////

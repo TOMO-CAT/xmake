@@ -47,10 +47,10 @@ tb_int_t xm_package_loadxmi(lua_State* lua)
     // check
     tb_assert_and_check_return_val(lua, 0);
 
-    tb_char_t const* path = luaL_checkstring(lua, 1);
+    xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
-    tb_char_t const* name = luaL_checkstring(lua, 2);
+    xu_char_t const* name = luaL_checkstring(lua, 2);
     tb_check_return_val(name, 0);
 
     // load module library

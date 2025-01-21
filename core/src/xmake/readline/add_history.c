@@ -42,7 +42,7 @@ tb_int_t xm_readline_add_history(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get history
-    tb_char_t const* history = luaL_checkstring(lua, 1);
+    xu_char_t const* history = luaL_checkstring(lua, 1);
     tb_check_return_val(history, 0);
 
     // call add_history

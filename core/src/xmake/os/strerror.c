@@ -44,7 +44,7 @@ tb_int_t xm_os_strerror(lua_State* lua)
     xu_size_t syserror = tb_syserror_state();
     if (syserror != TB_STATE_SYSERROR_UNKNOWN_ERROR)
     {
-        tb_char_t const* strerr = "Unknown";
+        xu_char_t const* strerr = "Unknown";
         switch (syserror)
         {
         case TB_STATE_SYSERROR_NOT_PERM: strerr = "Permission denied"; break;

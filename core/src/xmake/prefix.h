@@ -59,7 +59,7 @@ static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t p
         lua_pushlightuserdata(lua, ptr);
     else
     {
-        tb_char_t str[64];
+        xu_char_t str[64];
         tb_long_t len = tb_snprintf(str, sizeof(str), "%p", ptr);
         lua_pushlstring(lua, str, len);
     }
@@ -68,7 +68,7 @@ static __xu_inline__ xu_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx)
 {
     return lua_isuserdata(lua, idx) || lua_isstring(lua, idx);
 }
-static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx, tb_char_t const** pstr)
+static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx, xu_char_t const** pstr)
 {
     tb_pointer_t ptr = tb_null;
     if (lua_isuserdata(lua, idx))
@@ -79,7 +79,7 @@ static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx
     else
     {
         size_t len = 0;
-        tb_char_t const* str = luaL_checklstring(lua, idx, &len);
+        xu_char_t const* str = luaL_checklstring(lua, idx, &len);
         if (str && len > 2 && str[0] == '0' && str[1] == 'x')
             ptr = (tb_pointer_t)tb_s16tou64(str);
         if (pstr) *pstr = str;
@@ -93,7 +93,7 @@ static __xu_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx)
 #else
 static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr) { lua_pushlightuserdata(lua, ptr); }
 static __xu_inline__ xu_bool_t xm_lua_ispointer(lua_State* lua, tb_int_t idx) { return lua_isuserdata(lua, idx); }
-static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx, tb_char_t const** pstr)
+static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx, xu_char_t const** pstr)
 {
     if (pstr) *pstr = tb_null;
     return lua_touserdata(lua, idx);
@@ -101,7 +101,7 @@ static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx
 static __xu_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx) { return lua_touserdata(lua, idx); }
 #endif
 
-static __xu_inline__ xu_void_t xm_lua_register(lua_State* lua, tb_char_t const* libname, luaL_Reg const* l)
+static __xu_inline__ xu_void_t xm_lua_register(lua_State* lua, xu_char_t const* libname, luaL_Reg const* l)
 {
 #if LUA_VERSION_NUM >= 504
     lua_getglobal(lua, libname);

@@ -72,7 +72,7 @@ static xu_void_t xm_os_signal_handler_impl(tb_int_t signo)
     lua_State* lua = g_lua;
     if (lua)
     {
-        tb_char_t name[64] = {0};
+        xu_char_t name[64] = {0};
         tb_snprintf(name, sizeof(name), "_SIGNAL_HANDLER_%d", signo);
         lua_getglobal(lua, name);
         lua_pushinteger(lua, signo);
@@ -113,7 +113,7 @@ tb_int_t xm_os_signal(lua_State* lua)
     tb_int_t signo = (tb_int_t)luaL_checkinteger(lua, 1);
     if (handler == XM_OS_SIGFUN)
     {
-        tb_char_t name[64] = {0};
+        xu_char_t name[64] = {0};
         tb_snprintf(name, sizeof(name), "_SIGNAL_HANDLER_%d", signo);
         lua_pushvalue(lua, 2);
         lua_setglobal(lua, name);

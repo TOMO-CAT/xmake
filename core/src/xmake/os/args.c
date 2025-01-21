@@ -33,15 +33,15 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xu_void_t tb_os_args_append(tb_string_ref_t result, tb_char_t const* cstr, xu_size_t size, xu_bool_t escape,
+static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr, xu_size_t size, xu_bool_t escape,
                                    xu_bool_t nowrap)
 {
     // check
     tb_assert_and_check_return(size < TB_PATH_MAXN);
 
     // need wrap quote?
-    tb_char_t        ch;
-    tb_char_t const* p          = cstr;
+    xu_char_t        ch;
+    xu_char_t const* p          = cstr;
     xu_bool_t        wrap_quote = xu_false;
     if (!nowrap)
     {
@@ -122,14 +122,14 @@ tb_int_t xm_os_args(lua_State* lua)
                 lua_pushstring(lua, "_STR");
                 lua_gettable(lua, -2);
                 size_t           size = 0;
-                tb_char_t const* cstr = luaL_checklstring(lua, -1, &size);
+                xu_char_t const* cstr = luaL_checklstring(lua, -1, &size);
                 if (cstr && size) tb_os_args_append(&result, cstr, size, escape, nowrap);
                 lua_pop(lua, 1);
             }
             else
             {
                 size_t           size = 0;
-                tb_char_t const* cstr = luaL_checklstring(lua, -1, &size);
+                xu_char_t const* cstr = luaL_checklstring(lua, -1, &size);
                 if (cstr && size) tb_os_args_append(&result, cstr, size, escape, nowrap);
             }
             lua_pop(lua, 1);
@@ -138,7 +138,7 @@ tb_int_t xm_os_args(lua_State* lua)
     else
     {
         size_t           size = 0;
-        tb_char_t const* cstr = luaL_checklstring(lua, 1, &size);
+        xu_char_t const* cstr = luaL_checklstring(lua, 1, &size);
         if (cstr && size) tb_os_args_append(&result, cstr, size, escape, nowrap);
     }
 

@@ -82,7 +82,7 @@ tb_int_t xm_hash_xxhash(lua_State* lua)
         // make xxhash string
         xu_size_t i      = 0;
         xu_size_t n      = mode >> 3;
-        tb_char_t s[256] = {0};
+        xu_char_t s[256] = {0};
         for (i = 0; i < n; ++i)
             tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
@@ -92,7 +92,7 @@ tb_int_t xm_hash_xxhash(lua_State* lua)
     }
 
     // get the filename
-    tb_char_t const* filename = luaL_checkstring(lua, 2);
+    xu_char_t const* filename = luaL_checkstring(lua, 2);
     tb_check_return_val(filename, 0);
 
     // load data from file
@@ -158,7 +158,7 @@ tb_int_t xm_hash_xxhash(lua_State* lua)
             // make xxhash string
             xu_size_t i      = 0;
             xu_size_t n      = mode >> 3;
-            tb_char_t s[256] = {0};
+            xu_char_t s[256] = {0};
             for (i = 0; i < n; ++i)
                 tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 

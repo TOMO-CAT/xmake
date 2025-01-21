@@ -41,11 +41,11 @@ tb_int_t xm_semver_compare(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the version1 string
-    tb_char_t const* version1_str = luaL_checkstring(lua, 1);
+    xu_char_t const* version1_str = luaL_checkstring(lua, 1);
     tb_check_return_val(version1_str, 0);
 
     // get the version2 string
-    tb_char_t const* version2_str = luaL_checkstring(lua, 2);
+    xu_char_t const* version2_str = luaL_checkstring(lua, 2);
     tb_check_return_val(version2_str, 0);
 
     // try to parse version1 string

@@ -39,14 +39,14 @@ tb_int_t xm_path_absolute(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the path
-    tb_char_t const* path = luaL_checkstring(lua, 1);
+    xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
     // get the root
-    tb_char_t const* root = luaL_optstring(lua, 2, tb_null);
+    xu_char_t const* root = luaL_optstring(lua, 2, tb_null);
 
     // do path:absolute(root)
-    tb_char_t data[TB_PATH_MAXN];
+    xu_char_t data[TB_PATH_MAXN];
     lua_pushstring(lua, tb_path_absolute_to(root, path, data, sizeof(data) - 1));
     return 1;
 }

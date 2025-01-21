@@ -39,7 +39,7 @@ tb_int_t xm_os_argv(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the argument string
-    tb_char_t const* args = luaL_checkstring(lua, 1);
+    xu_char_t const* args = luaL_checkstring(lua, 1);
     tb_check_return_val(args, 0);
 
     // split only? do not escape
@@ -66,9 +66,9 @@ tb_int_t xm_os_argv(lua_State* lua)
         tb_int_t         i      = 1;
         tb_int_t         skip   = 0;
         tb_int_t         escape = 0;
-        tb_char_t        quote  = 0;
-        tb_char_t        ch     = 0;
-        tb_char_t const* p      = args;
+        xu_char_t        quote  = 0;
+        xu_char_t        ch     = 0;
+        xu_char_t const* p      = args;
         while ((ch = *p))
         {
             // no escape now?

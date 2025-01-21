@@ -43,7 +43,7 @@ tb_int_t xm_io_pipe_openpair(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get pipe mode
-    tb_char_t const* modestr = luaL_optstring(lua, 1, "AA");
+    xu_char_t const* modestr = luaL_optstring(lua, 1, "AA");
     tb_assert_and_check_return_val(modestr, 0);
 
     // init mode

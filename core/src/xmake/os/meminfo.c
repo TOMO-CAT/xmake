@@ -47,9 +47,9 @@
  * private implementation
  */
 #ifdef TB_CONFIG_OS_LINUX
-static tb_int64_t xm_os_meminfo_get_value(tb_char_t const* buffer, tb_char_t const* name)
+static tb_int64_t xm_os_meminfo_get_value(xu_char_t const* buffer, xu_char_t const* name)
 {
-    tb_char_t const* p = tb_strstr(buffer, name);
+    xu_char_t const* p = tb_strstr(buffer, name);
     return p ? tb_stoi64(p + tb_strlen(name)) : 0;
 }
 #endif
@@ -91,7 +91,7 @@ static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
         if (fp)
         {
             // 8192 should be enough for the foreseeable future.
-            tb_char_t buffer[8192];
+            xu_char_t buffer[8192];
             size_t    len = fread(buffer, 1, sizeof(buffer) - 1, fp);
             if (!ferror(fp) && len)
             {

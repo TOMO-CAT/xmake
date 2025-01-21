@@ -41,7 +41,7 @@ typedef struct __xm_charset_entry_t
     xu_size_t type;
 
     // the charset name
-    tb_char_t const* name;
+    xu_char_t const* name;
 
 } xm_charset_entry_t, *xm_charset_entry_ref_t;
 
@@ -66,9 +66,9 @@ static xm_charset_entry_t g_charsets[] = {{TB_CHARSET_TYPE_ANSI, "ansi"},
  */
 static tb_long_t xm_string_charset_comp_by_name(tb_iterator_ref_t iterator, tb_cpointer_t item, tb_cpointer_t name)
 {
-    return tb_stricmp(((xm_charset_entry_ref_t)item)->name, (tb_char_t const*)name);
+    return tb_stricmp(((xm_charset_entry_ref_t)item)->name, (xu_char_t const*)name);
 }
-static xm_charset_entry_ref_t xm_string_charset_find_by_name(tb_char_t const* name)
+static xm_charset_entry_ref_t xm_string_charset_find_by_name(xu_char_t const* name)
 {
     // make iterator
     tb_array_iterator_t array_iterator;
@@ -106,9 +106,9 @@ tb_int_t xm_string_convert(lua_State* lua)
 
     // get the string and charset types
     size_t           src_size   = 0;
-    tb_char_t const* src_cstr   = luaL_checklstring(lua, 1, &src_size);
-    tb_char_t const* ftype_cstr = luaL_checkstring(lua, 2);
-    tb_char_t const* ttype_cstr = luaL_checkstring(lua, 3);
+    xu_char_t const* src_cstr   = luaL_checklstring(lua, 1, &src_size);
+    xu_char_t const* ftype_cstr = luaL_checkstring(lua, 2);
+    xu_char_t const* ttype_cstr = luaL_checkstring(lua, 3);
     tb_check_return_val(src_cstr && ftype_cstr && ttype_cstr, 0);
 
     // find charsets
@@ -132,7 +132,7 @@ tb_int_t xm_string_convert(lua_State* lua)
                                              (xu_size_t)src_size, dst_data, dst_maxn)) >= 0 &&
             dst_size < dst_maxn)
         {
-            lua_pushlstring(lua, (tb_char_t const*)dst_data, dst_size);
+            lua_pushlstring(lua, (xu_char_t const*)dst_data, dst_size);
         }
         else
             lua_pushnil(lua);

@@ -65,7 +65,7 @@ static xu_void_t xm_sandbox_report(lua_State* lua)
     if (!lua_isnil(lua, -1))
     {
         // get message
-        tb_char_t const* msg = lua_tostring(lua, -1);
+        xu_char_t const* msg = lua_tostring(lua, -1);
         if (!msg) msg = "(error object is not a string)";
 
         // print it
@@ -134,8 +134,8 @@ static tb_int_t xm_sandbox_incomplete(lua_State* lua, tb_int_t status)
     if (status == LUA_ERRSYNTAX)
     {
         size_t           lmsg;
-        tb_char_t const* msg = lua_tolstring(lua, -1, &lmsg);
-        tb_char_t const* tp  = msg + lmsg - (sizeof(LUA_QL("<eof>")) - 1);
+        xu_char_t const* msg = lua_tolstring(lua, -1, &lmsg);
+        xu_char_t const* tp  = msg + lmsg - (sizeof(LUA_QL("<eof>")) - 1);
         if (tb_strstr(msg, LUA_QL("<eof>")) == tp)
         {
             lua_pop(lua, 1);
@@ -145,11 +145,11 @@ static tb_int_t xm_sandbox_incomplete(lua_State* lua, tb_int_t status)
     return 0;
 }
 // read line
-static xu_size_t xm_sandbox_readline(tb_char_t* data, xu_size_t maxn, tb_char_t const* prompt)
+static xu_size_t xm_sandbox_readline(xu_char_t* data, xu_size_t maxn, xu_char_t const* prompt)
 {
 #ifdef XM_CONFIG_API_HAVE_READLINE
     // get line
-    tb_char_t const* line = readline(prompt);
+    xu_char_t const* line = readline(prompt);
     if (line)
     {
         // add line to history
@@ -182,10 +182,10 @@ static xu_size_t xm_sandbox_readline(tb_char_t* data, xu_size_t maxn, tb_char_t 
 }
 
 // read and push input line
-static tb_int_t xm_sandbox_pushline(lua_State* lua, tb_char_t const* prompt2)
+static tb_int_t xm_sandbox_pushline(lua_State* lua, xu_char_t const* prompt2)
 {
     // read line
-    tb_char_t data[LUA_PROMPT_BUFSIZE];
+    xu_char_t data[LUA_PROMPT_BUFSIZE];
     xu_size_t size = xm_sandbox_readline(data, sizeof(data), prompt2);
     if (size)
     {
@@ -212,17 +212,17 @@ static tb_int_t xm_sandbox_loadline(lua_State* lua, tb_int_t top)
     // get prompt strings from arg1(sandbox_scope)
     lua_pushstring(lua, "$interactive_prompt");
     lua_gettable(lua, 1);
-    tb_char_t const* prompt = lua_tostring(lua, -1);
+    xu_char_t const* prompt = lua_tostring(lua, -1);
     lua_pop(lua, 1);
 
     lua_pushstring(lua, "$interactive_prompt2");
     lua_gettable(lua, 1);
-    tb_char_t const* prompt2 = lua_tostring(lua, -1);
+    xu_char_t const* prompt2 = lua_tostring(lua, -1);
     lua_pop(lua, 1);
 
     // read first line
     tb_int_t  status;
-    tb_char_t data[LUA_PROMPT_BUFSIZE];
+    xu_char_t data[LUA_PROMPT_BUFSIZE];
     xu_size_t size = xm_sandbox_readline(data + 7, sizeof(data) - 7, prompt);
     if (size)
     {

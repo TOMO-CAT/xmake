@@ -119,7 +119,7 @@ xu_void_t xm_exit()
 xu_version_t const* xm_version()
 {
     // init version tag for binary search
-    static __tb_volatile__ tb_char_t const* s_vtag = "[xmake]: [vtag]: " XM_VERSION_STRING;
+    static __tb_volatile__ xu_char_t const* s_vtag = "[xmake]: [vtag]: " XM_VERSION_STRING;
     tb_used(s_vtag);
 
     // init version

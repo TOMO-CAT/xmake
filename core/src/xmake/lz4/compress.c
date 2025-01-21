@@ -53,7 +53,7 @@ tb_int_t xm_lz4_compress(lua_State* lua)
 
     // do compress
     xu_bool_t        ok          = xu_false;
-    tb_char_t const* error       = tb_null;
+    xu_char_t const* error       = tb_null;
     tb_byte_t*       output_data = tb_null;
     tb_byte_t        buffer[8192];
     do
@@ -71,7 +71,7 @@ tb_int_t xm_lz4_compress(lua_State* lua)
             break;
         }
 
-        lua_pushlstring(lua, (tb_char_t const*)output_data, real_or_errs);
+        lua_pushlstring(lua, (xu_char_t const*)output_data, real_or_errs);
         ok = xu_true;
     } while (0);
 

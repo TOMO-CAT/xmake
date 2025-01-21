@@ -57,7 +57,7 @@ tb_int_t xm_hash_md5(lua_State* lua)
 
         // make md5 string
         xu_size_t i      = 0;
-        tb_char_t s[256] = {0};
+        xu_char_t s[256] = {0};
         for (i = 0; i < 16; ++i)
             tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
@@ -67,7 +67,7 @@ tb_int_t xm_hash_md5(lua_State* lua)
     }
 
     // get the filename
-    tb_char_t const* filename = luaL_checkstring(lua, 1);
+    xu_char_t const* filename = luaL_checkstring(lua, 1);
     tb_check_return_val(filename, 0);
 
     // load data from file
@@ -112,7 +112,7 @@ tb_int_t xm_hash_md5(lua_State* lua)
 
             // make md5 string
             xu_size_t i      = 0;
-            tb_char_t s[256] = {0};
+            xu_char_t s[256] = {0};
             for (i = 0; i < 16; ++i)
                 tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 

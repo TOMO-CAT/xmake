@@ -66,7 +66,7 @@ tb_int_t xm_io_socket_sendto(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // get address
-    tb_char_t const* addr = lua_tostring(lua, 4);
+    xu_char_t const* addr = lua_tostring(lua, 4);
     tb_uint16_t      port = (tb_uint16_t)luaL_checknumber(lua, 5);
     if (!addr || !port)
     {

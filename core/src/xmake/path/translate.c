@@ -40,7 +40,7 @@ tb_int_t xm_path_translate(lua_State* lua)
 
     // get the path
     size_t           path_size = 0;
-    tb_char_t const* path      = luaL_checklstring(lua, 1, &path_size);
+    xu_char_t const* path      = luaL_checklstring(lua, 1, &path_size);
     tb_check_return_val(path, 0);
 
     // get the option argument, e.g. {normalize = true}
@@ -54,7 +54,7 @@ tb_int_t xm_path_translate(lua_State* lua)
     }
 
     // do path:translate()
-    tb_char_t data[TB_PATH_MAXN];
+    xu_char_t data[TB_PATH_MAXN];
     xu_size_t size = tb_path_translate_to(path, (xu_size_t)path_size, data, sizeof(data), normalize);
     if (size)
         lua_pushlstring(lua, data, (size_t)size);

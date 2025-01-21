@@ -33,13 +33,13 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xu_void_t xm_string_trim_space(tb_char_t const** psstr, tb_char_t const** pestr, tb_int_t mode)
+static xu_void_t xm_string_trim_space(xu_char_t const** psstr, xu_char_t const** pestr, tb_int_t mode)
 {
     // check
     tb_assert(psstr && pestr && *psstr && *pestr);
 
-    tb_char_t const* p = *psstr;
-    tb_char_t const* e = *pestr;
+    xu_char_t const* p = *psstr;
+    xu_char_t const* e = *pestr;
 
     // trim left?
     if (mode <= 0)
@@ -60,25 +60,25 @@ static xu_void_t xm_string_trim_space(tb_char_t const** psstr, tb_char_t const**
     *pestr = e;
 }
 
-static tb_char_t const* xm_string_ltrim(tb_char_t const* sstr, tb_char_t const* estr, tb_char_t const* ctrim,
+static xu_char_t const* xm_string_ltrim(xu_char_t const* sstr, xu_char_t const* estr, xu_char_t const* ctrim,
                                         size_t ntrim)
 {
     // check
     tb_assert(sstr && estr && ctrim);
 
-    tb_char_t const* p = sstr;
+    xu_char_t const* p = sstr;
     while (p < estr && tb_strnchr(ctrim, ntrim, *p))
         p++;
     return p;
 }
 
-static tb_char_t const* xm_string_rtrim(tb_char_t const* sstr, tb_char_t const* estr, tb_char_t const* ctrim,
+static xu_char_t const* xm_string_rtrim(xu_char_t const* sstr, xu_char_t const* estr, xu_char_t const* ctrim,
                                         size_t ntrim)
 {
     // check
     tb_assert(sstr && estr && ctrim);
 
-    tb_char_t const* p = estr - 1;
+    xu_char_t const* p = estr - 1;
     while (p >= sstr && tb_strnchr(ctrim, ntrim, *p))
         p--;
     return p + 1;
@@ -105,17 +105,17 @@ tb_int_t xm_string_trim(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     size_t           lstr, ltrim;
-    tb_char_t const* sstr      = luaL_checklstring(lua, 1, &lstr);
-    tb_char_t const* estr      = sstr + lstr;
-    tb_char_t const* trimchars = luaL_optlstring(lua, 2, "", &ltrim);
+    xu_char_t const* sstr      = luaL_checklstring(lua, 1, &lstr);
+    xu_char_t const* estr      = sstr + lstr;
+    xu_char_t const* trimchars = luaL_optlstring(lua, 2, "", &ltrim);
     tb_int_t const   trimtype  = (tb_int_t)luaL_optinteger(lua, 3, 0);
     do
     {
         tb_assert_and_check_break(sstr && trimchars);
         tb_check_break(lstr != 0);
 
-        tb_char_t const* const rsstr = sstr;
-        tb_char_t const* const restr = estr;
+        xu_char_t const* const rsstr = sstr;
+        xu_char_t const* const restr = estr;
         if (ltrim == 0)
             xm_string_trim_space(&sstr, &estr, trimtype);
         else

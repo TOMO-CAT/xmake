@@ -39,8 +39,8 @@ tb_int_t xm_lz4_decompress_file(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the file paths
-    tb_char_t const* srcpath = luaL_checkstring(lua, 1);
-    tb_char_t const* dstpath = luaL_checkstring(lua, 2);
+    xu_char_t const* srcpath = luaL_checkstring(lua, 1);
+    xu_char_t const* dstpath = luaL_checkstring(lua, 2);
     tb_check_return_val(srcpath && dstpath, 0);
 
     // init lz4 stream

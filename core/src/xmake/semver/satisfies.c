@@ -44,8 +44,8 @@ tb_int_t xm_semver_satisfies(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the version string
-    tb_char_t const* version_str = luaL_checkstring(lua, 1);
-    tb_char_t const* range_str   = luaL_checkstring(lua, 2);
+    xu_char_t const* version_str = luaL_checkstring(lua, 1);
+    xu_char_t const* range_str   = luaL_checkstring(lua, 2);
     tb_assert_and_check_return_val(version_str && range_str, 0);
 
     // parse the version range string

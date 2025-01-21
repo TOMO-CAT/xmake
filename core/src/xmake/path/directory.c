@@ -39,12 +39,12 @@ tb_int_t xm_path_directory(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the path
-    tb_char_t const* path = luaL_checkstring(lua, 1);
+    xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
     // do path:directory()
-    tb_char_t data[TB_PATH_MAXN];
-    tb_char_t const* dir = tb_path_directory(path, data, sizeof(data));
+    xu_char_t data[TB_PATH_MAXN];
+    xu_char_t const* dir = tb_path_directory(path, data, sizeof(data));
     if (dir) lua_pushstring(lua, dir);
     else lua_pushnil(lua);
     return 1;

@@ -40,8 +40,8 @@ tb_int_t xm_string_startswith(lua_State* lua)
 
     // get the string and prefix
     size_t           prefix_size = 0;
-    tb_char_t const* string      = luaL_checkstring(lua, 1);
-    tb_char_t const* prefix      = luaL_checklstring(lua, 2, &prefix_size);
+    xu_char_t const* string      = luaL_checkstring(lua, 1);
+    xu_char_t const* prefix      = luaL_checklstring(lua, 2, &prefix_size);
     tb_check_return_val(string && prefix, 0);
 
     // string:startswith(prefix)?
