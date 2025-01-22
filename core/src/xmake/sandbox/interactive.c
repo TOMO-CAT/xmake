@@ -156,7 +156,7 @@ static xu_size_t xm_sandbox_readline(xu_char_t* data, xu_size_t maxn, xu_char_t 
         add_history(line);
 
         // copy line to data
-        xu_size_t size = tb_strlcpy(data, line, maxn);
+        xu_size_t size = xu_strlcpy(data, line, maxn);
 
         // free line
         free((void*)line);

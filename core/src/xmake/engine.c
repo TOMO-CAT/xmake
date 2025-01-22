@@ -541,7 +541,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
         {
             if (info.type == B_APP_IMAGE)
             {
-                tb_strlcpy(path, info.name, maxn);
+                xu_strlcpy(path, info.name, maxn);
                 ok = xu_true;
                 break;
             }
@@ -553,7 +553,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
             xu_char_t const* p = s_paths[i];
             if (tb_file_info(p, xu_null))
             {
-                tb_strlcpy(path, p, maxn);
+                xu_strlcpy(path, p, maxn);
                 ok = xu_true;
                 break;
             }
@@ -610,11 +610,11 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
                     xu_char_t const* rootdir = tb_path_directory(programfile, buff, sizeof(buff));
                     if (rootdir && tb_path_absolute_to(rootdir, programpath, path,
                                                        maxn)) // @note path and programfile are same buffer
-                        tb_strlcpy(programpath, path, maxn);
+                        xu_strlcpy(programpath, path, maxn);
                 }
             }
             else
-                tb_strlcpy(programpath, programfile, sizeof(programpath));
+                xu_strlcpy(programpath, programfile, sizeof(programpath));
 #else
             xu_char_t const* programpath = programfile;
 #endif
@@ -852,7 +852,7 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
         tb_assert_and_check_break(engine);
 
         // init name
-        tb_strlcpy(engine->name, name, sizeof(engine->name));
+        xu_strlcpy(engine->name, name, sizeof(engine->name));
 
         // init lua
         engine->lua = luaL_newstate();
