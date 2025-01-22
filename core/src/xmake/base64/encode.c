@@ -52,7 +52,7 @@ tb_int_t xm_base64_encode(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // encode it
-    tb_char_t buff[8192];
+    xu_char_t buff[8192];
     if (size * 3 / 2 < sizeof(buff))
     {
         xu_size_t real = tb_base64_encode(data, size, buff, sizeof(buff));

@@ -40,7 +40,7 @@ tb_int_t xm_libc_memset(lua_State* lua)
 
     // do memset
     tb_pointer_t data = (tb_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
-    tb_char_t    ch   = (tb_char_t)lua_tointeger(lua, 2);
+    xu_char_t    ch   = (xu_char_t)lua_tointeger(lua, 2);
     tb_int_t     size = (tb_int_t)lua_tointeger(lua, 3);
     if (data && size > 0) tb_memset(data, ch, size);
     return 0;

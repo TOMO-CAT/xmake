@@ -85,8 +85,8 @@ tb_int_t xm_io_socket_recvfrom(lua_State* lua)
         lua_pushnil(lua);
         if (!tb_ipaddr_is_empty(&ipaddr))
         {
-            tb_char_t        buffer[256];
-            tb_char_t const* ipstr = tb_ipaddr_ip_cstr(&ipaddr, buffer, sizeof(buffer));
+            xu_char_t        buffer[256];
+            xu_char_t const* ipstr = tb_ipaddr_ip_cstr(&ipaddr, buffer, sizeof(buffer));
             if (ipstr)
             {
                 lua_pushstring(lua, ipstr);

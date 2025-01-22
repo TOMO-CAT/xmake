@@ -43,8 +43,8 @@ tb_int_t xm_io_pipe_open(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get pipe name and mode
-    tb_char_t const* name    = luaL_checkstring(lua, 1);
-    tb_char_t const* modestr = luaL_optstring(lua, 2, "r");
+    xu_char_t const* name    = luaL_checkstring(lua, 1);
+    xu_char_t const* modestr = luaL_optstring(lua, 2, "r");
     tb_assert_and_check_return_val(name && modestr, 0);
 
     // get pipe mode value

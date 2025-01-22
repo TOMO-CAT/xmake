@@ -84,7 +84,7 @@ tb_int_t xm_lz4_decompress(lua_State* lua)
         }
         tb_assert_and_check_break(!failed && tb_buffer_size(&result));
 
-        lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&result), tb_buffer_size(&result));
+        lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&result), tb_buffer_size(&result));
         ok = xu_true;
     } while (0);
 
@@ -97,7 +97,7 @@ tb_int_t xm_lz4_decompress(lua_State* lua)
 
     if (!ok)
     {
-        tb_char_t const* error = LZ4F_getErrorName(code);
+        xu_char_t const* error = LZ4F_getErrorName(code);
         lua_pushnil(lua);
         lua_pushstring(lua, error ? error : "unknown");
         return 2;

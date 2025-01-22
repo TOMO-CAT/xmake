@@ -39,9 +39,9 @@ tb_int_t xm_libc_strndup(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // do strndup
-    tb_char_t const* s = tb_null;
+    xu_char_t const* s = tb_null;
     if (lua_isnumber(lua, 1))
-        s = (tb_char_t const*)(xu_size_t)lua_tointeger(lua, 1);
+        s = (xu_char_t const*)(xu_size_t)lua_tointeger(lua, 1);
     else if (lua_isstring(lua, 2))
         s = lua_tostring(lua, 2);
     else

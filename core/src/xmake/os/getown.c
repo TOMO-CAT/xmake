@@ -42,7 +42,7 @@ tb_int_t xm_os_getown(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the pathname
-    tb_char_t const* pathname = luaL_checkstring(lua, 1);
+    xu_char_t const* pathname = luaL_checkstring(lua, 1);
     tb_check_return_val(pathname, 0);
 
     // get stat

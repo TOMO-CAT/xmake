@@ -39,7 +39,7 @@ tb_int_t xm_path_is_absolute(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the path
-    tb_char_t const* path = luaL_checkstring(lua, 1);
+    xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
     // path:is_absolute()

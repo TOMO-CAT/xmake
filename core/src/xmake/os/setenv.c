@@ -41,8 +41,8 @@ tb_int_t xm_os_setenv(lua_State* lua)
 
     // get the name and value
     size_t              value_size = 0;
-    tb_char_t const*    name = luaL_checkstring(lua, 1);
-    tb_char_t const*    value = luaL_checklstring(lua, 2, &value_size);
+    xu_char_t const*    name = luaL_checkstring(lua, 1);
+    xu_char_t const*    value = luaL_checklstring(lua, 2, &value_size);
     tb_check_return_val(name, 0);
 
     // set it

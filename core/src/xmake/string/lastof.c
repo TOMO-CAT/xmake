@@ -33,12 +33,12 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static xu_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t const* csubstr,
+static xu_void_t xm_string_lastof_str(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t const* csubstr,
                                       xu_size_t nsubstr)
 {
     // find it
-    tb_char_t const* curr = tb_null;
-    tb_char_t const* next = cstr;
+    xu_char_t const* curr = tb_null;
+    xu_char_t const* next = cstr;
     do
     {
         next = tb_strstr(next, csubstr); // faster than tb_strnstr()
@@ -56,9 +56,9 @@ static xu_void_t xm_string_lastof_str(lua_State* lua, tb_char_t const* cstr, xu_
     else
         lua_pushnil(lua);
 }
-static xu_void_t xm_string_lastof_chr(lua_State* lua, tb_char_t const* cstr, xu_size_t nstr, tb_char_t ch)
+static xu_void_t xm_string_lastof_chr(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t ch)
 {
-    tb_char_t const* pos = tb_strrchr(cstr, ch); // faster than tb_strnrchr()
+    xu_char_t const* pos = tb_strrchr(cstr, ch); // faster than tb_strnrchr()
     if (pos)
         lua_pushinteger(lua, pos - cstr + 1);
     else
@@ -81,11 +81,11 @@ tb_int_t xm_string_lastof(lua_State* lua)
 
     // get string
     size_t           nstr = 0;
-    tb_char_t const* cstr = luaL_checklstring(lua, 1, &nstr);
+    xu_char_t const* cstr = luaL_checklstring(lua, 1, &nstr);
 
     // get substring
     size_t           nsubstr = 0;
-    tb_char_t const* csubstr = luaL_checklstring(lua, 2, &nsubstr);
+    xu_char_t const* csubstr = luaL_checklstring(lua, 2, &nsubstr);
 
     // lastof it
     lua_newtable(lua);

@@ -43,10 +43,10 @@ tb_int_t xm_readline_readline(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the prompt
-    tb_char_t const* prompt = luaL_optstring(lua, 1, tb_null);
+    xu_char_t const* prompt = luaL_optstring(lua, 1, tb_null);
 
     // call readline
-    tb_char_t* line = readline(prompt);
+    xu_char_t* line = readline(prompt);
     if (line)
     {
         // return line

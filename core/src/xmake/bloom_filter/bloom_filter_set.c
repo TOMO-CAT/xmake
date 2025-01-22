@@ -46,7 +46,7 @@ tb_int_t xm_bloom_filter_set(lua_State* lua)
     tb_check_return_val(filter, 0);
 
     // get item
-    tb_char_t const* item = luaL_checkstring(lua, 2);
+    xu_char_t const* item = luaL_checkstring(lua, 2);
     tb_assert_and_check_return_val(item, 0);
 
     // set item

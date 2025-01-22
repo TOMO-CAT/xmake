@@ -46,7 +46,7 @@ tb_int_t xm_os_getenv(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the name
-    tb_char_t const* name = luaL_checkstring(lua, 1);
+    xu_char_t const* name = luaL_checkstring(lua, 1);
     tb_check_return_val(name, 0);
 
     // init values
@@ -62,7 +62,7 @@ tb_int_t xm_os_getenv(lua_State* lua)
         {
             // make values
             xu_bool_t is_first = xu_true;
-            tb_for_all_if(tb_char_t const*, value, environment, value)
+            tb_for_all_if(xu_char_t const*, value, environment, value)
             {
                 // append separator
                 if (!is_first)

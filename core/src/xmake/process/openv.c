@@ -60,7 +60,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     }
 
     // get shellname
-    tb_char_t const* shellname = lua_tostring(lua, 1);
+    xu_char_t const* shellname = lua_tostring(lua, 1);
     tb_check_return_val(shellname, 0);
 
     // get the arguments count
@@ -69,7 +69,7 @@ tb_int_t xm_process_openv(lua_State* lua)
 
     // get arguments
     xu_size_t         argi = 0;
-    tb_char_t const** argv = tb_nalloc0_type(1 + argn + 1, tb_char_t const*);
+    xu_char_t const** argv = tb_nalloc0_type(1 + argn + 1, xu_char_t const*);
     tb_check_return_val(argv, 0);
 
     // fill arguments
@@ -111,10 +111,10 @@ tb_int_t xm_process_openv(lua_State* lua)
     // get option arguments
     xu_bool_t          exclusive  = xu_false;
     xu_size_t          envn       = 0;
-    tb_char_t const*   envs[1024] = {0};
-    tb_char_t const*   inpath     = tb_null;
-    tb_char_t const*   outpath    = tb_null;
-    tb_char_t const*   errpath    = tb_null;
+    xu_char_t const*   envs[1024] = {0};
+    xu_char_t const*   inpath     = tb_null;
+    xu_char_t const*   outpath    = tb_null;
+    xu_char_t const*   errpath    = tb_null;
     xm_io_file_t*      infile     = tb_null;
     xm_io_file_t*      outfile    = tb_null;
     xm_io_file_t*      errfile    = tb_null;

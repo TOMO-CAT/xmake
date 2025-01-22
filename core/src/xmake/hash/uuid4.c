@@ -39,10 +39,10 @@ tb_int_t xm_hash_uuid4(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the name
-    tb_char_t const* name = luaL_optstring(lua, 1, tb_null);
+    xu_char_t const* name = luaL_optstring(lua, 1, tb_null);
 
     // make uuid, use version 4
-    tb_char_t uuid[37];
+    xu_char_t uuid[37];
 	lua_pushstring(lua, tb_uuid4_make_cstr(uuid, name));
     return 1;
 }

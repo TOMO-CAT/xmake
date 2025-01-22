@@ -6,6 +6,7 @@
 
 * [#131](https://github.com/TOMO-CAT/xmake/issues/131): 支持传递参数控制是否编译 luajit 版本
 * [#140](https://github.com/TOMO-CAT/xmake/issues/140): 支持 io.popen 调用, 运行带管道符的复杂 shell 命令
+* [#154](https://github.com/TOMO-CAT/xmake/issues/154): ubuntu-arm workflow 运行在原生 arm 机器上提升流水线速度
 
 ### Bugs 修复
 

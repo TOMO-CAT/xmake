@@ -48,7 +48,7 @@ tb_int_t xm_fwatcher_add(lua_State* lua)
     tb_check_return_val(fwatcher, 0);
 
     // get watchdir
-    tb_char_t const* watchdir = luaL_checkstring(lua, 2);
+    xu_char_t const* watchdir = luaL_checkstring(lua, 2);
     tb_check_return_val(watchdir, 0);
 
     // get recursion

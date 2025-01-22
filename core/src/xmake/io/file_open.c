@@ -175,8 +175,8 @@ tb_int_t xm_io_file_open(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get file path and mode
-    tb_char_t const* path    = luaL_checkstring(lua, 1);
-    tb_char_t const* modestr = luaL_optstring(lua, 2, "r");
+    xu_char_t const* path    = luaL_checkstring(lua, 1);
+    xu_char_t const* modestr = luaL_optstring(lua, 2, "r");
     tb_assert_and_check_return_val(path && modestr, 0);
 
     // get file mode value

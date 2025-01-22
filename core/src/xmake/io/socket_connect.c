@@ -53,7 +53,7 @@ tb_int_t xm_io_socket_connect(lua_State* lua)
     tb_check_return_val(sock, 0);
 
     // get address
-    tb_char_t const* address = lua_tostring(lua, 2);
+    xu_char_t const* address = lua_tostring(lua, 2);
     tb_assert_and_check_return_val(address, 0);
 
     // get family

@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
+static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     tb_value_ref_t tuple = (tb_value_ref_t)priv;
@@ -44,7 +44,7 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
     tb_assert_and_check_return_val(lua, TB_DIRECTORY_WALK_CODE_END);
 
     // the pattern
-    tb_char_t const* pattern = (tb_char_t const*)tuple[1].cstr;
+    xu_char_t const* pattern = (xu_char_t const*)tuple[1].cstr;
     tb_assert_and_check_return_val(pattern, TB_DIRECTORY_WALK_CODE_END);
 
     // remove ./ for path
@@ -86,7 +86,7 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
         {
             // the root directory
             size_t           rootlen = 0;
-            tb_char_t const* rootdir = luaL_checklstring(lua, 1, &rootlen);
+            xu_char_t const* rootdir = luaL_checklstring(lua, 1, &rootlen);
             tb_assert_and_check_return_val(rootdir && rootlen, TB_DIRECTORY_WALK_CODE_END);
 
             // check
@@ -103,7 +103,7 @@ static tb_long_t xm_os_find_walk(tb_char_t const* path, tb_file_info_t const* in
             {
                 // get exclude
                 lua_rawgeti(lua, 5, i + 1);
-                tb_char_t const* exclude = lua_tostring(lua, -1);
+                xu_char_t const* exclude = lua_tostring(lua, -1);
                 if (exclude)
                 {
                     // do path:match(exclude)
@@ -171,11 +171,11 @@ tb_int_t xm_os_find(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the root directory
-    tb_char_t const* rootdir = luaL_checkstring(lua, 1);
+    xu_char_t const* rootdir = luaL_checkstring(lua, 1);
     tb_check_return_val(rootdir, 0);
 
     // get the pattern
-    tb_char_t const* pattern = luaL_checkstring(lua, 2);
+    xu_char_t const* pattern = luaL_checkstring(lua, 2);
     tb_check_return_val(pattern, 0);
 
     // the recursion level

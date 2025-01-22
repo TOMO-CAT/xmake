@@ -33,7 +33,7 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
-static tb_long_t xm_os_emptydir_walk(tb_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
+static tb_long_t xm_os_emptydir_walk(xu_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     xu_bool_t* is_emptydir = (xu_bool_t*)priv;
@@ -57,7 +57,7 @@ tb_int_t xm_os_emptydir(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the directory
-    tb_char_t const* dir = luaL_checkstring(lua, 1);
+    xu_char_t const* dir = luaL_checkstring(lua, 1);
     tb_check_return_val(dir, 0);
 
     // os.emptydir(dir)

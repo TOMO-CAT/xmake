@@ -39,8 +39,8 @@ tb_int_t xm_os_cpdir(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // get the source and destination
-    tb_char_t const* src = luaL_checkstring(lua, 1);
-    tb_char_t const* dst = luaL_checkstring(lua, 2);
+    xu_char_t const* src = luaL_checkstring(lua, 1);
+    xu_char_t const* dst = luaL_checkstring(lua, 2);
     tb_check_return_val(src && dst, 0);
 
     // init copy flags

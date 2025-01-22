@@ -60,7 +60,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
         tb_long_t real = tb_stream_peek(stream, &data, TB_STREAM_BLOCK_MAXN);
         if (real > 0)
         {
-            tb_char_t const* e = tb_strnchr((tb_char_t const*)data, real, '\n');
+            xu_char_t const* e = tb_strnchr((xu_char_t const*)data, real, '\n');
             if (e)
             {
                 xu_size_t n = (tb_byte_t const*)e + 1 - data;
@@ -97,7 +97,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     else
         return (eof || tb_stream_beof(stream)) ? -1 : 0;
 }
-static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, tb_char_t const* continuation,
+static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, xu_char_t const* continuation,
                                            xu_bool_t keep_crlf)
 {
     // check
@@ -119,7 +119,7 @@ static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 
     // translate line data
     tb_int_t   result = PL_FAIL;
-    tb_char_t* data   = tb_null;
+    xu_char_t* data   = tb_null;
     xu_size_t  conlen = tb_strlen(continuation);
     do
     {
@@ -134,7 +134,7 @@ static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
         tb_buffer_memncat(&file->rcache, (tb_byte_t const*)"\0\0", 2);
 
         // get line data
-        data = (tb_char_t*)tb_buffer_data(&file->rcache);
+        data = (xu_char_t*)tb_buffer_data(&file->rcache);
         tb_assert_and_check_break(data);
 
         // no lf found
@@ -151,7 +151,7 @@ static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 
             // has continuation?
             xu_bool_t has_conline = conlen && size >= conlen + 1 &&
-                                    tb_strncmp(continuation, (tb_char_t const*)(data + size - conlen - 1), conlen) == 0;
+                                    tb_strncmp(continuation, (xu_char_t const*)(data + size - conlen - 1), conlen) == 0;
 
             // do not keep crlf, strip the last lf
             if (!keep_crlf && !has_conline) size--;
@@ -205,13 +205,13 @@ static tb_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
     }
 
     if (tb_buffer_size(&buf))
-        lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
+        lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
     else
         lua_pushliteral(lua, "");
     tb_buffer_exit(&buf);
     return 1;
 }
-static tb_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, tb_char_t const* continuation)
+static tb_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
@@ -234,7 +234,7 @@ static tb_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, tb_char_
             if (!has_content)
                 lua_pushliteral(lua, "");
             else
-                lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
+                lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
             tb_buffer_exit(&buf);
             return 1;
         case PL_FIN:
@@ -248,7 +248,7 @@ static tb_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, tb_char_
     }
 }
 
-static tb_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, tb_char_t const* continuation,
+static tb_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation,
                                      xu_bool_t keep_crlf)
 {
     // check
@@ -268,11 +268,11 @@ static tb_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, tb_char
             if (!has_content)
                 lua_pushnil(lua);
             else
-                lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
+                lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
             tb_buffer_exit(&buf);
             return 1;
         case PL_FIN:
-            lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
+            lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
             tb_buffer_exit(&buf);
             return 1;
         case PL_CONL: has_content = xu_true; continue;
@@ -285,7 +285,7 @@ static tb_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, tb_char
     }
 }
 
-static tb_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, tb_char_t const* continuation, tb_long_t n)
+static tb_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
@@ -314,7 +314,7 @@ static tb_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, tb_char_t 
         {
             if (tb_stream_bread(file->u.file_ref, bufptr, n))
             {
-                lua_pushlstring(lua, (tb_char_t const*)bufptr, n);
+                lua_pushlstring(lua, (xu_char_t const*)bufptr, n);
                 ok = xu_true;
             }
         }
@@ -323,14 +323,14 @@ static tb_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, tb_char_t 
     return 1;
 }
 
-static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, tb_char_t const* continuation,
+static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, xu_char_t const* continuation,
                                                 xu_bool_t keep_crlf)
 {
     // check
     tb_assert(buf && file && continuation && xm_io_file_is_std(file));
 
     // get input buffer
-    tb_char_t strbuf[8192];
+    xu_char_t strbuf[8192];
     xu_size_t buflen = 0;
     xu_size_t result = PL_FAIL;
     if (tb_stdfile_gets(file->u.std_ref, strbuf, tb_arrayn(strbuf) - 1))
@@ -377,7 +377,7 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
     return result;
 }
 
-static tb_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, tb_char_t const* continuation,
+static tb_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation,
                                          xu_bool_t keep_crlf)
 {
     // check
@@ -397,11 +397,11 @@ static tb_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, tb_
             if (!has_content)
                 lua_pushnil(lua);
             else
-                lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
+                lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
             tb_buffer_exit(&buf);
             return 1;
         case PL_FIN:
-            lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
+            lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
             tb_buffer_exit(&buf);
             return 1;
         case PL_CONL: has_content = xu_true; continue;
@@ -414,7 +414,7 @@ static tb_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, tb_
     }
 }
 
-static tb_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, tb_char_t const* continuation)
+static tb_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_std(file));
@@ -433,7 +433,7 @@ static tb_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, tb_c
             if (!has_content)
                 lua_pushliteral(lua, "");
             else
-                lua_pushlstring(lua, (tb_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
+                lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&buf), tb_buffer_size(&buf));
             tb_buffer_exit(&buf);
             return 1;
         case PL_FIN:
@@ -447,7 +447,7 @@ static tb_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, tb_c
     }
 }
 
-static tb_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, tb_char_t const* continuation, tb_long_t n)
+static tb_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_std(file));
@@ -458,7 +458,7 @@ static tb_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, tb_cha
     // io.read(0)
     if (n == 0)
     {
-        tb_char_t ch;
+        xu_char_t ch;
         if (!tb_stdfile_peek(file->u.std_ref, &ch))
             lua_pushnil(lua);
         else
@@ -472,13 +472,13 @@ static tb_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, tb_cha
 
     // io.read(n)
     if (tb_stdfile_read(file->u.std_ref, buf_ptr, (xu_size_t)n))
-        lua_pushlstring(lua, (tb_char_t const*)buf_ptr, (size_t)n);
+        lua_pushlstring(lua, (xu_char_t const*)buf_ptr, (size_t)n);
     else
         lua_pushnil(lua);
     return 1;
 }
 
-static tb_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, tb_char_t const* continuation)
+static tb_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_std(file));
@@ -487,7 +487,7 @@ static tb_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, tb_c
     if (*continuation != '\0') xm_io_return_error(lua, "continuation is not supported for std streams");
 
     // read number
-    tb_char_t strbuf[512];
+    xu_char_t strbuf[512];
     if (tb_stdfile_gets(file->u.std_ref, strbuf, tb_arrayn(strbuf)))
         lua_pushnumber(lua, tb_s10tod(strbuf)); // TODO check invalid float number string and push nil
     else
@@ -515,8 +515,8 @@ tb_int_t xm_io_file_read(lua_State* lua)
     tb_check_return_val(file, 0);
 
     // get arguments
-    tb_char_t const* mode         = luaL_optstring(lua, 2, "l");
-    tb_char_t const* continuation = luaL_optstring(lua, 3, "");
+    xu_char_t const* mode         = luaL_optstring(lua, 2, "l");
+    xu_char_t const* continuation = luaL_optstring(lua, 3, "");
     tb_assert_and_check_return_val(mode && continuation, 0);
 
     tb_long_t count = -1;

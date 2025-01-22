@@ -1,4 +1,4 @@
-name: Run Example Script
+name: Linux (Arm64)
 
 on:
   pull_request:
@@ -9,25 +9,30 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04-arm
+
+    concurrency:
+        group: ${{ github.ref }}-${{ github.base_ref }}-${{ github.head_ref }}-Ubuntu-Arm64
+        cancel-in-progress: false
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Prepare Local Xmake
+      - name: prepare local xmake
         run: cp -rf . ../xmake-source
       - uses: xmake-io/github-action-setup-xmake@v1
         with:
           xmake-version: local#../xmake-source
-      - name: Prepare Environment
+
+      - name: Prepare
         run: |
           sudo apt update
-          sudo apt install -y build-essential lcov
-          sudo apt install -y ccache
-      - name: Run Examples
+          sudo apt install -y unzip build-essential llvm libc++-dev
+      - name: Tests
         env:
           XMAKE_ROOT: y
           XMAKE_MAIN_REPO: https://github.com/TOMO-CAT/xmake-repo.git
           XMAKE_BINARY_REPO: https://github.com/TOMO-CAT/xmake-build-artifacts.git
         run: |
-          bash scripts/example.sh
+          xmake lua -v -D tests/run.lua
+          xrepo --version
