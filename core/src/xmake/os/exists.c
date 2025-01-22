@@ -43,6 +43,6 @@ xu_int_t xm_os_exists(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // os.exists(path)
-    lua_pushboolean(lua, tb_file_info(path, xu_null));
+    lua_pushboolean(lua, xu_file_info(path, xu_null));
     return 1;
 }

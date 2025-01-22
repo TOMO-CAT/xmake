@@ -43,8 +43,8 @@ xu_int_t xm_os_mtime(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // os.mtime(path)
-    tb_file_info_t info = {0};
-    if (tb_file_info(path, &info))
+    xu_file_info_t info = {0};
+    if (xu_file_info(path, &info))
         lua_pushinteger(lua, (lua_Integer)info.mtime);
     else lua_pushinteger(lua, 0);
     return 1;

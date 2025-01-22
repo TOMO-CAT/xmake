@@ -44,11 +44,11 @@ xu_int_t xm_os_readlink(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // is link?
-    xu_char_t srcpath[TB_PATH_MAXN];
-    tb_long_t size = readlink(path, srcpath, TB_PATH_MAXN);
-    if (size == TB_PATH_MAXN)
+    xu_char_t srcpath[XU_PATH_MAXN];
+    tb_long_t size = readlink(path, srcpath, XU_PATH_MAXN);
+    if (size == XU_PATH_MAXN)
     {
-        xu_size_t  maxn = TB_PATH_MAXN * 2;
+        xu_size_t  maxn = XU_PATH_MAXN * 2;
         xu_char_t* data = (xu_char_t*)tb_malloc(maxn);
         if (data)
         {
@@ -63,7 +63,7 @@ xu_int_t xm_os_readlink(lua_State* lua)
             tb_free(data);
         }
     }
-    else if (size >= 0 && size < TB_PATH_MAXN)
+    else if (size >= 0 && size < XU_PATH_MAXN)
     {
         srcpath[size] = '\0';
         lua_pushstring(lua, srcpath);

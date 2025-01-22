@@ -84,7 +84,7 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
      *
      * @see https://github.com/rfjakob/earlyoom/blob/cba1d599e4a7484c45ac017aa7702ff879f15846/meminfo.c#L52
      */
-    if (tb_file_info("/proc/meminfo", xu_null))
+    if (xu_file_info("/proc/meminfo", xu_null))
     {
         xu_bool_t ok = xu_false;
         FILE*     fp = fopen("/proc/meminfo", "r");

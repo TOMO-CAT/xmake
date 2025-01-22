@@ -494,7 +494,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
     do
     {
         // get it from the environment variable first
-        if (xu_environment_first("XMAKE_PROGRAM_FILE", path, maxn) && tb_file_info(path, xu_null))
+        if (xu_environment_first("XMAKE_PROGRAM_FILE", path, maxn) && xu_file_info(path, xu_null))
         {
             ok = xu_true;
             break;
@@ -551,7 +551,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
         for (xu_size_t i = 0; i < xu_arrayn(s_paths); i++)
         {
             xu_char_t const* p = s_paths[i];
-            if (tb_file_info(p, xu_null))
+            if (xu_file_info(p, xu_null))
             {
                 xu_strlcpy(path, p, maxn);
                 ok = xu_true;
@@ -585,7 +585,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
     do
     {
         // get it from the environment variable first
-        xu_char_t data[TB_PATH_MAXN] = {0};
+        xu_char_t data[XU_PATH_MAXN] = {0};
         if (xu_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && tb_path_absolute(data, path, maxn))
         {
             ok = xu_true;
@@ -597,7 +597,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
         {
             // get real program file path from the symbol link
 #if !defined(XU_CONFIG_OS_IOS)
-            xu_char_t programpath[TB_PATH_MAXN];
+            xu_char_t programpath[XU_PATH_MAXN];
             tb_long_t size = readlink(programfile, programpath, sizeof(programpath));
             if (size >= 0 && size < sizeof(programpath))
             {
@@ -606,7 +606,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
                 // soft link to relative path? fix it
                 if (!tb_path_is_absolute(programpath))
                 {
-                    xu_char_t        buff[TB_PATH_MAXN];
+                    xu_char_t        buff[XU_PATH_MAXN];
                     xu_char_t const* rootdir = tb_path_directory(programfile, buff, sizeof(buff));
                     if (rootdir && tb_path_absolute_to(rootdir, programpath, path,
                                                        maxn)) // @note path and programfile are same buffer
@@ -620,7 +620,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
 #endif
 
             // get the root directory
-            xu_char_t        data[TB_PATH_MAXN];
+            xu_char_t        data[XU_PATH_MAXN];
             xu_char_t const* rootdir = tb_path_directory(programpath, data, sizeof(data));
             tb_assert_and_check_break(rootdir);
 
@@ -630,15 +630,15 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
 
             // find the program (lua) directory
             xu_size_t        i;
-            tb_file_info_t   info;
-            xu_char_t        scriptpath[TB_PATH_MAXN];
+            xu_file_info_t   info;
+            xu_char_t        scriptpath[XU_PATH_MAXN];
             xu_char_t const* subdirs[] = {".", sharedir};
             for (i = 0; i < xu_arrayn(subdirs); i++)
             {
                 // get program directory
                 if (tb_path_absolute_to(rootdir, subdirs[i], path, maxn) &&
                     tb_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
-                    tb_file_info(scriptpath, &info) && info.type == TB_FILE_TYPE_FILE)
+                    xu_file_info(scriptpath, &info) && info.type == TB_FILE_TYPE_FILE)
                 {
                     ok = xu_true;
                     break;
@@ -672,7 +672,7 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
     do
     {
         // attempt to get it from the environment variable first
-        xu_char_t data[TB_PATH_MAXN] = {0};
+        xu_char_t data[XU_PATH_MAXN] = {0};
         if (!xu_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !tb_path_absolute(data, path, maxn))
         {
             // get it from the current directory
@@ -1021,7 +1021,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     if (!xm_engine_save_arguments(engine, argc, argv, taskargv)) return -1;
 
     // get the project directory
-    xu_char_t path[TB_PATH_MAXN] = {0};
+    xu_char_t path[XU_PATH_MAXN] = {0};
     if (!xm_engine_get_project_directory(engine, path, sizeof(path))) return -1;
 
     // get the program file
@@ -1034,7 +1034,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     tb_strcat(path, "/core/_xmake_main.lua");
 
     // exists this script?
-    if (!tb_file_info(path, xu_null))
+    if (!xu_file_info(path, xu_null))
     {
         tb_printf("not found main script: %s\n", path);
         return -1;

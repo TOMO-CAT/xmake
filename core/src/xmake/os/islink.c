@@ -43,7 +43,7 @@ xu_int_t xm_os_islink(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // is link?
-    tb_file_info_t info = {0};
-    lua_pushboolean(lua, tb_file_info(path, &info) && (info.flags & TB_FILE_FLAG_LINK));
+    xu_file_info_t info = {0};
+    lua_pushboolean(lua, xu_file_info(path, &info) && (info.flags & TB_FILE_FLAG_LINK));
     return 1;
 }

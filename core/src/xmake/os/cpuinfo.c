@@ -87,7 +87,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
     return cpu_count > 0? usagerate / cpu_count : 0;
 #elif defined(XU_CONFIG_OS_LINUX)
     tb_float_t usagerate = 0;
-    if (tb_file_info("/proc/stat", xu_null))
+    if (xu_file_info("/proc/stat", xu_null))
     {
         FILE* fp = fopen("/proc/stat", "r");
         if (fp)

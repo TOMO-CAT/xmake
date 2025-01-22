@@ -43,7 +43,7 @@ xu_int_t xm_path_directory(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // do path:directory()
-    xu_char_t data[TB_PATH_MAXN];
+    xu_char_t data[XU_PATH_MAXN];
     xu_char_t const* dir = tb_path_directory(path, data, sizeof(data));
     if (dir) lua_pushstring(lua, dir);
     else lua_pushnil(lua);

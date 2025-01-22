@@ -33,7 +33,7 @@
 /* *******************************************************
  * private implementation
  */
-static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
+static tb_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     tb_value_ref_t tuple = (tb_value_ref_t)priv;
@@ -196,7 +196,7 @@ xu_int_t xm_os_find(lua_State* lua)
     tuple[1].cstr = pattern;
     tuple[2].l    = mode;
     tuple[3].ul   = 0;
-    tb_directory_walk(rootdir, recursion, xu_true, xm_os_find_walk, tuple);
+    xu_directory_walk(rootdir, recursion, xu_true, xm_os_find_walk, tuple);
 
     // pop string package
     lua_pop(lua, 1);
