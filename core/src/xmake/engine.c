@@ -839,7 +839,7 @@ static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data,
 /* //////////////////////////////////////////////////////////////////////////////////////
  * implementation
  */
-xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer)
+xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_cb_t lni_initializer)
 {
     xu_bool_t    ok     = xu_false;
     xm_engine_t* engine = tb_null;
@@ -983,7 +983,7 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initalizer_c
          * we can get the lni modules for _lni or `import("lib.lni.xxx")` in sandbox
          */
         lua_newtable(engine->lua);
-        if (lni_initalizer) lni_initalizer((xm_engine_ref_t)engine, engine->lua);
+        if (lni_initializer) lni_initializer((xm_engine_ref_t)engine, engine->lua);
         lua_setglobal(engine->lua, "_lni");
         ok = xu_true;
 
@@ -1076,12 +1076,12 @@ xu_void_t xm_engine_register(xm_engine_ref_t self, xu_char_t const* module, luaL
     lua_rawset(engine->lua, -3);
 }
 tb_int_t xm_engine_run(xu_char_t const* name, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv,
-                       xm_engine_lni_initalizer_cb_t lni_initalizer)
+                       xm_engine_lni_initializer_cb_t lni_initializer)
 {
     tb_int_t ok = -1;
     if (xm_init())
     {
-        xm_engine_ref_t engine = xm_engine_init(name, lni_initalizer);
+        xm_engine_ref_t engine = xm_engine_init(name, lni_initializer);
         if (engine)
         {
             ok = xm_engine_main(engine, argc, argv, taskargv);

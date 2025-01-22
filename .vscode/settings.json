@@ -455,7 +455,8 @@
     "cSpell.enabledFileTypes": {
         "markdown": false,
         "json": false,
-        "jsonc": false
+        "jsonc": false,
+        "makefile": false
     },
     "cSpell.allowCompoundWords": true,
 }
