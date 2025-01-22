@@ -1,5 +1,4 @@
-#ifndef XM_CONFIG_H
-#define XM_CONFIG_H
+#pragma once
 
 // version
 #define XM_CONFIG_VERSION "${VERSION}"
@@ -10,4 +9,3 @@
 #define XM_CONFIG_VERSION_BRANCH "${GIT_BRANCH}"
 #define XM_CONFIG_VERSION_COMMIT "${GIT_COMMIT}"
 #define XM_CONFIG_VERSION_GIT_SOURCE "${GIT_SOURCE}"
-#endif

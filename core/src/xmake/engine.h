@@ -18,44 +18,42 @@
  * @file        engine.h
  *
  */
-#ifndef XM_ENGINE_H
-#define XM_ENGINE_H
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+#pragma once
+
+/* *******************************************************
  * includes
+ * *******************************************************
  */
 #include "prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
- * extern
+/* *******************************************************
+ * types
+ * *******************************************************
  */
-__tb_extern_c_enter__
 
-    /* //////////////////////////////////////////////////////////////////////////////////////
-     * types
-     */
-
-    /// the xmake engine type
-    typedef struct
+// the xmake engine type
+typedef struct
 {
     tb_int_t dummy;
 } const* xm_engine_ref_t;
 
-/// the lni initializer callback type
-typedef xu_void_t (*xm_engine_lni_initalizer_cb_t)(xm_engine_ref_t engine, lua_State* lua);
+// the lni initializer callback type
+typedef xu_void_t (*xm_engine_lni_initializer_cb_t)(xm_engine_ref_t engine, lua_State* lua);
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
+ * *******************************************************
  */
 
 /*! init the engine
  *
  * @param name              the engine name
- * @param lni_initalizer    the lni initializer
+ * @param lni_initializer    the lni initializer
  *
  * @return                  the engine
  */
-xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initalizer_cb_t lni_initalizer);
+xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_cb_t lni_initializer);
 
 /*! exit the engine
  *
@@ -75,7 +73,7 @@ xu_void_t xm_engine_exit(xm_engine_ref_t engine);
  */
 tb_int_t xm_engine_main(xm_engine_ref_t engine, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv);
 
-/*! register lni modules in the engine, @note we need to call it in lni_initalizer()
+/*! register lni modules in the engine, @note we need to call it in lni_initializer()
  *
  * @param engine            the engine
  * @param module            the lni module name
@@ -90,16 +88,9 @@ xu_void_t xm_engine_register(xm_engine_ref_t engine, xu_char_t const* module, lu
  * @param argv              the argument list of the console
  * @param taskargv          the argument list of sub-task, e.g. taskargv(lua -vD lua.main) for xmake lua -vD lua.main
  * arg1 arg2 ..
- * @param lni_initalizer    the lni initializer
+ * @param lni_initializer    the lni initializer
  *
  * @return                  the error code of main()
  */
 tb_int_t xm_engine_run(xu_char_t const* name, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv,
-                       xm_engine_lni_initalizer_cb_t lni_initalizer);
-
-/* //////////////////////////////////////////////////////////////////////////////////////
- * extern
- */
-__tb_extern_c_leave__
-
-#endif
+                       xm_engine_lni_initializer_cb_t lni_initializer);

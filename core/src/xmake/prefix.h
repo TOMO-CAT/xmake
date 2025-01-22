@@ -21,8 +21,9 @@
 #ifndef XM_PREFIX_H
 #define XM_PREFIX_H
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
+ * *******************************************************
  */
 #include "luaconf.h"
 #include "xmake/prefix/config.h"
@@ -38,8 +39,9 @@
 #    include "lualib.h"
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private interfaces
+ * *******************************************************
  */
 
 // this issue has been fixed, @see https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
@@ -88,7 +90,7 @@ static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, tb_int_t idx
 }
 static __xu_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, tb_int_t idx)
 {
-   return xm_lua_topointer2(lua, idx, tb_null);
+    return xm_lua_topointer2(lua, idx, tb_null);
 }
 #else
 static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr) { lua_pushlightuserdata(lua, ptr); }
