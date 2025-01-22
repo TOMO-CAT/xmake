@@ -53,7 +53,7 @@ xu_int_t xm_io_poller_insert(lua_State* lua)
     tb_uint8_t otype = (tb_uint8_t)luaL_checknumber(lua, 1);
 
     // get cdata
-    xu_char_t const* cdata_str = tb_null;
+    xu_char_t const* cdata_str = xu_null;
     tb_pointer_t     cdata     = (tb_pointer_t)xm_lua_topointer2(lua, 2, &cdata_str);
     tb_check_return_val(cdata, 0);
 

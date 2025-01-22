@@ -49,7 +49,7 @@ xu_int_t xm_io_socket_accept(lua_State* lua)
     tb_check_return_val(sock, 0);
 
     // accept socket
-    tb_socket_ref_t client = tb_socket_accept(sock, tb_null);
+    tb_socket_ref_t client = tb_socket_accept(sock, xu_null);
     if (client) xm_lua_pushpointer(lua, (tb_pointer_t)client);
     else lua_pushnil(lua);
     return 1;

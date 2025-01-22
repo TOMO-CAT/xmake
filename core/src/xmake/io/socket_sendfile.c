@@ -73,7 +73,7 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // get file reference
-    tb_file_ref_t rawfile = tb_null;
+    tb_file_ref_t rawfile = xu_null;
     if (!tb_stream_ctrl(file->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) || !rawfile)
     {
         lua_pushinteger(lua, -1);

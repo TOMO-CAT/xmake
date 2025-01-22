@@ -57,15 +57,15 @@ xu_int_t xm_process_open(lua_State* lua)
     // get option arguments
     xu_size_t          envn       = 0;
     xu_char_t const*   envs[1024] = {0};
-    xu_char_t const*   inpath     = tb_null;
-    xu_char_t const*   outpath    = tb_null;
-    xu_char_t const*   errpath    = tb_null;
-    xm_io_file_t*      infile     = tb_null;
-    xm_io_file_t*      outfile    = tb_null;
-    xm_io_file_t*      errfile    = tb_null;
-    tb_pipe_file_ref_t inpipe     = tb_null;
-    tb_pipe_file_ref_t outpipe    = tb_null;
-    tb_pipe_file_ref_t errpipe    = tb_null;
+    xu_char_t const*   inpath     = xu_null;
+    xu_char_t const*   outpath    = xu_null;
+    xu_char_t const*   errpath    = xu_null;
+    xm_io_file_t*      infile     = xu_null;
+    xm_io_file_t*      outfile    = xu_null;
+    xm_io_file_t*      errfile    = xu_null;
+    tb_pipe_file_ref_t inpipe     = xu_null;
+    tb_pipe_file_ref_t outpipe    = xu_null;
+    tb_pipe_file_ref_t errpipe    = xu_null;
     if (lua_istable(lua, 2))
     {
         // is detached?
@@ -207,7 +207,7 @@ xu_int_t xm_process_open(lua_State* lua)
     }
     else if (infile && xm_io_file_is_file(infile))
     {
-        tb_file_ref_t rawfile = tb_null;
+        tb_file_ref_t rawfile = xu_null;
         if (tb_stream_ctrl(infile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.in.file = rawfile;
@@ -230,7 +230,7 @@ xu_int_t xm_process_open(lua_State* lua)
     }
     else if (outfile && xm_io_file_is_file(outfile))
     {
-        tb_file_ref_t rawfile = tb_null;
+        tb_file_ref_t rawfile = xu_null;
         if (tb_stream_ctrl(outfile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.out.file = rawfile;
@@ -253,7 +253,7 @@ xu_int_t xm_process_open(lua_State* lua)
     }
     else if (errfile && xm_io_file_is_file(errfile))
     {
-        tb_file_ref_t rawfile = tb_null;
+        tb_file_ref_t rawfile = xu_null;
         if (tb_stream_ctrl(errfile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.err.file = rawfile;

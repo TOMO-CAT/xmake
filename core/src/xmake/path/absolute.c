@@ -43,7 +43,7 @@ xu_int_t xm_path_absolute(lua_State* lua)
     tb_check_return_val(path, 0);
 
     // get the root
-    xu_char_t const* root = luaL_optstring(lua, 2, tb_null);
+    xu_char_t const* root = luaL_optstring(lua, 2, xu_null);
 
     // do path:absolute(root)
     xu_char_t data[TB_PATH_MAXN];

@@ -40,7 +40,7 @@ xu_int_t xm_base64_encode(lua_State* lua)
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = tb_null;
+    tb_byte_t const* data = xu_null;
     if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 1);
     if (xm_lua_isinteger(lua, 2)) size = (xu_size_t)lua_tointeger(lua, 2);
     if (!data || !size)

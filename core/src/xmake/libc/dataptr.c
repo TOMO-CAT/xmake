@@ -38,7 +38,7 @@ xu_int_t xm_libc_dataptr(lua_State* lua)
     // check
     tb_assert_and_check_return_val(lua, 0);
 
-    tb_pointer_t data = tb_null;
+    tb_pointer_t data = xu_null;
     if (lua_isstring(lua, 1))
         data = (tb_pointer_t)luaL_checkstring(lua, 1);
     else if (lua_isnumber(lua, 1))

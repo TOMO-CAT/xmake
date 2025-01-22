@@ -59,7 +59,7 @@ xu_int_t xm_io_socket_peeraddr(lua_State* lua)
     // get peer address
     xu_ipaddr_t addr;
     xu_char_t data[256];
-    xu_char_t const* cstr = tb_null;
+    xu_char_t const* cstr = xu_null;
     if (xu_socket_peer(sock, &addr) && (cstr = xu_ipaddr_cstr(&addr, data, sizeof(data))))
         lua_pushstring(lua, cstr);
     else lua_pushnil(lua);

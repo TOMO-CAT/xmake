@@ -40,7 +40,7 @@ xu_int_t xm_lz4_compress(lua_State* lua)
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = tb_null;
+    tb_byte_t const* data = xu_null;
     if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 1);
     if (xm_lua_isinteger(lua, 2)) size = (xu_size_t)lua_tointeger(lua, 2);
     if (!data || !size)
@@ -53,18 +53,18 @@ xu_int_t xm_lz4_compress(lua_State* lua)
 
     // do compress
     xu_bool_t        ok          = xu_false;
-    xu_char_t const* error       = tb_null;
-    tb_byte_t*       output_data = tb_null;
+    xu_char_t const* error       = xu_null;
+    tb_byte_t*       output_data = xu_null;
     tb_byte_t        buffer[8192];
     do
     {
-        xu_size_t output_size = LZ4F_compressFrameBound(size, tb_null);
+        xu_size_t output_size = LZ4F_compressFrameBound(size, xu_null);
         tb_assert_and_check_break(output_size);
 
         output_data = output_size <= sizeof(buffer) ? buffer : (tb_byte_t*)tb_malloc(output_size);
         tb_assert_and_check_break(output_data);
 
-        xu_size_t real_or_errs = LZ4F_compressFrame(output_data, output_size, data, size, tb_null);
+        xu_size_t real_or_errs = LZ4F_compressFrame(output_data, output_size, data, size, xu_null);
         if (LZ4F_isError(real_or_errs))
         {
             error = LZ4F_getErrorName(real_or_errs);
@@ -78,7 +78,7 @@ xu_int_t xm_lz4_compress(lua_State* lua)
     if (output_data && output_data != buffer)
     {
         tb_free(output_data);
-        output_data = tb_null;
+        output_data = xu_null;
     }
 
     if (!ok)

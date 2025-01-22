@@ -53,7 +53,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     // read line and reserve crlf
     xu_bool_t  eof    = xu_false;
     xu_hize_t  offset = 0;
-    tb_byte_t* data   = tb_null;
+    tb_byte_t* data   = xu_null;
     tb_hong_t  size   = tb_stream_size(stream);
     while (size < 0 || (offset = tb_stream_offset(stream)) < size)
     {
@@ -119,7 +119,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 
     // translate line data
     xu_int_t   result = PL_FAIL;
-    xu_char_t* data   = tb_null;
+    xu_char_t* data   = xu_null;
     xu_size_t  conlen = tb_strlen(continuation);
     do
     {
@@ -300,7 +300,7 @@ static xu_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t 
     xu_bool_t ok = xu_false;
     if (n == 0)
     {
-        tb_byte_t* data = tb_null;
+        tb_byte_t* data = xu_null;
         if (tb_stream_need(file->u.file_ref, &data, 1))
         {
             lua_pushliteral(lua, "");

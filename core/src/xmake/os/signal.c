@@ -61,7 +61,7 @@ typedef enum __xm_os_signal_handler_e
 /* *******************************************************
  * globals
  */
-static lua_State* g_lua = tb_null;
+static lua_State* g_lua = xu_null;
 
 /* *******************************************************
  * private implementation

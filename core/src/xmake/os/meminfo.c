@@ -84,7 +84,7 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
      *
      * @see https://github.com/rfjakob/earlyoom/blob/cba1d599e4a7484c45ac017aa7702ff879f15846/meminfo.c#L52
      */
-    if (tb_file_info("/proc/meminfo", tb_null))
+    if (tb_file_info("/proc/meminfo", xu_null))
     {
         xu_bool_t ok = xu_false;
         FILE*     fp = fopen("/proc/meminfo", "r");
@@ -130,16 +130,16 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
 #elif defined(XU_CONFIG_OS_BSD) && !defined(__OpenBSD__)
     unsigned long totalsize;
     size_t        size = sizeof(totalsize);
-    if (sysctlbyname("hw.physmem", &totalsize, &size, tb_null, 0) != 0) return xu_false;
+    if (sysctlbyname("hw.physmem", &totalsize, &size, xu_null, 0) != 0) return xu_false;
 
     // http://web.mit.edu/freebsd/head/usr.bin/systat/vmstat.c
     tb_uint32_t v_free_count;
     size = sizeof(v_free_count);
-    if (sysctlbyname("vm.stats.vm.v_free_count", &v_free_count, &size, tb_null, 0) != 0) return xu_false;
+    if (sysctlbyname("vm.stats.vm.v_free_count", &v_free_count, &size, xu_null, 0) != 0) return xu_false;
 
     tb_uint32_t v_inactive_count;
     size = sizeof(v_inactive_count);
-    if (sysctlbyname("vm.stats.vm.v_inactive_count", &v_inactive_count, &size, tb_null, 0) != 0) return xu_false;
+    if (sysctlbyname("vm.stats.vm.v_inactive_count", &v_inactive_count, &size, xu_null, 0) != 0) return xu_false;
 
     *ptotalsize = (xu_int_t)(totalsize / (1024 * 1024));
     *pavailsize = (xu_int_t)(((tb_int64_t)(v_free_count + v_inactive_count) * tb_page_size()) / (1024 * 1024));

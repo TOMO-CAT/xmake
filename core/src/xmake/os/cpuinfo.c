@@ -59,7 +59,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
     static tb_hong_t s_time = 0;
     if (tb_mclock() - s_time > 1000 && host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &cpu_count, &cpuinfo, &cpuinfo_count) == KERN_SUCCESS)
     {
-        static processor_info_array_t s_cpuinfo_prev = tb_null;
+        static processor_info_array_t s_cpuinfo_prev = xu_null;
         static mach_msg_type_number_t s_cpuinfo_count_prev = 0;
         for (xu_int_t i = 0; i < cpu_count; ++i)
         {
@@ -87,7 +87,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
     return cpu_count > 0? usagerate / cpu_count : 0;
 #elif defined(XU_CONFIG_OS_LINUX)
     tb_float_t usagerate = 0;
-    if (tb_file_info("/proc/stat", tb_null))
+    if (tb_file_info("/proc/stat", xu_null))
     {
         FILE* fp = fopen("/proc/stat", "r");
         if (fp)
@@ -153,7 +153,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
     tb_float_t usagerate = 0;
     long states[CPUSTATES] = {0};
     size_t states_size = sizeof(states);
-    if (sysctlbyname("kern.cp_time", &states, &states_size, tb_null, 0) == 0)
+    if (sysctlbyname("kern.cp_time", &states, &states_size, xu_null, 0) == 0)
     {
         tb_long_t user = states[CP_USER];
         tb_long_t nice = states[CP_NICE];

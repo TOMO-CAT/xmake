@@ -74,14 +74,14 @@ static xm_charset_entry_ref_t xm_string_charset_find_by_name(xu_char_t const* na
     tb_array_iterator_t array_iterator;
     tb_iterator_ref_t   iterator =
         tb_array_iterator_init_mem(&array_iterator, g_charsets, tb_arrayn(g_charsets), sizeof(xm_charset_entry_t));
-    tb_assert_and_check_return_val(iterator, tb_null);
+    tb_assert_and_check_return_val(iterator, xu_null);
 
     // find it by the binary search
     xu_size_t itor = tb_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
     if (itor != tb_iterator_tail(iterator))
         return (xm_charset_entry_ref_t)tb_iterator_item(iterator, itor);
     else
-        return tb_null;
+        return xu_null;
 }
 
 /* *******************************************************

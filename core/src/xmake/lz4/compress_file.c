@@ -90,12 +90,12 @@ xu_int_t xm_lz4_compress_file(lua_State* lua)
     if (istream)
     {
         tb_stream_exit(istream);
-        istream = tb_null;
+        istream = xu_null;
     }
     if (ostream)
     {
         tb_stream_exit(ostream);
-        ostream = tb_null;
+        ostream = xu_null;
     }
     xm_lz4_cstream_exit(stream_lz4);
 

@@ -40,7 +40,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = tb_null;
+    tb_byte_t const* data = xu_null;
     if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 1);
     if (xm_lua_isinteger(lua, 2)) size = (xu_size_t)lua_tointeger(lua, 2);
     if (!data || !size)
@@ -54,7 +54,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
     // do decompress
     xu_bool_t                   ok = xu_false;
     LZ4F_errorCode_t            code;
-    LZ4F_decompressionContext_t ctx = tb_null;
+    LZ4F_decompressionContext_t ctx = xu_null;
     tb_buffer_t                 result;
     do
     {
@@ -69,7 +69,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
         {
             size_t advance     = (size_t)size;
             size_t buffer_size = sizeof(buffer);
-            code               = LZ4F_decompress(ctx, buffer, &buffer_size, data, &advance, tb_null);
+            code               = LZ4F_decompress(ctx, buffer, &buffer_size, data, &advance, xu_null);
             if (LZ4F_isError(code))
             {
                 failed = xu_true;
@@ -91,7 +91,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
     if (ctx)
     {
         LZ4F_freeDecompressionContext(ctx);
-        ctx = tb_null;
+        ctx = xu_null;
     }
     tb_buffer_exit(&result);
 

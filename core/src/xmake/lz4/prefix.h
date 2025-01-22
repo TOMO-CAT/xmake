@@ -87,12 +87,12 @@ static __xu_inline__ xu_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
         if (stream->cctx)
         {
             LZ4F_freeCompressionContext(stream->cctx);
-            stream->cctx = tb_null;
+            stream->cctx = xu_null;
         }
         if (stream->buffer)
         {
             tb_free(stream->buffer);
-            stream->buffer = tb_null;
+            stream->buffer = xu_null;
         }
         tb_free(stream);
     }
@@ -102,8 +102,8 @@ static __xu_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
 {
     xu_size_t                 ret;
     xu_bool_t                 ok       = xu_false;
-    xm_lz4_cstream_t*         stream   = tb_null;
-    LZ4F_preferences_t const* prefsPtr = tb_null;
+    xm_lz4_cstream_t*         stream   = xu_null;
+    LZ4F_preferences_t const* prefsPtr = xu_null;
     do
     {
         stream = tb_malloc0_type(xm_lz4_cstream_t);
@@ -129,7 +129,7 @@ static __xu_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
     if (!ok && stream)
     {
         xm_lz4_cstream_exit(stream);
-        stream = tb_null;
+        stream = xu_null;
     }
     return stream;
 }
@@ -143,14 +143,14 @@ static __xu_inline__ tb_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb
     tb_assert_and_check_return_val(stream->buffer_size + isize < stream->buffer_maxn, -1);
 
     xu_size_t real = LZ4F_compressUpdate(stream->cctx, stream->buffer + stream->buffer_size,
-                                         stream->buffer_maxn - stream->buffer_size, idata, isize, tb_null);
+                                         stream->buffer_maxn - stream->buffer_size, idata, isize, xu_null);
     if (LZ4F_isError(real)) return -1;
     stream->buffer_size += real;
 
     if (end)
     {
         xu_size_t ret = LZ4F_compressEnd(stream->cctx, stream->buffer + stream->buffer_size,
-                                         stream->buffer_maxn - stream->buffer_size, tb_null);
+                                         stream->buffer_maxn - stream->buffer_size, xu_null);
         if (LZ4F_isError(ret)) return -1;
 
         real += ret;
@@ -190,12 +190,12 @@ static __xu_inline__ xu_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
         if (stream->dctx)
         {
             LZ4F_freeDecompressionContext(stream->dctx);
-            stream->dctx = tb_null;
+            stream->dctx = xu_null;
         }
         if (stream->buffer)
         {
             tb_free(stream->buffer);
-            stream->buffer = tb_null;
+            stream->buffer = xu_null;
         }
         tb_free(stream);
     }
@@ -205,7 +205,7 @@ static __xu_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
 {
     LZ4F_errorCode_t  ret;
     xu_bool_t         ok     = xu_false;
-    xm_lz4_dstream_t* stream = tb_null;
+    xm_lz4_dstream_t* stream = xu_null;
     do
     {
         stream = tb_malloc0_type(xm_lz4_dstream_t);
@@ -221,7 +221,7 @@ static __xu_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
     if (!ok && stream)
     {
         xm_lz4_dstream_exit(stream);
-        stream = tb_null;
+        stream = xu_null;
     }
     return stream;
 }
@@ -285,7 +285,7 @@ static __xu_inline__ tb_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, tb_
     // do decompress
     size_t    srcsize = stream->buffer_size;
     size_t    dstsize = osize;
-    xu_size_t ret     = LZ4F_decompress(stream->dctx, odata, &dstsize, stream->buffer, &srcsize, tb_null);
+    xu_size_t ret     = LZ4F_decompress(stream->dctx, odata, &dstsize, stream->buffer, &srcsize, xu_null);
     if (LZ4F_isError(ret)) return -1;
 
     // move the left input data

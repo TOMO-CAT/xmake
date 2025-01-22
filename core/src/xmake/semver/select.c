@@ -186,7 +186,7 @@ xu_int_t xm_semver_select(lua_State* lua)
     // select version
     xu_bool_t        ok        = xu_false;
     xu_bool_t        is_range  = xu_false;
-    xu_char_t const* range_str = tb_null;
+    xu_char_t const* range_str = xu_null;
     semver_t         semver    = {0};
     semvers_t        matches   = {0};
     semver_range_t   range     = {0};

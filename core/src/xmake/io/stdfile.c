@@ -67,13 +67,13 @@ static xu_void_t xm_io_stdfile_init_buffer(xu_size_t type)
     struct stat stats;
     xu_int_t    size = BUFSIZ;
     if (fstat(fileno(stdout), &stats) != -1) size = stats.st_blksize;
-    setvbuf(stdout, tb_null, _IOLBF, size);
+    setvbuf(stdout, xu_null, _IOLBF, size);
 }
 
 static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 {
     // init stdfile
-    tb_stdfile_ref_t fp = tb_null;
+    tb_stdfile_ref_t fp = xu_null;
     switch (type)
     {
     case XM_IO_FILE_TYPE_STDIN: fp = tb_stdfile_input(); break;
@@ -83,12 +83,12 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 
     // new file
     xm_io_file_t* file = (xm_io_file_t*)lua_newuserdata(lua, sizeof(xm_io_file_t));
-    tb_assert_and_check_return_val(file, tb_null);
+    tb_assert_and_check_return_val(file, xu_null);
 
     // init file
     file->u.std_ref = fp;
-    file->stream    = tb_null;
-    file->fstream   = tb_null;
+    file->stream    = xu_null;
+    file->fstream   = xu_null;
     file->type      = xm_io_stdfile_isatty(type);
     file->encoding  = TB_CHARSET_TYPE_UTF8;
 

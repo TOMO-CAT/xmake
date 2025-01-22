@@ -36,7 +36,7 @@
  */
 
 // we need only one global lua state/poller in main thread, so it is thread-safe.
-static lua_State* g_lua          = tb_null;
+static lua_State* g_lua          = xu_null;
 static xu_int_t   g_events_count = 0;
 
 /* *******************************************************

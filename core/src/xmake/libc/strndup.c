@@ -39,7 +39,7 @@ xu_int_t xm_libc_strndup(lua_State* lua)
     tb_assert_and_check_return_val(lua, 0);
 
     // do strndup
-    xu_char_t const* s = tb_null;
+    xu_char_t const* s = xu_null;
     if (lua_isnumber(lua, 1))
         s = (xu_char_t const*)(xu_size_t)lua_tointeger(lua, 1);
     else if (lua_isstring(lua, 2))

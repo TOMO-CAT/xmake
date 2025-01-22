@@ -37,7 +37,7 @@ static xu_void_t xm_string_lastof_str(lua_State* lua, xu_char_t const* cstr, xu_
                                       xu_size_t nsubstr)
 {
     // find it
-    xu_char_t const* curr = tb_null;
+    xu_char_t const* curr = xu_null;
     xu_char_t const* next = cstr;
     do
     {

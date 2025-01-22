@@ -62,15 +62,15 @@ xu_int_t xm_io_file_close(lua_State* lua)
 
         // close file
         tb_stream_clos(file->u.file_ref);
-        file->u.file_ref = tb_null;
+        file->u.file_ref = xu_null;
 
         // exit fstream
         if (file->fstream) tb_stream_exit(file->fstream);
-        file->fstream = tb_null;
+        file->fstream = xu_null;
 
         // exit stream
         if (file->stream) tb_stream_exit(file->stream);
-        file->stream = tb_null;
+        file->stream = xu_null;
 
         // exit the line cache buffer
         tb_buffer_exit(&file->rcache);

@@ -152,7 +152,7 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* p
     tb_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
 
     // detect encoding
-    tb_byte_t* data     = tb_null;
+    tb_byte_t* data     = xu_null;
     xu_size_t  encoding = XM_IO_FILE_ENCODING_BINARY;
     tb_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
     if (size > 0)
@@ -191,7 +191,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
 
     // get file encoding
     tb_long_t       bomoff   = 0;
-    tb_stream_ref_t stream   = tb_null;
+    tb_stream_ref_t stream   = xu_null;
     xu_bool_t       update   = !!tb_strchr(modestr, '+');
     xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
@@ -235,8 +235,8 @@ xu_int_t xm_io_file_open(lua_State* lua)
 
     // open file
     xu_bool_t       open_ok  = xu_false;
-    tb_stream_ref_t file_ref = tb_null;
-    tb_stream_ref_t fstream  = tb_null;
+    tb_stream_ref_t file_ref = xu_null;
+    tb_stream_ref_t fstream  = xu_null;
     do
     {
         // init stream from file
@@ -275,11 +275,11 @@ xu_int_t xm_io_file_open(lua_State* lua)
     {
         // exit stream
         if (stream) tb_stream_exit(stream);
-        stream = tb_null;
+        stream = xu_null;
 
         // exit charset stream filter
         if (fstream) tb_stream_exit(fstream);
-        fstream = tb_null;
+        fstream = xu_null;
 
         // return errors
         xm_io_return_error(lua, "failed to open file!");

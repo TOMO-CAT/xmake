@@ -112,7 +112,7 @@ xu_int_t xm_io_file_write(lua_State* lua)
         {
             // get data
             size_t           datasize = 0;
-            tb_byte_t const* data     = tb_null;
+            tb_byte_t const* data     = xu_null;
             if (lua_isstring(lua, i))
                 data = (tb_byte_t const*)luaL_checklstring(lua, i, &datasize);
             else if (lua_istable(lua, i))

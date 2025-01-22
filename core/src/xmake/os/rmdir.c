@@ -86,7 +86,7 @@ xu_int_t xm_os_rmdir(lua_State* lua)
     if (rmempty)
     {
         // remove all empty directories
-        tb_directory_walk(path, xu_true, xu_false, xm_os_rmdir_remove, tb_null);
+        tb_directory_walk(path, xu_true, xu_false, xm_os_rmdir_remove, xu_null);
 
         // remove empty root directory
         xu_bool_t is_emptydir = xu_true;
@@ -97,7 +97,7 @@ xu_int_t xm_os_rmdir(lua_State* lua)
         tb_trace_d("path: %s, emptydir: %u", path, is_emptydir);
 
         // ok?
-        lua_pushboolean(lua, !tb_file_info(path, tb_null));
+        lua_pushboolean(lua, !tb_file_info(path, xu_null));
     }
     else
     {
