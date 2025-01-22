@@ -511,7 +511,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
          * That is the path may be a symbolic link and not the real file. With deep directories the total bufsize
          * needed could be more than MAXPATHLEN.
          */
-        tb_uint32_t bufsize = (tb_uint32_t)maxn;
+        xu_uint32_t bufsize = (xu_uint32_t)maxn;
         if (!_NSGetExecutablePath(path, &bufsize)) ok = xu_true;
 #elif defined(XM_PROC_SELF_FILE)
         // get the executable file path as program directory

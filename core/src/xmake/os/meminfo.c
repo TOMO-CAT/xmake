@@ -133,11 +133,11 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
     if (sysctlbyname("hw.physmem", &totalsize, &size, xu_null, 0) != 0) return xu_false;
 
     // http://web.mit.edu/freebsd/head/usr.bin/systat/vmstat.c
-    tb_uint32_t v_free_count;
+    xu_uint32_t v_free_count;
     size = sizeof(v_free_count);
     if (sysctlbyname("vm.stats.vm.v_free_count", &v_free_count, &size, xu_null, 0) != 0) return xu_false;
 
-    tb_uint32_t v_inactive_count;
+    xu_uint32_t v_inactive_count;
     size = sizeof(v_inactive_count);
     if (sysctlbyname("vm.stats.vm.v_inactive_count", &v_inactive_count, &size, xu_null, 0) != 0) return xu_false;
 
