@@ -10,7 +10,6 @@
 
 /* *******************************************************
  *  types
- * *******************************************************
  */
 #if defined(XU_CONFIG_POSIX_HAVE_PTHREAD_MUTEX_INIT)
 typedef pthread_mutex_t xu_mutex_t;
@@ -20,7 +19,6 @@ typedef xu_spinlock_t xu_mutex_t;
 
 /* *******************************************************
  *  interfaces
- * *******************************************************
  */
 /* init mutex at the given mutex data
  *

@@ -19,15 +19,17 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "engine"
-#define TB_TRACE_MODULE_DEBUG (1)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+#define XU_TRACE_MODULE_NAME "engine"
+#define XU_TRACE_MODULE_DEBUG (1)
+
+/* *******************************************************
  * includes
  */
+
 #include "xmake/xmake.h"
 #if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
 #    include <mach-o/dyld.h>
@@ -47,7 +49,7 @@
 #    include <image.h>
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
@@ -65,7 +67,7 @@
 // hook lua memory allocator
 #define XM_HOOK_LUA_MEMALLOC (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * types
  */
 
@@ -80,7 +82,7 @@ typedef struct __xm_engine_t
 
 } xm_engine_t;
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * declaration
  */
 
@@ -284,28 +286,27 @@ tb_int_t xm_lua_curses_register(lua_State* lua, xu_char_t const* module);
 #endif
 
 // open cjson
-__tb_extern_c_enter__ tb_int_t luaopen_cjson(lua_State* l);
-__tb_extern_c_leave__
+tb_int_t luaopen_cjson(lua_State* l);
 
-    /* //////////////////////////////////////////////////////////////////////////////////////
-     * globals
-     */
+/* *******************************************************
+ * globals
+ */
 
-    // the os functions
-    static luaL_Reg const g_os_functions[] = {
-        {"argv", xm_os_argv},         {"args", xm_os_args},         {"find", xm_os_find},
-        {"link", xm_os_link},         {"isdir", xm_os_isdir},       {"rmdir", xm_os_rmdir},
-        {"mkdir", xm_os_mkdir},       {"cpdir", xm_os_cpdir},       {"chdir", xm_os_chdir},
-        {"mtime", xm_os_mtime},       {"sleep", xm_os_sleep},       {"mclock", xm_os_mclock},
-        {"curdir", xm_os_curdir},     {"tmpdir", xm_os_tmpdir},     {"islink", xm_os_islink},
-        {"isfile", xm_os_isfile},     {"touch", xm_os_touch},       {"rmfile", xm_os_rmfile},
-        {"cpfile", xm_os_cpfile},     {"fscase", xm_os_fscase},     {"rename", xm_os_rename},
-        {"exists", xm_os_exists},     {"setenv", xm_os_setenv},     {"getenv", xm_os_getenv},
-        {"getenvs", xm_os_getenvs},   {"cpuinfo", xm_os_cpuinfo},   {"meminfo", xm_os_meminfo},
-        {"readlink", xm_os_readlink}, {"emptydir", xm_os_emptydir}, {"strerror", xm_os_strerror},
-        {"syserror", xm_os_syserror}, {"filesize", xm_os_filesize}, {"getwinsize", xm_os_getwinsize},
-        {"getpid", xm_os_getpid},     {"signal", xm_os_signal},     {"uid", xm_os_uid},
-        {"gid", xm_os_gid},           {"getown", xm_os_getown},     {tb_null, tb_null}};
+// the os functions
+static luaL_Reg const g_os_functions[] = {
+    {"argv", xm_os_argv},         {"args", xm_os_args},         {"find", xm_os_find},
+    {"link", xm_os_link},         {"isdir", xm_os_isdir},       {"rmdir", xm_os_rmdir},
+    {"mkdir", xm_os_mkdir},       {"cpdir", xm_os_cpdir},       {"chdir", xm_os_chdir},
+    {"mtime", xm_os_mtime},       {"sleep", xm_os_sleep},       {"mclock", xm_os_mclock},
+    {"curdir", xm_os_curdir},     {"tmpdir", xm_os_tmpdir},     {"islink", xm_os_islink},
+    {"isfile", xm_os_isfile},     {"touch", xm_os_touch},       {"rmfile", xm_os_rmfile},
+    {"cpfile", xm_os_cpfile},     {"fscase", xm_os_fscase},     {"rename", xm_os_rename},
+    {"exists", xm_os_exists},     {"setenv", xm_os_setenv},     {"getenv", xm_os_getenv},
+    {"getenvs", xm_os_getenvs},   {"cpuinfo", xm_os_cpuinfo},   {"meminfo", xm_os_meminfo},
+    {"readlink", xm_os_readlink}, {"emptydir", xm_os_emptydir}, {"strerror", xm_os_strerror},
+    {"syserror", xm_os_syserror}, {"filesize", xm_os_filesize}, {"getwinsize", xm_os_getwinsize},
+    {"getpid", xm_os_getpid},     {"signal", xm_os_signal},     {"uid", xm_os_uid},
+    {"gid", xm_os_gid},           {"getown", xm_os_getown},     {tb_null, tb_null}};
 
 // the io functions
 static luaL_Reg const g_io_functions[] = {{"stdfile", xm_io_stdfile},
@@ -448,7 +449,7 @@ static luaL_Reg const g_package_functions[] = {{"loadxmi", xm_package_loadxmi}, 
 // the lua global instance for signal handler
 static lua_State* g_lua = tb_null;
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_bool_t xm_engine_save_arguments(xm_engine_t* engine, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv)
@@ -836,8 +837,9 @@ static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data,
 }
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
+ *
  */
 xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_cb_t lni_initializer)
 {

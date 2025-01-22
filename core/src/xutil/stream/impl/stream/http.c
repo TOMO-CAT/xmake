@@ -5,7 +5,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 
 // the http stream type
@@ -18,7 +17,6 @@ typedef struct __xu_stream_http_t
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 static __xu_inline__ xu_stream_http_t* xu_stream_http_cast(xu_stream_ref_t stream)
@@ -549,7 +547,6 @@ static xu_bool_t xu_stream_http_ctrl(xu_stream_ref_t stream, xu_size_t ctrl, xu_
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 xu_stream_ref_t xu_stream_init_http()
 {

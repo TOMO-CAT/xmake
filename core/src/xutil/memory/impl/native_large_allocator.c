@@ -1,6 +1,5 @@
 /* *******************************************************
  *  trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "native_large_allocator"
 #define XU_TRACE_MODULE_DEBUG (0)
@@ -13,7 +12,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 
 // the native large allocator data size
@@ -22,7 +20,6 @@
 
 /* *******************************************************
  *  types
- * *******************************************************
  */
 
 // the native large data head type
@@ -86,7 +83,6 @@ typedef struct __xu_native_large_allocator_t
 
 /* *******************************************************
  *  private implementation
- * *******************************************************
  */
 
 #ifdef __xu_debug__
@@ -617,7 +613,6 @@ static xu_bool_t xu_native_large_allocator_have(xu_allocator_ref_t self, xu_cpoi
 
 /* *******************************************************
  *  implementation
- * *******************************************************
  */
 
 xu_allocator_ref_t xu_native_large_allocator_init()

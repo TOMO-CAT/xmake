@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "find"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
@@ -162,7 +162,7 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* in
     if (!matched) lua_pop(lua, 1);
     return skip_recursion ? TB_DIRECTORY_WALK_CODE_SKIP_RECURSION : TB_DIRECTORY_WALK_CODE_CONTINUE;
 }
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 tb_int_t xm_os_find(lua_State* lua)

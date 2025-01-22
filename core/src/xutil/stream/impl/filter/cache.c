@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "cache"
 #define XU_TRACE_MODULE_DEBUG (0)
@@ -9,7 +8,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 // the cache filter type
 typedef struct __xu_filter_cache_t
@@ -21,7 +19,6 @@ typedef struct __xu_filter_cache_t
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 static __xu_inline__ xu_filter_cache_t* xu_filter_cache_cast(xu_filter_t* filter)
 {
@@ -67,7 +64,6 @@ static xu_long_t xu_filter_cache_spak(xu_filter_t* filter, xu_static_stream_ref_
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 xu_filter_ref_t xu_filter_init_from_cache(xu_size_t size)
 {

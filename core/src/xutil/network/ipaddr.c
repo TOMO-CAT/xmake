@@ -5,7 +5,6 @@
 
 /* *******************************************************
  *  private implementation
- * *******************************************************
  */
 
 static __xu_inline__ xu_bool_t xu_ipaddr_ipv6_to_ipv4(xu_ipv6_ref_t ipv6, xu_ipv4_ref_t ipv4)
@@ -44,7 +43,6 @@ static __xu_inline__ xu_bool_t xu_ipaddr_ipv4_to_ipv6(xu_ipv4_ref_t ipv4, xu_ipv
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_void_t xu_ipaddr_clear(xu_ipaddr_ref_t ipaddr)
 {

@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 
 #define XU_TRACE_MODULE_NAME "ifaddrs"
@@ -14,7 +13,6 @@
 
 /* *******************************************************
  * instance implementation
- * *******************************************************
  */
 
 static xu_handle_t xu_ifaddrs_instance_init(xu_cpointer_t* ppriv)
@@ -50,7 +48,6 @@ static xu_ifaddrs_interface_ref_t xu_ifaddrs_interface_find(xu_iterator_ref_t it
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 #if defined(XU_CONFIG_POSIX_HAVE_GETIFADDRS) && !defined(XU_CONFIG_OS_WEB)
 #    if defined(XU_CONFIG_LINUX_HAVE_IFADDRS) || defined(XU_CONFIG_OS_ANDROID)

@@ -15,7 +15,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 #if defined(XU_CONFIG_LIBC_HAVE_STRCMP)
@@ -40,7 +39,6 @@ static xu_long_t xu_strcmp_impl(xu_char_t const* s1, xu_char_t const* s2)
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 
 xu_long_t xu_strcmp(xu_char_t const* s1, xu_char_t const* s2)

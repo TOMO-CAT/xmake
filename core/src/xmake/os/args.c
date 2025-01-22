@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "os.args"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr, xu_size_t size, xu_bool_t escape,
@@ -69,7 +69,7 @@ static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr
     if (wrap_quote) tb_string_chrcat(result, '\"');
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 // os.args({"xx", "yy"}, {escape = true})

@@ -5,7 +5,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_allocator_ref_t xu_large_allocator_init(xu_byte_t* data, xu_size_t size)
 {

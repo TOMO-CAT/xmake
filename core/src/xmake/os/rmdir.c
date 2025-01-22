@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "rmdir"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static tb_long_t xm_os_rmdir_empty(xu_char_t const* path, tb_file_info_t const* info, tb_cpointer_t priv)
@@ -69,7 +69,7 @@ static tb_long_t xm_os_rmdir_remove(xu_char_t const* path, tb_file_info_t const*
     return TB_DIRECTORY_WALK_CODE_CONTINUE;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 tb_int_t xm_os_rmdir(lua_State* lua)

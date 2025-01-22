@@ -2,7 +2,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 
 // the small allocator type
@@ -21,7 +20,6 @@ typedef struct __xu_small_allocator_t
 
 /* *******************************************************
  * declaration
- * *******************************************************
  */
 
 xu_fixed_pool_ref_t xu_fixed_pool_init_(xu_allocator_ref_t large_allocator, xu_size_t slot_size, xu_size_t item_size,
@@ -30,7 +28,6 @@ xu_fixed_pool_ref_t xu_fixed_pool_init_(xu_allocator_ref_t large_allocator, xu_s
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_fixed_pool_ref_t xu_small_allocator_find_fixed(xu_small_allocator_ref_t allocator, xu_size_t size)
@@ -399,7 +396,6 @@ static xu_bool_t xu_small_allocator_have(xu_allocator_ref_t self, xu_cpointer_t 
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_allocator_ref_t xu_small_allocator_init(xu_allocator_ref_t large_allocator)
 {

@@ -16,7 +16,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_void_t xu_ifaddrs_interface_exit(xu_element_ref_t element, xu_pointer_t buff)
@@ -33,7 +32,6 @@ static xu_void_t xu_ifaddrs_interface_exit(xu_element_ref_t element, xu_pointer_
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_ifaddrs_ref_t xu_ifaddrs_init()

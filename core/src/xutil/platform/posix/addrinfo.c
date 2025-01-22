@@ -11,7 +11,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 #if defined(XU_ADDRINFO_ADDR_IMPL) && defined(XU_CONFIG_POSIX_HAVE_GETADDRINFO)
 static __xu_inline__ xu_int_t xu_addrinfo_ai_family(xu_ipaddr_ref_t addr)
@@ -28,7 +27,6 @@ static __xu_inline__ xu_int_t xu_addrinfo_ai_family(xu_ipaddr_ref_t addr)
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 #ifdef XU_ADDRINFO_ADDR_IMPL
 xu_bool_t xu_addrinfo_addr(xu_char_t const* name, xu_ipaddr_ref_t addr)

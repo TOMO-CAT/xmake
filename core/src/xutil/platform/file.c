@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "platform_file"
 #define XU_TRACE_MODULE_DEBUG (0)

@@ -18,12 +18,14 @@
  * @file        prefix.h
  *
  */
-#ifndef XM_PREFIX_H
+
+#pragma once
+
+// for xmake/scripts/module/xmi.h
 #define XM_PREFIX_H
 
 /* *******************************************************
  * includes
- * *******************************************************
  */
 #include "luaconf.h"
 #include "xmake/prefix/config.h"
@@ -41,7 +43,6 @@
 
 /* *******************************************************
  * private interfaces
- * *******************************************************
  */
 
 // this issue has been fixed, @see https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
@@ -127,5 +128,3 @@ static __xu_inline__ tb_int_t xm_lua_isinteger(lua_State* lua, int idx)
     return lua_isinteger(lua, idx);
 #endif
 }
-
-#endif

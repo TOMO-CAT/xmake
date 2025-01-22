@@ -5,7 +5,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 static xu_size_t xu_element_size_hash(xu_element_ref_t element, xu_cpointer_t data, xu_size_t mask, xu_size_t index)
@@ -79,7 +78,6 @@ static xu_void_t xu_element_size_ncopy(xu_element_ref_t element, xu_pointer_t bu
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 
 xu_element_t xu_element_size()

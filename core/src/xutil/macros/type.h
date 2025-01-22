@@ -6,14 +6,12 @@
 
 /* *******************************************************
  *  includes
- * *******************************************************
  */
 #include "xutil/libc/misc/stdarg.h"
 #include "xutil/macros/keyword.h"
 
 /* *******************************************************
  *  basic types
- * *******************************************************
  */
 typedef signed int       xu_int_t;
 typedef unsigned int     xu_uint_t;
@@ -39,14 +37,12 @@ typedef xu_pointer_t     xu_handle_t;
 
 /* *******************************************************
  *  bool values
- * *******************************************************
  */
 #define xu_true ((xu_bool_t)1)
 #define xu_false ((xu_bool_t)0)
 
 /* *******************************************************
  *  null
- * *******************************************************
  */
 #ifdef __cplusplus
 #    define xu_null (0)
@@ -56,7 +52,6 @@ typedef xu_pointer_t     xu_handle_t;
 
 /* *******************************************************
  *  no argument
- * *******************************************************
  */
 #ifdef __cplusplus
 #    define xu_noarg_t
@@ -66,7 +61,6 @@ typedef xu_pointer_t     xu_handle_t;
 
 /* *******************************************************
  *  wchar
- * *******************************************************
  */
 #ifdef XU_CONFIG_TYPE_HAVE_WCHAR
 typedef wchar_t xu_wchar_t;
@@ -154,7 +148,6 @@ typedef union __xu_ieee_double_t
 
 /* *******************************************************
  *  atomic type
- * *******************************************************
  */
 #if (__xu_has_feature__(c_atomic) && !defined(__STDC_NO_ATOMICS__))
 typedef __xu_volatile__ _Atomic xu_int32_t xu_atomic32_t;

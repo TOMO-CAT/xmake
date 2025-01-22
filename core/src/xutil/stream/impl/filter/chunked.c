@@ -1,6 +1,5 @@
 /* *******************************************************
  *  trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "chunked"
 #define XU_TRACE_MODULE_DEBUG (0)
@@ -11,7 +10,6 @@
 
 /* *******************************************************
  *  types
- * *******************************************************
  */
 // the chunked filter type
 typedef struct __xu_filter_chunked_t
@@ -32,7 +30,6 @@ typedef struct __xu_filter_chunked_t
 
 /* *******************************************************
  *  implementation
- * *******************************************************
  */
 static __xu_inline__ xu_filter_chunked_t* xu_filter_chunked_cast(xu_filter_t* filter)
 {
@@ -205,7 +202,6 @@ static xu_void_t xu_filter_chunked_exit(xu_filter_t* filter)
 
 /* *******************************************************
  *  interfaces
- * *******************************************************
  */
 xu_filter_ref_t xu_filter_init_from_chunked(xu_bool_t dechunked)
 {

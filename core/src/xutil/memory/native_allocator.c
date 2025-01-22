@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "native_allocator"
 #define XU_TRACE_MODULE_DEBUG (0)
@@ -11,7 +10,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 static xu_pointer_t xu_native_allocator_malloc(xu_allocator_ref_t allocator, xu_size_t size __xu_debug_decl__)
 {
@@ -67,7 +65,6 @@ static xu_bool_t xu_native_allocator_instance_init(xu_handle_t instance, xu_cpoi
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_allocator_ref_t xu_native_allocator()
 {

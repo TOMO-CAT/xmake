@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 
 #define XU_TRACE_MODULE_NAME "thread_local"
@@ -14,7 +13,6 @@
 
 /* *******************************************************
  * globals
- * *******************************************************
  */
 
 // the thread local list
@@ -25,7 +23,6 @@ static xu_spinlock_t g_thread_local_lock = XU_SPINLOCK_INIT;
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 xu_bool_t xu_thread_local_init_env()
 {
@@ -73,7 +70,6 @@ xu_void_t xu_thread_local_walk(xu_walk_func_t func, xu_cpointer_t priv)
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 #if defined(XU_CONFIG_POSIX_HAVE_PTHREAD_SETSPECIFIC) && defined(XU_CONFIG_POSIX_HAVE_PTHREAD_GETSPECIFIC) &&          \
     defined(XU_CONFIG_POSIX_HAVE_PTHREAD_KEY_CREATE) && defined(XU_CONFIG_POSIX_HAVE_PTHREAD_KEY_DELETE)

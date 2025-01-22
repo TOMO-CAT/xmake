@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "url"
 #define XU_TRACE_MODULE_DEBUG (0)
@@ -11,7 +10,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_char_t const* xu_url_parse_args(xu_string_ref_t args, xu_char_t const* p)
@@ -155,7 +153,6 @@ static xu_char_t const* xu_url_parse_data(xu_string_ref_t data, xu_char_t const*
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_bool_t xu_url_init(xu_url_ref_t url)
 {

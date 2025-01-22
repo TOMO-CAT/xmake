@@ -2,7 +2,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_bool_t xu_remove_if_pred(xu_iterator_ref_t iterator, xu_cpointer_t item, xu_cpointer_t value,
@@ -18,7 +17,6 @@ static xu_bool_t xu_remove_if_pred(xu_iterator_ref_t iterator, xu_cpointer_t ite
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_void_t xu_remove_if(xu_iterator_ref_t iterator, xu_predicate_ref_t pred, xu_cpointer_t value)

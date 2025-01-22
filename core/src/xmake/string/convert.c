@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "convert"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/string/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * globals
  */
 
@@ -61,7 +61,7 @@ static xm_charset_entry_t g_charsets[] = {{TB_CHARSET_TYPE_ANSI, "ansi"},
                                           {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_LE, "utf32le"},
                                           {TB_CHARSET_TYPE_UTF8, "utf8"}};
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * finder
  */
 static tb_long_t xm_string_charset_comp_by_name(tb_iterator_ref_t iterator, tb_cpointer_t item, tb_cpointer_t name)
@@ -84,7 +84,7 @@ static xm_charset_entry_ref_t xm_string_charset_find_by_name(xu_char_t const* na
         return tb_null;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 

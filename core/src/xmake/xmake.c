@@ -21,13 +21,11 @@
 
 /* *******************************************************
  * includes
- * *******************************************************
  */
 #include "xmake/xmake.h"
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 static __xu_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
 {
@@ -85,7 +83,6 @@ static __xu_inline__ xu_bool_t xm_version_check(xu_hize_t build)
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 {

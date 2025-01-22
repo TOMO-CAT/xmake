@@ -11,7 +11,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 #ifndef xu_atomic64_init
 #    define xu_atomic64_init(a, v)                                                                                     \
@@ -110,7 +109,6 @@
 
 /* *******************************************************
  *  interfaces
- * *******************************************************
  */
 /* compare and set the 64bits value
  *
@@ -127,7 +125,6 @@ xu_bool_t xu_atomic64_compare_and_swap_explicit_generic(xu_atomic64_t* a, xu_int
 
 /* *******************************************************
  *  inline interfaces
- * *******************************************************
  */
 
 static __xu_inline__ xu_int64_t xu_atomic64_fetch_and_cmpset_explicit_generic(xu_atomic64_t* a, xu_int64_t p,

@@ -4,14 +4,12 @@
 
 /* *******************************************************
  *  includes
- * *******************************************************
  */
 // #include "xutil/macros/type.h"
 #include "xutil/platform/atomic.h"
 
 /* *******************************************************
  *  types
- * *******************************************************
  */
 // the singleton type enum
 typedef enum __xu_singleton_type_e
@@ -121,7 +119,6 @@ typedef xu_bool_t (*xu_singleton_static_init_func_t)(xu_handle_t instance, xu_cp
 
 /* *******************************************************
  *  interfaces
- * *******************************************************
  */
 
 /*! init singleton

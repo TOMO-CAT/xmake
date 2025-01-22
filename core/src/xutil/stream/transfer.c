@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 
 #define XU_TRACE_MODULE_NAME "transfer"
@@ -16,7 +15,6 @@
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 xu_hong_t xu_transfer(xu_stream_ref_t istream, xu_stream_ref_t ostream, xu_size_t lrate, xu_transfer_func_t func,
                       xu_cpointer_t priv)

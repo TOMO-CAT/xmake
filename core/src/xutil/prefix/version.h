@@ -4,7 +4,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 // the major version
 #define XU_VERSION_MAJOR XU_CONFIG_VERSION_MAJOR

@@ -15,7 +15,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_long_t xu_directory_walk_remove(xu_char_t const* path, xu_file_info_t const* info, xu_cpointer_t priv)
@@ -141,7 +140,6 @@ static xu_long_t xu_directory_walk_impl(xu_char_t const* path, xu_long_t recursi
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_bool_t xu_directory_create(xu_char_t const* path)
 {

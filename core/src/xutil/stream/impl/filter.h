@@ -7,7 +7,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 // the filter type
 typedef struct __xu_filter_t
@@ -53,7 +52,6 @@ typedef struct __xu_filter_t
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 static __xu_inline__ xu_bool_t xu_filter_init(xu_filter_t* filter, xu_size_t type)
 {

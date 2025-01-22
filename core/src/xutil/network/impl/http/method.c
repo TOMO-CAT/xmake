@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "http_method"
 #define XU_TRACE_MODULE_DEBUG (1)
@@ -9,13 +8,11 @@
 
 /* *******************************************************
  * globals
- * *******************************************************
  */
 static xu_char_t const* g_http_methods[] = {"GET", "POST", "HEAD", "PUT", "OPTIONS", "DELETE", "TRACE", "CONNECT"};
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_char_t const* xu_http_method_cstr(xu_size_t method)
 {

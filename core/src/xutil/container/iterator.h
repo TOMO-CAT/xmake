@@ -5,7 +5,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 // the iterator mode enum
 typedef enum __xu_iterator_mode_e
@@ -99,7 +98,6 @@ typedef xu_long_t (*xu_iterator_comp_t)(xu_iterator_ref_t iterator, xu_cpointer_
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 /*! the iterator mode
  *

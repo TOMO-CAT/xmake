@@ -4,7 +4,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 
 /* abort it, @note ud2 cannot be aborted immediately for multi-thread

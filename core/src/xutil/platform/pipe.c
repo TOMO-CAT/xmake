@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "pipe"
 #define XU_TRACE_MODULE_DEBUG (1)
@@ -9,7 +8,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 #if defined(XU_CONFIG_POSIX_HAVE_PIPE) || defined(XU_CONFIG_POSIX_HAVE_PIPE2) || defined(XU_CONFIG_POSIX_HAVE_MKFIFO)
 #    include "xutil/platform/posix/pipe.c"

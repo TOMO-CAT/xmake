@@ -14,7 +14,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 #if defined(XU_CONFIG_LIBC_HAVE_MEMCMP)
 static xu_long_t xu_memcmp_impl(xu_cpointer_t s1, xu_cpointer_t s2, xu_size_t n)
@@ -46,7 +45,6 @@ static xu_long_t xu_memcmp_impl(xu_cpointer_t s1, xu_cpointer_t s2, xu_size_t n)
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 xu_long_t xu_memcmp_(xu_cpointer_t s1, xu_cpointer_t s2, xu_size_t n)
 {

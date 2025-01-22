@@ -5,7 +5,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_long_t xu_socket_wait_impl(xu_socket_ref_t sock, xu_size_t events, xu_long_t timeout)
 {
