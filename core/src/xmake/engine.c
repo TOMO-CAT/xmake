@@ -548,7 +548,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
         }
 #else
         static xu_char_t const* s_paths[] = {"~/.local/bin/xmake", "/usr/local/bin/xmake", "/usr/bin/xmake"};
-        for (xu_size_t i = 0; i < tb_arrayn(s_paths); i++)
+        for (xu_size_t i = 0; i < xu_arrayn(s_paths); i++)
         {
             xu_char_t const* p = s_paths[i];
             if (tb_file_info(p, xu_null))
@@ -633,7 +633,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
             tb_file_info_t   info;
             xu_char_t        scriptpath[TB_PATH_MAXN];
             xu_char_t const* subdirs[] = {".", sharedir};
-            for (i = 0; i < tb_arrayn(subdirs); i++)
+            for (i = 0; i < xu_arrayn(subdirs); i++)
             {
                 // get program directory
                 if (tb_path_absolute_to(rootdir, subdirs[i], path, maxn) &&

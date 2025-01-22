@@ -333,7 +333,7 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
     xu_char_t strbuf[8192];
     xu_size_t buflen = 0;
     xu_size_t result = PL_FAIL;
-    if (tb_stdfile_gets(file->u.std_ref, strbuf, tb_arrayn(strbuf) - 1))
+    if (tb_stdfile_gets(file->u.std_ref, strbuf, xu_arrayn(strbuf) - 1))
         buflen = tb_strlen(strbuf);
     else
         return PL_EOF;
@@ -488,7 +488,7 @@ static xu_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, xu_c
 
     // read number
     xu_char_t strbuf[512];
-    if (tb_stdfile_gets(file->u.std_ref, strbuf, tb_arrayn(strbuf)))
+    if (tb_stdfile_gets(file->u.std_ref, strbuf, xu_arrayn(strbuf)))
         lua_pushnumber(lua, tb_s10tod(strbuf)); // TODO check invalid float number string and push nil
     else
         lua_pushnil(lua);

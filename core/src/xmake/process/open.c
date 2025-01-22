@@ -172,13 +172,13 @@ xu_int_t xm_process_open(lua_State* lua)
                 if (lua_isstring(lua, -1))
                 {
                     // add this environment value
-                    if (envn + 1 < tb_arrayn(envs))
+                    if (envn + 1 < xu_arrayn(envs))
                         envs[envn++] = lua_tostring(lua, -1);
                     else
                     {
                         // error
                         lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (xu_int_t)envn,
-                                        tb_arrayn(envs) - 1);
+                                        xu_arrayn(envs) - 1);
                         lua_error(lua);
                     }
                 }
