@@ -39,7 +39,7 @@
 xu_int_t xm_readline_history_list(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // history list
     lua_newtable(lua);

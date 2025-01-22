@@ -76,7 +76,7 @@ static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr
 xu_int_t xm_os_args(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // escape '\\' characters in global?
     xu_bool_t escape = xu_false;

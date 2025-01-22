@@ -36,7 +36,7 @@
 xu_int_t xm_libc_setbyte(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get data
     tb_pointer_t data = xu_null;

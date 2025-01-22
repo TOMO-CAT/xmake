@@ -35,14 +35,14 @@
  */
 static xu_bool_t xm_io_std_flush_impl(xm_io_file_t* file)
 {
-    tb_assert_and_check_return_val(xm_io_file_is_std(file), xu_false);
+    xu_assert_and_check_return_val(xm_io_file_is_std(file), xu_false);
     return (file->u.std_ref != tb_stdfile_input()) ? tb_stdfile_flush(file->u.std_ref) : xu_false;
 }
 
 static xu_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
 {
     // check
-    tb_assert_and_check_return_val(xm_io_file_is_file(file), xu_false);
+    xu_assert_and_check_return_val(xm_io_file_is_file(file), xu_false);
     return tb_stream_sync(file->u.file_ref, xu_false);
 }
 
@@ -54,7 +54,7 @@ static xu_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
 xu_int_t xm_io_file_flush(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
     if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "flush(invalid file)!");

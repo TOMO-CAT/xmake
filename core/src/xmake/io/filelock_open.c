@@ -40,11 +40,11 @@
 xu_int_t xm_io_filelock_open(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get file path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_assert_and_check_return_val(path, 0);
+    xu_assert_and_check_return_val(path, 0);
 
     // init file lock
     tb_long_t tryn = 2;

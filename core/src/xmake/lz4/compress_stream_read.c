@@ -37,7 +37,7 @@
 xu_int_t xm_lz4_compress_stream_read(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check handle
     if (!xm_lua_ispointer(lua, 1))

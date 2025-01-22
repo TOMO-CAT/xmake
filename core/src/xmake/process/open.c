@@ -44,7 +44,7 @@
 xu_int_t xm_process_open(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get command
     size_t           command_size = 0;

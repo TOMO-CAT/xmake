@@ -102,7 +102,7 @@ static xu_char_t const* xm_string_rtrim(xu_char_t const* sstr, xu_char_t const* 
 xu_int_t xm_string_trim(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     size_t           lstr, ltrim;
     xu_char_t const* sstr      = luaL_checklstring(lua, 1, &lstr);

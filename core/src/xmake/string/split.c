@@ -108,7 +108,7 @@ static xu_void_t xm_string_split_chr(lua_State* lua, xu_char_t const* cstr, xu_s
 xu_int_t xm_string_split(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get string
     size_t           nstr = 0;

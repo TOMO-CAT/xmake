@@ -99,7 +99,7 @@ static xu_void_t xm_os_signal_handler(xu_int_t signo_native)
 xu_int_t xm_os_signal(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
     g_lua            = lua;
     xu_int_t handler = XM_OS_SIGFUN;
 

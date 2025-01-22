@@ -83,7 +83,7 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 
     // new file
     xm_io_file_t* file = (xm_io_file_t*)lua_newuserdata(lua, sizeof(xm_io_file_t));
-    tb_assert_and_check_return_val(file, xu_null);
+    xu_assert_and_check_return_val(file, xu_null);
 
     // init file
     file->u.std_ref = fp;
@@ -109,7 +109,7 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 xu_int_t xm_io_stdfile(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get std type
     tb_long_t type = (tb_long_t)lua_tointeger(lua, 1);

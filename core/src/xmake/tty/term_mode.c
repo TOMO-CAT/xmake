@@ -40,7 +40,7 @@
 xu_int_t xm_tty_term_mode(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
     xu_int_t mode = 0;
     lua_pushinteger(lua, (xu_int_t)mode);
     return 1;

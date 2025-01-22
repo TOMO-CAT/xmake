@@ -37,15 +37,15 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* in
 {
     // check
     tb_value_ref_t tuple = (tb_value_ref_t)priv;
-    tb_assert_and_check_return_val(path && info && tuple, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(path && info && tuple, TB_DIRECTORY_WALK_CODE_END);
 
     // the lua
     lua_State* lua = (lua_State*)tuple[0].ptr;
-    tb_assert_and_check_return_val(lua, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(lua, TB_DIRECTORY_WALK_CODE_END);
 
     // the pattern
     xu_char_t const* pattern = (xu_char_t const*)tuple[1].cstr;
-    tb_assert_and_check_return_val(pattern, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(pattern, TB_DIRECTORY_WALK_CODE_END);
 
     // remove ./ for path
     if (path[0] == '.' && (path[1] == '/' || path[1] == '\\')) path = path + 2;
@@ -87,7 +87,7 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* in
             // the root directory
             size_t           rootlen = 0;
             xu_char_t const* rootdir = luaL_checklstring(lua, 1, &rootlen);
-            tb_assert_and_check_return_val(rootdir && rootlen, TB_DIRECTORY_WALK_CODE_END);
+            xu_assert_and_check_return_val(rootdir && rootlen, TB_DIRECTORY_WALK_CODE_END);
 
             // check
             tb_assert(!tb_strncmp(path, rootdir, rootlen));
@@ -168,7 +168,7 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* in
 xu_int_t xm_os_find(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the root directory
     xu_char_t const* rootdir = luaL_checkstring(lua, 1);

@@ -38,7 +38,7 @@
 xu_int_t xm_os_getpid(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
     lua_pushinteger(lua, (xu_int_t)getpid());
     return 1;
 }

@@ -36,7 +36,7 @@
 xu_int_t xm_bloom_filter_open(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get arguments
     xu_int_t probability = (xu_int_t)lua_tointeger(lua, 1);

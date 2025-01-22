@@ -38,7 +38,7 @@
 xu_int_t xm_io_file_seek(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
     if (!lua_isuserdata(lua, 1))
@@ -51,7 +51,7 @@ xu_int_t xm_io_file_seek(lua_State* lua)
     // get whence and offset
     xu_char_t const* whence = luaL_optstring(lua, 2, "cur");
     tb_hong_t        offset = (tb_hong_t)luaL_optnumber(lua, 3, 0);
-    tb_assert_and_check_return_val(whence, 0);
+    xu_assert_and_check_return_val(whence, 0);
 
     // seek file
     if (xm_io_file_is_file(file))

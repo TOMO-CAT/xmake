@@ -36,7 +36,7 @@
 xu_int_t xm_os_link(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the source and destination
     xu_char_t const* src = luaL_checkstring(lua, 1);

@@ -42,7 +42,7 @@
 xu_int_t xm_io_filelock_lock(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get option argument
     xu_bool_t is_shared = xu_false;

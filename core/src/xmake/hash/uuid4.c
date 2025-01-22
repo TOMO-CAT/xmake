@@ -36,7 +36,7 @@
 xu_int_t xm_hash_uuid4(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the name
     xu_char_t const* name = luaL_optstring(lua, 1, xu_null);

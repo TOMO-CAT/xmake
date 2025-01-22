@@ -39,7 +39,7 @@
 xu_int_t xm_readline_clear_history(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
 #ifdef XU_CONFIG_OS_MACOSX
     // call clear_history (will crash on macOS)

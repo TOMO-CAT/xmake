@@ -36,7 +36,7 @@
 xu_int_t xm_hash_md5(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 1) && xm_lua_isinteger(lua, 2))

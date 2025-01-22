@@ -94,7 +94,7 @@ static xu_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data,
 xu_int_t xm_io_file_write(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
     if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "write(invalid file)!");

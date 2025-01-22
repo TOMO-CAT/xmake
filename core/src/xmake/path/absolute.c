@@ -36,7 +36,7 @@
 xu_int_t xm_path_absolute(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);

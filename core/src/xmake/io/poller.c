@@ -44,7 +44,7 @@ static tb_handle_t xm_io_poller_instance_init(tb_cpointer_t* ppriv)
 {
     // init poller
     tb_poller_ref_t poller = tb_poller_init(xu_null);
-    tb_assert_and_check_return_val(poller, xu_null);
+    xu_assert_and_check_return_val(poller, xu_null);
 
     return (tb_handle_t)poller;
 }

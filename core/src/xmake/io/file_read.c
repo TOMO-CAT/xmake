@@ -48,7 +48,7 @@ typedef enum __xm_pushline_state_e
 static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_ref_t line)
 {
     // check
-    tb_assert_and_check_return_val(stream && line, -1);
+    xu_assert_and_check_return_val(stream && line, -1);
 
     // read line and reserve crlf
     xu_bool_t  eof    = xu_false;
@@ -505,7 +505,7 @@ static xu_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, xu_c
 xu_int_t xm_io_file_read(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
     if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "read(invalid file)!");
@@ -517,7 +517,7 @@ xu_int_t xm_io_file_read(lua_State* lua)
     // get arguments
     xu_char_t const* mode         = luaL_optstring(lua, 2, "l");
     xu_char_t const* continuation = luaL_optstring(lua, 3, "");
-    tb_assert_and_check_return_val(mode && continuation, 0);
+    xu_assert_and_check_return_val(mode && continuation, 0);
 
     tb_long_t count = -1;
     if (lua_isnumber(lua, 2))

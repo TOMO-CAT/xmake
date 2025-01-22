@@ -38,7 +38,7 @@
 xu_int_t xm_os_mclock(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // save result
     lua_pushnumber(lua, (lua_Number)tb_mclock());

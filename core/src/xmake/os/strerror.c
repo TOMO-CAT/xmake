@@ -38,7 +38,7 @@
 xu_int_t xm_os_strerror(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get syserror state
     xu_size_t syserror = tb_syserror_state();

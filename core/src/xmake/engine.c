@@ -455,7 +455,7 @@ static lua_State* g_lua = xu_null;
 static xu_bool_t xm_engine_save_arguments(xm_engine_t* engine, xu_int_t argc, xu_char_t** argv, xu_char_t** taskargv)
 {
     // check
-    tb_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, xu_false);
+    xu_assert_and_check_return_val(engine && engine->lua && argc >= 1 && argv, xu_false);
 
     // put a new table into the stack
     lua_newtable(engine->lua);
@@ -488,7 +488,7 @@ static xu_bool_t xm_engine_save_arguments(xm_engine_t* engine, xu_int_t argc, xu
 static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path, xu_size_t maxn)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, xu_false);
+    xu_assert_and_check_return_val(engine && path && maxn, xu_false);
 
     xu_bool_t ok = xu_false;
     do
@@ -579,7 +579,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
                                                  xu_char_t const* programfile)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, xu_false);
+    xu_assert_and_check_return_val(engine && path && maxn, xu_false);
 
     xu_bool_t ok = xu_false;
     do
@@ -666,7 +666,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
 static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t* path, xu_size_t maxn)
 {
     // check
-    tb_assert_and_check_return_val(engine && path && maxn, xu_false);
+    xu_assert_and_check_return_val(engine && path && maxn, xu_false);
 
     xu_bool_t ok = xu_false;
     do
@@ -1015,7 +1015,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
-    tb_assert_and_check_return_val(engine && engine->lua, -1);
+    xu_assert_and_check_return_val(engine && engine->lua, -1);
 
     // save main arguments to the global variable: _ARGV
     if (!xm_engine_save_arguments(engine, argc, argv, taskargv)) return -1;

@@ -86,7 +86,7 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
 xu_int_t xm_io_poller_wait(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get timeout
     tb_long_t timeout = (tb_long_t)luaL_checknumber(lua, 1);

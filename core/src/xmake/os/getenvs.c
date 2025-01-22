@@ -50,7 +50,7 @@ extern xu_char_t** environ;
 xu_int_t xm_os_getenvs(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // init table
     lua_newtable(lua);

@@ -77,7 +77,7 @@ static xu_void_t xm_string_lastof_chr(lua_State* lua, xu_char_t const* cstr, xu_
 xu_int_t xm_string_lastof(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get string
     size_t           nstr = 0;

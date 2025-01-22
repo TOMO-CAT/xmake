@@ -40,7 +40,7 @@
 xu_int_t xm_hash_xxhash(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get mode
     xu_size_t mode = (xu_size_t)lua_tointeger(lua, 1);

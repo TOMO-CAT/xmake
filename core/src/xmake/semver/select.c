@@ -181,7 +181,7 @@ static xu_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, xu_i
 xu_int_t xm_semver_select(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // select version
     xu_bool_t        ok        = xu_false;

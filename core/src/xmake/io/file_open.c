@@ -149,7 +149,7 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t
 static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* pbomoff)
 {
     // check
-    tb_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
+    xu_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
 
     // detect encoding
     tb_byte_t* data     = xu_null;
@@ -172,12 +172,12 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* p
 xu_int_t xm_io_file_open(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get file path and mode
     xu_char_t const* path    = luaL_checkstring(lua, 1);
     xu_char_t const* modestr = luaL_optstring(lua, 2, "r");
-    tb_assert_and_check_return_val(path && modestr, 0);
+    xu_assert_and_check_return_val(path && modestr, 0);
 
     // get file mode value
     xu_size_t mode;
@@ -227,7 +227,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
     }
     else
         xm_io_return_error(lua, "invalid open mode!");
-    tb_assert_and_check_return_val(encoding != XM_IO_FILE_ENCODING_UNKNOWN, 0);
+    xu_assert_and_check_return_val(encoding != XM_IO_FILE_ENCODING_UNKNOWN, 0);
 
     // write data with utf bom? e.g. utf8bom, utf16lebom, utf16bom
     xu_bool_t utfbom = xu_false;
@@ -287,7 +287,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
 
     // make file
     xm_io_file_t* file = (xm_io_file_t*)lua_newuserdata(lua, sizeof(xm_io_file_t));
-    tb_assert_and_check_return_val(file, 0);
+    xu_assert_and_check_return_val(file, 0);
 
     // init file
     file->u.file_ref = file_ref;

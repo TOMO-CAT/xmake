@@ -301,7 +301,7 @@ static xu_int_t xm_sandbox_loadline(lua_State* lua, xu_int_t top)
 xu_int_t xm_sandbox_interactive(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     /* get init stack top
      *

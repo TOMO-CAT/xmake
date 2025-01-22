@@ -39,7 +39,7 @@
 xu_int_t xm_os_uid(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     xu_int_t ruidset = -1;
     xu_int_t euidset = -1;

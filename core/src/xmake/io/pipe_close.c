@@ -38,7 +38,7 @@
 xu_int_t xm_io_pipe_close(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check pipe?
     if (!xm_lua_ispointer(lua, 1))
