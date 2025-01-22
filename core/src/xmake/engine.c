@@ -494,7 +494,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
     do
     {
         // get it from the environment variable first
-        if (tb_environment_first("XMAKE_PROGRAM_FILE", path, maxn) && tb_file_info(path, xu_null))
+        if (xu_environment_first("XMAKE_PROGRAM_FILE", path, maxn) && tb_file_info(path, xu_null))
         {
             ok = xu_true;
             break;
@@ -586,7 +586,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
     {
         // get it from the environment variable first
         xu_char_t data[TB_PATH_MAXN] = {0};
-        if (tb_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && tb_path_absolute(data, path, maxn))
+        if (xu_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && tb_path_absolute(data, path, maxn))
         {
             ok = xu_true;
             break;
@@ -673,7 +673,7 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
     {
         // attempt to get it from the environment variable first
         xu_char_t data[TB_PATH_MAXN] = {0};
-        if (!tb_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !tb_path_absolute(data, path, maxn))
+        if (!xu_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !tb_path_absolute(data, path, maxn))
         {
             // get it from the current directory
             if (!tb_directory_current(path, maxn)) break;
@@ -813,7 +813,7 @@ static xu_void_t xm_engine_init_signal(xm_engine_t* engine)
 {
     // we enable it to catch the current lua stack in ctrl-c signal handler if XMAKE_PROFILE=stuck
     xu_char_t data[64] = {0};
-    if (!tb_environment_first("XMAKE_PROFILE", data, sizeof(data)) || tb_strcmp(data, "stuck")) return;
+    if (!xu_environment_first("XMAKE_PROFILE", data, sizeof(data)) || tb_strcmp(data, "stuck")) return;
 
     g_lua = engine->lua;
 #if defined(SIGINT)

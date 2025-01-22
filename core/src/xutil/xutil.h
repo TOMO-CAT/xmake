@@ -6,6 +6,7 @@
 #include "xutil/memory/allocator.h"
 #include "xutil/memory/memory.h"
 #include "xutil/platform/atomic.h"
+#include "xutil/platform/environment.h"
 #include "xutil/platform/socket.h"
 #include "xutil/utils/state.h"
 #include "xutil/utils/trace.h"
