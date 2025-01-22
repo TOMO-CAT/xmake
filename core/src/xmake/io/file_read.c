@@ -97,7 +97,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     else
         return (eof || tb_stream_beof(stream)) ? -1 : 0;
 }
-static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, xu_char_t const* continuation,
+static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* file, xu_char_t const* continuation,
                                            xu_bool_t keep_crlf)
 {
     // check
@@ -118,7 +118,7 @@ static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
     tb_long_t size = xm_io_file_buffer_readline(file->u.file_ref, &file->rcache);
 
     // translate line data
-    tb_int_t   result = PL_FAIL;
+    xu_int_t   result = PL_FAIL;
     xu_char_t* data   = tb_null;
     xu_size_t  conlen = tb_strlen(continuation);
     do
@@ -178,7 +178,7 @@ static tb_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
     // return result
     return result;
 }
-static tb_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
+static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
 {
     // check
     tb_assert(lua && file && xm_io_file_is_file(file) && file->u.file_ref);
@@ -211,7 +211,7 @@ static tb_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
     tb_buffer_exit(&buf);
     return 1;
 }
-static tb_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
+static xu_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
@@ -248,7 +248,7 @@ static tb_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, xu_char_
     }
 }
 
-static tb_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation,
+static xu_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation,
                                      xu_bool_t keep_crlf)
 {
     // check
@@ -285,7 +285,7 @@ static tb_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, xu_char
     }
 }
 
-static tb_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
+static xu_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
@@ -377,7 +377,7 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
     return result;
 }
 
-static tb_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation,
+static xu_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation,
                                          xu_bool_t keep_crlf)
 {
     // check
@@ -414,7 +414,7 @@ static tb_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, xu_
     }
 }
 
-static tb_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
+static xu_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_std(file));
@@ -447,7 +447,7 @@ static tb_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, xu_c
     }
 }
 
-static tb_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
+static xu_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_std(file));
@@ -478,7 +478,7 @@ static tb_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_cha
     return 1;
 }
 
-static tb_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
+static xu_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_std(file));
@@ -502,7 +502,7 @@ static tb_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, xu_c
  * io.file_read(file, "n")
  * io.file_read(file, 10)
  */
-tb_int_t xm_io_file_read(lua_State* lua)
+xu_int_t xm_io_file_read(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

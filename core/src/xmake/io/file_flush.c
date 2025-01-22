@@ -51,7 +51,7 @@ static xu_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
  */
 
 // io.file_flush(file)
-tb_int_t xm_io_file_flush(lua_State* lua)
+xu_int_t xm_io_file_flush(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

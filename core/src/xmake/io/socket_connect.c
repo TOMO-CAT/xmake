@@ -35,7 +35,7 @@
  */
 
 // io.socket_connect(sock, addr, port, family)
-tb_int_t xm_io_socket_connect(lua_State* lua)
+xu_int_t xm_io_socket_connect(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -73,6 +73,6 @@ tb_int_t xm_io_socket_connect(lua_State* lua)
     }
 
     // connect socket
-    lua_pushnumber(lua, (tb_int_t)tb_socket_connect(sock, &addr));
+    lua_pushnumber(lua, (xu_int_t)tb_socket_connect(sock, &addr));
     return 1;
 }

@@ -34,9 +34,9 @@
  * private implementation
  */
 static xu_void_t xm_string_split_str(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t const* cdls,
-                                     xu_size_t ndls, xu_bool_t strict, tb_int_t limit)
+                                     xu_size_t ndls, xu_bool_t strict, xu_int_t limit)
 {
-    tb_int_t         num = 0;
+    xu_int_t         num = 0;
     xu_char_t const* end = cstr + nstr;
     xu_char_t const* pos = tb_strstr(cstr, cdls); // faster than tb_strnstr()
     while (pos && pos < end)
@@ -64,9 +64,9 @@ static xu_void_t xm_string_split_str(lua_State* lua, xu_char_t const* cstr, xu_s
     }
 }
 static xu_void_t xm_string_split_chr(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t ch,
-                                     xu_bool_t strict, tb_int_t limit)
+                                     xu_bool_t strict, xu_int_t limit)
 {
-    tb_int_t         num = 0;
+    xu_int_t         num = 0;
     xu_char_t const* end = cstr + nstr;
     xu_char_t const* pos = tb_strchr(cstr, ch); // faster than tb_strnchr()
     while (pos && pos < end)
@@ -105,7 +105,7 @@ static xu_void_t xm_string_split_chr(lua_State* lua, xu_char_t const* cstr, xu_s
  * @param strict          is strict?
  * @param limit           the limit count
  */
-tb_int_t xm_string_split(lua_State* lua)
+xu_int_t xm_string_split(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -122,7 +122,7 @@ tb_int_t xm_string_split(lua_State* lua)
     xu_bool_t const strict = (xu_bool_t)lua_toboolean(lua, 3);
 
     // get limit count
-    tb_int_t const limit = (tb_int_t)luaL_optinteger(lua, 4, -1);
+    xu_int_t const limit = (xu_int_t)luaL_optinteger(lua, 4, -1);
 
     // split it
     lua_newtable(lua);

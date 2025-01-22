@@ -43,7 +43,7 @@
 
 /* io.socket_rawfd(sock)
  */
-tb_int_t xm_io_socket_rawfd(lua_State* lua)
+xu_int_t xm_io_socket_rawfd(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

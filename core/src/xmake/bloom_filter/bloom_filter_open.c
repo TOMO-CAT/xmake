@@ -33,15 +33,15 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_bloom_filter_open(lua_State* lua)
+xu_int_t xm_bloom_filter_open(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
 
     // get arguments
-    tb_int_t probability = (tb_int_t)lua_tointeger(lua, 1);
-    tb_int_t hash_count = (tb_int_t)lua_tointeger(lua, 2);
-    tb_int_t item_maxn = (tb_int_t)lua_tointeger(lua, 3);
+    xu_int_t probability = (xu_int_t)lua_tointeger(lua, 1);
+    xu_int_t hash_count = (xu_int_t)lua_tointeger(lua, 2);
+    xu_int_t item_maxn = (xu_int_t)lua_tointeger(lua, 3);
     if (hash_count > 16 || item_maxn < 0)
     {
         lua_pushnil(lua);

@@ -35,7 +35,7 @@
  */
 
 // io.filelock_unlock(lock)
-tb_int_t xm_io_filelock_unlock(lua_State* lua)
+xu_int_t xm_io_filelock_unlock(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

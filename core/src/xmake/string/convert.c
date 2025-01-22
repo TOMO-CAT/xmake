@@ -99,7 +99,7 @@ static xm_charset_entry_ref_t xm_string_charset_find_by_name(xu_char_t const* na
  *      local result = string.convert(str, "utf8", "gb2312")
  * @endcode
  */
-tb_int_t xm_string_convert(lua_State* lua)
+xu_int_t xm_string_convert(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

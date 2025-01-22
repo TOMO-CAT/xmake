@@ -36,7 +36,7 @@
  */
 
 // io.poller_support(events)
-tb_int_t xm_io_poller_support(lua_State* lua)
+xu_int_t xm_io_poller_support(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

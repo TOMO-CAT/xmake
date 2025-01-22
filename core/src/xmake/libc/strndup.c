@@ -33,7 +33,7 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_libc_strndup(lua_State* lua)
+xu_int_t xm_libc_strndup(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -46,7 +46,7 @@ tb_int_t xm_libc_strndup(lua_State* lua)
         s = lua_tostring(lua, 2);
     else
         xm_libc_return_error(lua, "libc.strndup(invalid args)!");
-    tb_int_t n = (tb_int_t)lua_tointeger(lua, 2);
+    xu_int_t n = (xu_int_t)lua_tointeger(lua, 2);
     if (s && n >= 0)
         lua_pushlstring(lua, s, n);
     else

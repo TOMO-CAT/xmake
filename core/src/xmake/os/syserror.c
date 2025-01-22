@@ -33,13 +33,13 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_os_syserror(lua_State* lua)
+xu_int_t xm_os_syserror(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
 
     // get syserror state
-    tb_int_t  err      = 0;
+    xu_int_t  err      = 0;
     xu_size_t syserror = tb_syserror_state();
     switch (syserror)
     {

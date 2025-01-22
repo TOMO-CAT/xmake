@@ -97,8 +97,8 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* in
             if (tb_strcmp(rootdir, ".")) path += rootlen + 1;
 
             // exclude paths
-            tb_int_t i     = 0;
-            tb_int_t count = (tb_int_t)lua_objlen(lua, 5);
+            xu_int_t i     = 0;
+            xu_int_t count = (xu_int_t)lua_objlen(lua, 5);
             for (i = 0; i < count && !excluded; i++)
             {
                 // get exclude
@@ -136,7 +136,7 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* in
             if (info->type & needtype)
             {
                 // save it
-                lua_rawseti(lua, -3, (tb_int_t)(++*pcount));
+                lua_rawseti(lua, -3, (xu_int_t)(++*pcount));
 
                 // do callback function
                 if (lua_isfunction(lua, 6))
@@ -165,7 +165,7 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, tb_file_info_t const* in
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_os_find(lua_State* lua)
+xu_int_t xm_os_find(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

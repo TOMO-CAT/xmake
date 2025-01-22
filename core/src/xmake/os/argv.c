@@ -33,7 +33,7 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_os_argv(lua_State* lua)
+xu_int_t xm_os_argv(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -63,9 +63,9 @@ tb_int_t xm_os_argv(lua_State* lua)
         if (!tb_string_init(&arg)) break;
 
         // parse command to the arguments
-        tb_int_t         i      = 1;
-        tb_int_t         skip   = 0;
-        tb_int_t         escape = 0;
+        xu_int_t         i      = 1;
+        xu_int_t         skip   = 0;
+        xu_int_t         escape = 0;
         xu_char_t        quote  = 0;
         xu_char_t        ch     = 0;
         xu_char_t const* p      = args;

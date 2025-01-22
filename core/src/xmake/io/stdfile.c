@@ -65,7 +65,7 @@ static xu_size_t xm_io_stdfile_isatty(xu_size_t type)
 static xu_void_t xm_io_stdfile_init_buffer(xu_size_t type)
 {
     struct stat stats;
-    tb_int_t    size = BUFSIZ;
+    xu_int_t    size = BUFSIZ;
     if (fstat(fileno(stdout), &stats) != -1) size = stats.st_blksize;
     setvbuf(stdout, tb_null, _IOLBF, size);
 }
@@ -106,7 +106,7 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
  */
 
 // io.stdfile(stdin: 1, stdout: 2, stderr: 3)
-tb_int_t xm_io_stdfile(lua_State* lua)
+xu_int_t xm_io_stdfile(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

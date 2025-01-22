@@ -34,7 +34,7 @@
  * implementation
  */
 
-tb_int_t xm_lz4_decompress_stream_write(lua_State* lua)
+xu_int_t xm_lz4_decompress_stream_write(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -59,13 +59,13 @@ tb_int_t xm_lz4_decompress_stream_write(lua_State* lua)
     if (!data || !size)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // write data
     tb_long_t real = xm_lz4_dstream_write(stream, data, size, xu_false);
-    lua_pushinteger(lua, (tb_int_t)real);
+    lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

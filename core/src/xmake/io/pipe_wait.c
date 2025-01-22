@@ -35,7 +35,7 @@
  */
 
 // io.pipe_wait(pipefile, events, timeout)
-tb_int_t xm_io_pipe_wait(lua_State* lua)
+xu_int_t xm_io_pipe_wait(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -54,6 +54,6 @@ tb_int_t xm_io_pipe_wait(lua_State* lua)
     tb_long_t timeout = (tb_long_t)luaL_checknumber(lua, 3);
 
     // wait pipe
-    lua_pushnumber(lua, (tb_int_t)tb_pipe_file_wait(pipefile, events, timeout));
+    lua_pushnumber(lua, (xu_int_t)tb_pipe_file_wait(pipefile, events, timeout));
     return 1;
 }

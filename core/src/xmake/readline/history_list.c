@@ -36,7 +36,7 @@
 #ifdef XM_CONFIG_API_HAVE_READLINE
 
 // history_list wrapper
-tb_int_t xm_readline_history_list(lua_State* lua)
+xu_int_t xm_readline_history_list(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -44,8 +44,8 @@ tb_int_t xm_readline_history_list(lua_State* lua)
     // history list
     lua_newtable(lua);
 
-#ifdef TB_CONFIG_OS_MACOSX
-    for (tb_int_t i = 1; i <= history_length; ++i)
+#ifdef XU_CONFIG_OS_MACOSX
+    for (xu_int_t i = 1; i <= history_length; ++i)
     {
         lua_newtable(lua);
 
@@ -58,7 +58,7 @@ tb_int_t xm_readline_history_list(lua_State* lua)
         lua_rawseti(lua, -2, i);
     }
 #else
-    tb_int_t i = 1;
+    xu_int_t i = 1;
     for (HIST_ENTRY **p = history_list(); *p; ++p, ++i)
     {
         lua_newtable(lua);

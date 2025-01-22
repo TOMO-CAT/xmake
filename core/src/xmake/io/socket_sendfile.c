@@ -35,7 +35,7 @@
  */
 
 // io.socket_sendfile(sock, file, start, last)
-tb_int_t xm_io_socket_sendfile(lua_State* lua)
+xu_int_t xm_io_socket_sendfile(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -96,7 +96,7 @@ tb_int_t xm_io_socket_sendfile(lua_State* lua)
     if (start < 1 || start > filesize)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid start position(%d)!", (tb_int_t)start);
+        lua_pushfstring(lua, "invalid start position(%d)!", (xu_int_t)start);
         return 2;
     }
 
@@ -106,12 +106,12 @@ tb_int_t xm_io_socket_sendfile(lua_State* lua)
     if (last < start - 1 || last > filesize + start - 1)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid last position(%d)!", (tb_int_t)last);
+        lua_pushfstring(lua, "invalid last position(%d)!", (xu_int_t)last);
         return 2;
     }
 
     // send file data
     tb_long_t real = (tb_long_t)tb_socket_sendf(sock, rawfile, start - 1, last - start + 1);
-    lua_pushinteger(lua, (tb_int_t)real);
+    lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

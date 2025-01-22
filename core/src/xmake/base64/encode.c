@@ -33,7 +33,7 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_base64_encode(lua_State* lua)
+xu_int_t xm_base64_encode(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -46,7 +46,7 @@ tb_int_t xm_base64_encode(lua_State* lua)
     if (!data || !size)
     {
         lua_pushnil(lua);
-        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
@@ -58,7 +58,7 @@ tb_int_t xm_base64_encode(lua_State* lua)
         xu_size_t real = tb_base64_encode(data, size, buff, sizeof(buff));
         if (real > 0)
         {
-            lua_pushlstring(lua, buff, (tb_int_t)real);
+            lua_pushlstring(lua, buff, (xu_int_t)real);
             return 1;
         }
     }

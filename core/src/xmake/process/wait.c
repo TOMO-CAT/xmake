@@ -35,7 +35,7 @@
  */
 
 // ok, status = process.wait(proc, timeout)
-tb_int_t xm_process_wait(lua_State* lua)
+xu_int_t xm_process_wait(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

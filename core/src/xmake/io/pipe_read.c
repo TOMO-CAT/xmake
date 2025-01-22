@@ -35,7 +35,7 @@
  */
 
 // real, data_or_errors = io.pipe_read(pipefile, size)
-tb_int_t xm_io_pipe_read(lua_State* lua)
+xu_int_t xm_io_pipe_read(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -69,12 +69,12 @@ tb_int_t xm_io_pipe_read(lua_State* lua)
     if (size <= 0)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid size(%d)!", (tb_int_t)size);
+        lua_pushfstring(lua, "invalid size(%d)!", (xu_int_t)size);
         return 2;
     }
 
     // read data
     tb_long_t real = tb_pipe_file_read(pipefile, data, size);
-    lua_pushinteger(lua, (tb_int_t)real);
+    lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

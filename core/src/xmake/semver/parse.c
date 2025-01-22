@@ -54,7 +54,7 @@
     }
  *
  */
-tb_int_t xm_semver_parse(lua_State* lua)
+xu_int_t xm_semver_parse(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

@@ -33,7 +33,7 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_lz4_block_decompress(lua_State* lua)
+xu_int_t xm_lz4_block_decompress(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -46,13 +46,13 @@ tb_int_t xm_lz4_block_decompress(lua_State* lua)
     if (!data || !size)
     {
         lua_pushnil(lua);
-        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // get real size
-    tb_int_t real = (tb_int_t)lua_tointeger(lua, 3);
+    xu_int_t real = (xu_int_t)lua_tointeger(lua, 3);
     if (real <= 0)
     {
         lua_pushnil(lua);
@@ -69,7 +69,7 @@ tb_int_t xm_lz4_block_decompress(lua_State* lua)
         output_data = real <= sizeof(buffer) ? buffer : (tb_byte_t*)tb_malloc(real);
         tb_assert_and_check_break(output_data);
 
-        tb_int_t r = LZ4_decompress_safe((xu_char_t const*)data, (xu_char_t*)output_data, (tb_int_t)size, real);
+        xu_int_t r = LZ4_decompress_safe((xu_char_t const*)data, (xu_char_t*)output_data, (xu_int_t)size, real);
         tb_assert_and_check_break(r > 0);
 
         lua_pushlstring(lua, (xu_char_t const*)output_data, r);

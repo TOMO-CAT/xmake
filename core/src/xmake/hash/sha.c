@@ -33,7 +33,7 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_hash_sha(lua_State* lua)
+xu_int_t xm_hash_sha(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -49,7 +49,7 @@ tb_int_t xm_hash_sha(lua_State* lua)
         if (!data || !size)
         {
             lua_pushnil(lua);
-            lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+            lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
             return 2;
         }
         tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));

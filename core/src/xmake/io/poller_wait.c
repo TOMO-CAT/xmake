@@ -37,7 +37,7 @@
 
 // we need only one global lua state/poller in main thread, so it is thread-safe.
 static lua_State* g_lua          = tb_null;
-static tb_int_t   g_events_count = 0;
+static xu_int_t   g_events_count = 0;
 
 /* *******************************************************
  * private implementation
@@ -50,7 +50,7 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
 
     // save object and events
     lua_newtable(g_lua);
-    lua_pushinteger(g_lua, (tb_int_t)object->type);
+    lua_pushinteger(g_lua, (xu_int_t)object->type);
     lua_rawseti(g_lua, -2, 1);
     if (priv)
         lua_pushstring(g_lua, (xu_char_t const*)priv);
@@ -73,7 +73,7 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
         }
     }
     else
-        lua_pushinteger(g_lua, (tb_int_t)events);
+        lua_pushinteger(g_lua, (xu_int_t)events);
     lua_rawseti(g_lua, -2, 3);
     lua_rawseti(g_lua, -2, ++g_events_count);
 }
@@ -83,7 +83,7 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
  */
 
 // local events, count = io.poller_wait(timeout)
-tb_int_t xm_io_poller_wait(lua_State* lua)
+xu_int_t xm_io_poller_wait(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -100,7 +100,7 @@ tb_int_t xm_io_poller_wait(lua_State* lua)
     tb_long_t count = tb_poller_wait(xm_io_poller(), xm_io_poller_event, timeout);
     if (count > 0)
     {
-        lua_pushinteger(lua, (tb_int_t)count);
+        lua_pushinteger(lua, (xu_int_t)count);
         return 2;
     }
     else if (!count)

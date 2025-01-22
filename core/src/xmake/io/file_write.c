@@ -91,7 +91,7 @@ static xu_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data,
  */
 
 // io.file_write(file, ...)
-tb_int_t xm_io_file_write(lua_State* lua)
+xu_int_t xm_io_file_write(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -104,11 +104,11 @@ tb_int_t xm_io_file_write(lua_State* lua)
     tb_check_return_val(file, 0);
 
     // write file data
-    tb_int_t narg = lua_gettop(lua);
+    xu_int_t narg = lua_gettop(lua);
     if (narg > 1)
     {
         xu_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
-        for (tb_int_t i = 2; i <= narg; i++)
+        for (xu_int_t i = 2; i <= narg; i++)
         {
             // get data
             size_t           datasize = 0;

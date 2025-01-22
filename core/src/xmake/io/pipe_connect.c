@@ -35,7 +35,7 @@
  */
 
 // io.pipe_connect(pipefile)
-tb_int_t xm_io_pipe_connect(lua_State* lua)
+xu_int_t xm_io_pipe_connect(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -53,6 +53,6 @@ tb_int_t xm_io_pipe_connect(lua_State* lua)
     tb_check_return_val(pipefile, 0);
 
     // connect pipe
-    lua_pushnumber(lua, (tb_int_t)tb_pipe_file_connect(pipefile));
+    lua_pushnumber(lua, (xu_int_t)tb_pipe_file_connect(pipefile));
     return 1;
 }

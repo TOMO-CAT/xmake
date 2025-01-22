@@ -33,7 +33,7 @@
 // the xmake engine type
 typedef struct
 {
-    tb_int_t dummy;
+    xu_int_t dummy;
 } const* xm_engine_ref_t;
 
 // the lni initializer callback type
@@ -68,7 +68,7 @@ xu_void_t xm_engine_exit(xm_engine_ref_t engine);
  *
  * @return                  the error code of main()
  */
-tb_int_t xm_engine_main(xm_engine_ref_t engine, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv);
+xu_int_t xm_engine_main(xm_engine_ref_t engine, xu_int_t argc, xu_char_t** argv, xu_char_t** taskargv);
 
 /*! register lni modules in the engine, @note we need to call it in lni_initializer()
  *
@@ -89,5 +89,5 @@ xu_void_t xm_engine_register(xm_engine_ref_t engine, xu_char_t const* module, lu
  *
  * @return                  the error code of main()
  */
-tb_int_t xm_engine_run(xu_char_t const* name, tb_int_t argc, xu_char_t** argv, xu_char_t** taskargv,
+xu_int_t xm_engine_run(xu_char_t const* name, xu_int_t argc, xu_char_t** argv, xu_char_t** taskargv,
                        xm_engine_lni_initializer_cb_t lni_initializer);

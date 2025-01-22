@@ -73,7 +73,7 @@ static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr
  * implementation
  */
 // os.args({"xx", "yy"}, {escape = true})
-tb_int_t xm_os_args(lua_State* lua)
+xu_int_t xm_os_args(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -115,7 +115,7 @@ tb_int_t xm_os_args(lua_State* lua)
             if (i != 1) tb_string_chrcat(&result, ' ');
 
             // add argument
-            lua_pushnumber(lua, (tb_int_t)i);
+            lua_pushnumber(lua, (xu_int_t)i);
             lua_rawget(lua, 1);
             if (lua_istable(lua, -1)) // is path instance?
             {

@@ -33,7 +33,7 @@
 /* *******************************************************
  * private implementation
  */
-static xu_void_t xm_string_trim_space(xu_char_t const** psstr, xu_char_t const** pestr, tb_int_t mode)
+static xu_void_t xm_string_trim_space(xu_char_t const** psstr, xu_char_t const** pestr, xu_int_t mode)
 {
     // check
     tb_assert(psstr && pestr && *psstr && *pestr);
@@ -99,7 +99,7 @@ static xu_char_t const* xm_string_rtrim(xu_char_t const* sstr, xu_char_t const* 
  *      local result = string.trim(str, "(", -1)
  * @endcode
  */
-tb_int_t xm_string_trim(lua_State* lua)
+xu_int_t xm_string_trim(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -108,7 +108,7 @@ tb_int_t xm_string_trim(lua_State* lua)
     xu_char_t const* sstr      = luaL_checklstring(lua, 1, &lstr);
     xu_char_t const* estr      = sstr + lstr;
     xu_char_t const* trimchars = luaL_optlstring(lua, 2, "", &ltrim);
-    tb_int_t const   trimtype  = (tb_int_t)luaL_optinteger(lua, 3, 0);
+    xu_int_t const   trimtype  = (xu_int_t)luaL_optinteger(lua, 3, 0);
     do
     {
         tb_assert_and_check_break(sstr && trimchars);

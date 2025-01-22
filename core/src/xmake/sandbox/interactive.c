@@ -78,7 +78,7 @@ static xu_void_t xm_sandbox_report(lua_State* lua)
 }
 
 // the traceback function
-static tb_int_t xm_sandbox_traceback(lua_State* lua)
+static xu_int_t xm_sandbox_traceback(lua_State* lua)
 {
     if (!lua_isstring(lua, 1))
     {
@@ -96,13 +96,13 @@ static tb_int_t xm_sandbox_traceback(lua_State* lua)
 }
 
 // execute codes
-static tb_int_t xm_sandbox_docall(lua_State* lua, tb_int_t narg, tb_int_t clear)
+static xu_int_t xm_sandbox_docall(lua_State* lua, xu_int_t narg, xu_int_t clear)
 {
     /* get error function index
      *
      * stack: arg1(sandbox_scope) scriptfunc(top) -> ...
      */
-    tb_int_t errfunc = lua_gettop(lua) - narg;
+    xu_int_t errfunc = lua_gettop(lua) - narg;
 
     // push traceback function
     lua_pushcfunction(lua, xm_sandbox_traceback);
@@ -115,7 +115,7 @@ static tb_int_t xm_sandbox_docall(lua_State* lua, tb_int_t narg, tb_int_t clear)
      * stack: errfunc arg1 scriptfunc -> ...
      * after: errfunc arg1 [results] -> ...
      */
-    tb_int_t status = lua_pcall(lua, narg, (clear ? 0 : LUA_MULTRET), errfunc);
+    xu_int_t status = lua_pcall(lua, narg, (clear ? 0 : LUA_MULTRET), errfunc);
 
     // remove traceback function
     lua_remove(lua, errfunc);
@@ -128,7 +128,7 @@ static tb_int_t xm_sandbox_docall(lua_State* lua, tb_int_t narg, tb_int_t clear)
 }
 
 // this line is incomplete?
-static tb_int_t xm_sandbox_incomplete(lua_State* lua, tb_int_t status)
+static xu_int_t xm_sandbox_incomplete(lua_State* lua, xu_int_t status)
 {
     // syntax error?
     if (status == LUA_ERRSYNTAX)
@@ -182,7 +182,7 @@ static xu_size_t xm_sandbox_readline(xu_char_t* data, xu_size_t maxn, xu_char_t 
 }
 
 // read and push input line
-static tb_int_t xm_sandbox_pushline(lua_State* lua, xu_char_t const* prompt2)
+static xu_int_t xm_sandbox_pushline(lua_State* lua, xu_char_t const* prompt2)
 {
     // read line
     xu_char_t data[LUA_PROMPT_BUFSIZE];
@@ -204,7 +204,7 @@ static tb_int_t xm_sandbox_pushline(lua_State* lua, xu_char_t const* prompt2)
 }
 
 // load code line
-static tb_int_t xm_sandbox_loadline(lua_State* lua, tb_int_t top)
+static xu_int_t xm_sandbox_loadline(lua_State* lua, xu_int_t top)
 {
     // clear stack
     lua_settop(lua, top);
@@ -221,7 +221,7 @@ static tb_int_t xm_sandbox_loadline(lua_State* lua, tb_int_t top)
     lua_pop(lua, 1);
 
     // read first line
-    tb_int_t  status;
+    xu_int_t  status;
     xu_char_t data[LUA_PROMPT_BUFSIZE];
     xu_size_t size = xm_sandbox_readline(data + 7, sizeof(data) - 7, prompt);
     if (size)
@@ -298,7 +298,7 @@ static tb_int_t xm_sandbox_loadline(lua_State* lua, tb_int_t top)
  */
 
 // sandbox.interactive()
-tb_int_t xm_sandbox_interactive(lua_State* lua)
+xu_int_t xm_sandbox_interactive(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -307,10 +307,10 @@ tb_int_t xm_sandbox_interactive(lua_State* lua)
      *
      * stack: arg1(sandbox_scope)
      */
-    tb_int_t top = lua_gettop(lua);
+    xu_int_t top = lua_gettop(lua);
 
     // enter interactive
-    tb_int_t status;
+    xu_int_t status;
     while ((status = xm_sandbox_loadline(lua, top)) != -1)
     {
         // execute codes
@@ -347,7 +347,7 @@ tb_int_t xm_sandbox_interactive(lua_State* lua)
         if (status == 0 && lua_gettop(lua) > top)
         {
             // get results count
-            tb_int_t count = lua_gettop(lua) - top;
+            xu_int_t count = lua_gettop(lua) - top;
 
             /* dump results
              *

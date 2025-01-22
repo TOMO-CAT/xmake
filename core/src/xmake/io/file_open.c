@@ -169,7 +169,7 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* p
  */
 
 // io.file_open(path, modestr)
-tb_int_t xm_io_file_open(lua_State* lua)
+xu_int_t xm_io_file_open(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

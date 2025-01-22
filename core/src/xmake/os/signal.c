@@ -29,15 +29,15 @@
  * includes
  */
 #include "xmake/os/prefix.h"
-#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_IOS)
+#if defined(XU_CONFIG_OS_MACOSX) || defined(XU_CONFIG_OS_IOS)
 #    include <signal.h>
 #    include <unistd.h>
-#elif defined(TB_CONFIG_OS_LINUX) || defined(TB_CONFIG_OS_BSD) || defined(TB_CONFIG_OS_ANDROID) ||                     \
-    defined(TB_CONFIG_OS_HAIKU)
+#elif defined(XU_CONFIG_OS_LINUX) || defined(XU_CONFIG_OS_BSD) || defined(XU_CONFIG_OS_ANDROID) ||                     \
+    defined(XU_CONFIG_OS_HAIKU)
 #    include <signal.h>
 #    include <unistd.h>
 #endif
-#ifdef TB_CONFIG_OS_BSD
+#ifdef XU_CONFIG_OS_BSD
 #    include <signal.h>
 #    include <sys/sysctl.h>
 #    include <sys/types.h>
@@ -66,7 +66,7 @@ static lua_State* g_lua = tb_null;
 /* *******************************************************
  * private implementation
  */
-static xu_void_t xm_os_signal_handler_impl(tb_int_t signo)
+static xu_void_t xm_os_signal_handler_impl(xu_int_t signo)
 {
     // do callback(signo)
     lua_State* lua = g_lua;
@@ -81,9 +81,9 @@ static xu_void_t xm_os_signal_handler_impl(tb_int_t signo)
 }
 
 #if defined(SIGINT)
-static xu_void_t xm_os_signal_handler(tb_int_t signo_native)
+static xu_void_t xm_os_signal_handler(xu_int_t signo_native)
 {
-    tb_int_t signo = -1;
+    xu_int_t signo = -1;
     switch (signo_native)
     {
     case SIGINT: signo = XM_OS_SIGINT; break;
@@ -96,21 +96,21 @@ static xu_void_t xm_os_signal_handler(tb_int_t signo_native)
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_os_signal(lua_State* lua)
+xu_int_t xm_os_signal(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
     g_lua            = lua;
-    tb_int_t handler = XM_OS_SIGFUN;
+    xu_int_t handler = XM_OS_SIGFUN;
 
     // check signal handler
     if (lua_isnumber(lua, 2))
-        handler = (tb_int_t)luaL_checkinteger(lua, 2);
+        handler = (xu_int_t)luaL_checkinteger(lua, 2);
     else if (!lua_isfunction(lua, 2))
         return 0;
 
     // save signal handler
-    tb_int_t signo = (tb_int_t)luaL_checkinteger(lua, 1);
+    xu_int_t signo = (xu_int_t)luaL_checkinteger(lua, 1);
     if (handler == XM_OS_SIGFUN)
     {
         xu_char_t name[64] = {0};

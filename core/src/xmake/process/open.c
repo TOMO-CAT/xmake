@@ -41,7 +41,7 @@
  *  infile = "", inpipe = "", inpipe = "",
  *  envs = {"PATH=xxx", "XXX=yyy"}})
  */
-tb_int_t xm_process_open(lua_State* lua)
+xu_int_t xm_process_open(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -177,7 +177,7 @@ tb_int_t xm_process_open(lua_State* lua)
                     else
                     {
                         // error
-                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (tb_int_t)envn,
+                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (xu_int_t)envn,
                                         tb_arrayn(envs) - 1);
                         lua_error(lua);
                     }
@@ -185,7 +185,7 @@ tb_int_t xm_process_open(lua_State* lua)
                 else
                 {
                     // error
-                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (tb_int_t)i,
+                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (xu_int_t)i,
                                     luaL_typename(lua, -1));
                     lua_error(lua);
                 }

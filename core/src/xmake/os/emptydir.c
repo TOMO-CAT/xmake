@@ -51,7 +51,7 @@ static tb_long_t xm_os_emptydir_walk(xu_char_t const* path, tb_file_info_t const
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_os_emptydir(lua_State* lua)
+xu_int_t xm_os_emptydir(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

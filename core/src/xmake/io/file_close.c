@@ -35,7 +35,7 @@
  */
 
 // io.file_close(file)
-tb_int_t xm_io_file_close(lua_State* lua)
+xu_int_t xm_io_file_close(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);

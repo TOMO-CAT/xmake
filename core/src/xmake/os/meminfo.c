@@ -29,16 +29,16 @@
  * includes
  */
 #include "xmake/os/prefix.h"
-#if defined(TB_CONFIG_OS_MACOSX)
+#if defined(XU_CONFIG_OS_MACOSX)
 #    include <mach-o/dyld.h>
 #    include <mach-o/nlist.h>
 #    include <mach/mach.h>
 #    include <mach/machine.h>
 #    include <mach/vm_statistics.h>
-#elif defined(TB_CONFIG_OS_LINUX)
+#elif defined(XU_CONFIG_OS_LINUX)
 #    include <stdio.h>
 #    include <sys/sysinfo.h>
-#elif defined(TB_CONFIG_OS_BSD)
+#elif defined(XU_CONFIG_OS_BSD)
 #    include <sys/sysctl.h>
 #    include <sys/types.h>
 #endif
@@ -46,7 +46,7 @@
 /* *******************************************************
  * private implementation
  */
-#ifdef TB_CONFIG_OS_LINUX
+#ifdef XU_CONFIG_OS_LINUX
 static tb_int64_t xm_os_meminfo_get_value(xu_char_t const* buffer, xu_char_t const* name)
 {
     xu_char_t const* p = tb_strstr(buffer, name);
@@ -55,14 +55,14 @@ static tb_int64_t xm_os_meminfo_get_value(xu_char_t const* buffer, xu_char_t con
 #endif
 
 // get the used memory size (MB)
-static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
+static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
 {
-#if defined(TB_CONFIG_OS_MACOSX)
+#if defined(XU_CONFIG_OS_MACOSX)
     vm_statistics64_data_t vmstat;
     mach_msg_type_number_t count = HOST_VM_INFO64_COUNT;
     if (host_statistics64(mach_host_self(), HOST_VM_INFO64, (host_info_t)&vmstat, &count) == KERN_SUCCESS)
     {
-        tb_int_t   pagesize  = (tb_int_t)tb_page_size();
+        xu_int_t   pagesize  = (xu_int_t)tb_page_size();
         tb_int64_t totalsize = (tb_int64_t)(vmstat.inactive_count + vmstat.free_count + vmstat.active_count +
                                             vmstat.wire_count + vmstat.compressor_page_count) *
                                pagesize;
@@ -75,11 +75,11 @@ static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
          */
         tb_int64_t availsize =
             (tb_int64_t)(vmstat.inactive_count + vmstat.free_count - vmstat.speculative_count) * pagesize;
-        *ptotalsize = (tb_int_t)(totalsize / (1024 * 1024));
-        *pavailsize = (tb_int_t)(availsize / (1024 * 1024));
+        *ptotalsize = (xu_int_t)(totalsize / (1024 * 1024));
+        *pavailsize = (xu_int_t)(availsize / (1024 * 1024));
         return xu_true;
     }
-#elif defined(TB_CONFIG_OS_LINUX)
+#elif defined(XU_CONFIG_OS_LINUX)
     /* we get meminfo from /proc/meminfo
      *
      * @see https://github.com/rfjakob/earlyoom/blob/cba1d599e4a7484c45ac017aa7702ff879f15846/meminfo.c#L52
@@ -108,8 +108,8 @@ static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
                 }
                 if (totalsize > 0 && availsize >= 0)
                 {
-                    *ptotalsize = (tb_int_t)(totalsize / 1024);
-                    *pavailsize = (tb_int_t)(availsize / 1024);
+                    *ptotalsize = (xu_int_t)(totalsize / 1024);
+                    *pavailsize = (xu_int_t)(availsize / 1024);
                     ok          = xu_true;
                 }
             }
@@ -122,12 +122,12 @@ static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
         struct sysinfo info = {0};
         if (sysinfo(&info) == 0)
         {
-            *ptotalsize = (tb_int_t)(info.totalram / (1024 * 1024));
-            *pavailsize = (tb_int_t)((info.freeram + info.bufferram /* + cache size */) / (1024 * 1024));
+            *ptotalsize = (xu_int_t)(info.totalram / (1024 * 1024));
+            *pavailsize = (xu_int_t)((info.freeram + info.bufferram /* + cache size */) / (1024 * 1024));
             return xu_true;
         }
     }
-#elif defined(TB_CONFIG_OS_BSD) && !defined(__OpenBSD__)
+#elif defined(XU_CONFIG_OS_BSD) && !defined(__OpenBSD__)
     unsigned long totalsize;
     size_t        size = sizeof(totalsize);
     if (sysctlbyname("hw.physmem", &totalsize, &size, tb_null, 0) != 0) return xu_false;
@@ -141,8 +141,8 @@ static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
     size = sizeof(v_inactive_count);
     if (sysctlbyname("vm.stats.vm.v_inactive_count", &v_inactive_count, &size, tb_null, 0) != 0) return xu_false;
 
-    *ptotalsize = (tb_int_t)(totalsize / (1024 * 1024));
-    *pavailsize = (tb_int_t)(((tb_int64_t)(v_free_count + v_inactive_count) * tb_page_size()) / (1024 * 1024));
+    *ptotalsize = (xu_int_t)(totalsize / (1024 * 1024));
+    *pavailsize = (xu_int_t)(((tb_int64_t)(v_free_count + v_inactive_count) * tb_page_size()) / (1024 * 1024));
     return xu_true;
 #endif
     return xu_false;
@@ -151,7 +151,7 @@ static xu_bool_t xm_os_meminfo_stats(tb_int_t* ptotalsize, tb_int_t* pavailsize)
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_os_meminfo(lua_State* lua)
+xu_int_t xm_os_meminfo(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -160,14 +160,14 @@ tb_int_t xm_os_meminfo(lua_State* lua)
     lua_newtable(lua);
 
     // get the pagesize (bytes)
-    tb_int_t pagesize = (tb_int_t)tb_page_size();
+    xu_int_t pagesize = (xu_int_t)tb_page_size();
     lua_pushstring(lua, "pagesize");
     lua_pushinteger(lua, pagesize);
     lua_settable(lua, -3);
 
     // get the memory size (MB)
-    tb_int_t availsize = 0;
-    tb_int_t totalsize = 0;
+    xu_int_t availsize = 0;
+    xu_int_t totalsize = 0;
     if (xm_os_meminfo_stats(&totalsize, &availsize))
     {
         lua_pushstring(lua, "totalsize");

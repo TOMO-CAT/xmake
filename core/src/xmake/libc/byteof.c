@@ -33,7 +33,7 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_libc_byteof(lua_State* lua)
+xu_int_t xm_libc_byteof(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -48,9 +48,9 @@ tb_int_t xm_libc_byteof(lua_State* lua)
         xm_libc_return_error(lua, "libc.byteof(invalid data)!");
 
     // get offset
-    tb_int_t offset = 0;
+    xu_int_t offset = 0;
     if (lua_isnumber(lua, 2))
-        offset = (tb_int_t)lua_tointeger(lua, 2);
+        offset = (xu_int_t)lua_tointeger(lua, 2);
     else
         xm_libc_return_error(lua, "libc.byteof(invalid offset)!");
     lua_pushinteger(lua, ((tb_byte_t const*)data)[offset]);

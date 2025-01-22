@@ -33,7 +33,7 @@
 /* *******************************************************
  * implementation
  */
-tb_int_t xm_libc_memset(lua_State* lua)
+xu_int_t xm_libc_memset(lua_State* lua)
 {
     // check
     tb_assert_and_check_return_val(lua, 0);
@@ -41,7 +41,7 @@ tb_int_t xm_libc_memset(lua_State* lua)
     // do memset
     tb_pointer_t data = (tb_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
     xu_char_t    ch   = (xu_char_t)lua_tointeger(lua, 2);
-    tb_int_t     size = (tb_int_t)lua_tointeger(lua, 3);
+    xu_int_t     size = (xu_int_t)lua_tointeger(lua, 3);
     if (data && size > 0) tb_memset(data, ch, size);
     return 0;
 }
