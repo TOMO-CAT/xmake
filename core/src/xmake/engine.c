@@ -756,7 +756,7 @@ static __xu_inline__ xu_char_t const* xm_engine_xmake_arch()
     xu_char_t const* arch = xu_null;
 #if defined(XU_ARCH_x64)
     arch = "x86_64";
-#elif defined(TB_ARCH_x86)
+#elif defined(XU_ARCH_x86)
     arch = "i386";
 #elif defined(TB_ARCH_ARM64)
     arch = "arm64";
