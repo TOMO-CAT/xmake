@@ -134,7 +134,7 @@ xu_int_t xm_io_file_write(lua_State* lua)
             }
 
             tb_check_continue(datasize);
-            tb_assert_and_check_break(data);
+            xu_assert_and_check_break(data);
 
             // write data to std or file
             if (xm_io_file_is_std(file))

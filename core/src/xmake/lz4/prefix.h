@@ -107,12 +107,12 @@ static __xu_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
     do
     {
         stream = tb_malloc0_type(xm_lz4_cstream_t);
-        tb_assert_and_check_break(stream);
+        xu_assert_and_check_break(stream);
 
         stream->write_maxn  = 64 * 1024;
         stream->buffer_maxn = LZ4F_compressBound(stream->write_maxn, prefsPtr);
         stream->buffer      = (LZ4_byte*)tb_malloc(stream->buffer_maxn);
-        tb_assert_and_check_break(stream->buffer);
+        xu_assert_and_check_break(stream->buffer);
 
         ret = LZ4F_createCompressionContext(&stream->cctx, LZ4F_getVersion());
         if (LZ4F_isError(ret)) break;
@@ -209,7 +209,7 @@ static __xu_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
     do
     {
         stream = tb_malloc0_type(xm_lz4_dstream_t);
-        tb_assert_and_check_break(stream);
+        xu_assert_and_check_break(stream);
 
         ret = LZ4F_createDecompressionContext(&stream->dctx, LZ4F_getVersion());
         if (LZ4F_isError(ret)) break;

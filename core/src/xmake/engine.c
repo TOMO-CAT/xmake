@@ -622,7 +622,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
             // get the root directory
             xu_char_t        data[XU_PATH_MAXN];
             xu_char_t const* rootdir = tb_path_directory(programpath, data, sizeof(data));
-            tb_assert_and_check_break(rootdir);
+            xu_assert_and_check_break(rootdir);
 
             // init share/name sub-directory
             xu_char_t sharedir[128];
@@ -849,14 +849,14 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
     {
         // init self
         engine = tb_malloc0_type(xm_engine_t);
-        tb_assert_and_check_break(engine);
+        xu_assert_and_check_break(engine);
 
         // init name
         xu_strlcpy(engine->name, name, sizeof(engine->name));
 
         // init lua
         engine->lua = luaL_newstate();
-        tb_assert_and_check_break(engine->lua);
+        xu_assert_and_check_break(engine->lua);
 
 #if XM_HOOK_LUA_MEMALLOC
         // hook lua memory
@@ -941,7 +941,7 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
 
         // get version
         xu_version_t const* version = xm_version();
-        tb_assert_and_check_break(version);
+        xu_assert_and_check_break(version);
 
         // init version string
         xu_char_t version_cstr[256] = {0};

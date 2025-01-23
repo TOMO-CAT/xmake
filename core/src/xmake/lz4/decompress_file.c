@@ -64,7 +64,7 @@ xu_int_t xm_lz4_decompress_file(lua_State* lua)
             if (ireal > 0)
             {
                 xu_long_t r = xm_lz4_dstream_write(stream_lz4, idata, ireal, tb_stream_beof(istream));
-                tb_assert_and_check_break(r >= 0);
+                xu_assert_and_check_break(r >= 0);
                 tb_check_continue(r > 0);
 
                 xu_long_t oreal;
@@ -76,7 +76,7 @@ xu_int_t xm_lz4_decompress_file(lua_State* lua)
                         break;
                     }
                 }
-                tb_assert_and_check_break(oreal >= 0);
+                xu_assert_and_check_break(oreal >= 0);
             }
             else
                 break;

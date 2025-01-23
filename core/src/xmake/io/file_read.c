@@ -135,7 +135,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 
         // get line data
         data = (xu_char_t*)tb_buffer_data(&file->rcache);
-        tb_assert_and_check_break(data);
+        xu_assert_and_check_break(data);
 
         // no lf found
         if (size > 0 && data[size - 1] != '\n')

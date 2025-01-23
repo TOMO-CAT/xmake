@@ -99,7 +99,7 @@ xu_int_t xm_hash_md5(lua_State* lua)
                     tb_check_break(real > 0);
 
                     // has read?
-                    tb_assert_and_check_break(real & TB_STREAM_WAIT_READ);
+                    xu_assert_and_check_break(real & TB_STREAM_WAIT_READ);
                 }
                 // failed or end?
                 else

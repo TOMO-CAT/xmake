@@ -82,7 +82,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
 
             tb_buffer_memncat(&result, buffer, buffer_size);
         }
-        tb_assert_and_check_break(!failed && tb_buffer_size(&result));
+        xu_assert_and_check_break(!failed && tb_buffer_size(&result));
 
         lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&result), tb_buffer_size(&result));
         ok = xu_true;

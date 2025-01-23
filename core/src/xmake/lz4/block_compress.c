@@ -58,13 +58,13 @@ xu_int_t xm_lz4_block_compress(lua_State* lua)
     do
     {
         xu_int_t output_size = LZ4_compressBound(size);
-        tb_assert_and_check_break(output_size);
+        xu_assert_and_check_break(output_size);
 
         output_data = output_size <= sizeof(buffer) ? buffer : (tb_byte_t*)tb_malloc(output_size);
-        tb_assert_and_check_break(output_data);
+        xu_assert_and_check_break(output_data);
 
         xu_int_t real = LZ4_compress_default((xu_char_t const*)data, (xu_char_t*)output_data, size, output_size);
-        tb_assert_and_check_break(real > 0);
+        xu_assert_and_check_break(real > 0);
 
         lua_pushlstring(lua, (xu_char_t const*)output_data, real);
         ok = xu_true;

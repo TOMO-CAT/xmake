@@ -67,10 +67,10 @@ xu_int_t xm_lz4_block_decompress(lua_State* lua)
     do
     {
         output_data = real <= sizeof(buffer) ? buffer : (tb_byte_t*)tb_malloc(real);
-        tb_assert_and_check_break(output_data);
+        xu_assert_and_check_break(output_data);
 
         xu_int_t r = LZ4_decompress_safe((xu_char_t const*)data, (xu_char_t*)output_data, (xu_int_t)size, real);
-        tb_assert_and_check_break(r > 0);
+        xu_assert_and_check_break(r > 0);
 
         lua_pushlstring(lua, (xu_char_t const*)output_data, r);
         ok = xu_true;
