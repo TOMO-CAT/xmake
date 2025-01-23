@@ -71,7 +71,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
     if (lua_pcall(lua, 2, 1, 0))
     {
         // trace
-        tb_printf("error: call string.match(%s, %s) failed: %s!\n", path, pattern, lua_tostring(lua, -1));
+        xu_printf("error: call string.match(%s, %s) failed: %s!\n", path, pattern, lua_tostring(lua, -1));
         return TB_DIRECTORY_WALK_CODE_END;
     }
 
@@ -113,7 +113,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
                     if (lua_pcall(lua, 2, 1, 0))
                     {
                         // trace
-                        tb_printf("error: call string.match(%s, %s) failed: %s!\n", path, exclude,
+                        xu_printf("error: call string.match(%s, %s) failed: %s!\n", path, exclude,
                                   lua_tostring(lua, -1));
                     }
 

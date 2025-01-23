@@ -692,7 +692,7 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
     } while (0);
 
     // failed?
-    if (!ok) tb_printf("error: not found the project directory!\n");
+    if (!ok) xu_printf("error: not found the project directory!\n");
 
     // ok?
     return ok;
@@ -1036,7 +1036,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     // exists this script?
     if (!xu_file_info(path, xu_null))
     {
-        tb_printf("not found main script: %s\n", path);
+        xu_printf("not found main script: %s\n", path);
         return -1;
     }
 
@@ -1046,7 +1046,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     // load and execute the main script
     if (luaL_dofile(engine->lua, path))
     {
-        tb_printf("error: %s\n", lua_tostring(engine->lua, -1));
+        xu_printf("error: %s\n", lua_tostring(engine->lua, -1));
         return -1;
     }
 
@@ -1058,7 +1058,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     lua_getglobal(engine->lua, "_xmake_main");
     if (lua_pcall(engine->lua, 0, 1, -2))
     {
-        tb_printf("error: %s\n", lua_tostring(engine->lua, -1));
+        xu_printf("error: %s\n", lua_tostring(engine->lua, -1));
         return -1;
     }
 
