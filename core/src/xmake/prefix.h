@@ -63,7 +63,7 @@ static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t p
     else
     {
         xu_char_t str[64];
-        xu_long_t len = tb_snprintf(str, sizeof(str), "%p", ptr);
+        xu_long_t len = xu_snprintf(str, sizeof(str), "%p", ptr);
         lua_pushlstring(lua, str, len);
     }
 }

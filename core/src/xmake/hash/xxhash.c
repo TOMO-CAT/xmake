@@ -84,7 +84,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
         xu_size_t n      = mode >> 3;
         xu_char_t s[256] = {0};
         for (i = 0; i < n; ++i)
-            tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+            xu_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
         // save result
         lua_pushstring(lua, s);
@@ -160,7 +160,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             xu_size_t n      = mode >> 3;
             xu_char_t s[256] = {0};
             for (i = 0; i < n; ++i)
-                tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+                xu_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
             // save result
             lua_pushstring(lua, s);

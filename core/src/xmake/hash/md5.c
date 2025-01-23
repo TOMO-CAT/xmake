@@ -59,7 +59,7 @@ xu_int_t xm_hash_md5(lua_State* lua)
         xu_size_t i      = 0;
         xu_char_t s[256] = {0};
         for (i = 0; i < 16; ++i)
-            tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+            xu_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
         // save result
         lua_pushstring(lua, s);
@@ -114,7 +114,7 @@ xu_int_t xm_hash_md5(lua_State* lua)
             xu_size_t i      = 0;
             xu_char_t s[256] = {0};
             for (i = 0; i < 16; ++i)
-                tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+                xu_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
             // save result
             lua_pushstring(lua, s);
