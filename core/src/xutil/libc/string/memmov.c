@@ -14,7 +14,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 #if defined(XU_CONFIG_LIBC_HAVE_MEMMOVE)
@@ -54,7 +53,6 @@ static xu_pointer_t xu_memmov_impl(xu_pointer_t s1, xu_cpointer_t s2, xu_size_t 
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 
 xu_pointer_t xu_memmov_(xu_pointer_t s1, xu_cpointer_t s2, xu_size_t n)

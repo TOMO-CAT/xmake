@@ -19,24 +19,24 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "compress_stream_close"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/lz4/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_lz4_compress_stream_close(lua_State* lua)
+xu_int_t xm_lz4_compress_stream_close(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
     if (!xm_lua_ispointer(lua, 1))

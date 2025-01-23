@@ -19,26 +19,26 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "socket_recvfrom"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 // real, data_or_errors, addr, port = io.socket_recvfrom(sock, size)
-tb_int_t xm_io_socket_recvfrom(lua_State* lua)
+xu_int_t xm_io_socket_recvfrom(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check socket
     if (!xm_lua_ispointer(lua, 1))
@@ -53,7 +53,7 @@ tb_int_t xm_io_socket_recvfrom(lua_State* lua)
     tb_check_return_val(sock, 0);
 
     // get data
-    tb_byte_t* data = tb_null;
+    tb_byte_t* data = xu_null;
     if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
     if (!data)
     {
@@ -69,16 +69,16 @@ tb_int_t xm_io_socket_recvfrom(lua_State* lua)
     if (size <= 0)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid size(%d)!", (tb_int_t)size);
+        lua_pushfstring(lua, "invalid size(%d)!", (xu_int_t)size);
         return 2;
     }
 
     // recv data
     tb_ipaddr_t ipaddr;
     tb_ipaddr_clear(&ipaddr);
-    tb_int_t  retn = 1;
+    xu_int_t  retn = 1;
     tb_long_t real = tb_socket_urecv(sock, &ipaddr, data, size);
-    lua_pushinteger(lua, (tb_int_t)real);
+    lua_pushinteger(lua, (xu_int_t)real);
     if (real > 0)
     {
         retn = 2;
@@ -90,7 +90,7 @@ tb_int_t xm_io_socket_recvfrom(lua_State* lua)
             if (ipstr)
             {
                 lua_pushstring(lua, ipstr);
-                lua_pushinteger(lua, (tb_int_t)tb_ipaddr_port(&ipaddr));
+                lua_pushinteger(lua, (xu_int_t)tb_ipaddr_port(&ipaddr));
                 retn = 4;
             }
         }

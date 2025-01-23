@@ -7,7 +7,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 #define XU_ATOMIC_RELAXED memory_order_relaxed
 #define XU_ATOMIC_CONSUME memory_order_consume
@@ -33,7 +32,6 @@
 
 /* *******************************************************
  *  inline implementation
- * *******************************************************
  */
 // static __xu_inline__ xu_bool_t xu_atomic_flag_test_explicit_libc(xu_atomic_flag_t* a, xu_int_t mo)
 // {

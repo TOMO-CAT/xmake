@@ -19,24 +19,24 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "md5"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/hash/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_hash_md5(lua_State* lua)
+xu_int_t xm_hash_md5(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 1) && xm_lua_isinteger(lua, 2))
@@ -46,7 +46,7 @@ tb_int_t xm_hash_md5(lua_State* lua)
         if (!data || !size)
         {
             lua_pushnil(lua);
-            lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+            lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
             return 2;
         }
         tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));

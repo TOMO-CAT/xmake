@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "filelock_trylock"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
@@ -39,10 +39,10 @@
  * exclusive lock:  io.filelock_trylock("/xxxx/filelock")
  * shared lock:     io.filelock_trylock("/xxxx/filelock", {shared = true})
  */
-tb_int_t xm_io_filelock_trylock(lua_State* lua)
+xu_int_t xm_io_filelock_trylock(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get option argument
     xu_bool_t is_shared = xu_false;

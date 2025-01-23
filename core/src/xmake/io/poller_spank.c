@@ -19,27 +19,27 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME    "poller_spank"
 #define TB_TRACE_MODULE_DEBUG   (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 #include "poller.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 
 // io.poller_spank()
-tb_int_t xm_io_poller_spank(lua_State* lua)
+xu_int_t xm_io_poller_spank(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // spank the poller, break the tb_poller_wait() and return all events
     tb_poller_spak(xm_io_poller());

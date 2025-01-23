@@ -2,7 +2,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_uint32_t xu_isqrti_impl(xu_uint32_t x)
@@ -172,7 +171,6 @@ static __xu_inline__ xu_uint32_t xu_isqrti_impl_using_sqrt(xu_uint32_t x)
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_uint32_t xu_isqrti(xu_uint32_t x)

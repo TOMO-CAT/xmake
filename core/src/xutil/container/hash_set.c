@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "hash_set"
 #define XU_TRACE_MODULE_DEBUG (0)
@@ -11,7 +10,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 
 // the hash map itor item func type
@@ -19,7 +17,6 @@ typedef xu_pointer_t (*gb_hash_map_item_func_t)(xu_iterator_ref_t, xu_size_t);
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_pointer_t xu_hash_set_itor_item(xu_iterator_ref_t iterator, xu_size_t itor)
@@ -39,7 +36,6 @@ static xu_pointer_t xu_hash_set_itor_item(xu_iterator_ref_t iterator, xu_size_t 
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_hash_set_ref_t xu_hash_set_init(xu_size_t bucket_size, xu_element_t element)
 {

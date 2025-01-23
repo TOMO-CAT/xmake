@@ -10,7 +10,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 
 /* suppress warning as error for clang compiler temporarily:
@@ -25,7 +24,6 @@
 
 /* *******************************************************
  *  implementation
- * *******************************************************
  */
 
 #if defined(XU_CONFIG_LIBC_HAVE_STRLCPY)
@@ -80,7 +78,6 @@ static xu_size_t xu_strlcpy_impl(xu_char_t* s1, xu_char_t const* s2, xu_size_t n
 
 /* *******************************************************
  *  interfaces
- * *******************************************************
  */
 
 xu_size_t xu_strlcpy(xu_char_t* s1, xu_char_t const* s2, xu_size_t n)

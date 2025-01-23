@@ -19,26 +19,26 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "getpid"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 #include <unistd.h>
 #include <errno.h>
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_os_getpid(lua_State* lua)
+xu_int_t xm_os_getpid(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
-    lua_pushinteger(lua, (tb_int_t)getpid());
+    xu_assert_and_check_return_val(lua, 0);
+    lua_pushinteger(lua, (xu_int_t)getpid());
     return 1;
 }

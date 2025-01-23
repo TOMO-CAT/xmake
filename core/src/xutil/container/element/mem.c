@@ -6,7 +6,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 static xu_size_t xu_element_mem_hash(xu_element_ref_t element, xu_cpointer_t data, xu_size_t mask, xu_size_t index)
 {
@@ -123,7 +122,6 @@ static xu_void_t xu_element_mem_ncopy(xu_element_ref_t element, xu_pointer_t buf
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 
 xu_element_t xu_element_mem(xu_size_t size, xu_element_free_func_t free, xu_cpointer_t priv)

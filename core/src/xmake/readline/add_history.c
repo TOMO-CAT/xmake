@@ -19,27 +19,27 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "add_history"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/readline/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 #ifdef XM_CONFIG_API_HAVE_READLINE
 
 // add_history wrapper
-tb_int_t xm_readline_add_history(lua_State* lua)
+xu_int_t xm_readline_add_history(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get history
     xu_char_t const* history = luaL_checkstring(lua, 1);

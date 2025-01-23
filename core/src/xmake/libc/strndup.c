@@ -19,34 +19,34 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "strndup"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/libc/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_libc_strndup(lua_State* lua)
+xu_int_t xm_libc_strndup(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // do strndup
-    xu_char_t const* s = tb_null;
+    xu_char_t const* s = xu_null;
     if (lua_isnumber(lua, 1))
         s = (xu_char_t const*)(xu_size_t)lua_tointeger(lua, 1);
     else if (lua_isstring(lua, 2))
         s = lua_tostring(lua, 2);
     else
         xm_libc_return_error(lua, "libc.strndup(invalid args)!");
-    tb_int_t n = (tb_int_t)lua_tointeger(lua, 2);
+    xu_int_t n = (xu_int_t)lua_tointeger(lua, 2);
     if (s && n >= 0)
         lua_pushlstring(lua, s, n);
     else

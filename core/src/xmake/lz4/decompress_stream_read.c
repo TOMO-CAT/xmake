@@ -19,25 +19,25 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "decompress_stream_read"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/lz4/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
-tb_int_t xm_lz4_decompress_stream_read(lua_State* lua)
+xu_int_t xm_lz4_decompress_stream_read(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check handle
     if (!xm_lua_ispointer(lua, 1))
@@ -52,7 +52,7 @@ tb_int_t xm_lz4_decompress_stream_read(lua_State* lua)
     tb_check_return_val(stream, 0);
 
     // get data
-    tb_byte_t* data = tb_null;
+    tb_byte_t* data = xu_null;
     if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
     if (!data)
     {
@@ -68,12 +68,12 @@ tb_int_t xm_lz4_decompress_stream_read(lua_State* lua)
     if (size <= 0)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid size(%d)!", (tb_int_t)size);
+        lua_pushfstring(lua, "invalid size(%d)!", (xu_int_t)size);
         return 2;
     }
 
     // read data
     tb_long_t real = xm_lz4_dstream_read(stream, data, size);
-    lua_pushinteger(lua, (tb_int_t)real);
+    lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

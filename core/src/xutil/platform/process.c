@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "process"
 #define XU_TRACE_MODULE_DEBUG (1)
@@ -9,7 +8,6 @@
 
 /* *******************************************************
  * declaration
- * *******************************************************
  */
 
 xu_bool_t xu_process_group_init();
@@ -17,7 +15,6 @@ xu_void_t xu_process_group_exit();
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 #if defined(XU_CONFIG_POSIX_HAVE_WAITPID) && defined(XU_CONFIG_POSIX_HAVE_POSIX_SPAWNP)

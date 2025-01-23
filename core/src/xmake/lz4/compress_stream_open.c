@@ -19,24 +19,24 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "compress_stream_open"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/lz4/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_lz4_compress_stream_open(lua_State* lua)
+xu_int_t xm_lz4_compress_stream_open(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     xm_lz4_cstream_t* stream = xm_lz4_cstream_init();
     if (stream) xm_lua_pushpointer(lua, (tb_pointer_t)stream);

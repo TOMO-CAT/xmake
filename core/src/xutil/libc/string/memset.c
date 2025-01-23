@@ -16,7 +16,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 #if defined(XU_CONFIG_LIBC_HAVE_MEMSET)
@@ -223,7 +222,6 @@ static xu_pointer_t xu_memset_u64_impl(xu_pointer_t s, xu_uint64_t c, xu_size_t 
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 
 xu_pointer_t xu_memset_(xu_pointer_t s, xu_byte_t c, xu_size_t n)

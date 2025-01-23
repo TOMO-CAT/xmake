@@ -6,7 +6,6 @@
 
 /* *******************************************************
  * macros
- * *******************************************************
  */
 
 // index
@@ -35,7 +34,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 
 // the hash map item list type
@@ -83,7 +81,6 @@ typedef struct __xu_hash_map_t
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 #if 0
 // linear finder
@@ -463,7 +460,6 @@ static xu_void_t xu_hash_map_itor_nremove(xu_iterator_ref_t iterator, xu_size_t 
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_hash_map_ref_t xu_hash_map_init(xu_size_t bucket_size, xu_element_t element_name, xu_element_t element_data)

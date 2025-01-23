@@ -19,26 +19,26 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "socket_connect"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 
 // io.socket_connect(sock, addr, port, family)
-tb_int_t xm_io_socket_connect(lua_State* lua)
+xu_int_t xm_io_socket_connect(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check socket
     if (!xm_lua_ispointer(lua, 1))
@@ -54,7 +54,7 @@ tb_int_t xm_io_socket_connect(lua_State* lua)
 
     // get address
     xu_char_t const* address = lua_tostring(lua, 2);
-    tb_assert_and_check_return_val(address, 0);
+    xu_assert_and_check_return_val(address, 0);
 
     // get family
     tb_uint8_t family = (tb_uint8_t)luaL_checknumber(lua, 4);
@@ -73,6 +73,6 @@ tb_int_t xm_io_socket_connect(lua_State* lua)
     }
 
     // connect socket
-    lua_pushnumber(lua, (tb_int_t)tb_socket_connect(sock, &addr));
+    lua_pushnumber(lua, (xu_int_t)tb_socket_connect(sock, &addr));
     return 1;
 }

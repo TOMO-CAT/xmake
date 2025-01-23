@@ -19,25 +19,25 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "compress_stream_write"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/lz4/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
-tb_int_t xm_lz4_compress_stream_write(lua_State* lua)
+xu_int_t xm_lz4_compress_stream_write(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check handle
     if (!xm_lua_ispointer(lua, 1))
@@ -53,13 +53,13 @@ tb_int_t xm_lz4_compress_stream_write(lua_State* lua)
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = tb_null;
+    tb_byte_t const* data = xu_null;
     if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
     if (xm_lua_isinteger(lua, 3)) size = (xu_size_t)lua_tointeger(lua, 3);
     if (!data || !size)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
@@ -70,6 +70,6 @@ tb_int_t xm_lz4_compress_stream_write(lua_State* lua)
 
     // write data
     tb_long_t real = xm_lz4_cstream_write(stream, data, size, end);
-    lua_pushinteger(lua, (tb_int_t)real);
+    lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

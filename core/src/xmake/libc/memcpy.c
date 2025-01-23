@@ -19,29 +19,29 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "memcpy"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/libc/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_libc_memcpy(lua_State* lua)
+xu_int_t xm_libc_memcpy(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // do memcpy
     tb_pointer_t dst  = (tb_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
     tb_pointer_t src  = (tb_pointer_t)(xu_size_t)luaL_checkinteger(lua, 2);
-    tb_int_t     size = (tb_int_t)lua_tointeger(lua, 3);
+    xu_int_t     size = (xu_int_t)lua_tointeger(lua, 3);
     if (dst && src && size > 0) tb_memcpy(dst, src, size);
     return 0;
 }

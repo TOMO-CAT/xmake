@@ -19,25 +19,25 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "cpuinfo"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
-#if defined(TB_CONFIG_OS_MACOSX)
+#if defined(XU_CONFIG_OS_MACOSX)
 #   include <sys/sysctl.h>
 #   include <sys/types.h>
 #   include <mach/mach.h>
 #   include <mach/processor_info.h>
 #   include <mach/mach_host.h>
-#elif defined(TB_CONFIG_OS_LINUX)
+#elif defined(XU_CONFIG_OS_LINUX)
 #   include <stdio.h>
-#elif defined(TB_CONFIG_OS_BSD)
+#elif defined(XU_CONFIG_OS_BSD)
 #   include <stdio.h>
 #   include <string.h>
 #   include <sys/types.h>
@@ -45,13 +45,13 @@
 #   include <unistd.h>
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 
 static tb_float_t xm_os_cpuinfo_usagerate()
 {
-#if defined(TB_CONFIG_OS_MACOSX)
+#if defined(XU_CONFIG_OS_MACOSX)
     tb_float_t usagerate = 0;
     natural_t cpu_count = 0;
     processor_info_array_t cpuinfo;
@@ -59,11 +59,11 @@ static tb_float_t xm_os_cpuinfo_usagerate()
     static tb_hong_t s_time = 0;
     if (tb_mclock() - s_time > 1000 && host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &cpu_count, &cpuinfo, &cpuinfo_count) == KERN_SUCCESS)
     {
-        static processor_info_array_t s_cpuinfo_prev = tb_null;
+        static processor_info_array_t s_cpuinfo_prev = xu_null;
         static mach_msg_type_number_t s_cpuinfo_count_prev = 0;
-        for (tb_int_t i = 0; i < cpu_count; ++i)
+        for (xu_int_t i = 0; i < cpu_count; ++i)
         {
-            tb_int_t use, total;
+            xu_int_t use, total;
             if (s_cpuinfo_prev)
             {
                 use = (cpuinfo[(CPU_STATE_MAX * i) + CPU_STATE_USER]   - s_cpuinfo_prev[(CPU_STATE_MAX * i) + CPU_STATE_USER])
@@ -85,9 +85,9 @@ static tb_float_t xm_os_cpuinfo_usagerate()
         s_cpuinfo_count_prev = cpuinfo_count;
     }
     return cpu_count > 0? usagerate / cpu_count : 0;
-#elif defined(TB_CONFIG_OS_LINUX)
+#elif defined(XU_CONFIG_OS_LINUX)
     tb_float_t usagerate = 0;
-    if (tb_file_info("/proc/stat", tb_null))
+    if (xu_file_info("/proc/stat", xu_null))
     {
         FILE* fp = fopen("/proc/stat", "r");
         if (fp)
@@ -139,7 +139,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
         }
     }
     return usagerate;
-#elif defined(TB_CONFIG_OS_BSD) && !defined(__OpenBSD__)
+#elif defined(XU_CONFIG_OS_BSD) && !defined(__OpenBSD__)
 #   define CP_USER   0
 #   define CP_NICE   1
 #   define CP_SYS    2
@@ -153,7 +153,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
     tb_float_t usagerate = 0;
     long states[CPUSTATES] = {0};
     size_t states_size = sizeof(states);
-    if (sysctlbyname("kern.cp_time", &states, &states_size, tb_null, 0) == 0)
+    if (sysctlbyname("kern.cp_time", &states, &states_size, xu_null, 0) == 0)
     {
         tb_long_t user = states[CP_USER];
         tb_long_t nice = states[CP_NICE];
@@ -179,7 +179,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
 #endif
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
@@ -189,16 +189,16 @@ static tb_float_t xm_os_cpuinfo_usagerate()
  *      ...
  * }
  */
-tb_int_t xm_os_cpuinfo(lua_State* lua)
+xu_int_t xm_os_cpuinfo(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // init table
     lua_newtable(lua);
 
     // get cpu number
-    tb_int_t ncpu = (tb_int_t)tb_cpu_count();
+    xu_int_t ncpu = (xu_int_t)tb_cpu_count();
     lua_pushstring(lua, "ncpu");
     lua_pushinteger(lua, ncpu > 0? ncpu : 1);
     lua_settable(lua, -3);

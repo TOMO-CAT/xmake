@@ -7,7 +7,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 
 // the default allocator type
@@ -26,7 +25,6 @@ typedef struct __xu_default_allocator_t
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 static xu_void_t xu_default_allocator_exit(xu_allocator_ref_t self)
 {
@@ -265,7 +263,6 @@ static xu_void_t xu_default_allocator_instance_exit(xu_handle_t self, xu_cpointe
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_allocator_ref_t xu_default_allocator(xu_byte_t* data, xu_size_t size)

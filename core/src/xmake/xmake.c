@@ -21,13 +21,11 @@
 
 /* *******************************************************
  * includes
- * *******************************************************
  */
 #include "xmake/xmake.h"
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 static __xu_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
 {
@@ -85,7 +83,6 @@ static __xu_inline__ xu_bool_t xm_version_check(xu_hize_t build)
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 {
@@ -100,10 +97,10 @@ xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 
 #if 0
     // init tbox, we always use the tbox's default allocator
-    if (!tb_init(tb_null, tb_default_allocator(tb_null, 0))) return xu_false;
+    if (!tb_init(xu_null, tb_default_allocator(xu_null, 0))) return xu_false;
 #else
     // init tbox, since small compilation mode is enabled, it still uses the native allocator
-    if (!tb_init(tb_null, tb_null)) return xu_false;
+    if (!tb_init(xu_null, xu_null)) return xu_false;
 #endif
 
     // trace

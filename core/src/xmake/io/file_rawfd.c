@@ -19,25 +19,25 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME    "file_rawfd"
 #define TB_TRACE_MODULE_DEBUG   (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
 // file to fd
 #define xm_io_file2fd(file)            (lua_Number)tb_file2fd(file)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
@@ -47,10 +47,10 @@
  *
  * e.g. set VS_UNICODE_OUTPUT=fd to enable vs unicode output, @see https://github.com/xmake-io/xmake/issues/528
  */
-tb_int_t xm_io_file_rawfd(lua_State* lua)
+xu_int_t xm_io_file_rawfd(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
     if (!lua_isuserdata(lua, 1))
@@ -63,7 +63,7 @@ tb_int_t xm_io_file_rawfd(lua_State* lua)
     // get file raw fd
     if (xm_io_file_is_file(file))
     {
-        tb_file_ref_t rawfile = tb_null;
+        tb_file_ref_t rawfile = xu_null;
         if (tb_stream_ctrl(file->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile))
         {
             lua_pushnumber(lua, xm_io_file2fd(rawfile));

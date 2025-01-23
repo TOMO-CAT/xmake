@@ -7,7 +7,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_size_t xu_environment_load(xu_environment_ref_t environment, xu_char_t const* name)
 {

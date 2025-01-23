@@ -9,7 +9,6 @@
 
 /* *******************************************************
  * macros
- * *******************************************************
  */
 
 // the item belong to this slot?
@@ -18,7 +17,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 
 // the fixed pool slot type
@@ -84,7 +82,6 @@ typedef struct __xu_fixed_pool_impl_t
 
 /* *******************************************************
  * declaration
- * *******************************************************
  */
 
 xu_fixed_pool_ref_t xu_fixed_pool_init_(xu_allocator_ref_t large_allocator, xu_size_t slot_size, xu_size_t item_size,
@@ -93,7 +90,6 @@ xu_fixed_pool_ref_t xu_fixed_pool_init_(xu_allocator_ref_t large_allocator, xu_s
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 static xu_bool_t xu_fixed_pool_item_exit(xu_pointer_t data, xu_cpointer_t priv)
 {
@@ -323,7 +319,6 @@ static xu_fixed_pool_slot_t* xu_fixed_pool_slot_find(xu_fixed_pool_t* pool, xu_p
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_fixed_pool_ref_t xu_fixed_pool_init_(xu_allocator_ref_t large_allocator, xu_size_t slot_size, xu_size_t item_size,
                                         xu_bool_t for_small, xu_fixed_pool_item_init_func_t item_init,

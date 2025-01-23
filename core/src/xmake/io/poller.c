@@ -19,32 +19,32 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "poller"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "poller.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
 // the singleton type of poller
 #define XM_IO_POLLER (TB_SINGLETON_TYPE_USER + 4)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static tb_handle_t xm_io_poller_instance_init(tb_cpointer_t* ppriv)
 {
     // init poller
-    tb_poller_ref_t poller = tb_poller_init(tb_null);
-    tb_assert_and_check_return_val(poller, tb_null);
+    tb_poller_ref_t poller = tb_poller_init(xu_null);
+    xu_assert_and_check_return_val(poller, xu_null);
 
     return (tb_handle_t)poller;
 }
@@ -53,11 +53,11 @@ static xu_void_t xm_io_poller_instance_exit(tb_handle_t poller, tb_cpointer_t pr
     if (poller) tb_poller_exit((tb_poller_ref_t)poller);
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 tb_poller_ref_t xm_io_poller()
 {
     return (tb_poller_ref_t)tb_singleton_instance(XM_IO_POLLER, xm_io_poller_instance_init, xm_io_poller_instance_exit,
-                                                  tb_null, tb_null);
+                                                  xu_null, xu_null);
 }

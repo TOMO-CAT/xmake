@@ -19,29 +19,29 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "term_mode"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/tty/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 /* local oldmode = tty.term_mode(stdtype)
  * local oldmode = tty.term_mode(stdtype, newmode)
  */
-tb_int_t xm_tty_term_mode(lua_State* lua)
+xu_int_t xm_tty_term_mode(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
-    tb_int_t mode = 0;
-    lua_pushinteger(lua, (tb_int_t)mode);
+    xu_assert_and_check_return_val(lua, 0);
+    xu_int_t mode = 0;
+    lua_pushinteger(lua, (xu_int_t)mode);
     return 1;
 }

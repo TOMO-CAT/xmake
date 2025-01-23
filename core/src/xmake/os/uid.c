@@ -19,31 +19,31 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "uid"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 #include <unistd.h>
 #include <errno.h>
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 // get & set uid
-tb_int_t xm_os_uid(lua_State* lua)
+xu_int_t xm_os_uid(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
-    tb_int_t ruidset = -1;
-    tb_int_t euidset = -1;
-    tb_int_t argc = lua_gettop(lua);
+    xu_int_t ruidset = -1;
+    xu_int_t euidset = -1;
+    xu_int_t argc = lua_gettop(lua);
     if (argc == 1)
     {
         if (lua_istable(lua, 1))
@@ -59,7 +59,7 @@ tb_int_t xm_os_uid(lua_State* lua)
                     lua_error(lua);
                     return 0;
                 }
-                euidset = (tb_int_t)lua_tonumber(lua, -1);
+                euidset = (xu_int_t)lua_tonumber(lua, -1);
             }
             lua_pop(lua, 1);
             if (!lua_isnil(lua, -1))
@@ -70,14 +70,14 @@ tb_int_t xm_os_uid(lua_State* lua)
                     lua_error(lua);
                     return 0;
                 }
-                ruidset = (tb_int_t)lua_tonumber(lua, -1);
+                ruidset = (xu_int_t)lua_tonumber(lua, -1);
             }
             lua_pop(lua, 1);
         }
         else if (lua_isnumber(lua, 1))
         {
             // os.uid(uid)
-            ruidset = euidset = (tb_int_t)lua_tonumber(lua, 1);
+            ruidset = euidset = (xu_int_t)lua_tonumber(lua, 1);
         }
         else
         {
@@ -97,7 +97,7 @@ tb_int_t xm_os_uid(lua_State* lua)
                 lua_error(lua);
                 return 0;
             }
-            ruidset = (tb_int_t)lua_tonumber(lua, 1);
+            ruidset = (xu_int_t)lua_tonumber(lua, 1);
         }
         if (!lua_isnil(lua, 2))
         {
@@ -107,7 +107,7 @@ tb_int_t xm_os_uid(lua_State* lua)
                 lua_error(lua);
                 return 0;
             }
-            euidset = (tb_int_t)lua_tonumber(lua, 2);
+            euidset = (xu_int_t)lua_tonumber(lua, 2);
         }
     }
     else if (argc != 0)

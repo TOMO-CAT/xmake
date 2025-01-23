@@ -19,26 +19,26 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "socket_wait"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 
 // io.socket_wait(sock, events, timeout)
-tb_int_t xm_io_socket_wait(lua_State* lua)
+xu_int_t xm_io_socket_wait(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check socket?
     if (!xm_lua_ispointer(lua, 1)) return 0;
@@ -54,6 +54,6 @@ tb_int_t xm_io_socket_wait(lua_State* lua)
     tb_long_t timeout = (tb_long_t)luaL_checknumber(lua, 3);
 
     // wait socket
-    lua_pushnumber(lua, (tb_int_t)tb_socket_wait(sock, events, timeout));
+    lua_pushnumber(lua, (xu_int_t)tb_socket_wait(sock, events, timeout));
     return 1;
 }

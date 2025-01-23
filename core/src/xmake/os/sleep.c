@@ -19,23 +19,23 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "sleep"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_os_sleep(lua_State* lua)
+xu_int_t xm_os_sleep(lua_State* lua)
 {
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
     tb_long_t interval = (tb_long_t)luaL_checklong(lua, 1);
     if (interval >= 0) tb_msleep(interval);
     return 0;

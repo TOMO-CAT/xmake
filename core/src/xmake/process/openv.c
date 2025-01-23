@@ -19,23 +19,23 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "process.openv"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "../io/prefix.h"
 #include "xmake/process/prefix.h"
-#if defined(TB_CONFIG_OS_MACOSX) || defined(TB_CONFIG_OS_LINUX) || defined(TB_CONFIG_OS_BSD) ||                        \
-    defined(TB_CONFIG_OS_HAIKU)
+#if defined(XU_CONFIG_OS_MACOSX) || defined(XU_CONFIG_OS_LINUX) || defined(XU_CONFIG_OS_BSD) ||                        \
+    defined(XU_CONFIG_OS_HAIKU)
 #    include <signal.h>
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
@@ -45,10 +45,10 @@
  *  infile = "", inpipe = "", inpipe = "",
  *  envs = {"PATH=xxx", "XXX=yyy"}})
  */
-tb_int_t xm_process_openv(lua_State* lua)
+xu_int_t xm_process_openv(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check argv
     if (!lua_istable(lua, 2))
@@ -97,7 +97,7 @@ tb_int_t xm_process_openv(lua_State* lua)
         else
         {
             // error
-            lua_pushfstring(lua, "invalid argv[%d] type(%s) for process.openv", (tb_int_t)argi, luaL_typename(lua, -1));
+            lua_pushfstring(lua, "invalid argv[%d] type(%s) for process.openv", (xu_int_t)argi, luaL_typename(lua, -1));
             lua_error(lua);
         }
 
@@ -112,15 +112,15 @@ tb_int_t xm_process_openv(lua_State* lua)
     xu_bool_t          exclusive  = xu_false;
     xu_size_t          envn       = 0;
     xu_char_t const*   envs[1024] = {0};
-    xu_char_t const*   inpath     = tb_null;
-    xu_char_t const*   outpath    = tb_null;
-    xu_char_t const*   errpath    = tb_null;
-    xm_io_file_t*      infile     = tb_null;
-    xm_io_file_t*      outfile    = tb_null;
-    xm_io_file_t*      errfile    = tb_null;
-    tb_pipe_file_ref_t inpipe     = tb_null;
-    tb_pipe_file_ref_t outpipe    = tb_null;
-    tb_pipe_file_ref_t errpipe    = tb_null;
+    xu_char_t const*   inpath     = xu_null;
+    xu_char_t const*   outpath    = xu_null;
+    xu_char_t const*   errpath    = xu_null;
+    xm_io_file_t*      infile     = xu_null;
+    xm_io_file_t*      outfile    = xu_null;
+    xm_io_file_t*      errfile    = xu_null;
+    tb_pipe_file_ref_t inpipe     = xu_null;
+    tb_pipe_file_ref_t outpipe    = xu_null;
+    tb_pipe_file_ref_t errpipe    = xu_null;
     if (lua_istable(lua, 3))
     {
         // is detached?
@@ -233,20 +233,20 @@ tb_int_t xm_process_openv(lua_State* lua)
                 if (lua_isstring(lua, -1))
                 {
                     // add this environment value
-                    if (envn + 1 < tb_arrayn(envs))
+                    if (envn + 1 < xu_arrayn(envs))
                         envs[envn++] = lua_tostring(lua, -1);
                     else
                     {
                         // error
-                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (tb_int_t)envn,
-                                        tb_arrayn(envs) - 1);
+                        lua_pushfstring(lua, "envs is too large(%d > %d) for process.openv", (xu_int_t)envn,
+                                        xu_arrayn(envs) - 1);
                         lua_error(lua);
                     }
                 }
                 else
                 {
                     // error
-                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (tb_int_t)i,
+                    lua_pushfstring(lua, "invalid envs[%d] type(%s) for process.openv", (xu_int_t)i,
                                     luaL_typename(lua, -1));
                     lua_error(lua);
                 }
@@ -268,7 +268,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     }
     else if (infile && xm_io_file_is_file(infile))
     {
-        tb_file_ref_t rawfile = tb_null;
+        tb_file_ref_t rawfile = xu_null;
         if (tb_stream_ctrl(infile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.in.file = rawfile;
@@ -291,7 +291,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     }
     else if (outfile && xm_io_file_is_file(outfile))
     {
-        tb_file_ref_t rawfile = tb_null;
+        tb_file_ref_t rawfile = xu_null;
         if (tb_stream_ctrl(outfile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.out.file = rawfile;
@@ -314,7 +314,7 @@ tb_int_t xm_process_openv(lua_State* lua)
     }
     else if (errfile && xm_io_file_is_file(errfile))
     {
-        tb_file_ref_t rawfile = tb_null;
+        tb_file_ref_t rawfile = xu_null;
         if (tb_stream_ctrl(errfile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.err.file = rawfile;
@@ -349,7 +349,7 @@ tb_int_t xm_process_openv(lua_State* lua)
 
     // exit argv
     if (argv) tb_free(argv);
-    argv = tb_null;
+    argv = xu_null;
 
     // ok
     return 1;

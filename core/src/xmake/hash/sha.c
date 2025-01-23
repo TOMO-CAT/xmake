@@ -19,24 +19,24 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "sha"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/hash/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_hash_sha(lua_State* lua)
+xu_int_t xm_hash_sha(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get mode
     xu_size_t mode = (xu_size_t)lua_tointeger(lua, 1);
@@ -49,7 +49,7 @@ tb_int_t xm_hash_sha(lua_State* lua)
         if (!data || !size)
         {
             lua_pushnil(lua);
-            lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+            lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
             return 2;
         }
         tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));

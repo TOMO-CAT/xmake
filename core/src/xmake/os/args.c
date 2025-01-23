@@ -19,25 +19,25 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "os.args"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr, xu_size_t size, xu_bool_t escape,
                                    xu_bool_t nowrap)
 {
     // check
-    tb_assert_and_check_return(size < TB_PATH_MAXN);
+    tb_assert_and_check_return(size < XU_PATH_MAXN);
 
     // need wrap quote?
     xu_char_t        ch;
@@ -69,14 +69,14 @@ static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr
     if (wrap_quote) tb_string_chrcat(result, '\"');
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 // os.args({"xx", "yy"}, {escape = true})
-tb_int_t xm_os_args(lua_State* lua)
+xu_int_t xm_os_args(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // escape '\\' characters in global?
     xu_bool_t escape = xu_false;
@@ -115,7 +115,7 @@ tb_int_t xm_os_args(lua_State* lua)
             if (i != 1) tb_string_chrcat(&result, ' ');
 
             // add argument
-            lua_pushnumber(lua, (tb_int_t)i);
+            lua_pushnumber(lua, (xu_int_t)i);
             lua_rawget(lua, 1);
             if (lua_istable(lua, -1)) // is path instance?
             {

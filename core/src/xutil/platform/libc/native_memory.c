@@ -4,7 +4,6 @@
 
 /* *******************************************************
  *  implementation
- * *******************************************************
  */
 xu_bool_t    xu_native_memory_init() { return xu_true; }
 xu_void_t    xu_native_memory_exit() {}

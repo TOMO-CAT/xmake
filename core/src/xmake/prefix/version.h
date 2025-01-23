@@ -21,12 +21,12 @@
 #ifndef XM_PREFIX_VERSION_H
 #define XM_PREFIX_VERSION_H
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "config.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
@@ -55,5 +55,3 @@
 #define XM_VERSION_SHORT_STRING     __tb_mstrcat__("xmake_", __tb_mstring_ex__(__tb_mconcat8_ex__(v, XM_VERSION_MAJOR, _, XM_VERSION_MINOR, _, XM_VERSION_ALTER, _, XM_CONFIG_VERSION_BUILD)))
 
 #endif
-
-

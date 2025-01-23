@@ -19,27 +19,27 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "uuid4"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/hash/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_hash_uuid4(lua_State* lua)
+xu_int_t xm_hash_uuid4(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the name
-    xu_char_t const* name = luaL_optstring(lua, 1, tb_null);
+    xu_char_t const* name = luaL_optstring(lua, 1, xu_null);
 
     // make uuid, use version 4
     xu_char_t uuid[37];

@@ -4,7 +4,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 static xu_long_t xu_element_ptr_comp(xu_element_ref_t element, xu_cpointer_t ldata, xu_cpointer_t rdata)
@@ -113,7 +112,6 @@ static xu_void_t xu_element_ptr_ncopy(xu_element_ref_t element, xu_pointer_t buf
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 
 xu_element_t xu_element_ptr(xu_element_free_func_t free, xu_cpointer_t priv)

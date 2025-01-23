@@ -8,7 +8,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 #ifdef XU_CONFIG_LIBC_HAVE_STRCASECMP
 static xu_long_t xu_stricmp_impl(xu_char_t const* s1, xu_char_t const* s2)
@@ -38,7 +37,6 @@ static xu_long_t xu_stricmp_impl(xu_char_t const* s1, xu_char_t const* s2)
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 xu_long_t xu_stricmp(xu_char_t const* s1, xu_char_t const* s2)
 {

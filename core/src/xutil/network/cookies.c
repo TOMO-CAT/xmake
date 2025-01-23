@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 
 #define XU_TRACE_MODULE_NAME "cookies"
@@ -18,7 +17,6 @@
 
 /* *******************************************************
  * type
- * *******************************************************
  */
 
 // the cookies entry type
@@ -69,7 +67,6 @@ typedef struct __xu_cookies_t
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_bool_t xu_cookies_get_domain_and_path_from_url(xu_char_t const* url, xu_char_t* pdomain, xu_size_t ndomain,
@@ -472,7 +469,6 @@ static xu_bool_t xu_cookies_entry_walk(xu_iterator_ref_t iterator, xu_cpointer_t
 
 /* *******************************************************
  * instance implementation
- * *******************************************************
  */
 static xu_handle_t xu_cookies_instance_init(xu_cpointer_t* ppriv) { return (xu_handle_t)xu_cookies_init(); }
 static xu_void_t   xu_cookies_instance_exit(xu_handle_t cookies, xu_cpointer_t priv)
@@ -488,7 +484,6 @@ static xu_void_t   xu_cookies_instance_exit(xu_handle_t cookies, xu_cpointer_t p
 
 /* *******************************************************
  * interface implementation
- * *******************************************************
  */
 xu_cookies_ref_t xu_cookies()
 {

@@ -19,26 +19,26 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "socket_listen"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 
 // io.socket_listen(sock, backlog)
-tb_int_t xm_io_socket_listen(lua_State* lua)
+xu_int_t xm_io_socket_listen(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
     if (!xm_lua_ispointer(lua, 1)) return 0;
@@ -51,6 +51,6 @@ tb_int_t xm_io_socket_listen(lua_State* lua)
     xu_size_t backlog = (xu_size_t)luaL_checknumber(lua, 2);
 
     // listen socket
-    lua_pushnumber(lua, (tb_int_t)tb_socket_listen(sock, backlog));
+    lua_pushnumber(lua, (xu_int_t)tb_socket_listen(sock, backlog));
     return 1;
 }

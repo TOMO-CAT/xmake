@@ -6,7 +6,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 #ifdef XU_CONFIG_LIBC_HAVE_STRNCASECMP
@@ -37,7 +36,6 @@ static xu_long_t xu_strnicmp_impl(xu_char_t const* s1, xu_char_t const* s2, xu_s
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 
 xu_long_t xu_strnicmp(xu_char_t const* s1, xu_char_t const* s2, xu_size_t n)

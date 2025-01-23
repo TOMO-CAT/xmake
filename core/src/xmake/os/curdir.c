@@ -19,27 +19,27 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "curdir"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_os_curdir(lua_State* lua)
+xu_int_t xm_os_curdir(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // os.curdir()
-    xu_char_t path[TB_PATH_MAXN];
+    xu_char_t path[XU_PATH_MAXN];
     if (tb_directory_current(path, sizeof(path))) lua_pushstring(lua, path);
     else lua_pushnil(lua);
     return 1;

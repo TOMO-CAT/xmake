@@ -19,24 +19,24 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "bloom_filter_set"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/bloom_filter/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_bloom_filter_set(lua_State* lua)
+xu_int_t xm_bloom_filter_set(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
     if (!xm_lua_ispointer(lua, 1)) return 0;
@@ -47,7 +47,7 @@ tb_int_t xm_bloom_filter_set(lua_State* lua)
 
     // get item
     xu_char_t const* item = luaL_checkstring(lua, 2);
-    tb_assert_and_check_return_val(item, 0);
+    xu_assert_and_check_return_val(item, 0);
 
     // set item
     xu_bool_t ok = tb_bloom_filter_set(filter, item);

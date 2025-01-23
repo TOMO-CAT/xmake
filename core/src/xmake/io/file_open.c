@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "file_open"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
@@ -40,7 +40,7 @@
 // is utf-8 tail character
 #define IS_UTF8_TAIL(c) (c >= 0x80 && c < 0xc0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t size)
@@ -149,10 +149,10 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t
 static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* pbomoff)
 {
     // check
-    tb_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
+    xu_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
 
     // detect encoding
-    tb_byte_t* data     = tb_null;
+    tb_byte_t* data     = xu_null;
     xu_size_t  encoding = XM_IO_FILE_ENCODING_BINARY;
     tb_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
     if (size > 0)
@@ -164,20 +164,20 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* p
     return encoding;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 // io.file_open(path, modestr)
-tb_int_t xm_io_file_open(lua_State* lua)
+xu_int_t xm_io_file_open(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get file path and mode
     xu_char_t const* path    = luaL_checkstring(lua, 1);
     xu_char_t const* modestr = luaL_optstring(lua, 2, "r");
-    tb_assert_and_check_return_val(path && modestr, 0);
+    xu_assert_and_check_return_val(path && modestr, 0);
 
     // get file mode value
     xu_size_t mode;
@@ -191,7 +191,7 @@ tb_int_t xm_io_file_open(lua_State* lua)
 
     // get file encoding
     tb_long_t       bomoff   = 0;
-    tb_stream_ref_t stream   = tb_null;
+    tb_stream_ref_t stream   = xu_null;
     xu_bool_t       update   = !!tb_strchr(modestr, '+');
     xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
@@ -227,7 +227,7 @@ tb_int_t xm_io_file_open(lua_State* lua)
     }
     else
         xm_io_return_error(lua, "invalid open mode!");
-    tb_assert_and_check_return_val(encoding != XM_IO_FILE_ENCODING_UNKNOWN, 0);
+    xu_assert_and_check_return_val(encoding != XM_IO_FILE_ENCODING_UNKNOWN, 0);
 
     // write data with utf bom? e.g. utf8bom, utf16lebom, utf16bom
     xu_bool_t utfbom = xu_false;
@@ -235,8 +235,8 @@ tb_int_t xm_io_file_open(lua_State* lua)
 
     // open file
     xu_bool_t       open_ok  = xu_false;
-    tb_stream_ref_t file_ref = tb_null;
-    tb_stream_ref_t fstream  = tb_null;
+    tb_stream_ref_t file_ref = xu_null;
+    tb_stream_ref_t fstream  = xu_null;
     do
     {
         // init stream from file
@@ -275,11 +275,11 @@ tb_int_t xm_io_file_open(lua_State* lua)
     {
         // exit stream
         if (stream) tb_stream_exit(stream);
-        stream = tb_null;
+        stream = xu_null;
 
         // exit charset stream filter
         if (fstream) tb_stream_exit(fstream);
-        fstream = tb_null;
+        fstream = xu_null;
 
         // return errors
         xm_io_return_error(lua, "failed to open file!");
@@ -287,7 +287,7 @@ tb_int_t xm_io_file_open(lua_State* lua)
 
     // make file
     xm_io_file_t* file = (xm_io_file_t*)lua_newuserdata(lua, sizeof(xm_io_file_t));
-    tb_assert_and_check_return_val(file, 0);
+    xu_assert_and_check_return_val(file, 0);
 
     // init file
     file->u.file_ref = file_ref;

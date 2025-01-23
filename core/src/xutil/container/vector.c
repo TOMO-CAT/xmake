@@ -2,7 +2,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 
 // the vector grow
@@ -21,7 +20,6 @@
 
 /* *******************************************************
  *  types
- * *******************************************************
  */
 
 // the vector type
@@ -49,7 +47,6 @@ typedef struct __xu_vector_t
 
 /* *******************************************************
  *  private implementation
- * *******************************************************
  */
 
 static xu_size_t xu_vector_itor_size(xu_iterator_ref_t iterator)
@@ -148,7 +145,6 @@ static xu_void_t xu_vector_itor_nremove(xu_iterator_ref_t iterator, xu_size_t pr
 
 /* *******************************************************
  *  implementation
- * *******************************************************
  */
 
 xu_vector_ref_t xu_vector_init(xu_size_t grow, xu_element_t element)

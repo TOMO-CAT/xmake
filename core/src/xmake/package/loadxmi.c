@@ -19,33 +19,36 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "loadxmi"
-#define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+#define XU_TRACE_MODULE_NAME "loadxmi"
+#define XU_TRACE_MODULE_DEBUG (0)
+
+/* *******************************************************
  * includes
  */
+
 #include "xmake/package/prefix.h"
 #ifdef USE_LUAJIT
 #    define XMI_USE_LUAJIT
 #endif
 #include "xmi.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * types
  */
+
 typedef int (*xm_setup_func_t)(xmi_lua_ops_t* ops);
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_package_loadxmi(lua_State* lua)
+xu_int_t xm_package_loadxmi(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);

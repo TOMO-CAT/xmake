@@ -4,14 +4,12 @@
 
 /* *******************************************************
  *  includes
- * *******************************************************
  */
 #include "xutil/libc/misc/stdarg.h"
 #include "xutil/macros/type.h"
 
 /* *******************************************************
  *  the trace prefix
- * *******************************************************
  */
 #ifndef __xu_prefix__
 #    define __xu_prefix__ xu_null
@@ -19,7 +17,6 @@
 
 /* *******************************************************
  *  the trace module name
- * *******************************************************
  */
 #ifndef XU_TRACE_MODULE_NAME
 #    define XU_TRACE_MODULE_NAME xu_null
@@ -27,7 +24,6 @@
 
 /* *******************************************************
  *  the trace module debug
- * *******************************************************
  */
 #ifndef XU_TRACE_MODULE_DEBUG
 #    define XU_TRACE_MODULE_DEBUG (1)
@@ -35,7 +31,6 @@
 
 /* *******************************************************
  *  trace prefix
- * *******************************************************
  */
 #if defined(XU_COMPILER_IS_GCC) || defined(XU_COMPILER_IS_TINYC)
 #    define xu_trace_p(prefix, fmt, arg...)                                                                            \
@@ -194,7 +189,6 @@
 
 /* *******************************************************
  *  trace once
- * *******************************************************
  */
 #if defined(XU_COMPILER_IS_GCC) || defined(XU_COMPILER_IS_TINYC)
 #    define xu_trace1_d(fmt, arg...)                                                                                   \
@@ -254,7 +248,6 @@
 
 /* *******************************************************
  *  trace more info?
- * *******************************************************
  */
 #if !defined(__xu_debug__) && !defined(XU_CONFIG_INFO_TRACE_MORE)
 #    undef XU_TRACE_DEBUG
@@ -315,25 +308,21 @@
 
 /* *******************************************************
  *  noimpl
- * *******************************************************
  */
 #define xu_trace_noimpl() xu_trace1_w("noimpl")
 
 /* *******************************************************
  *  nosafe
- * *******************************************************
  */
 #define xu_trace_nosafe() xu_trace1_w("nosafe")
 
 /* *******************************************************
  *  deprecated
- * *******************************************************
  */
 #define xu_trace_deprecated() xu_trace1_w("deprecated")
 
 /* *******************************************************
  *  declaration
- * *******************************************************
  */
 xu_void_t xu_trace_sync(xu_noarg_t);
 xu_void_t xu_trace_done(xu_char_t const* prefix, xu_char_t const* module, xu_char_t const* format, ...);

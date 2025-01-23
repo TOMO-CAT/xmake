@@ -19,30 +19,30 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "exists"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_os_exists(lua_State* lua)
+xu_int_t xm_os_exists(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
     // os.exists(path)
-    lua_pushboolean(lua, tb_file_info(path, tb_null));
+    lua_pushboolean(lua, xu_file_info(path, xu_null));
     return 1;
 }

@@ -19,24 +19,24 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "dedecompress_file"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/lz4/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_lz4_decompress_file(lua_State* lua)
+xu_int_t xm_lz4_decompress_file(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the file paths
     xu_char_t const* srcpath = luaL_checkstring(lua, 1);
@@ -90,12 +90,12 @@ tb_int_t xm_lz4_decompress_file(lua_State* lua)
     if (istream)
     {
         tb_stream_exit(istream);
-        istream = tb_null;
+        istream = xu_null;
     }
     if (ostream)
     {
         tb_stream_exit(ostream);
-        ostream = tb_null;
+        ostream = xu_null;
     }
     xm_lz4_dstream_exit(stream_lz4);
 

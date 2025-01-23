@@ -19,13 +19,13 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "stdfile"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
@@ -34,7 +34,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
@@ -43,7 +43,7 @@
 #define XM_IO_STDFILE_STDOUT (TB_SINGLETON_TYPE_USER + 2)
 #define XM_IO_STDFILE_STDERR (TB_SINGLETON_TYPE_USER + 3)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_size_t xm_io_stdfile_isatty(xu_size_t type)
@@ -65,15 +65,15 @@ static xu_size_t xm_io_stdfile_isatty(xu_size_t type)
 static xu_void_t xm_io_stdfile_init_buffer(xu_size_t type)
 {
     struct stat stats;
-    tb_int_t    size = BUFSIZ;
+    xu_int_t    size = BUFSIZ;
     if (fstat(fileno(stdout), &stats) != -1) size = stats.st_blksize;
-    setvbuf(stdout, tb_null, _IOLBF, size);
+    setvbuf(stdout, xu_null, _IOLBF, size);
 }
 
 static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 {
     // init stdfile
-    tb_stdfile_ref_t fp = tb_null;
+    tb_stdfile_ref_t fp = xu_null;
     switch (type)
     {
     case XM_IO_FILE_TYPE_STDIN: fp = tb_stdfile_input(); break;
@@ -83,12 +83,12 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 
     // new file
     xm_io_file_t* file = (xm_io_file_t*)lua_newuserdata(lua, sizeof(xm_io_file_t));
-    tb_assert_and_check_return_val(file, tb_null);
+    xu_assert_and_check_return_val(file, xu_null);
 
     // init file
     file->u.std_ref = fp;
-    file->stream    = tb_null;
-    file->fstream   = tb_null;
+    file->stream    = xu_null;
+    file->fstream   = xu_null;
     file->type      = xm_io_stdfile_isatty(type);
     file->encoding  = TB_CHARSET_TYPE_UTF8;
 
@@ -101,15 +101,15 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
     return file;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 
 // io.stdfile(stdin: 1, stdout: 2, stderr: 3)
-tb_int_t xm_io_stdfile(lua_State* lua)
+xu_int_t xm_io_stdfile(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get std type
     tb_long_t type = (tb_long_t)lua_tointeger(lua, 1);

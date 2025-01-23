@@ -5,7 +5,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_bool_t xu_static_stream_init(xu_static_stream_ref_t stream, xu_byte_t* data, xu_size_t size)

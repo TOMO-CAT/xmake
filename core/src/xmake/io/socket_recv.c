@@ -19,26 +19,26 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "socket_recv"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 // real, data_or_errors = io.socket_recv(sock, size)
-tb_int_t xm_io_socket_recv(lua_State* lua)
+xu_int_t xm_io_socket_recv(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // check socket
     if (!xm_lua_ispointer(lua, 1))
@@ -53,7 +53,7 @@ tb_int_t xm_io_socket_recv(lua_State* lua)
     tb_check_return_val(sock, 0);
 
     // get data
-    tb_byte_t* data = tb_null;
+    tb_byte_t* data = xu_null;
     if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
     if (!data)
     {
@@ -69,12 +69,12 @@ tb_int_t xm_io_socket_recv(lua_State* lua)
     if (size <= 0)
     {
         lua_pushinteger(lua, -1);
-        lua_pushfstring(lua, "invalid size(%d)!", (tb_int_t)size);
+        lua_pushfstring(lua, "invalid size(%d)!", (xu_int_t)size);
         return 2;
     }
 
     // recv data
     tb_long_t real = tb_socket_recv(sock, data, size);
-    lua_pushinteger(lua, (tb_int_t)real);
+    lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

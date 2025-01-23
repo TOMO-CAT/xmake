@@ -2,7 +2,6 @@
 
 /* *******************************************************
  * macros
- * *******************************************************
  */
 
 #ifdef XU_WORDS_BIGENDIAN
@@ -60,7 +59,6 @@
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 // the static fixed pool type
 typedef __xu_pool_data_aligned__ struct __xu_static_fixed_pool_t
@@ -127,7 +125,6 @@ typedef __xu_pool_data_aligned__ struct __xu_static_fixed_pool_t
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 static xu_pool_data_empty_head_t* xu_static_fixed_pool_malloc_pred(xu_static_fixed_pool_t* pool)

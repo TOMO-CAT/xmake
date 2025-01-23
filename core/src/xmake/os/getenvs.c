@@ -19,38 +19,38 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "getenvs"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
 // the separator
 #define XM_OS_ENV_SEP ':'
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * globals
  */
 
 // the user environment
 extern xu_char_t** environ;
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_os_getenvs(lua_State* lua)
+xu_int_t xm_os_getenvs(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // init table
     lua_newtable(lua);
@@ -58,7 +58,7 @@ tb_int_t xm_os_getenvs(lua_State* lua)
     xu_char_t const** p = (xu_char_t const**)environ;
     if (p)
     {
-        tb_int_t  i = 1;
+        xu_int_t  i = 1;
         xu_size_t n = 0;
         while (*p)
         {

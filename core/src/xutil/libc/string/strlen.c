@@ -15,7 +15,6 @@
 
 /* *******************************************************
  *  implementation
- * *******************************************************
  */
 #if defined(XU_CONFIG_LIBC_HAVE_STRLEN)
 static xu_size_t xu_strlen_impl(xu_char_t const* s)
@@ -50,7 +49,6 @@ static xu_size_t xu_strlen_impl(xu_char_t const* s)
 
 /* *******************************************************
  *  interfaces
- * *******************************************************
  */
 xu_size_t xu_strlen(xu_char_t const* s)
 {

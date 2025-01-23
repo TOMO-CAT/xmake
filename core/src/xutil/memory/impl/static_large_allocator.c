@@ -1,6 +1,5 @@
 /* *******************************************************
  *  trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "static_large_allocator"
 #define XU_TRACE_MODULE_DEBUG (0)
@@ -13,7 +12,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 
 // the static large allocator data size
@@ -22,7 +20,6 @@
 
 /* *******************************************************
  *  types
- * *******************************************************
  */
 
 // the static large data head type
@@ -211,7 +208,6 @@ static xu_void_t xu_static_large_allocator_check_next(xu_static_large_allocator_
 
 /* *******************************************************
  *  malloc implementation
- * *******************************************************
  */
 
 static __xu_inline__ xu_size_t xu_static_large_allocator_pred_index(xu_static_large_allocator_ref_t allocator,

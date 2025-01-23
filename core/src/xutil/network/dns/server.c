@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 
 #define XU_TRACE_MODULE_NAME "dns_server"
@@ -18,14 +17,12 @@
 
 /* *******************************************************
  * macros
- * *******************************************************
  */
 // the dns server test timeout
 #define XU_DNS_SERVER_TEST_TIMEOUT (500)
 
 /* *******************************************************
  * types
- * *******************************************************
  */
 
 // the dns server type
@@ -52,7 +49,6 @@ typedef struct __xu_dns_server_list_t
 
 /* *******************************************************
  * globals
- * *******************************************************
  */
 // the lock
 static xu_spinlock_t g_lock = XU_SPINLOCK_INIT;
@@ -62,7 +58,6 @@ static xu_dns_server_list_t g_list = {0};
 
 /* *******************************************************
  * server
- * *******************************************************
  */
 
 static xu_long_t xu_dns_server_comp(xu_element_ref_t element, xu_cpointer_t litem, xu_cpointer_t ritem)
@@ -307,7 +302,6 @@ static xu_bool_t xu_dns_server_rate(xu_iterator_ref_t iterator, xu_cpointer_t it
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_bool_t xu_dns_server_init()

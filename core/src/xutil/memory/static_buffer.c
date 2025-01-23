@@ -3,7 +3,6 @@
 
 /* *******************************************************
  * macros
- * *******************************************************
  */
 
 // the maximum grow size of value buffer
@@ -15,7 +14,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_bool_t xu_static_buffer_init(xu_static_buffer_ref_t buffer, xu_byte_t* data, xu_size_t maxn)

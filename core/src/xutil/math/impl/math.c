@@ -2,7 +2,6 @@
 
 /* *******************************************************
  * private implementation
- * *******************************************************
  */
 
 #ifndef XU_CONFIG_MICRO_ENABLE
@@ -30,7 +29,6 @@ static xu_long_t xu_math_printf_format_fixed(xu_cpointer_t object, xu_char_t* cs
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_bool_t xu_math_init_env()

@@ -19,25 +19,25 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "string_lastof"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/string/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_void_t xm_string_lastof_str(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t const* csubstr,
                                       xu_size_t nsubstr)
 {
     // find it
-    xu_char_t const* curr = tb_null;
+    xu_char_t const* curr = xu_null;
     xu_char_t const* next = cstr;
     do
     {
@@ -65,7 +65,7 @@ static xu_void_t xm_string_lastof_chr(lua_State* lua, xu_char_t const* cstr, xu_
         lua_pushnil(lua);
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
@@ -74,10 +74,10 @@ static xu_void_t xm_string_lastof_chr(lua_State* lua, xu_char_t const* cstr, xu_
  * @param str             the string
  * @param substr          the substring
  */
-tb_int_t xm_string_lastof(lua_State* lua)
+xu_int_t xm_string_lastof(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get string
     size_t           nstr = 0;

@@ -4,7 +4,6 @@
 
 /* *******************************************************
  *  includes
- * *******************************************************
  */
 
 #include "xutil/macros/type.h"
@@ -19,7 +18,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 
 // the atomic flag initialize value
@@ -70,7 +68,6 @@
 
 /* *******************************************************
  *  macros
- * *******************************************************
  */
 /*! initializes the default-constructed atomic object obj with the value desired.
  *
@@ -266,7 +263,6 @@
 
 /* *******************************************************
  *  inline implementation
- * *******************************************************
  */
 #ifdef xu_atomic_flag_test_and_set_explicit_generic_impl
 static __xu_inline__ xu_bool_t xu_atomic_flag_test_and_set_explicit_generic(xu_atomic_flag_t* a, xu_int_t mo)

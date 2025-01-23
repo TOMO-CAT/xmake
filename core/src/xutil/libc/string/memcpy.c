@@ -16,7 +16,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 #if defined(XU_CONFIG_LIBC_HAVE_MEMCPY)
@@ -63,7 +62,6 @@ static xu_pointer_t xu_memcpy_impl(xu_pointer_t s1, xu_cpointer_t s2, xu_size_t 
 
 /* *******************************************************
  * interfaces
- * *******************************************************
  */
 xu_pointer_t xu_memcpy_(xu_pointer_t s1, xu_cpointer_t s2, xu_size_t n)
 {

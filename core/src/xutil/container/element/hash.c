@@ -17,7 +17,6 @@
 
 /* *******************************************************
  * data hash implementation
- * *******************************************************
  */
 static xu_size_t xu_element_hash_data_func_0(xu_byte_t const* data, xu_size_t size)
 {
@@ -97,14 +96,12 @@ static xu_size_t xu_element_hash_data_func_15(xu_byte_t const* data, xu_size_t s
 
 /* *******************************************************
  * cstr hash implementation
- * *******************************************************
  */
 static xu_size_t xu_element_hash_cstr_func_0(xu_char_t const* data) { return xu_bkdr_make_from_cstr(data, 0); }
 static xu_size_t xu_element_hash_cstr_func_1(xu_char_t const* data) { return xu_fnv32_1a_make_from_cstr(data, 0); }
 
 /* *******************************************************
  * uint8 hash implementation
- * *******************************************************
  */
 
 static xu_size_t xu_element_hash_uint8_func_0(xu_uint8_t value) { return (xu_size_t)value; }
@@ -115,7 +112,6 @@ static xu_size_t xu_element_hash_uint8_func_1(xu_uint8_t value)
 
 /* *******************************************************
  * uint16 hash implementation
- * *******************************************************
  */
 
 static xu_size_t xu_element_hash_uint16_func_0(xu_uint16_t value)
@@ -125,7 +121,6 @@ static xu_size_t xu_element_hash_uint16_func_0(xu_uint16_t value)
 
 /* *******************************************************
  * uint32 hash implementation
- * *******************************************************
  */
 
 static xu_size_t xu_element_hash_uint32_func_0(xu_uint32_t value)
@@ -157,14 +152,12 @@ static xu_size_t xu_element_hash_uint32_func_2(xu_uint32_t value)
 
 /* *******************************************************
  * uint64 hash implementation
- * *******************************************************
  */
 
 static xu_size_t xu_element_hash_uint64_func_0(xu_uint64_t value) { return (xu_size_t)((value * 2654435761ul) >> 16); }
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_size_t xu_element_hash_uint8(xu_uint8_t value, xu_size_t mask, xu_size_t index)

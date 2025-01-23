@@ -37,7 +37,7 @@ tb_uint32_t tb_crc32_make_asm(tb_uint32_t crc32, tb_byte_t const* data, tb_size_
  */
 
 // the crc32(IEEE) table
-tb_uint32_t const g_crc32_table[] =
+tb_uint32_t const g_crc32_table_tb[] =
 {
     0x00000000, 0xb71dc104, 0x6e3b8209, 0xd926430d, 0xdc760413, 0x6b6bc517
 ,	0xb24d861a, 0x0550471e, 0xb8ed0826, 0x0ff0c922, 0xd6d68a2f, 0x61cb4b2b
@@ -85,7 +85,7 @@ tb_uint32_t const g_crc32_table[] =
 };
 
 // the crc32(IEEE LE) table
-tb_uint32_t const g_crc32_le_table[] =
+tb_uint32_t const g_crc32_le_table_tb[] =
 {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f
 ,	0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988
@@ -160,7 +160,7 @@ tb_uint32_t tb_crc32_make(tb_byte_t const* data, tb_size_t size, tb_uint32_t see
     tb_assert_and_check_return_val(data, 0);
 
     // calculate it
-    return tb_crc32_make_impl(seed, data, size, g_crc32_table);
+    return tb_crc32_make_impl(seed, data, size, g_crc32_table_tb);
 }
 tb_uint32_t tb_crc32_make_from_cstr(tb_char_t const* cstr, tb_uint32_t seed)
 {
@@ -176,7 +176,7 @@ tb_uint32_t tb_crc32_le_make(tb_byte_t const* data, tb_size_t size, tb_uint32_t 
     tb_assert_and_check_return_val(data, 0);
 
     // calculate it
-    return tb_crc32_make_impl(seed, data, size, g_crc32_le_table);
+    return tb_crc32_make_impl(seed, data, size, g_crc32_le_table_tb);
 }
 tb_uint32_t tb_crc32_le_make_from_cstr(tb_char_t const* cstr, tb_uint32_t seed)
 {

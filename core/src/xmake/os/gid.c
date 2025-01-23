@@ -19,31 +19,31 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "gid"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
 #include <unistd.h>
 #include <errno.h>
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 // get & set gid
-tb_int_t xm_os_gid(lua_State* lua)
+xu_int_t xm_os_gid(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
-    tb_int_t rgidset = -1;
-    tb_int_t egidset = -1;
-    tb_int_t argc = lua_gettop(lua);
+    xu_int_t rgidset = -1;
+    xu_int_t egidset = -1;
+    xu_int_t argc = lua_gettop(lua);
     if (argc == 1)
     {
         if (lua_istable(lua, 1))
@@ -59,7 +59,7 @@ tb_int_t xm_os_gid(lua_State* lua)
                     lua_error(lua);
                     return 0;
                 }
-                egidset = (tb_int_t)lua_tonumber(lua, -1);
+                egidset = (xu_int_t)lua_tonumber(lua, -1);
             }
             lua_pop(lua, 1);
             if (!lua_isnil(lua, -1))
@@ -70,14 +70,14 @@ tb_int_t xm_os_gid(lua_State* lua)
                     lua_error(lua);
                     return 0;
                 }
-                rgidset = (tb_int_t)lua_tonumber(lua, -1);
+                rgidset = (xu_int_t)lua_tonumber(lua, -1);
             }
             lua_pop(lua, 1);
         }
         else if (lua_isnumber(lua, 1))
         {
             // os.gid(gid)
-            rgidset = egidset = (tb_int_t)lua_tonumber(lua, 1);
+            rgidset = egidset = (xu_int_t)lua_tonumber(lua, 1);
         }
         else
         {
@@ -97,7 +97,7 @@ tb_int_t xm_os_gid(lua_State* lua)
                 lua_error(lua);
                 return 0;
             }
-            rgidset = (tb_int_t)lua_tonumber(lua, 1);
+            rgidset = (xu_int_t)lua_tonumber(lua, 1);
         }
         if (!lua_isnil(lua, 2))
         {
@@ -107,7 +107,7 @@ tb_int_t xm_os_gid(lua_State* lua)
                 lua_error(lua);
                 return 0;
             }
-            egidset = (tb_int_t)lua_tonumber(lua, 2);
+            egidset = (xu_int_t)lua_tonumber(lua, 2);
         }
     }
     else if (argc != 0)

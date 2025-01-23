@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "file_write"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
@@ -86,15 +86,15 @@ static xu_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data,
     tb_stdfile_writ(file->u.std_ref, data, size);
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 // io.file_write(file, ...)
-tb_int_t xm_io_file_write(lua_State* lua)
+xu_int_t xm_io_file_write(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
     if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "write(invalid file)!");
@@ -104,15 +104,15 @@ tb_int_t xm_io_file_write(lua_State* lua)
     tb_check_return_val(file, 0);
 
     // write file data
-    tb_int_t narg = lua_gettop(lua);
+    xu_int_t narg = lua_gettop(lua);
     if (narg > 1)
     {
         xu_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
-        for (tb_int_t i = 2; i <= narg; i++)
+        for (xu_int_t i = 2; i <= narg; i++)
         {
             // get data
             size_t           datasize = 0;
-            tb_byte_t const* data     = tb_null;
+            tb_byte_t const* data     = xu_null;
             if (lua_isstring(lua, i))
                 data = (tb_byte_t const*)luaL_checklstring(lua, i, &datasize);
             else if (lua_istable(lua, i))

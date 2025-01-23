@@ -19,24 +19,24 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "bloom_filter_size"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/bloom_filter/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_bloom_filter_size(lua_State* lua)
+xu_int_t xm_bloom_filter_size(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
     if (!xm_lua_ispointer(lua, 1)) return 0;
@@ -47,6 +47,6 @@ tb_int_t xm_bloom_filter_size(lua_State* lua)
 
     // get size
     xu_size_t size = tb_bloom_filter_size(filter);
-    lua_pushinteger(lua, (tb_int_t)size);
+    lua_pushinteger(lua, (xu_int_t)size);
     return 1;
 }

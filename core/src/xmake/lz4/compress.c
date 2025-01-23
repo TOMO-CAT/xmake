@@ -19,52 +19,52 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "compress"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/lz4/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_lz4_compress(lua_State* lua)
+xu_int_t xm_lz4_compress(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = tb_null;
+    tb_byte_t const* data = xu_null;
     if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 1);
     if (xm_lua_isinteger(lua, 2)) size = (xu_size_t)lua_tointeger(lua, 2);
     if (!data || !size)
     {
         lua_pushnil(lua);
-        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (tb_int_t)size);
+        lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // do compress
     xu_bool_t        ok          = xu_false;
-    xu_char_t const* error       = tb_null;
-    tb_byte_t*       output_data = tb_null;
+    xu_char_t const* error       = xu_null;
+    tb_byte_t*       output_data = xu_null;
     tb_byte_t        buffer[8192];
     do
     {
-        xu_size_t output_size = LZ4F_compressFrameBound(size, tb_null);
+        xu_size_t output_size = LZ4F_compressFrameBound(size, xu_null);
         tb_assert_and_check_break(output_size);
 
         output_data = output_size <= sizeof(buffer) ? buffer : (tb_byte_t*)tb_malloc(output_size);
         tb_assert_and_check_break(output_data);
 
-        xu_size_t real_or_errs = LZ4F_compressFrame(output_data, output_size, data, size, tb_null);
+        xu_size_t real_or_errs = LZ4F_compressFrame(output_data, output_size, data, size, xu_null);
         if (LZ4F_isError(real_or_errs))
         {
             error = LZ4F_getErrorName(real_or_errs);
@@ -78,7 +78,7 @@ tb_int_t xm_lz4_compress(lua_State* lua)
     if (output_data && output_data != buffer)
     {
         tb_free(output_data);
-        output_data = tb_null;
+        output_data = xu_null;
     }
 
     if (!ok)

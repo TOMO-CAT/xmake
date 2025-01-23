@@ -6,6 +6,10 @@
 #include "xutil/memory/allocator.h"
 #include "xutil/memory/memory.h"
 #include "xutil/platform/atomic.h"
+#include "xutil/platform/directory.h"
+#include "xutil/platform/environment.h"
+#include "xutil/platform/file.h"
+#include "xutil/platform/path.h"
 #include "xutil/platform/socket.h"
 #include "xutil/utils/state.h"
 #include "xutil/utils/trace.h"
@@ -13,7 +17,6 @@
 
 /* *******************************************************
  * macros
- * *******************************************************
  */
 
 // the compile mode
@@ -100,7 +103,6 @@
 
 /* *******************************************************
  *  interfaces
- * *******************************************************
  */
 
 /*! init the xutil library

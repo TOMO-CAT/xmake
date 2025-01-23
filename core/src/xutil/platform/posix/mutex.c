@@ -9,7 +9,6 @@
 
 /* *******************************************************
  *  private implementation
- * *******************************************************
  */
 
 xu_mutex_ref_t xu_mutex_init_impl(xu_mutex_t* mutex)
@@ -42,7 +41,6 @@ xu_bool_t xu_mutex_entry_try_without_profiler(xu_mutex_ref_t mutex)
 
 /* *******************************************************
  *  implementation
- * *******************************************************
  */
 xu_mutex_ref_t xu_mutex_init()
 {

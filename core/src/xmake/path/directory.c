@@ -19,31 +19,31 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "directory"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/path/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_path_directory(lua_State* lua)
+xu_int_t xm_path_directory(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
     // do path:directory()
-    xu_char_t data[TB_PATH_MAXN];
+    xu_char_t data[XU_PATH_MAXN];
     xu_char_t const* dir = tb_path_directory(path, data, sizeof(data));
     if (dir) lua_pushstring(lua, dir);
     else lua_pushnil(lua);

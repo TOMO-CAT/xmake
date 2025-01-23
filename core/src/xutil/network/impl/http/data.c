@@ -1,6 +1,5 @@
 /* *******************************************************
  * trace
- * *******************************************************
  */
 #define XU_TRACE_MODULE_NAME "http_date"
 #define XU_TRACE_MODULE_DEBUG (1)
@@ -14,7 +13,6 @@
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 xu_time_t xu_http_date_from_cstr(xu_char_t const* cstr, xu_size_t size)
 {

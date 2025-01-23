@@ -18,14 +18,9 @@
  * @file        config.h
  *
  */
-#ifndef XM_CORE_CONFIG_H
-#define XM_CORE_CONFIG_H
+#pragma once
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake.config.h"
-
-#endif
-
-

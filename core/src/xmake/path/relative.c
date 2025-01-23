@@ -19,34 +19,34 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "relative"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/path/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
-tb_int_t xm_path_relative(lua_State* lua)
+xu_int_t xm_path_relative(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
     tb_check_return_val(path, 0);
 
     // get the root
-    xu_char_t const* root = luaL_optstring(lua, 2, tb_null);
+    xu_char_t const* root = luaL_optstring(lua, 2, xu_null);
 
     // path:relative(root)
-    xu_char_t data[TB_PATH_MAXN];
+    xu_char_t data[XU_PATH_MAXN];
     lua_pushstring(lua, tb_path_relative_to(root, path, data, sizeof(data) - 1));
     return 1;
 }

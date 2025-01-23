@@ -19,13 +19,13 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME                "getwinsize"
 #define TB_TRACE_MODULE_DEBUG               (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
@@ -33,25 +33,25 @@
 #include <errno.h>  // for errno
 #include <unistd.h> // for STDOUT_FILENO
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 // get console window size
-tb_int_t xm_os_getwinsize(lua_State* lua)
+xu_int_t xm_os_getwinsize(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // init default window size (we will not consider winsize limit if cannot get it)
-    tb_int_t w = TB_MAXS16, h = TB_MAXS16;
+    xu_int_t w = TB_MAXS16, h = TB_MAXS16;
 
     // get winsize
     struct winsize size;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0)
     {
-        w = (tb_int_t)size.ws_col;
-        h = (tb_int_t)size.ws_row;
+        w = (xu_int_t)size.ws_col;
+        h = (xu_int_t)size.ws_row;
     }
 
     /* local winsize = os.getwinsize()

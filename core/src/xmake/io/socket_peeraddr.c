@@ -19,34 +19,34 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME    "socket_peeraddr"
 #define TB_TRACE_MODULE_DEBUG   (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * macros
  */
 
 // socket to fd
 #define xm_io_sock2fd(sock)            (lua_Number)tb_sock2fd(sock)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 /* io.socket_peeraddr(sock)
  */
-tb_int_t xm_io_socket_peeraddr(lua_State* lua)
+xu_int_t xm_io_socket_peeraddr(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
     if (!xm_lua_ispointer(lua, 1))
@@ -59,7 +59,7 @@ tb_int_t xm_io_socket_peeraddr(lua_State* lua)
     // get peer address
     xu_ipaddr_t addr;
     xu_char_t data[256];
-    xu_char_t const* cstr = tb_null;
+    xu_char_t const* cstr = xu_null;
     if (xu_socket_peer(sock, &addr) && (cstr = xu_ipaddr_cstr(&addr, data, sizeof(data))))
         lua_pushstring(lua, cstr);
     else lua_pushnil(lua);

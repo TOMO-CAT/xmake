@@ -19,18 +19,18 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "convert"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/string/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * globals
  */
 
@@ -61,7 +61,7 @@ static xm_charset_entry_t g_charsets[] = {{TB_CHARSET_TYPE_ANSI, "ansi"},
                                           {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_LE, "utf32le"},
                                           {TB_CHARSET_TYPE_UTF8, "utf8"}};
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * finder
  */
 static tb_long_t xm_string_charset_comp_by_name(tb_iterator_ref_t iterator, tb_cpointer_t item, tb_cpointer_t name)
@@ -73,18 +73,18 @@ static xm_charset_entry_ref_t xm_string_charset_find_by_name(xu_char_t const* na
     // make iterator
     tb_array_iterator_t array_iterator;
     tb_iterator_ref_t   iterator =
-        tb_array_iterator_init_mem(&array_iterator, g_charsets, tb_arrayn(g_charsets), sizeof(xm_charset_entry_t));
-    tb_assert_and_check_return_val(iterator, tb_null);
+        tb_array_iterator_init_mem(&array_iterator, g_charsets, xu_arrayn(g_charsets), sizeof(xm_charset_entry_t));
+    xu_assert_and_check_return_val(iterator, xu_null);
 
     // find it by the binary search
     xu_size_t itor = tb_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
     if (itor != tb_iterator_tail(iterator))
         return (xm_charset_entry_ref_t)tb_iterator_item(iterator, itor);
     else
-        return tb_null;
+        return xu_null;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
@@ -99,10 +99,10 @@ static xm_charset_entry_ref_t xm_string_charset_find_by_name(xu_char_t const* na
  *      local result = string.convert(str, "utf8", "gb2312")
  * @endcode
  */
-tb_int_t xm_string_convert(lua_State* lua)
+xu_int_t xm_string_convert(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get the string and charset types
     size_t           src_size   = 0;

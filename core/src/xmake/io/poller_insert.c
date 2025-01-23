@@ -19,27 +19,27 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "poller_insert"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "poller.h"
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 
 // io.poller_insert(obj:otype(), obj:cdata(), events)
-tb_int_t xm_io_poller_insert(lua_State* lua)
+xu_int_t xm_io_poller_insert(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
     if (!xm_lua_ispointer(lua, 2))
@@ -53,7 +53,7 @@ tb_int_t xm_io_poller_insert(lua_State* lua)
     tb_uint8_t otype = (tb_uint8_t)luaL_checknumber(lua, 1);
 
     // get cdata
-    xu_char_t const* cdata_str = tb_null;
+    xu_char_t const* cdata_str = xu_null;
     tb_pointer_t     cdata     = (tb_pointer_t)xm_lua_topointer2(lua, 2, &cdata_str);
     tb_check_return_val(cdata, 0);
 

@@ -19,21 +19,21 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "select"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/semver/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
-static xu_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t fromidx, semver_t* semver,
+static xu_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, xu_int_t fromidx, semver_t* semver,
                                                       semver_range_t const* range, semvers_t* matches)
 {
     // clear matches
@@ -81,7 +81,7 @@ static xu_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, tb_int_t f
     // ok
     return xu_true;
 }
-static xu_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t fromidx, semver_t* semver,
+static xu_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, xu_int_t fromidx, semver_t* semver,
                                                       xu_char_t const* version_str, xu_size_t version_len)
 {
     lua_Integer i = 0;
@@ -106,7 +106,7 @@ static xu_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, tb_int_t f
     }
     return xu_false;
 }
-static xu_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx, xu_char_t const* range_str,
+static xu_bool_t xm_semver_select_from_branches(lua_State* lua, xu_int_t fromidx, xu_char_t const* range_str,
                                                 xu_size_t range_len)
 {
     lua_Integer i = 0;
@@ -131,7 +131,7 @@ static xu_bool_t xm_semver_select_from_branches(lua_State* lua, tb_int_t fromidx
     }
     return xu_false;
 }
-static xu_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_int_t fromidx, semver_t* semver,
+static xu_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, xu_int_t fromidx, semver_t* semver,
                                                             semvers_t* matches)
 {
     // clear matches
@@ -170,7 +170,7 @@ static xu_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_i
     return xu_true;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
@@ -178,15 +178,15 @@ static xu_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, tb_i
  *
  * local versioninfo, errors = semver.select(">=1.5.0 <1.6", {"1.5.0", "1.5.1"}, {"v1.5.0", ..}, {"latest", "dev"})
  */
-tb_int_t xm_semver_select(lua_State* lua)
+xu_int_t xm_semver_select(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // select version
     xu_bool_t        ok        = xu_false;
     xu_bool_t        is_range  = xu_false;
-    xu_char_t const* range_str = tb_null;
+    xu_char_t const* range_str = xu_null;
     semver_t         semver    = {0};
     semvers_t        matches   = {0};
     semver_range_t   range     = {0};

@@ -21,7 +21,7 @@
 #ifndef XM_BLOOM_FILTER_PREFIX_H
 #define XM_BLOOM_FILTER_PREFIX_H
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/prefix.h"

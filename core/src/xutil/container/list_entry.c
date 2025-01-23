@@ -2,7 +2,6 @@
 
 /* *******************************************************
  * iterator implementation
- * *******************************************************
  */
 
 static xu_size_t xu_list_entry_itor_size(xu_iterator_ref_t iterator)
@@ -108,7 +107,6 @@ static xu_void_t xu_list_entry_itor_nremove(xu_iterator_ref_t iterator, xu_size_
 
 /* *******************************************************
  * implementation
- * *******************************************************
  */
 
 xu_iterator_ref_t xu_list_entry_itor(xu_list_entry_head_ref_t list)

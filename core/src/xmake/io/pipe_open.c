@@ -19,33 +19,33 @@
  *
  */
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * trace
  */
 #define TB_TRACE_MODULE_NAME "pipe_open"
 #define TB_TRACE_MODULE_DEBUG (0)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/io/prefix.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 
 /*
  * io.pipe_open(name, mode, buffsize)
  */
-tb_int_t xm_io_pipe_open(lua_State* lua)
+xu_int_t xm_io_pipe_open(lua_State* lua)
 {
     // check
-    tb_assert_and_check_return_val(lua, 0);
+    xu_assert_and_check_return_val(lua, 0);
 
     // get pipe name and mode
     xu_char_t const* name    = luaL_checkstring(lua, 1);
     xu_char_t const* modestr = luaL_optstring(lua, 2, "r");
-    tb_assert_and_check_return_val(name && modestr, 0);
+    xu_assert_and_check_return_val(name && modestr, 0);
 
     // get pipe mode value
     xu_size_t mode = TB_PIPE_MODE_RO;
