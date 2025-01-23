@@ -61,7 +61,7 @@ static tb_long_t xm_os_rmdir_remove(xu_char_t const* path, xu_file_info_t const*
         xu_directory_walk(path, xu_false, xu_true, xm_os_rmdir_empty, &is_emptydir);
 
         // trace
-        tb_trace_d("path: %s, emptydir: %u", path, is_emptydir);
+        xu_trace_d("path: %s, emptydir: %u", path, is_emptydir);
 
         // remove empty directory
         if (is_emptydir) tb_directory_remove(path);
@@ -94,7 +94,7 @@ xu_int_t xm_os_rmdir(lua_State* lua)
         if (is_emptydir) tb_directory_remove(path);
 
         // trace
-        tb_trace_d("path: %s, emptydir: %u", path, is_emptydir);
+        xu_trace_d("path: %s, emptydir: %u", path, is_emptydir);
 
         // ok?
         lua_pushboolean(lua, !xu_file_info(path, xu_null));

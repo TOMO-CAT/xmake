@@ -566,7 +566,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
     if (ok)
     {
         // trace
-        tb_trace_d("programfile: %s", path);
+        xu_trace_d("programfile: %s", path);
 
         // save the directory to the global variable: _PROGRAM_FILE
         lua_pushstring(engine->lua, path);
@@ -652,7 +652,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
     if (ok)
     {
         // trace
-        tb_trace_d("programdir: %s", path);
+        xu_trace_d("programdir: %s", path);
 
         // save the directory to the global variable: _PROGRAM_DIR
         lua_pushstring(engine->lua, path);
@@ -680,7 +680,7 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
         }
 
         // trace
-        tb_trace_d("project: %s", path);
+        xu_trace_d("project: %s", path);
 
         // save the directory to the global variable: _PROJECT_DIR
         lua_pushstring(engine->lua, path);
@@ -1041,7 +1041,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     }
 
     // trace
-    tb_trace_d("main: %s", path);
+    xu_trace_d("main: %s", path);
 
     // load and execute the main script
     if (luaL_dofile(engine->lua, path))
