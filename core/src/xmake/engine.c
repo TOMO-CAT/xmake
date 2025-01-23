@@ -754,7 +754,7 @@ static xu_void_t xm_engine_init_host(xm_engine_t* engine)
 static __xu_inline__ xu_char_t const* xm_engine_xmake_arch()
 {
     xu_char_t const* arch = xu_null;
-#if defined(TB_ARCH_x64)
+#if defined(XU_ARCH_x64)
     arch = "x86_64";
 #elif defined(TB_ARCH_x86)
     arch = "i386";
