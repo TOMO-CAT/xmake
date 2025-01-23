@@ -676,7 +676,7 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
         if (!xu_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !xu_path_absolute(data, path, maxn))
         {
             // get it from the current directory
-            if (!tb_directory_current(path, maxn)) break;
+            if (!xu_directory_current(path, maxn)) break;
         }
 
         // trace
