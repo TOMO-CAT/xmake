@@ -184,7 +184,7 @@ function builder:_add_flags_from_flagkind(flags, target, flagkind, opt)
 
         if for_this_tool then
             if extraconf then
-                -- @note we need join the single flag with shallow mode, aboid expand table values
+                -- @note we need join the single flag with shallow mode, avoid expand table values
                 -- e.g. add_cflags({"-I", "/tmp/xxx foo"}, {force = true, expand = false})
                 if flagconf and flagconf.force then
                     table.shallow_join2(flags, flag)

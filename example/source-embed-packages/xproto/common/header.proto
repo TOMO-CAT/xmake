@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package xmake.common.proto;
+
+message Header {
+  string module_name = 1;
+  uint32 sequence_num = 2;
+  uint64 timestamp = 3;
+  bytes status_data = 4;
+}

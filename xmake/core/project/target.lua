@@ -312,6 +312,18 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
         end
         return table.unwrap(result)
     end
+    -- use softlink installdir?
+    -- @see https://github.com/TOMO-CAT/xmake/issues/62
+    local function _transform_softlink_installdir(paths, installdir, softlink_installdir)
+        if not paths then
+            return
+        end
+        for i, path in ipairs(paths) do
+            if path:startswith(installdir) then
+                paths[i] = path:replace(installdir, softlink_installdir, {plain = true})
+            end
+        end
+    end
     for _, pkg in ipairs(self:orderpkgs(opt)) do
         local configinfo = self:pkgconfig(pkg:name())
         -- get values from package components
@@ -385,6 +397,22 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
                     end
                 end
             end
+            -- use softlink installdir for top-level package to make brief __FILE__ symbol 
+            -- @see https://github.com/TOMO-CAT/xmake/issues/129
+            -- @see https://github.com/TOMO-CAT/xmake/issues/62
+            if name == "includedirs" then
+                values = table.wrap(values)
+                if target._project().policy("package.enable_softlink_installdir") then
+                    if not os.getenv("XMAKE_IN_XREPO") then
+                        local installdir = pkg:installdir()
+                        if installdir then
+                            local softlink_installdir = path.join(config.buildir(), ".pkg", pkg:name())
+                            _transform_softlink_installdir(values, installdir, softlink_installdir)
+                        end
+                    end
+                end
+            end
+
             if values ~= nil then
                 table.insert(result_values, values)
                 table.insert(result_sources, "package::" .. pkg:name())

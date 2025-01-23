@@ -742,7 +742,7 @@ end
 function _instance:buildir()
     local buildir = self._BUILDIR
     if not buildir then
-        if self:sourcedir() then
+        if self:is_source_embed() then
             buildir = path.join(self:sourcedir(), "build")
         elseif self:is_local() then
             local name = self:name():lower():gsub("::", "_")
@@ -779,7 +779,11 @@ function _instance:cachedir()
                 -- strip `>= <=`
                 version_str = version_str:gsub("[>=<]", "")
             end
-            if self:is_local() then
+            if self:is_source_embed() then
+                -- source-embed package should be installed into it's build-dir
+                -- @see https://github.com/TOMO-CAT/xmake/issues/148
+                cachedir = path.join(self:buildir(), ".packages")
+            elseif self:is_local() then
                 cachedir = path.join(config.buildir({absolute = true}), ".packages", name:sub(1, 1):lower(), name, version_str, "cache")
             else
                 cachedir = path.join(package.cachedir(), name:sub(1, 1):lower(), name, version_str)
@@ -797,7 +801,11 @@ function _instance:installdir(...)
         installdir = self:get("installdir")
         if not installdir then
             local name = self:name():lower():gsub("::", "_")
-            if self:is_local() then
+            if self:is_source_embed() then
+                -- source-embed package should be installed into it's build-dir
+                -- @see https://github.com/TOMO-CAT/xmake/issues/148
+                installdir = path.join(self:buildir(), ".packages")
+            elseif self:is_local() then
                 installdir = path.join(config.buildir({absolute = true}), ".packages", name:sub(1, 1):lower(), name)
             else
                 installdir = path.join(package.installdir(), name:sub(1, 1):lower(), name)
@@ -1978,43 +1986,6 @@ function _instance:fetch(opt)
             fetchinfo = self:_fetch_library({system = true, require_version = require_ver, external = external, force = opt.force})
             if fetchinfo then
                 is_system = true
-            end
-        end
-    end
-
-    -- use softlink installdir?
-    -- https://github.com/TOMO-CAT/xmake/issues/62
-    local function _transform_softlink_installdir(paths, installdir, softlink_installdir)
-        if not paths then
-            return
-        end
-        for i, path in ipairs(paths) do
-            if path:startswith(installdir) then
-                paths[i] = path:replace(installdir, softlink_installdir, {plain = true})
-            end
-        end
-    end
-
-    -- use softlink installdir for top-level package to make brief __FILE__ symbol 
-    -- @see https://github.com/TOMO-CAT/xmake/issues/129
-    -- @see https://github.com/TOMO-CAT/xmake/issues/62
-    --
-    -- using a relative path with a softlink will definitely cause errors when we're not in os.projectdir,
-    -- therefore, we need to exclude scenarios like package:on_test() with opt.softlink_installdir
-    if project.policy("package.enable_softlink_installdir") then
-        if opt.softlink_installdir ~= false then
-            if self:is_toplevel() and fetchinfo and not os.getenv("XMAKE_IN_XREPO") then
-                local installdir = self:installdir()
-                if installdir and project and project.required_package(self:name()) then
-                    fetchinfo.includedirs = table.wrap(fetchinfo.includedirs)
-                    fetchinfo.sysincludedirs = table.wrap(fetchinfo.sysincludedirs)
-                    fetchinfo.linkdirs = table.wrap(fetchinfo.linkdirs)
-
-                    local softlink_installdir = path.join(config.buildir(), ".pkg", self:name())
-                    _transform_softlink_installdir(fetchinfo.includedirs, installdir, softlink_installdir)
-                    _transform_softlink_installdir(fetchinfo.sysincludedirs, installdir, softlink_installdir)
-                    _transform_softlink_installdir(fetchinfo.linkdirs, installdir, softlink_installdir)
-                end
             end
         end
     end

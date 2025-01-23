@@ -322,7 +322,7 @@ function get_batchjobs(targetnames, group_pattern)
         end
     end
 
-    -- contains serveral tables, each table's key is target_name and the value is a job function
+    -- contains several tables, each table's key is target_name and the value is a job function
     local all_target_jobs = {
         after_build = {}, -- each target's `after_build` job
         before_build = {}, -- each target's `before_build` job
