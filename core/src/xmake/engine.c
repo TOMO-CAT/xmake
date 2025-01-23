@@ -761,7 +761,7 @@ static __xu_inline__ xu_char_t const* xm_engine_xmake_arch()
 #elif defined(XU_ARCH_ARM64)
     arch = "arm64";
 #else
-    arch = TB_ARCH_STRING;
+    arch = XU_ARCH_STRING;
 #endif
     return arch;
 }
