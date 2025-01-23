@@ -120,9 +120,9 @@ xu_int_t xm_io_file_write(lua_State* lua)
                 // get bytes data
                 lua_pushstring(lua, "data");
                 lua_gettable(lua, i);
-                if (xm_lua_isinteger(lua, -1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, -1);
+                if (xm_lua_isinteger(lua, -1)) data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, -1);
                 lua_pop(lua, 1);
-                tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
+                tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
                 lua_pushstring(lua, "size");
                 lua_gettable(lua, i);
@@ -134,7 +134,7 @@ xu_int_t xm_io_file_write(lua_State* lua)
             }
 
             tb_check_continue(datasize);
-            tb_assert_and_check_break(data);
+            xu_assert_and_check_break(data);
 
             // write data to std or file
             if (xm_io_file_is_std(file))

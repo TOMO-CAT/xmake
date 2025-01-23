@@ -37,7 +37,7 @@ static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr
                                    xu_bool_t nowrap)
 {
     // check
-    tb_assert_and_check_return(size < XU_PATH_MAXN);
+    xu_assert_and_check_return(size < XU_PATH_MAXN);
 
     // need wrap quote?
     xu_char_t        ch;

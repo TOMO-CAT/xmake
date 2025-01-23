@@ -60,14 +60,14 @@ xu_int_t xm_lz4_decompress_file(lua_State* lua)
         while (!tb_stream_beof(istream))
         {
             write_ok        = xu_false;
-            tb_long_t ireal = (tb_long_t)tb_stream_read(istream, idata, sizeof(idata));
+            xu_long_t ireal = (xu_long_t)tb_stream_read(istream, idata, sizeof(idata));
             if (ireal > 0)
             {
-                tb_long_t r = xm_lz4_dstream_write(stream_lz4, idata, ireal, tb_stream_beof(istream));
-                tb_assert_and_check_break(r >= 0);
+                xu_long_t r = xm_lz4_dstream_write(stream_lz4, idata, ireal, tb_stream_beof(istream));
+                xu_assert_and_check_break(r >= 0);
                 tb_check_continue(r > 0);
 
-                tb_long_t oreal;
+                xu_long_t oreal;
                 while ((oreal = xm_lz4_dstream_read(stream_lz4, odata, sizeof(odata))) > 0)
                 {
                     if (!tb_stream_bwrit(ostream, odata, oreal))
@@ -76,7 +76,7 @@ xu_int_t xm_lz4_decompress_file(lua_State* lua)
                         break;
                     }
                 }
-                tb_assert_and_check_break(oreal >= 0);
+                xu_assert_and_check_break(oreal >= 0);
             }
             else
                 break;

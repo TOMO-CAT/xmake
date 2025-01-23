@@ -38,13 +38,13 @@ xu_int_t xm_libc_dataptr(lua_State* lua)
     // check
     xu_assert_and_check_return_val(lua, 0);
 
-    tb_pointer_t data = xu_null;
+    xu_pointer_t data = xu_null;
     if (lua_isstring(lua, 1))
-        data = (tb_pointer_t)luaL_checkstring(lua, 1);
+        data = (xu_pointer_t)luaL_checkstring(lua, 1);
     else if (lua_isnumber(lua, 1))
-        data = (tb_pointer_t)(xu_size_t)lua_tointeger(lua, 1);
+        data = (xu_pointer_t)(xu_size_t)lua_tointeger(lua, 1);
     else if (xm_lua_ispointer(lua, 1))
-        data = (tb_pointer_t)xm_lua_topointer(lua, 1);
+        data = (xu_pointer_t)xm_lua_topointer(lua, 1);
     else
         xm_libc_return_error(lua, "libc.dataptr(invalid data)!");
     lua_pushinteger(lua, (lua_Integer)data);

@@ -33,14 +33,14 @@
 /* *******************************************************
  * private implementation
  */
-static tb_long_t xm_os_emptydir_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_emptydir_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     xu_bool_t* is_emptydir = (xu_bool_t*)priv;
     xu_assert_and_check_return_val(path && info && is_emptydir, TB_DIRECTORY_WALK_CODE_END);
 
     // is emptydir?
-    if (info->type == TB_FILE_TYPE_FILE || info->type == TB_FILE_TYPE_DIRECTORY)
+    if (info->type == XU_FILE_TYPE_FILE || info->type == TB_FILE_TYPE_DIRECTORY)
     {
         *is_emptydir = xu_false;
         return xu_false;

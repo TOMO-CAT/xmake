@@ -272,7 +272,7 @@ xu_int_t xm_process_open(lua_State* lua)
     // init process
     tb_process_ref_t process = (tb_process_ref_t)tb_process_init_cmd(command, &attr);
     if (process)
-        xm_lua_pushpointer(lua, (tb_pointer_t)process);
+        xm_lua_pushpointer(lua, (xu_pointer_t)process);
     else
         lua_pushnil(lua);
     return 1;

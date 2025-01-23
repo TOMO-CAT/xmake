@@ -566,7 +566,7 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
     if (ok)
     {
         // trace
-        tb_trace_d("programfile: %s", path);
+        xu_trace_d("programfile: %s", path);
 
         // save the directory to the global variable: _PROGRAM_FILE
         lua_pushstring(engine->lua, path);
@@ -586,7 +586,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
     {
         // get it from the environment variable first
         xu_char_t data[XU_PATH_MAXN] = {0};
-        if (xu_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && tb_path_absolute(data, path, maxn))
+        if (xu_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && xu_path_absolute(data, path, maxn))
         {
             ok = xu_true;
             break;
@@ -598,17 +598,17 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
             // get real program file path from the symbol link
 #if !defined(XU_CONFIG_OS_IOS)
             xu_char_t programpath[XU_PATH_MAXN];
-            tb_long_t size = readlink(programfile, programpath, sizeof(programpath));
+            xu_long_t size = readlink(programfile, programpath, sizeof(programpath));
             if (size >= 0 && size < sizeof(programpath))
             {
                 programpath[size] = '\0';
 
                 // soft link to relative path? fix it
-                if (!tb_path_is_absolute(programpath))
+                if (!xu_path_is_absolute(programpath))
                 {
                     xu_char_t        buff[XU_PATH_MAXN];
-                    xu_char_t const* rootdir = tb_path_directory(programfile, buff, sizeof(buff));
-                    if (rootdir && tb_path_absolute_to(rootdir, programpath, path,
+                    xu_char_t const* rootdir = xu_path_directory(programfile, buff, sizeof(buff));
+                    if (rootdir && xu_path_absolute_to(rootdir, programpath, path,
                                                        maxn)) // @note path and programfile are same buffer
                         xu_strlcpy(programpath, path, maxn);
                 }
@@ -621,12 +621,12 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
 
             // get the root directory
             xu_char_t        data[XU_PATH_MAXN];
-            xu_char_t const* rootdir = tb_path_directory(programpath, data, sizeof(data));
-            tb_assert_and_check_break(rootdir);
+            xu_char_t const* rootdir = xu_path_directory(programpath, data, sizeof(data));
+            xu_assert_and_check_break(rootdir);
 
             // init share/name sub-directory
             xu_char_t sharedir[128];
-            tb_snprintf(sharedir, sizeof(sharedir), "../share/%s", engine->name);
+            xu_snprintf(sharedir, sizeof(sharedir), "../share/%s", engine->name);
 
             // find the program (lua) directory
             xu_size_t        i;
@@ -636,9 +636,9 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
             for (i = 0; i < xu_arrayn(subdirs); i++)
             {
                 // get program directory
-                if (tb_path_absolute_to(rootdir, subdirs[i], path, maxn) &&
-                    tb_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
-                    xu_file_info(scriptpath, &info) && info.type == TB_FILE_TYPE_FILE)
+                if (xu_path_absolute_to(rootdir, subdirs[i], path, maxn) &&
+                    xu_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
+                    xu_file_info(scriptpath, &info) && info.type == XU_FILE_TYPE_FILE)
                 {
                     ok = xu_true;
                     break;
@@ -652,7 +652,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
     if (ok)
     {
         // trace
-        tb_trace_d("programdir: %s", path);
+        xu_trace_d("programdir: %s", path);
 
         // save the directory to the global variable: _PROGRAM_DIR
         lua_pushstring(engine->lua, path);
@@ -673,14 +673,14 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
     {
         // attempt to get it from the environment variable first
         xu_char_t data[XU_PATH_MAXN] = {0};
-        if (!xu_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !tb_path_absolute(data, path, maxn))
+        if (!xu_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !xu_path_absolute(data, path, maxn))
         {
             // get it from the current directory
-            if (!tb_directory_current(path, maxn)) break;
+            if (!xu_directory_current(path, maxn)) break;
         }
 
         // trace
-        tb_trace_d("project: %s", path);
+        xu_trace_d("project: %s", path);
 
         // save the directory to the global variable: _PROJECT_DIR
         lua_pushstring(engine->lua, path);
@@ -692,7 +692,7 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
     } while (0);
 
     // failed?
-    if (!ok) tb_printf("error: not found the project directory!\n");
+    if (!ok) xu_printf("error: not found the project directory!\n");
 
     // ok?
     return ok;
@@ -707,7 +707,7 @@ static xu_void_t xm_engine_dump_traceback(lua_State* lua)
     lua_replace(lua, -2);
     lua_pushvalue(lua, 1);
     lua_call(lua, 1, 1);
-    tb_trace_i("%s", lua_tostring(lua, -1));
+    xu_trace_i("%s", lua_tostring(lua, -1));
 }
 #endif
 
@@ -717,7 +717,7 @@ static xu_void_t xm_engine_signal_handler(xu_int_t signo)
     if (signo == SIGINT && g_lua)
     {
         xm_engine_dump_traceback(g_lua);
-        tb_abort();
+        xu_abort();
     }
 }
 #endif
@@ -725,7 +725,7 @@ static xu_void_t xm_engine_signal_handler(xu_int_t signo)
 static xu_void_t xm_engine_init_host(xm_engine_t* engine)
 {
     // check
-    tb_assert_and_check_return(engine && engine->lua);
+    xu_assert_and_check_return(engine && engine->lua);
 
     // init system host
     xu_char_t const* syshost = xu_null;
@@ -754,14 +754,14 @@ static xu_void_t xm_engine_init_host(xm_engine_t* engine)
 static __xu_inline__ xu_char_t const* xm_engine_xmake_arch()
 {
     xu_char_t const* arch = xu_null;
-#if defined(TB_ARCH_x64)
+#if defined(XU_ARCH_x64)
     arch = "x86_64";
-#elif defined(TB_ARCH_x86)
+#elif defined(XU_ARCH_x86)
     arch = "i386";
-#elif defined(TB_ARCH_ARM64)
+#elif defined(XU_ARCH_ARM64)
     arch = "arm64";
 #else
-    arch = TB_ARCH_STRING;
+    arch = XU_ARCH_STRING;
 #endif
     return arch;
 }
@@ -769,7 +769,7 @@ static __xu_inline__ xu_char_t const* xm_engine_xmake_arch()
 static xu_void_t xm_engine_init_arch(xm_engine_t* engine)
 {
     // check
-    tb_assert_and_check_return(engine && engine->lua);
+    xu_assert_and_check_return(engine && engine->lua);
 
     // init xmake arch
     xu_char_t const* xmakearch = xm_engine_xmake_arch();
@@ -791,7 +791,7 @@ static xu_void_t xm_engine_init_arch(xm_engine_t* engine)
 static xu_void_t xm_engine_init_features(xm_engine_t* engine)
 {
     // check
-    tb_assert_and_check_return(engine && engine->lua);
+    xu_assert_and_check_return(engine && engine->lua);
 
     // init features
     lua_newtable(engine->lua);
@@ -822,9 +822,9 @@ static xu_void_t xm_engine_init_signal(xm_engine_t* engine)
 }
 
 #if XM_HOOK_LUA_MEMALLOC
-static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data, size_t osize, size_t nsize)
+static xu_pointer_t xm_engine_lua_realloc(xu_pointer_t udata, xu_pointer_t data, size_t osize, size_t nsize)
 {
-    tb_pointer_t ptr = xu_null;
+    xu_pointer_t ptr = xu_null;
     if (nsize == 0 && data)
         tb_free(data);
     else if (!data)
@@ -849,14 +849,14 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
     {
         // init self
         engine = tb_malloc0_type(xm_engine_t);
-        tb_assert_and_check_break(engine);
+        xu_assert_and_check_break(engine);
 
         // init name
         xu_strlcpy(engine->name, name, sizeof(engine->name));
 
         // init lua
         engine->lua = luaL_newstate();
-        tb_assert_and_check_break(engine->lua);
+        xu_assert_and_check_break(engine->lua);
 
 #if XM_HOOK_LUA_MEMALLOC
         // hook lua memory
@@ -941,21 +941,21 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
 
         // get version
         xu_version_t const* version = xm_version();
-        tb_assert_and_check_break(version);
+        xu_assert_and_check_break(version);
 
         // init version string
         xu_char_t version_cstr[256] = {0};
         if (tb_strcmp(XM_CONFIG_VERSION_BRANCH, "") && tb_strcmp(XM_CONFIG_VERSION_COMMIT, ""))
-            tb_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u+%s.%s", version->major, version->minor,
+            xu_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u+%s.%s", version->major, version->minor,
                         version->alter, XM_CONFIG_VERSION_BRANCH, XM_CONFIG_VERSION_COMMIT);
         else
-            tb_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u+%llu", version->major, version->minor,
+            xu_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u+%llu", version->major, version->minor,
                         version->alter, version->build);
         lua_pushstring(engine->lua, version_cstr);
         lua_setglobal(engine->lua, "_VERSION");
 
         // init short version string
-        tb_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u", version->major, version->minor, version->alter);
+        xu_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u", version->major, version->minor, version->alter);
         lua_pushstring(engine->lua, version_cstr);
         lua_setglobal(engine->lua, "_VERSION_SHORT");
 
@@ -1002,7 +1002,7 @@ xu_void_t xm_engine_exit(xm_engine_ref_t self)
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
-    tb_assert_and_check_return(engine);
+    xu_assert_and_check_return(engine);
 
     // exit lua
     if (engine->lua) lua_close(engine->lua);
@@ -1036,17 +1036,17 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     // exists this script?
     if (!xu_file_info(path, xu_null))
     {
-        tb_printf("not found main script: %s\n", path);
+        xu_printf("not found main script: %s\n", path);
         return -1;
     }
 
     // trace
-    tb_trace_d("main: %s", path);
+    xu_trace_d("main: %s", path);
 
     // load and execute the main script
     if (luaL_dofile(engine->lua, path))
     {
-        tb_printf("error: %s\n", lua_tostring(engine->lua, -1));
+        xu_printf("error: %s\n", lua_tostring(engine->lua, -1));
         return -1;
     }
 
@@ -1058,7 +1058,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     lua_getglobal(engine->lua, "_xmake_main");
     if (lua_pcall(engine->lua, 0, 1, -2))
     {
-        tb_printf("error: %s\n", lua_tostring(engine->lua, -1));
+        xu_printf("error: %s\n", lua_tostring(engine->lua, -1));
         return -1;
     }
 
@@ -1069,7 +1069,7 @@ xu_void_t xm_engine_register(xm_engine_ref_t self, xu_char_t const* module, luaL
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
-    tb_assert_and_check_return(engine && engine->lua && module && funcs);
+    xu_assert_and_check_return(engine && engine->lua && module && funcs);
 
     // do register
     lua_pushstring(engine->lua, module);

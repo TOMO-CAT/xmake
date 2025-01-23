@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "curdir"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "curdir"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,7 +40,9 @@ xu_int_t xm_os_curdir(lua_State* lua)
 
     // os.curdir()
     xu_char_t path[XU_PATH_MAXN];
-    if (tb_directory_current(path, sizeof(path))) lua_pushstring(lua, path);
-    else lua_pushnil(lua);
+    if (xu_directory_current(path, sizeof(path)))
+        lua_pushstring(lua, path);
+    else
+        lua_pushnil(lua);
     return 1;
 }

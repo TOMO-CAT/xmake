@@ -170,7 +170,7 @@ static xu_size_t xm_sandbox_readline(xu_char_t* data, xu_size_t maxn, xu_char_t 
 #else
 
     // print prompt
-    tb_printf(prompt);
+    xu_printf(prompt);
     tb_print_sync();
 
     // get input buffer

@@ -33,14 +33,14 @@
 /* *******************************************************
  * private implementation
  */
-static tb_long_t xm_os_rmdir_empty(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_rmdir_empty(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     xu_bool_t* is_emptydir = (xu_bool_t*)priv;
     xu_assert_and_check_return_val(path && info && is_emptydir, TB_DIRECTORY_WALK_CODE_END);
 
     // is emptydir?
-    if (info->type == TB_FILE_TYPE_DIRECTORY || info->type == TB_FILE_TYPE_FILE)
+    if (info->type == TB_FILE_TYPE_DIRECTORY || info->type == XU_FILE_TYPE_FILE)
     {
         // not emptydir
         *is_emptydir = xu_false;
@@ -48,7 +48,7 @@ static tb_long_t xm_os_rmdir_empty(xu_char_t const* path, xu_file_info_t const* 
     }
     return TB_DIRECTORY_WALK_CODE_CONTINUE;
 }
-static tb_long_t xm_os_rmdir_remove(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_rmdir_remove(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     xu_assert_and_check_return_val(path, TB_DIRECTORY_WALK_CODE_END);
@@ -61,7 +61,7 @@ static tb_long_t xm_os_rmdir_remove(xu_char_t const* path, xu_file_info_t const*
         xu_directory_walk(path, xu_false, xu_true, xm_os_rmdir_empty, &is_emptydir);
 
         // trace
-        tb_trace_d("path: %s, emptydir: %u", path, is_emptydir);
+        xu_trace_d("path: %s, emptydir: %u", path, is_emptydir);
 
         // remove empty directory
         if (is_emptydir) tb_directory_remove(path);
@@ -94,7 +94,7 @@ xu_int_t xm_os_rmdir(lua_State* lua)
         if (is_emptydir) tb_directory_remove(path);
 
         // trace
-        tb_trace_d("path: %s, emptydir: %u", path, is_emptydir);
+        xu_trace_d("path: %s, emptydir: %u", path, is_emptydir);
 
         // ok?
         lua_pushboolean(lua, !xu_file_info(path, xu_null));

@@ -54,7 +54,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 2) && xm_lua_isinteger(lua, 3))
     {
-        tb_byte_t const* data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
+        tb_byte_t const* data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
         xu_size_t        size = (xu_size_t)lua_tointeger(lua, 3);
         if (!data || !size)
         {
@@ -62,7 +62,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
             return 2;
         }
-        tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
+        tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
         // compute hash
         tb_byte_t const* buffer;
@@ -84,7 +84,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
         xu_size_t n      = mode >> 3;
         xu_char_t s[256] = {0};
         for (i = 0; i < n; ++i)
-            tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+            xu_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
         // save result
         lua_pushstring(lua, s);
@@ -115,7 +115,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             while (!tb_stream_beof(stream))
             {
                 // read data
-                tb_long_t real = tb_stream_read(stream, data, sizeof(data));
+                xu_long_t real = tb_stream_read(stream, data, sizeof(data));
 
                 // ok?
                 if (real > 0)
@@ -133,7 +133,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
                     tb_check_break(real > 0);
 
                     // has read?
-                    tb_assert_and_check_break(real & TB_STREAM_WAIT_READ);
+                    xu_assert_and_check_break(real & TB_STREAM_WAIT_READ);
                 }
                 // failed or end?
                 else
@@ -160,7 +160,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             xu_size_t n      = mode >> 3;
             xu_char_t s[256] = {0};
             for (i = 0; i < n; ++i)
-                tb_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
+                xu_snprintf(s + (i << 1), 3, "%02x", buffer[i]);
 
             // save result
             lua_pushstring(lua, s);

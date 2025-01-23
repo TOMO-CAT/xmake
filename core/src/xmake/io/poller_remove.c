@@ -22,14 +22,14 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "poller_remove"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "poller_remove"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
  */
-#include "xmake/io/prefix.h"
 #include "poller.h"
+#include "xmake/io/prefix.h"
 
 /* *******************************************************
  * interfaces
@@ -53,7 +53,7 @@ xu_int_t xm_io_poller_remove(lua_State* lua)
     tb_uint8_t otype = (tb_uint8_t)luaL_checknumber(lua, 1);
 
     // get cdata
-    tb_pointer_t cdata = (tb_pointer_t)xm_lua_topointer(lua, 2);
+    xu_pointer_t cdata = (xu_pointer_t)xm_lua_topointer(lua, 2);
     tb_check_return_val(cdata, 0);
 
     // remove events from poller

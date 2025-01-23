@@ -1,6 +1,8 @@
 #pragma once
 
 // interface headers
+#include "xutil/libc/stdio/stdio.h"
+#include "xutil/libc/string/string.h"
 #include "xutil/macros/assert.h"
 #include "xutil/macros/type.h"
 #include "xutil/memory/allocator.h"

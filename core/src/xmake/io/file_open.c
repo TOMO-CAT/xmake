@@ -43,7 +43,7 @@
 /* *******************************************************
  * private implementation
  */
-static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t size)
+static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, xu_long_t size)
 {
     // check
     tb_assert(data_ptr && *data_ptr);
@@ -85,7 +85,7 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t
         tb_sint16_t utf8_conf    = 0;
         tb_sint16_t ascii_conf   = 0;
         tb_sint16_t zero_count   = 0;
-        for (tb_long_t i = 0; i < (size - 4) && i < CHECK_SIZE; i++)
+        for (xu_long_t i = 0; i < (size - 4) && i < CHECK_SIZE; i++)
         {
             if (data[i] == 0) zero_count++;
 
@@ -146,7 +146,7 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, tb_long_t
     *data_ptr = data;
     return charset;
 }
-static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* pbomoff)
+static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, xu_long_t* pbomoff)
 {
     // check
     xu_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
@@ -154,7 +154,7 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, tb_long_t* p
     // detect encoding
     tb_byte_t* data     = xu_null;
     xu_size_t  encoding = XM_IO_FILE_ENCODING_BINARY;
-    tb_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
+    xu_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
     if (size > 0)
     {
         tb_byte_t const* p = data;
@@ -190,7 +190,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
     }
 
     // get file encoding
-    tb_long_t       bomoff   = 0;
+    xu_long_t       bomoff   = 0;
     tb_stream_ref_t stream   = xu_null;
     xu_bool_t       update   = !!tb_strchr(modestr, '+');
     xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
@@ -241,7 +241,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
     {
         // init stream from file
         stream = stream ? stream : tb_stream_init_from_file(path, mode);
-        tb_assert_and_check_break(stream);
+        xu_assert_and_check_break(stream);
 
         // is transcode?
         xu_bool_t is_transcode = encoding != TB_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
@@ -251,7 +251,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
                 fstream = tb_stream_init_filter_from_charset(stream, encoding, TB_CHARSET_TYPE_UTF8);
             else
                 fstream = tb_stream_init_filter_from_charset(stream, TB_CHARSET_TYPE_UTF8, encoding);
-            tb_assert_and_check_break(fstream);
+            xu_assert_and_check_break(fstream);
 
             // use fstream as file
             file_ref = fstream;

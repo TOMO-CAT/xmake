@@ -69,7 +69,7 @@ static __xu_inline__ xu_bool_t xm_version_check(xu_hize_t build)
     // ok
     if ((build / 100) == (XM_VERSION_BUILD / 100))
     {
-        tb_trace_d("version: %s", XM_VERSION_STRING);
+        xu_trace_d("version: %s", XM_VERSION_STRING);
         return xu_true;
     }
     else
@@ -87,7 +87,7 @@ static __xu_inline__ xu_bool_t xm_version_check(xu_hize_t build)
 xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 {
     // trace
-    tb_trace_d("init: ..");
+    xu_trace_d("init: ..");
 
     // check mode
     if (!xm_check_mode(mode)) return xu_false;
@@ -104,7 +104,7 @@ xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 #endif
 
     // trace
-    tb_trace_d("init: ok");
+    xu_trace_d("init: ok");
 
     // ok
     return xu_true;

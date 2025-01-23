@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "absolute"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "absolute"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -47,6 +47,6 @@ xu_int_t xm_path_absolute(lua_State* lua)
 
     // do path:absolute(root)
     xu_char_t data[XU_PATH_MAXN];
-    lua_pushstring(lua, tb_path_absolute_to(root, path, data, sizeof(data) - 1));
+    lua_pushstring(lua, xu_path_absolute_to(root, path, data, sizeof(data) - 1));
     return 1;
 }

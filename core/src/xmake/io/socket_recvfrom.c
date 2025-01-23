@@ -54,18 +54,18 @@ xu_int_t xm_io_socket_recvfrom(lua_State* lua)
 
     // get data
     tb_byte_t* data = xu_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
+    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
     if (!data)
     {
         lua_pushinteger(lua, -1);
         lua_pushfstring(lua, "invalid data(%p)!", data);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
+    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // get size
-    tb_long_t size = 0;
-    if (xm_lua_isinteger(lua, 3)) size = (tb_long_t)lua_tointeger(lua, 3);
+    xu_long_t size = 0;
+    if (xm_lua_isinteger(lua, 3)) size = (xu_long_t)lua_tointeger(lua, 3);
     if (size <= 0)
     {
         lua_pushinteger(lua, -1);
@@ -77,7 +77,7 @@ xu_int_t xm_io_socket_recvfrom(lua_State* lua)
     tb_ipaddr_t ipaddr;
     tb_ipaddr_clear(&ipaddr);
     xu_int_t  retn = 1;
-    tb_long_t real = tb_socket_urecv(sock, &ipaddr, data, size);
+    xu_long_t real = tb_socket_urecv(sock, &ipaddr, data, size);
     lua_pushinteger(lua, (xu_int_t)real);
     if (real > 0)
     {

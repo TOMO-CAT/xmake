@@ -39,11 +39,11 @@ xu_int_t xm_libc_byteof(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // get data
-    tb_pointer_t data = xu_null;
+    xu_pointer_t data = xu_null;
     if (lua_isnumber(lua, 1))
-        data = (tb_pointer_t)(xu_size_t)lua_tointeger(lua, 1);
+        data = (xu_pointer_t)(xu_size_t)lua_tointeger(lua, 1);
     else if (lua_isstring(lua, 1))
-        data = (tb_pointer_t)luaL_checkstring(lua, 1);
+        data = (xu_pointer_t)luaL_checkstring(lua, 1);
     else
         xm_libc_return_error(lua, "libc.byteof(invalid data)!");
 

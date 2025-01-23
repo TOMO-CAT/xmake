@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "fwatcher.wait"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "fwatcher.wait"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,19 +41,18 @@ xu_int_t xm_fwatcher_wait(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the fwatcher
     tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)xm_lua_topointer(lua, 1);
     tb_check_return_val(fwatcher, 0);
 
     // get the timeout
-    tb_long_t timeout = (tb_long_t)luaL_checkinteger(lua, 2);
+    xu_long_t timeout = (xu_long_t)luaL_checkinteger(lua, 2);
 
     // wait fwatcher event
     tb_fwatcher_event_t event;
-    tb_long_t ok = tb_fwatcher_wait(fwatcher, &event, timeout);
+    xu_long_t           ok = tb_fwatcher_wait(fwatcher, &event, timeout);
 
     // save result
     lua_pushinteger(lua, ok);

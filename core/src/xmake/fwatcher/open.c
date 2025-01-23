@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "fwatcher.open"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "fwatcher.open"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,7 +40,9 @@ xu_int_t xm_fwatcher_open(lua_State* lua)
 
     // init fwatcher
     tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)tb_fwatcher_init();
-    if (fwatcher) xm_lua_pushpointer(lua, (tb_pointer_t)fwatcher);
-    else lua_pushnil(lua);
+    if (fwatcher)
+        xm_lua_pushpointer(lua, (xu_pointer_t)fwatcher);
+    else
+        lua_pushnil(lua);
     return 1;
 }

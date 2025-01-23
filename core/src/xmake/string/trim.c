@@ -111,7 +111,7 @@ xu_int_t xm_string_trim(lua_State* lua)
     xu_int_t const   trimtype  = (xu_int_t)luaL_optinteger(lua, 3, 0);
     do
     {
-        tb_assert_and_check_break(sstr && trimchars);
+        xu_assert_and_check_break(sstr && trimchars);
         tb_check_break(lstr != 0);
 
         xu_char_t const* const rsstr = sstr;

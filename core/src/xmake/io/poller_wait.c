@@ -42,11 +42,11 @@ static xu_int_t   g_events_count = 0;
 /* *******************************************************
  * private implementation
  */
-static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref_t object, tb_long_t events,
+static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref_t object, xu_long_t events,
                                     tb_cpointer_t priv)
 {
     // check
-    tb_assert_and_check_return(g_lua);
+    xu_assert_and_check_return(g_lua);
 
     // save object and events
     lua_newtable(g_lua);
@@ -89,7 +89,7 @@ xu_int_t xm_io_poller_wait(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // get timeout
-    tb_long_t timeout = (tb_long_t)luaL_checknumber(lua, 1);
+    xu_long_t timeout = (xu_long_t)luaL_checknumber(lua, 1);
 
     // pass lua and count to the events callback
     g_lua          = lua;
@@ -97,7 +97,7 @@ xu_int_t xm_io_poller_wait(lua_State* lua)
 
     // wait it
     lua_newtable(lua);
-    tb_long_t count = tb_poller_wait(xm_io_poller(), xm_io_poller_event, timeout);
+    xu_long_t count = tb_poller_wait(xm_io_poller(), xm_io_poller_event, timeout);
     if (count > 0)
     {
         lua_pushinteger(lua, (xu_int_t)count);

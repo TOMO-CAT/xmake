@@ -41,7 +41,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
     // get data and size
     xu_size_t        size = 0;
     tb_byte_t const* data = xu_null;
-    if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 1);
+    if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 1);
     if (xm_lua_isinteger(lua, 2)) size = (xu_size_t)lua_tointeger(lua, 2);
     if (!data || !size)
     {
@@ -49,7 +49,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
         lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
+    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // do decompress
     xu_bool_t                   ok = xu_false;
@@ -82,7 +82,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
 
             tb_buffer_memncat(&result, buffer, buffer_size);
         }
-        tb_assert_and_check_break(!failed && tb_buffer_size(&result));
+        xu_assert_and_check_break(!failed && tb_buffer_size(&result));
 
         lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&result), tb_buffer_size(&result));
         ok = xu_true;
