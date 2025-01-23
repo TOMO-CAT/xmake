@@ -426,7 +426,11 @@ function buildenvs(package, opt)
     _get_package_depconfs_envs(envs, package, opt)
     -- we should avoid using $XMAKE_CONFIGDIR outside to cause conflicts
     envs.XMAKE_CONFIGDIR = os.curdir()
-    envs.XMAKE_IN_XREPO  = "1"
+    if not package:is_source_embed() then
+        -- source-embed package need build with softlink requires-installdir
+        -- @see https://github.com/TOMO-CAT/xmake/issues/149
+        envs.XMAKE_IN_XREPO  = "1"
+    end
     envs.XMAKE_IN_PROJECT_GENERATOR = ""
     return envs
 end

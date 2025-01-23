@@ -742,7 +742,7 @@ end
 function _instance:buildir()
     local buildir = self._BUILDIR
     if not buildir then
-        if self:sourcedir() then
+        if self:is_source_embed() then
             buildir = path.join(self:sourcedir(), "build")
         elseif self:is_local() then
             local name = self:name():lower():gsub("::", "_")
@@ -797,7 +797,11 @@ function _instance:installdir(...)
         installdir = self:get("installdir")
         if not installdir then
             local name = self:name():lower():gsub("::", "_")
-            if self:is_local() then
+            if self:sourcedir() then
+                -- source-embed package should be installed into it's build-dir
+                -- @see https://github.com/TOMO-CAT/xmake/issues/148
+                installdir = path.join(self:buildir(), ".packages")
+            elseif self:is_local() then
                 installdir = path.join(config.buildir({absolute = true}), ".packages", name:sub(1, 1):lower(), name)
             else
                 installdir = path.join(package.installdir(), name:sub(1, 1):lower(), name)
