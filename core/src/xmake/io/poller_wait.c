@@ -46,7 +46,7 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
                                     tb_cpointer_t priv)
 {
     // check
-    tb_assert_and_check_return(g_lua);
+    xu_assert_and_check_return(g_lua);
 
     // save object and events
     lua_newtable(g_lua);

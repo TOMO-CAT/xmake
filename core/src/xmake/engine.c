@@ -725,7 +725,7 @@ static xu_void_t xm_engine_signal_handler(xu_int_t signo)
 static xu_void_t xm_engine_init_host(xm_engine_t* engine)
 {
     // check
-    tb_assert_and_check_return(engine && engine->lua);
+    xu_assert_and_check_return(engine && engine->lua);
 
     // init system host
     xu_char_t const* syshost = xu_null;
@@ -769,7 +769,7 @@ static __xu_inline__ xu_char_t const* xm_engine_xmake_arch()
 static xu_void_t xm_engine_init_arch(xm_engine_t* engine)
 {
     // check
-    tb_assert_and_check_return(engine && engine->lua);
+    xu_assert_and_check_return(engine && engine->lua);
 
     // init xmake arch
     xu_char_t const* xmakearch = xm_engine_xmake_arch();
@@ -791,7 +791,7 @@ static xu_void_t xm_engine_init_arch(xm_engine_t* engine)
 static xu_void_t xm_engine_init_features(xm_engine_t* engine)
 {
     // check
-    tb_assert_and_check_return(engine && engine->lua);
+    xu_assert_and_check_return(engine && engine->lua);
 
     // init features
     lua_newtable(engine->lua);
@@ -1002,7 +1002,7 @@ xu_void_t xm_engine_exit(xm_engine_ref_t self)
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
-    tb_assert_and_check_return(engine);
+    xu_assert_and_check_return(engine);
 
     // exit lua
     if (engine->lua) lua_close(engine->lua);
@@ -1069,7 +1069,7 @@ xu_void_t xm_engine_register(xm_engine_ref_t self, xu_char_t const* module, luaL
 {
     // check
     xm_engine_t* engine = (xm_engine_t*)self;
-    tb_assert_and_check_return(engine && engine->lua && module && funcs);
+    xu_assert_and_check_return(engine && engine->lua && module && funcs);
 
     // do register
     lua_pushstring(engine->lua, module);
