@@ -598,7 +598,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
             // get real program file path from the symbol link
 #if !defined(XU_CONFIG_OS_IOS)
             xu_char_t programpath[XU_PATH_MAXN];
-            tb_long_t size = readlink(programfile, programpath, sizeof(programpath));
+            xu_long_t size = readlink(programfile, programpath, sizeof(programpath));
             if (size >= 0 && size < sizeof(programpath))
             {
                 programpath[size] = '\0';

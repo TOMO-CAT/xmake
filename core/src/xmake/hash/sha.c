@@ -44,7 +44,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 2) && xm_lua_isinteger(lua, 3))
     {
-        tb_byte_t const* data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
+        tb_byte_t const* data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
         xu_size_t        size = (xu_size_t)lua_tointeger(lua, 3);
         if (!data || !size)
         {
@@ -94,7 +94,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
             while (!tb_stream_beof(stream))
             {
                 // read data
-                tb_long_t real = tb_stream_read(stream, data, sizeof(data));
+                xu_long_t real = tb_stream_read(stream, data, sizeof(data));
 
                 // ok?
                 if (real > 0) tb_sha_spak(&sha, data, real);

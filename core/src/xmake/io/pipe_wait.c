@@ -51,7 +51,7 @@ xu_int_t xm_io_pipe_wait(lua_State* lua)
     xu_size_t events = (xu_size_t)luaL_checknumber(lua, 2);
 
     // get timeout
-    tb_long_t timeout = (tb_long_t)luaL_checknumber(lua, 3);
+    xu_long_t timeout = (xu_long_t)luaL_checknumber(lua, 3);
 
     // wait pipe
     lua_pushnumber(lua, (xu_int_t)tb_pipe_file_wait(pipefile, events, timeout));

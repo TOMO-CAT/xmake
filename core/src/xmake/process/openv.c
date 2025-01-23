@@ -64,7 +64,7 @@ xu_int_t xm_process_openv(lua_State* lua)
     tb_check_return_val(shellname, 0);
 
     // get the arguments count
-    tb_long_t argn = (tb_long_t)lua_objlen(lua, 2);
+    xu_long_t argn = (xu_long_t)lua_objlen(lua, 2);
     tb_check_return_val(argn >= 0, 0);
 
     // get arguments

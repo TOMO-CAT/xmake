@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_sendfile"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "socket_sendfile"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -91,8 +91,8 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // get start
-    tb_long_t start = 1;
-    if (lua_isnumber(lua, 3)) start = (tb_long_t)lua_tonumber(lua, 3);
+    xu_long_t start = 1;
+    if (lua_isnumber(lua, 3)) start = (xu_long_t)lua_tonumber(lua, 3);
     if (start < 1 || start > filesize)
     {
         lua_pushinteger(lua, -1);
@@ -101,8 +101,8 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // get last
-    tb_long_t last = (tb_long_t)filesize;
-    if (lua_isnumber(lua, 4)) last = (tb_long_t)lua_tonumber(lua, 4);
+    xu_long_t last = (xu_long_t)filesize;
+    if (lua_isnumber(lua, 4)) last = (xu_long_t)lua_tonumber(lua, 4);
     if (last < start - 1 || last > filesize + start - 1)
     {
         lua_pushinteger(lua, -1);
@@ -111,7 +111,7 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // send file data
-    tb_long_t real = (tb_long_t)tb_socket_sendf(sock, rawfile, start - 1, last - start + 1);
+    xu_long_t real = (xu_long_t)tb_socket_sendf(sock, rawfile, start - 1, last - start + 1);
     lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

@@ -33,7 +33,7 @@
 /* *******************************************************
  * private implementation
  */
-static tb_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     tb_value_ref_t tuple = (tb_value_ref_t)priv;
@@ -51,7 +51,7 @@ static tb_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
     if (path[0] == '.' && (path[1] == '/' || path[1] == '\\')) path = path + 2;
 
     // the match mode
-    tb_long_t mode = tuple[2].l;
+    xu_long_t mode = tuple[2].l;
 
     // the count
     xu_size_t* pcount = &(tuple[3].ul);
@@ -179,10 +179,10 @@ xu_int_t xm_os_find(lua_State* lua)
     tb_check_return_val(pattern, 0);
 
     // the recursion level
-    tb_long_t recursion = (tb_long_t)lua_tointeger(lua, 3);
+    xu_long_t recursion = (xu_long_t)lua_tointeger(lua, 3);
 
     // the match mode
-    tb_long_t mode = (tb_long_t)lua_tointeger(lua, 4);
+    xu_long_t mode = (xu_long_t)lua_tointeger(lua, 4);
 
     // init table
     lua_newtable(lua);

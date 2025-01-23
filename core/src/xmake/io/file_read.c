@@ -45,7 +45,7 @@ typedef enum __xm_pushline_state_e
 /* *******************************************************
  * implementation
  */
-static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_ref_t line)
+static xu_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_ref_t line)
 {
     // check
     xu_assert_and_check_return_val(stream && line, -1);
@@ -57,7 +57,7 @@ static tb_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     tb_hong_t  size   = tb_stream_size(stream);
     while (size < 0 || (offset = tb_stream_offset(stream)) < size)
     {
-        tb_long_t real = tb_stream_peek(stream, &data, TB_STREAM_BLOCK_MAXN);
+        xu_long_t real = tb_stream_peek(stream, &data, TB_STREAM_BLOCK_MAXN);
         if (real > 0)
         {
             xu_char_t const* e = tb_strnchr((xu_char_t const*)data, real, '\n');
@@ -115,7 +115,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
     tb_buffer_clear(&file->rcache);
 
     // read line data
-    tb_long_t size = xm_io_file_buffer_readline(file->u.file_ref, &file->rcache);
+    xu_long_t size = xm_io_file_buffer_readline(file->u.file_ref, &file->rcache);
 
     // translate line data
     xu_int_t   result = PL_FAIL;
@@ -192,7 +192,7 @@ static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
     tb_stream_ref_t stream = file->u.file_ref;
     while (!tb_stream_beof(stream))
     {
-        tb_long_t real = tb_stream_read(stream, data, sizeof(data));
+        xu_long_t real = tb_stream_read(stream, data, sizeof(data));
         if (real > 0)
             tb_buffer_memncat(&buf, data, real);
         else if (!real)
@@ -285,7 +285,7 @@ static xu_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, xu_char
     }
 }
 
-static xu_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
+static xu_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, xu_long_t n)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
@@ -447,7 +447,7 @@ static xu_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, xu_c
     }
 }
 
-static xu_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, tb_long_t n)
+static xu_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, xu_long_t n)
 {
     // check
     tb_assert(lua && file && continuation && xm_io_file_is_std(file));
@@ -519,10 +519,10 @@ xu_int_t xm_io_file_read(lua_State* lua)
     xu_char_t const* continuation = luaL_optstring(lua, 3, "");
     xu_assert_and_check_return_val(mode && continuation, 0);
 
-    tb_long_t count = -1;
+    xu_long_t count = -1;
     if (lua_isnumber(lua, 2))
     {
-        count = (tb_long_t)lua_tointeger(lua, 2);
+        count = (xu_long_t)lua_tointeger(lua, 2);
         if (count < 0) xm_io_return_error(lua, "invalid read size, must be positive nubmber or 0");
     }
     else if (*mode == '*')

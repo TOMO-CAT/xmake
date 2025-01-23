@@ -54,7 +54,7 @@ xu_int_t xm_io_pipe_read(lua_State* lua)
 
     // get data
     tb_byte_t* data = xu_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
+    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
     if (!data)
     {
         lua_pushinteger(lua, -1);
@@ -64,8 +64,8 @@ xu_int_t xm_io_pipe_read(lua_State* lua)
     tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
 
     // get size
-    tb_long_t size = 0;
-    if (xm_lua_isinteger(lua, 3)) size = (tb_long_t)lua_tointeger(lua, 3);
+    xu_long_t size = 0;
+    if (xm_lua_isinteger(lua, 3)) size = (xu_long_t)lua_tointeger(lua, 3);
     if (size <= 0)
     {
         lua_pushinteger(lua, -1);
@@ -74,7 +74,7 @@ xu_int_t xm_io_pipe_read(lua_State* lua)
     }
 
     // read data
-    tb_long_t real = tb_pipe_file_read(pipefile, data, size);
+    xu_long_t real = tb_pipe_file_read(pipefile, data, size);
     lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

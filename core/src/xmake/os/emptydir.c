@@ -33,7 +33,7 @@
 /* *******************************************************
  * private implementation
  */
-static tb_long_t xm_os_emptydir_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_emptydir_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
 {
     // check
     xu_bool_t* is_emptydir = (xu_bool_t*)priv;

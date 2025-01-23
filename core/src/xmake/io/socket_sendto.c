@@ -55,7 +55,7 @@ xu_int_t xm_io_socket_sendto(lua_State* lua)
     // get data and size
     xu_size_t        size = 0;
     tb_byte_t const* data = xu_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xu_size_t)(tb_long_t)lua_tointeger(lua, 2);
+    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
     if (xm_lua_isinteger(lua, 3)) size = (xu_size_t)lua_tointeger(lua, 3);
     if (!data || !size)
     {
@@ -83,7 +83,7 @@ xu_int_t xm_io_socket_sendto(lua_State* lua)
     tb_ipaddr_set(&ipaddr, addr, port, (tb_uint8_t)family);
 
     // send data
-    tb_long_t real = tb_socket_usend(sock, &ipaddr, data, size);
+    xu_long_t real = tb_socket_usend(sock, &ipaddr, data, size);
     lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

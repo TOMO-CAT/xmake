@@ -64,7 +64,7 @@ static xm_charset_entry_t g_charsets[] = {{TB_CHARSET_TYPE_ANSI, "ansi"},
 /* *******************************************************
  * finder
  */
-static tb_long_t xm_string_charset_comp_by_name(tb_iterator_ref_t iterator, tb_cpointer_t item, tb_cpointer_t name)
+static xu_long_t xm_string_charset_comp_by_name(tb_iterator_ref_t iterator, tb_cpointer_t item, tb_cpointer_t name)
 {
     return tb_stricmp(((xm_charset_entry_ref_t)item)->name, (xu_char_t const*)name);
 }
@@ -124,7 +124,7 @@ xu_int_t xm_string_convert(lua_State* lua)
     else
     {
         // convert string
-        tb_long_t  dst_size = 0;
+        xu_long_t  dst_size = 0;
         xu_size_t  dst_maxn = (xu_size_t)src_size << 2;
         tb_byte_t* dst_data = tb_malloc_bytes(dst_maxn);
         if (dst_data && dst_maxn &&
