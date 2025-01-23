@@ -53,7 +53,7 @@ xu_int_t xm_io_filelock_open(lua_State* lua)
         lock = tb_filelock_init_from_path(path, xu_file_info(path, xu_null) ? TB_FILE_MODE_RW
                                                                             : TB_FILE_MODE_RW | TB_FILE_MODE_CREAT);
     if (lock)
-        xm_lua_pushpointer(lua, (tb_pointer_t)lock);
+        xm_lua_pushpointer(lua, (xu_pointer_t)lock);
     else
         lua_pushnil(lua);
     return 1;

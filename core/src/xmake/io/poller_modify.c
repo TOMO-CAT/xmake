@@ -54,7 +54,7 @@ xu_int_t xm_io_poller_modify(lua_State* lua)
 
     // get cdata
     xu_char_t const* cdata_str = xu_null;
-    tb_pointer_t     cdata     = (tb_pointer_t)xm_lua_topointer2(lua, 2, &cdata_str);
+    xu_pointer_t     cdata     = (xu_pointer_t)xm_lua_topointer2(lua, 2, &cdata_str);
     tb_check_return_val(cdata, 0);
 
     // get events

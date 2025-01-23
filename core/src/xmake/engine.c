@@ -822,9 +822,9 @@ static xu_void_t xm_engine_init_signal(xm_engine_t* engine)
 }
 
 #if XM_HOOK_LUA_MEMALLOC
-static tb_pointer_t xm_engine_lua_realloc(tb_pointer_t udata, tb_pointer_t data, size_t osize, size_t nsize)
+static xu_pointer_t xm_engine_lua_realloc(xu_pointer_t udata, xu_pointer_t data, size_t osize, size_t nsize)
 {
-    tb_pointer_t ptr = xu_null;
+    xu_pointer_t ptr = xu_null;
     if (nsize == 0 && data)
         tb_free(data);
     else if (!data)

@@ -39,8 +39,8 @@ xu_int_t xm_libc_memcpy(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // do memcpy
-    tb_pointer_t dst  = (tb_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
-    tb_pointer_t src  = (tb_pointer_t)(xu_size_t)luaL_checkinteger(lua, 2);
+    xu_pointer_t dst  = (xu_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
+    xu_pointer_t src  = (xu_pointer_t)(xu_size_t)luaL_checkinteger(lua, 2);
     xu_int_t     size = (xu_int_t)lua_tointeger(lua, 3);
     if (dst && src && size > 0) tb_memcpy(dst, src, size);
     return 0;

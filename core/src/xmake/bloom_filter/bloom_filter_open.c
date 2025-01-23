@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "bloom_filter_open"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "bloom_filter_open"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,8 +40,8 @@ xu_int_t xm_bloom_filter_open(lua_State* lua)
 
     // get arguments
     xu_int_t probability = (xu_int_t)lua_tointeger(lua, 1);
-    xu_int_t hash_count = (xu_int_t)lua_tointeger(lua, 2);
-    xu_int_t item_maxn = (xu_int_t)lua_tointeger(lua, 3);
+    xu_int_t hash_count  = (xu_int_t)lua_tointeger(lua, 2);
+    xu_int_t item_maxn   = (xu_int_t)lua_tointeger(lua, 3);
     if (hash_count > 16 || item_maxn < 0)
     {
         lua_pushnil(lua);
@@ -51,7 +51,9 @@ xu_int_t xm_bloom_filter_open(lua_State* lua)
 
     // init the bloom filter
     tb_bloom_filter_ref_t filter = tb_bloom_filter_init(probability, hash_count, item_maxn, tb_element_str(xu_true));
-    if (filter) xm_lua_pushpointer(lua, (tb_pointer_t)filter);
-    else lua_pushnil(lua);
+    if (filter)
+        xm_lua_pushpointer(lua, (xu_pointer_t)filter);
+    else
+        lua_pushnil(lua);
     return 1;
 }

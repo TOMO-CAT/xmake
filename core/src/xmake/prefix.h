@@ -55,7 +55,7 @@
  * @note we cannot lua_newuserdata() because we need pass this pointer to the external lua code
  * in poller_wait()/event_callback, but lua_pushuserdata does not exists
  */
-static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr)
+static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, xu_pointer_t ptr)
 {
     tb_uint64_t ptrval = (tb_uint64_t)ptr;
     if ((ptrval >> 47) == 0)
@@ -71,9 +71,9 @@ static __xu_inline__ xu_bool_t xm_lua_ispointer(lua_State* lua, xu_int_t idx)
 {
     return lua_isuserdata(lua, idx) || lua_isstring(lua, idx);
 }
-static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, xu_int_t idx, xu_char_t const** pstr)
+static __xu_inline__ xu_pointer_t xm_lua_topointer2(lua_State* lua, xu_int_t idx, xu_char_t const** pstr)
 {
-    tb_pointer_t ptr = xu_null;
+    xu_pointer_t ptr = xu_null;
     if (lua_isuserdata(lua, idx))
     {
         ptr = lua_touserdata(lua, idx);
@@ -84,24 +84,24 @@ static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, xu_int_t idx
         size_t len = 0;
         xu_char_t const* str = luaL_checklstring(lua, idx, &len);
         if (str && len > 2 && str[0] == '0' && str[1] == 'x')
-            ptr = (tb_pointer_t)tb_s16tou64(str);
+            ptr = (xu_pointer_t)tb_s16tou64(str);
         if (pstr) *pstr = str;
     }
     return ptr;
 }
-static __xu_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, xu_int_t idx)
+static __xu_inline__ xu_pointer_t xm_lua_topointer(lua_State* lua, xu_int_t idx)
 {
     return xm_lua_topointer2(lua, idx, xu_null);
 }
 #else
-static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, tb_pointer_t ptr) { lua_pushlightuserdata(lua, ptr); }
+static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, xu_pointer_t ptr) { lua_pushlightuserdata(lua, ptr); }
 static __xu_inline__ xu_bool_t xm_lua_ispointer(lua_State* lua, xu_int_t idx) { return lua_isuserdata(lua, idx); }
-static __xu_inline__ tb_pointer_t xm_lua_topointer2(lua_State* lua, xu_int_t idx, xu_char_t const** pstr)
+static __xu_inline__ xu_pointer_t xm_lua_topointer2(lua_State* lua, xu_int_t idx, xu_char_t const** pstr)
 {
     if (pstr) *pstr = xu_null;
     return lua_touserdata(lua, idx);
 }
-static __xu_inline__ tb_pointer_t xm_lua_topointer(lua_State* lua, xu_int_t idx) { return lua_touserdata(lua, idx); }
+static __xu_inline__ xu_pointer_t xm_lua_topointer(lua_State* lua, xu_int_t idx) { return lua_touserdata(lua, idx); }
 #endif
 
 static __xu_inline__ xu_void_t xm_lua_register(lua_State* lua, xu_char_t const* libname, luaL_Reg const* l)

@@ -39,7 +39,7 @@ xu_int_t xm_libc_free(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // do free
-    tb_pointer_t data = (tb_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
+    xu_pointer_t data = (xu_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
     if (data) tb_free(data);
     return 0;
 }

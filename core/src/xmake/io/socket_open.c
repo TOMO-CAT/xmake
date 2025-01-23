@@ -59,7 +59,7 @@ xu_int_t xm_io_socket_open(lua_State* lua)
     // init socket
     tb_socket_ref_t sock = tb_socket_init(socktype, family);
     if (sock)
-        xm_lua_pushpointer(lua, (tb_pointer_t)sock);
+        xm_lua_pushpointer(lua, (xu_pointer_t)sock);
     else
         lua_pushnil(lua);
     return 1;

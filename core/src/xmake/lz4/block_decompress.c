@@ -49,7 +49,7 @@ xu_int_t xm_lz4_block_decompress(lua_State* lua)
         lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
+    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // get real size
     xu_int_t real = (xu_int_t)lua_tointeger(lua, 3);

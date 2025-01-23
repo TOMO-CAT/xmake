@@ -62,7 +62,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
             return 2;
         }
-        tb_assert_static(sizeof(lua_Integer) >= sizeof(tb_pointer_t));
+        tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
         // compute hash
         tb_byte_t const* buffer;

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_accept"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define TB_TRACE_MODULE_NAME "socket_accept"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,8 +41,7 @@ xu_int_t xm_io_socket_accept(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
@@ -50,7 +49,9 @@ xu_int_t xm_io_socket_accept(lua_State* lua)
 
     // accept socket
     tb_socket_ref_t client = tb_socket_accept(sock, xu_null);
-    if (client) xm_lua_pushpointer(lua, (tb_pointer_t)client);
-    else lua_pushnil(lua);
+    if (client)
+        xm_lua_pushpointer(lua, (xu_pointer_t)client);
+    else
+        lua_pushnil(lua);
     return 1;
 }
