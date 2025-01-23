@@ -604,7 +604,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
                 programpath[size] = '\0';
 
                 // soft link to relative path? fix it
-                if (!tb_path_is_absolute(programpath))
+                if (!xu_path_is_absolute(programpath))
                 {
                     xu_char_t        buff[XU_PATH_MAXN];
                     xu_char_t const* rootdir = tb_path_directory(programfile, buff, sizeof(buff));
