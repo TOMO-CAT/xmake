@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "isfile"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "isfile"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -44,6 +44,6 @@ xu_int_t xm_os_isfile(lua_State* lua)
 
     // is file?
     xu_file_info_t info = {0};
-    lua_pushboolean(lua, xu_file_info(path, &info) && (info.type == TB_FILE_TYPE_FILE));
+    lua_pushboolean(lua, xu_file_info(path, &info) && (info.type == XU_FILE_TYPE_FILE));
     return 1;
 }

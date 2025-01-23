@@ -40,7 +40,7 @@ static xu_long_t xm_os_rmdir_empty(xu_char_t const* path, xu_file_info_t const* 
     xu_assert_and_check_return_val(path && info && is_emptydir, TB_DIRECTORY_WALK_CODE_END);
 
     // is emptydir?
-    if (info->type == TB_FILE_TYPE_DIRECTORY || info->type == TB_FILE_TYPE_FILE)
+    if (info->type == TB_FILE_TYPE_DIRECTORY || info->type == XU_FILE_TYPE_FILE)
     {
         // not emptydir
         *is_emptydir = xu_false;

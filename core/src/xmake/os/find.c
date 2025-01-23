@@ -61,8 +61,8 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
 
     // we can ignore it directly if this path is file, but we need directory
     xu_size_t needtype = (mode == 1) ? TB_FILE_TYPE_DIRECTORY
-                                     : ((mode == 0) ? TB_FILE_TYPE_FILE : (TB_FILE_TYPE_FILE | TB_FILE_TYPE_DIRECTORY));
-    if (info->type == TB_FILE_TYPE_FILE && needtype == TB_FILE_TYPE_DIRECTORY) return TB_DIRECTORY_WALK_CODE_CONTINUE;
+                                     : ((mode == 0) ? XU_FILE_TYPE_FILE : (XU_FILE_TYPE_FILE | TB_FILE_TYPE_DIRECTORY));
+    if (info->type == XU_FILE_TYPE_FILE && needtype == TB_FILE_TYPE_DIRECTORY) return TB_DIRECTORY_WALK_CODE_CONTINUE;
 
     // do path:match(pattern)
     lua_getfield(lua, -1, "match");

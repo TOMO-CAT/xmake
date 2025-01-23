@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "filesize"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define TB_TRACE_MODULE_NAME "filesize"
+#define TB_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -44,8 +44,9 @@ xu_int_t xm_os_filesize(lua_State* lua)
 
     // os.filesize(path)
     xu_file_info_t info = {0};
-    if (xu_file_info(path, &info) && (info.type == TB_FILE_TYPE_FILE))
+    if (xu_file_info(path, &info) && (info.type == XU_FILE_TYPE_FILE))
         lua_pushinteger(lua, (lua_Integer)info.size);
-    else lua_pushinteger(lua, 0);
+    else
+        lua_pushinteger(lua, 0);
     return 1;
 }

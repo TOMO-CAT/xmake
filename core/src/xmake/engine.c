@@ -638,7 +638,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
                 // get program directory
                 if (xu_path_absolute_to(rootdir, subdirs[i], path, maxn) &&
                     xu_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
-                    xu_file_info(scriptpath, &info) && info.type == TB_FILE_TYPE_FILE)
+                    xu_file_info(scriptpath, &info) && info.type == XU_FILE_TYPE_FILE)
                 {
                     ok = xu_true;
                     break;
