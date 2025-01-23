@@ -25,7 +25,7 @@
  */
 #include "string.h"
 #ifdef TB_CONFIG_LIBC_HAVE_STRNCAT
-#   include <string.h>
+#    include <string.h>
 #endif
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -49,8 +49,11 @@ tb_char_t* tb_strncat(tb_char_t* s1, tb_char_t const* s2, tb_size_t n)
 
     // append it
     tb_char_t* s = s1;
-    while (*s++); --s;
-    while (n-- && !(*s++ = *s2++));
+    while (*s++)
+        ;
+    --s;
+    while (n-- && !(*s++ = *s2++))
+        ;
     return s1;
 }
 #endif
