@@ -27,3 +27,11 @@
             *((__xu_volatile__ xu_int_t*)0) = 0;                                                                       \
         } while (0)
 #endif
+
+// abort
+#define xu_abort()                                                                                                     \
+    do                                                                                                                 \
+    {                                                                                                                  \
+        xu_trace_e("abort");                                                                                           \
+        xu_abort_done();                                                                                               \
+    } while (0)

@@ -717,7 +717,7 @@ static xu_void_t xm_engine_signal_handler(xu_int_t signo)
     if (signo == SIGINT && g_lua)
     {
         xm_engine_dump_traceback(g_lua);
-        tb_abort();
+        xu_abort();
     }
 }
 #endif
