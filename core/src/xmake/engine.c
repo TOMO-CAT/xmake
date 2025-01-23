@@ -607,7 +607,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
                 if (!xu_path_is_absolute(programpath))
                 {
                     xu_char_t        buff[XU_PATH_MAXN];
-                    xu_char_t const* rootdir = tb_path_directory(programfile, buff, sizeof(buff));
+                    xu_char_t const* rootdir = xu_path_directory(programfile, buff, sizeof(buff));
                     if (rootdir && tb_path_absolute_to(rootdir, programpath, path,
                                                        maxn)) // @note path and programfile are same buffer
                         xu_strlcpy(programpath, path, maxn);
@@ -621,7 +621,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
 
             // get the root directory
             xu_char_t        data[XU_PATH_MAXN];
-            xu_char_t const* rootdir = tb_path_directory(programpath, data, sizeof(data));
+            xu_char_t const* rootdir = xu_path_directory(programpath, data, sizeof(data));
             xu_assert_and_check_break(rootdir);
 
             // init share/name sub-directory
