@@ -586,7 +586,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
     {
         // get it from the environment variable first
         xu_char_t data[XU_PATH_MAXN] = {0};
-        if (xu_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && tb_path_absolute(data, path, maxn))
+        if (xu_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && xu_path_absolute(data, path, maxn))
         {
             ok = xu_true;
             break;
@@ -673,7 +673,7 @@ static xu_bool_t xm_engine_get_project_directory(xm_engine_t* engine, xu_char_t*
     {
         // attempt to get it from the environment variable first
         xu_char_t data[XU_PATH_MAXN] = {0};
-        if (!xu_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !tb_path_absolute(data, path, maxn))
+        if (!xu_environment_first("XMAKE_PROJECT_DIR", data, sizeof(data)) || !xu_path_absolute(data, path, maxn))
         {
             // get it from the current directory
             if (!tb_directory_current(path, maxn)) break;
