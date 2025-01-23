@@ -608,7 +608,7 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
                 {
                     xu_char_t        buff[XU_PATH_MAXN];
                     xu_char_t const* rootdir = xu_path_directory(programfile, buff, sizeof(buff));
-                    if (rootdir && tb_path_absolute_to(rootdir, programpath, path,
+                    if (rootdir && xu_path_absolute_to(rootdir, programpath, path,
                                                        maxn)) // @note path and programfile are same buffer
                         xu_strlcpy(programpath, path, maxn);
                 }
@@ -636,8 +636,8 @@ static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t*
             for (i = 0; i < xu_arrayn(subdirs); i++)
             {
                 // get program directory
-                if (tb_path_absolute_to(rootdir, subdirs[i], path, maxn) &&
-                    tb_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
+                if (xu_path_absolute_to(rootdir, subdirs[i], path, maxn) &&
+                    xu_path_absolute_to(path, "core/_xmake_main.lua", scriptpath, sizeof(scriptpath)) &&
                     xu_file_info(scriptpath, &info) && info.type == TB_FILE_TYPE_FILE)
                 {
                     ok = xu_true;
