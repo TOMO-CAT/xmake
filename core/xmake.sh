@@ -44,6 +44,8 @@ option "external" "Always use external dependencies" false
 option "small" "Enable the small compile mode and disable all modules." false
 # the micro option
 option "micro" "Compile micro core library for the embed system." false
+# enable unit-test?
+option "ut" "Enable or disable the unit-test." false
 
 #-----------------------------------------------------------------------------
 # project autoconf options

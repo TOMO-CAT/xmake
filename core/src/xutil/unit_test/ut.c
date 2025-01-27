@@ -67,14 +67,14 @@ xu_int_t main(xu_int_t argc, xu_char_t** argv)
         }
     }
 
-    // no this demo? help it
+    // no this ut? help it
     if (!name)
     {
         xu_trace_i("======================================================================");
-        xu_trace_i("Usages: xmake r demo [testname] arguments ...");
+        xu_trace_i("Usages: xmake run xutil-ut [testname] arguments ...");
         xu_trace_i("");
         xu_trace_i(".e.g");
-        xu_trace_i("    xmake r demo stream http://www.xxxxx.com /tmp/a");
+        xu_trace_i("    xmake run xutil-ut stream http://www.xxxxx.com /tmp/a");
         xu_trace_i("");
 
         // walk name
