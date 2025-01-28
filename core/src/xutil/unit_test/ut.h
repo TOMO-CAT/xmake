@@ -11,6 +11,9 @@
  *  interfaces
  */
 
+// algorithm
+XU_UT_MAIN_DECL(algorithm_sort);
+
 // memory
 XU_UT_MAIN_DECL(memory_buffer);
 XU_UT_MAIN_DECL(memory_check);

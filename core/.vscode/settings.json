@@ -180,6 +180,7 @@
         "pwritev",
         "pwritv",
         "ralloc",
+        "rangef",
         "raphson",
         "raspberrypi",
         "rdynamic",
