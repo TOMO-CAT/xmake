@@ -31,7 +31,11 @@ typedef struct __xu_ut_t
  */
 
 // the unit-tests
-static xu_ut_t g_ut[] = {XU_UT_MAIN_ITEM(utils_trace)};
+static xu_ut_t g_ut[] = {
+    XU_UT_MAIN_ITEM(memory_buffer),
+    XU_UT_MAIN_ITEM(memory_check),
+    XU_UT_MAIN_ITEM(utils_trace),
+};
 
 /* *******************************************************
  *  main
