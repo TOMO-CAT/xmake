@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "setenv"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "setenv"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,12 +40,12 @@ xu_int_t xm_os_setenv(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // get the name and value
-    size_t              value_size = 0;
-    xu_char_t const*    name = luaL_checkstring(lua, 1);
-    xu_char_t const*    value = luaL_checklstring(lua, 2, &value_size);
+    size_t           value_size = 0;
+    xu_char_t const* name       = luaL_checkstring(lua, 1);
+    xu_char_t const* value      = luaL_checklstring(lua, 2, &value_size);
     tb_check_return_val(name, 0);
 
     // set it
-    lua_pushboolean(lua, value? tb_environment_set(name, value) : xu_false);
+    lua_pushboolean(lua, value ? tb_environment_set(name, value) : xu_false);
     return 1;
 }

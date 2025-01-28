@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "process.close"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "process.close"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,8 +41,7 @@ xu_int_t xm_process_close(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the process
     tb_process_ref_t process = (tb_process_ref_t)xm_lua_topointer(lua, 1);

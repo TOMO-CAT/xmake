@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "clear_history"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "clear_history"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,13 +41,13 @@ xu_int_t xm_readline_clear_history(lua_State* lua)
     // check
     xu_assert_and_check_return_val(lua, 0);
 
-#ifdef XU_CONFIG_OS_MACOSX
+#    ifdef XU_CONFIG_OS_MACOSX
     // call clear_history (will crash on macOS)
     for (xu_int_t i = history_length - 1; i >= 0; --i)
         remove_history(i);
-#else
+#    else
     clear_history();
-#endif
+#    endif
 
     // ok
     return 0;

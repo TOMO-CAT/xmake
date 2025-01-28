@@ -22,15 +22,15 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "gid"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "gid"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
-#include <unistd.h>
 #include <errno.h>
+#include <unistd.h>
 
 /* *******************************************************
  * implementation
@@ -43,7 +43,7 @@ xu_int_t xm_os_gid(lua_State* lua)
 
     xu_int_t rgidset = -1;
     xu_int_t egidset = -1;
-    xu_int_t argc = lua_gettop(lua);
+    xu_int_t argc    = lua_gettop(lua);
     if (argc == 1)
     {
         if (lua_istable(lua, 1))

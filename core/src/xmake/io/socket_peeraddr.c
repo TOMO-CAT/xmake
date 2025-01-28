@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_peeraddr"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "socket_peeraddr"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -35,7 +35,7 @@
  */
 
 // socket to fd
-#define xm_io_sock2fd(sock)            (lua_Number)tb_sock2fd(sock)
+#define xm_io_sock2fd(sock) (lua_Number) tb_sock2fd(sock)
 
 /* *******************************************************
  * implementation
@@ -49,19 +49,19 @@ xu_int_t xm_io_socket_peeraddr(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
-    if (!xm_lua_ispointer(lua, 1))
-        xm_io_return_error(lua, "get peer address for invalid sock!");
+    if (!xm_lua_ispointer(lua, 1)) xm_io_return_error(lua, "get peer address for invalid sock!");
 
     // get socket
     xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     tb_check_return_val(sock, 0);
 
     // get peer address
-    xu_ipaddr_t addr;
-    xu_char_t data[256];
+    xu_ipaddr_t      addr;
+    xu_char_t        data[256];
     xu_char_t const* cstr = xu_null;
     if (xu_socket_peer(sock, &addr) && (cstr = xu_ipaddr_cstr(&addr, data, sizeof(data))))
         lua_pushstring(lua, cstr);
-    else lua_pushnil(lua);
+    else
+        lua_pushnil(lua);
     return 1;
 }

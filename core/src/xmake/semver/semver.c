@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "semver"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "semver"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "stdfile"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "stdfile"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes

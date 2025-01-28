@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "filelock_close"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "filelock_close"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,8 +41,7 @@ xu_int_t xm_io_filelock_close(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // check lock?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get lock
     tb_filelock_ref_t lock = (tb_filelock_ref_t)xm_lua_topointer(lua, 1);

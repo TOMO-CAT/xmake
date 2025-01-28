@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "history_list"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "history_list"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -44,7 +44,7 @@ xu_int_t xm_readline_history_list(lua_State* lua)
     // history list
     lua_newtable(lua);
 
-#ifdef XU_CONFIG_OS_MACOSX
+#    ifdef XU_CONFIG_OS_MACOSX
     for (xu_int_t i = 1; i <= history_length; ++i)
     {
         lua_newtable(lua);
@@ -57,9 +57,9 @@ xu_int_t xm_readline_history_list(lua_State* lua)
         // set back
         lua_rawseti(lua, -2, i);
     }
-#else
+#    else
     xu_int_t i = 1;
-    for (HIST_ENTRY **p = history_list(); *p; ++p, ++i)
+    for (HIST_ENTRY** p = history_list(); *p; ++p, ++i)
     {
         lua_newtable(lua);
 
@@ -71,7 +71,7 @@ xu_int_t xm_readline_history_list(lua_State* lua)
         // set back
         lua_rawseti(lua, -2, i);
     }
-#endif
+#    endif
 
     // ok
     return 1;

@@ -22,15 +22,15 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "getwinsize"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "getwinsize"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
+#include <errno.h> // for errno
 #include <sys/ioctl.h>
-#include <errno.h>  // for errno
 #include <unistd.h> // for STDOUT_FILENO
 
 /* *******************************************************

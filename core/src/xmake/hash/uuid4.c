@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "uuid4"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "uuid4"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -43,6 +43,6 @@ xu_int_t xm_hash_uuid4(lua_State* lua)
 
     // make uuid, use version 4
     xu_char_t uuid[37];
-	lua_pushstring(lua, tb_uuid4_make_cstr(uuid, name));
+    lua_pushstring(lua, tb_uuid4_make_cstr(uuid, name));
     return 1;
 }

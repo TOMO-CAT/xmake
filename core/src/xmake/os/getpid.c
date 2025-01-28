@@ -22,15 +22,15 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "getpid"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "getpid"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
-#include <unistd.h>
 #include <errno.h>
+#include <unistd.h>
 
 /* *******************************************************
  * implementation
