@@ -78,7 +78,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
     // match ok?
     xu_bool_t matched        = xu_false;
     xu_bool_t skip_recursion = xu_false;
-    if (lua_isstring(lua, -1) && !tb_strcmp(path, lua_tostring(lua, -1)))
+    if (lua_isstring(lua, -1) && !xu_strcmp(path, lua_tostring(lua, -1)))
     {
         // exists excludes?
         xu_bool_t excluded = xu_false;
@@ -94,7 +94,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
             tb_assert(rootlen + 1 <= tb_strlen(path));
 
             // skip the rootdir if not "."
-            if (tb_strcmp(rootdir, ".")) path += rootlen + 1;
+            if (xu_strcmp(rootdir, ".")) path += rootlen + 1;
 
             // exclude paths
             xu_int_t i     = 0;
@@ -118,7 +118,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
                     }
 
                     // matched?
-                    excluded = lua_isstring(lua, -1) && !tb_strcmp(path, lua_tostring(lua, -1));
+                    excluded = lua_isstring(lua, -1) && !xu_strcmp(path, lua_tostring(lua, -1));
 
                     // pop the match result
                     lua_pop(lua, 1);

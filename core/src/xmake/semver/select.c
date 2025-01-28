@@ -242,7 +242,7 @@ xu_int_t xm_semver_select(lua_State* lua)
         }
 
         // select the latest version from the tags and versions if be latest
-        if (!tb_strcmp(range_str, "latest"))
+        if (!xu_strcmp(range_str, "latest"))
         {
             // attempt to select latest version from the versions list
             if (xm_semver_select_latest_from_versions_tags(lua, 2, &semver, &matches))

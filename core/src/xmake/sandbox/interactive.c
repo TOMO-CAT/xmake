@@ -264,7 +264,7 @@ static xu_int_t xm_sandbox_loadline(lua_State* lua, xu_int_t top)
         if (!xm_sandbox_pushline(lua, prompt2)) return -1;
 
         // cancel multi-line input?
-        if (!tb_strcmp(lua_tostring(lua, -1), "q"))
+        if (!xu_strcmp(lua_tostring(lua, -1), "q"))
         {
             lua_pop(lua, 2);
             lua_pushstring(lua, "return ");
