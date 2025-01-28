@@ -32,13 +32,13 @@ static __xu_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
 #ifdef __xm_debug__
     if (!(mode & XU_MODE_DEBUG))
     {
-        tb_trace_e("libxmake.a has __xm_debug__ but xmake/xmake.h not");
+        xu_trace_e("libxmake.a has __xm_debug__ but xmake/xmake.h not");
         return xu_false;
     }
 #else
     if (mode & XU_MODE_DEBUG)
     {
-        tb_trace_e("xmake/xmake.h has __xm_debug__ but libxmake.a not");
+        xu_trace_e("xmake/xmake.h has __xm_debug__ but libxmake.a not");
         return xu_false;
     }
 #endif
@@ -46,13 +46,13 @@ static __xu_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
 #ifdef __xm_small__
     if (!(mode & XU_MODE_SMALL))
     {
-        tb_trace_e("libxmake.a has __xm_small__ but xmake/xmake.h not");
+        xu_trace_e("libxmake.a has __xm_small__ but xmake/xmake.h not");
         return xu_false;
     }
 #else
     if (mode & XU_MODE_SMALL)
     {
-        tb_trace_e("xmake/xmake.h has __xm_small__ but libxmake.a not");
+        xu_trace_e("xmake/xmake.h has __xm_small__ but libxmake.a not");
         return xu_false;
     }
 #endif
@@ -74,7 +74,7 @@ static __xu_inline__ xu_bool_t xm_version_check(xu_hize_t build)
     }
     else
     {
-        tb_trace_w("version: %s != %llu", XM_VERSION_STRING, build);
+        xu_trace_w("version: %s != %llu", XM_VERSION_STRING, build);
     }
 
     // no
