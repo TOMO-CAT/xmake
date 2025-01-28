@@ -52,8 +52,8 @@ xu_int_t xm_lz4_compress_stream_read(lua_State* lua)
     xu_check_return_val(stream, 0);
 
     // get data
-    tb_byte_t* data = xu_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
+    xu_byte_t* data = xu_null;
+    if (xm_lua_isinteger(lua, 2)) data = (xu_byte_t*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
     if (!data)
     {
         lua_pushinteger(lua, -1);

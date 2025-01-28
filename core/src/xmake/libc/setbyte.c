@@ -56,7 +56,7 @@ xu_int_t xm_libc_setbyte(lua_State* lua)
 
     // set byte
     if (lua_isnumber(lua, 3))
-        ((tb_byte_t*)data)[offset] = (tb_byte_t)lua_tointeger(lua, 3);
+        ((xu_byte_t*)data)[offset] = (xu_byte_t)lua_tointeger(lua, 3);
     else
         xm_libc_return_error(lua, "libc.setbyte(invalid value)!");
     return 0;

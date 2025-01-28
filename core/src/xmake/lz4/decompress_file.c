@@ -55,8 +55,8 @@ xu_int_t xm_lz4_decompress_file(lua_State* lua)
     if (istream && ostream && tb_stream_open(istream) && tb_stream_open(ostream))
     {
         xu_bool_t write_ok = xu_false;
-        tb_byte_t idata[TB_STREAM_BLOCK_MAXN];
-        tb_byte_t odata[TB_STREAM_BLOCK_MAXN];
+        xu_byte_t idata[TB_STREAM_BLOCK_MAXN];
+        xu_byte_t odata[TB_STREAM_BLOCK_MAXN];
         while (!tb_stream_beof(istream))
         {
             write_ok        = xu_false;

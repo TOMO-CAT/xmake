@@ -43,37 +43,37 @@ static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
     {
     case TB_CHARSET_TYPE_UTF8:
     {
-        static tb_byte_t bom[] = {0xef, 0xbb, 0xbf};
+        static xu_byte_t bom[] = {0xef, 0xbb, 0xbf};
         tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
     case TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE:
     {
-        static tb_byte_t bom[] = {0xff, 0xfe};
+        static xu_byte_t bom[] = {0xff, 0xfe};
         tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
     case TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE:
     {
-        static tb_byte_t bom[] = {0xfe, 0xff};
+        static xu_byte_t bom[] = {0xfe, 0xff};
         tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
     default: break;
     }
 }
-static xu_void_t xm_io_file_write_file_directly(xm_io_file_t* file, tb_byte_t const* data, xu_size_t size)
+static xu_void_t xm_io_file_write_file_directly(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
     tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     tb_stream_bwrit(file->u.file_ref, data, size);
 }
-static xu_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, tb_byte_t const* data, xu_size_t size)
+static xu_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
     // check
     tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     return xm_io_file_write_file_directly(file, data, size);
 }
-static xu_void_t xm_io_file_write_std(xm_io_file_t* file, tb_byte_t const* data, xu_size_t size)
+static xu_void_t xm_io_file_write_std(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
     // check
     tb_assert(file && data && xm_io_file_is_std(file));
@@ -112,15 +112,15 @@ xu_int_t xm_io_file_write(lua_State* lua)
         {
             // get data
             size_t           datasize = 0;
-            tb_byte_t const* data     = xu_null;
+            xu_byte_t const* data     = xu_null;
             if (lua_isstring(lua, i))
-                data = (tb_byte_t const*)luaL_checklstring(lua, i, &datasize);
+                data = (xu_byte_t const*)luaL_checklstring(lua, i, &datasize);
             else if (lua_istable(lua, i))
             {
                 // get bytes data
                 lua_pushstring(lua, "data");
                 lua_gettable(lua, i);
-                if (xm_lua_isinteger(lua, -1)) data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, -1);
+                if (xm_lua_isinteger(lua, -1)) data = (xu_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, -1);
                 lua_pop(lua, 1);
                 tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 

@@ -40,8 +40,8 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = xu_null;
-    if (xm_lua_isinteger(lua, 1)) data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 1);
+    xu_byte_t const* data = xu_null;
+    if (xm_lua_isinteger(lua, 1)) data = (xu_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 1);
     if (xm_lua_isinteger(lua, 2)) size = (xu_size_t)lua_tointeger(lua, 2);
     if (!data || !size)
     {
@@ -63,7 +63,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
         code = LZ4F_createDecompressionContext(&ctx, LZ4F_VERSION);
         if (LZ4F_isError(code)) break;
 
-        tb_byte_t buffer[8192];
+        xu_byte_t buffer[8192];
         xu_bool_t failed = xu_false;
         while (1)
         {

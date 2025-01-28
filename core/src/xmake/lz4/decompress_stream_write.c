@@ -53,8 +53,8 @@ xu_int_t xm_lz4_decompress_stream_write(lua_State* lua)
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = xu_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
+    xu_byte_t const* data = xu_null;
+    if (xm_lua_isinteger(lua, 2)) data = (xu_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
     if (xm_lua_isinteger(lua, 3)) size = (xu_size_t)lua_tointeger(lua, 3);
     if (!data || !size)
     {

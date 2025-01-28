@@ -43,12 +43,12 @@
 /* *******************************************************
  * private implementation
  */
-static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, xu_long_t size)
+static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t size)
 {
     // check
     tb_assert(data_ptr && *data_ptr);
 
-    tb_byte_t const* data    = *data_ptr;
+    xu_byte_t const* data    = *data_ptr;
     xu_size_t        charset = XM_IO_FILE_ENCODING_BINARY;
     do
     {
@@ -152,12 +152,12 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, xu_long_t* p
     xu_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
 
     // detect encoding
-    tb_byte_t* data     = xu_null;
+    xu_byte_t* data     = xu_null;
     xu_size_t  encoding = XM_IO_FILE_ENCODING_BINARY;
     xu_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
     if (size > 0)
     {
-        tb_byte_t const* p = data;
+        xu_byte_t const* p = data;
         encoding           = xm_io_file_detect_charset(&p, size);
         *pbomoff           = p - data;
     }

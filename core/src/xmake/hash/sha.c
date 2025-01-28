@@ -44,7 +44,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 2) && xm_lua_isinteger(lua, 3))
     {
-        tb_byte_t const* data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
+        xu_byte_t const* data = (xu_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
         xu_size_t        size = (xu_size_t)lua_tointeger(lua, 3);
         if (!data || !size)
         {
@@ -56,7 +56,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
 
         // compute sha
         tb_sha_t  sha;
-        tb_byte_t buffer[32];
+        xu_byte_t buffer[32];
         tb_sha_init(&sha, mode);
         tb_sha_spak(&sha, data, size);
         tb_sha_exit(&sha, buffer, sizeof(buffer));
@@ -90,7 +90,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
             tb_sha_init(&sha, mode);
 
             // read data and update sha
-            tb_byte_t data[TB_STREAM_BLOCK_MAXN];
+            xu_byte_t data[TB_STREAM_BLOCK_MAXN];
             while (!tb_stream_beof(stream))
             {
                 // read data
@@ -114,7 +114,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
             }
 
             // exit sha
-            tb_byte_t buffer[32];
+            xu_byte_t buffer[32];
             tb_sha_exit(&sha, buffer, sizeof(buffer));
 
             // make sha string

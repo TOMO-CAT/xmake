@@ -44,7 +44,7 @@ xu_int_t xm_base64_decode(lua_State* lua)
     xu_check_return_val(cstr && size, 0);
 
     // decode it
-    tb_byte_t buff[8192];
+    xu_byte_t buff[8192];
     if (size < sizeof(buff))
     {
         xu_size_t real = tb_base64_decode(cstr, size, buff, sizeof(buff));
