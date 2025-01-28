@@ -58,7 +58,7 @@ xu_int_t xm_os_emptydir(lua_State* lua)
 
     // get the directory
     xu_char_t const* dir = luaL_checkstring(lua, 1);
-    tb_check_return_val(dir, 0);
+    xu_check_return_val(dir, 0);
 
     // os.emptydir(dir)
     xu_bool_t is_emptydir = xu_true;

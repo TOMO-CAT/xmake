@@ -40,7 +40,7 @@ xu_int_t xm_path_relative(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // get the root
     xu_char_t const* root = luaL_optstring(lua, 2, xu_null);

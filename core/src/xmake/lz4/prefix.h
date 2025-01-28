@@ -267,7 +267,7 @@ static __xu_inline__ xu_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb
             tb_memcpy(stream->buffer, stream->header + consumed_size, stream->buffer_size);
         }
     }
-    tb_check_return_val(stream->header_size == header_size && isize, 0);
+    xu_check_return_val(stream->header_size == header_size && isize, 0);
     xu_assert_and_check_return_val(stream->buffer && stream->buffer_size + isize <= stream->buffer_maxn, -1);
 
     // append the input data
@@ -280,7 +280,7 @@ static __xu_inline__ xu_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, tb_
 {
     // check
     xu_assert_and_check_return_val(stream && stream->dctx && stream->buffer && odata && osize, -1);
-    tb_check_return_val(stream->buffer_size, 0);
+    xu_check_return_val(stream->buffer_size, 0);
 
     // do decompress
     size_t    srcsize = stream->buffer_size;

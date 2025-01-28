@@ -109,14 +109,14 @@ xu_int_t xm_string_convert(lua_State* lua)
     xu_char_t const* src_cstr   = luaL_checklstring(lua, 1, &src_size);
     xu_char_t const* ftype_cstr = luaL_checkstring(lua, 2);
     xu_char_t const* ttype_cstr = luaL_checkstring(lua, 3);
-    tb_check_return_val(src_cstr && ftype_cstr && ttype_cstr, 0);
+    xu_check_return_val(src_cstr && ftype_cstr && ttype_cstr, 0);
 
     // find charsets
     xm_charset_entry_ref_t fcharset = xm_string_charset_find_by_name(ftype_cstr);
     xm_charset_entry_ref_t tcharset = xm_string_charset_find_by_name(ttype_cstr);
     luaL_argcheck(lua, fcharset, 2, "charset not found");
     luaL_argcheck(lua, tcharset, 3, "charset not found");
-    tb_check_return_val(fcharset && tcharset, 0);
+    xu_check_return_val(fcharset && tcharset, 0);
 
     // empty string?
     if (!src_size)

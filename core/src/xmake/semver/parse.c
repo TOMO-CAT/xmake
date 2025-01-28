@@ -61,7 +61,7 @@ xu_int_t xm_semver_parse(lua_State* lua)
 
     // get the version string
     xu_char_t const* version_str = luaL_checkstring(lua, 1);
-    tb_check_return_val(version_str, 0);
+    xu_check_return_val(version_str, 0);
 
     // try to parse version string
     semver_t semver = {0};

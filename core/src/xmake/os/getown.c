@@ -43,7 +43,7 @@ xu_int_t xm_os_getown(lua_State* lua)
 
     // get the pathname
     xu_char_t const* pathname = luaL_checkstring(lua, 1);
-    tb_check_return_val(pathname, 0);
+    xu_check_return_val(pathname, 0);
 
     // get stat
     struct stat sts;

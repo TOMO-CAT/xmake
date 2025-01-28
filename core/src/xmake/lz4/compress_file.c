@@ -41,11 +41,11 @@ xu_int_t xm_lz4_compress_file(lua_State* lua)
     // get the file paths
     xu_char_t const* srcpath = luaL_checkstring(lua, 1);
     xu_char_t const* dstpath = luaL_checkstring(lua, 2);
-    tb_check_return_val(srcpath && dstpath, 0);
+    xu_check_return_val(srcpath && dstpath, 0);
 
     // init lz4 stream
     xm_lz4_cstream_t* stream_lz4 = xm_lz4_cstream_init();
-    tb_check_return_val(stream_lz4, 0);
+    xu_check_return_val(stream_lz4, 0);
 
     // do compress
     xu_bool_t       ok      = xu_false;

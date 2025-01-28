@@ -40,7 +40,7 @@ xu_int_t xm_os_argv(lua_State* lua)
 
     // get the argument string
     xu_char_t const* args = luaL_checkstring(lua, 1);
-    tb_check_return_val(args, 0);
+    xu_check_return_val(args, 0);
 
     // split only? do not escape
     xu_bool_t splitonly = xu_false;

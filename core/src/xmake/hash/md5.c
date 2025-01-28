@@ -68,7 +68,7 @@ xu_int_t xm_hash_md5(lua_State* lua)
 
     // get the filename
     xu_char_t const* filename = luaL_checkstring(lua, 1);
-    tb_check_return_val(filename, 0);
+    xu_check_return_val(filename, 0);
 
     // load data from file
     xu_bool_t       ok     = xu_false;

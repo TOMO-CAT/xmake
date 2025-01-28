@@ -43,7 +43,7 @@ xu_int_t xm_string_endswith(lua_State* lua)
     size_t           suffix_size = 0;
     xu_char_t const* string      = luaL_checklstring(lua, 1, &string_size);
     xu_char_t const* suffix      = luaL_checklstring(lua, 2, &suffix_size);
-    tb_check_return_val(string && suffix, 0);
+    xu_check_return_val(string && suffix, 0);
 
     // string:endswith(suffix)?
     lua_pushboolean(lua, string_size >= suffix_size && !xu_strcmp(string + string_size - suffix_size, suffix));

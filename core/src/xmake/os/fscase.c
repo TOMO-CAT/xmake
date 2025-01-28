@@ -40,7 +40,7 @@ xu_int_t xm_os_fscase(lua_State* lua)
 
 #if ((TB_VERSION_MAJOR * 100) + (TB_VERSION_MINOR * 10) + TB_VERSION_ALTER) >= 174
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     lua_pushinteger(lua, (xu_int_t)tb_file_fscase(path));
 #else

@@ -45,11 +45,11 @@ xu_int_t xm_fwatcher_add(lua_State* lua)
 
     // get the fwatcher
     tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(fwatcher, 0);
+    xu_check_return_val(fwatcher, 0);
 
     // get watchdir
     xu_char_t const* watchdir = luaL_checkstring(lua, 2);
-    tb_check_return_val(watchdir, 0);
+    xu_check_return_val(watchdir, 0);
 
     // get recursion
     xu_bool_t recursion = lua_toboolean(lua, 3);

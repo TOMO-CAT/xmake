@@ -172,11 +172,11 @@ xu_int_t xm_os_find(lua_State* lua)
 
     // get the root directory
     xu_char_t const* rootdir = luaL_checkstring(lua, 1);
-    tb_check_return_val(rootdir, 0);
+    xu_check_return_val(rootdir, 0);
 
     // get the pattern
     xu_char_t const* pattern = luaL_checkstring(lua, 2);
-    tb_check_return_val(pattern, 0);
+    xu_check_return_val(pattern, 0);
 
     // the recursion level
     xu_long_t recursion = (xu_long_t)lua_tointeger(lua, 3);

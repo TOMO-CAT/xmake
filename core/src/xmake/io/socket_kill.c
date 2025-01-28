@@ -45,7 +45,7 @@ xu_int_t xm_io_socket_kill(lua_State* lua)
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // kill socket
     tb_socket_kill(sock, TB_SOCKET_KILL_RW);

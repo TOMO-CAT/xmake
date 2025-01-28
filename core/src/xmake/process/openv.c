@@ -61,16 +61,16 @@ xu_int_t xm_process_openv(lua_State* lua)
 
     // get shellname
     xu_char_t const* shellname = lua_tostring(lua, 1);
-    tb_check_return_val(shellname, 0);
+    xu_check_return_val(shellname, 0);
 
     // get the arguments count
     xu_long_t argn = (xu_long_t)lua_objlen(lua, 2);
-    tb_check_return_val(argn >= 0, 0);
+    xu_check_return_val(argn >= 0, 0);
 
     // get arguments
     xu_size_t         argi = 0;
     xu_char_t const** argv = tb_nalloc0_type(1 + argn + 1, xu_char_t const*);
-    tb_check_return_val(argv, 0);
+    xu_check_return_val(argv, 0);
 
     // fill arguments
     argv[0] = shellname;

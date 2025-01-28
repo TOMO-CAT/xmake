@@ -58,11 +58,11 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 2);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // does not support stdfile
     if (!xm_io_file_is_file(file) || !file->stream)

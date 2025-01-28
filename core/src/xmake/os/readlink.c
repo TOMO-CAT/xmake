@@ -41,7 +41,7 @@ xu_int_t xm_os_readlink(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // is link?
     xu_char_t srcpath[XU_PATH_MAXN];

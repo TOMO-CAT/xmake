@@ -45,7 +45,7 @@ xu_int_t xm_io_file_isatty(lua_State* lua)
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // is tty?
     lua_pushboolean(lua, xm_io_file_is_tty(file));

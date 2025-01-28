@@ -41,7 +41,7 @@ xu_int_t xm_base64_decode(lua_State* lua)
     // get the string
     size_t           size = 0;
     xu_char_t const* cstr = luaL_checklstring(lua, 1, &size);
-    tb_check_return_val(cstr && size, 0);
+    xu_check_return_val(cstr && size, 0);
 
     // decode it
     tb_byte_t buff[8192];

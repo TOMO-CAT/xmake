@@ -50,7 +50,7 @@ xu_int_t xm_io_socket_connect(lua_State* lua)
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // get address
     xu_char_t const* address = lua_tostring(lua, 2);

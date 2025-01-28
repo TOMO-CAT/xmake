@@ -39,7 +39,7 @@ xu_int_t xm_os_touch(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     tb_time_t atime = (tb_time_t)luaL_checknumber(lua, 2);
     tb_time_t mtime = (tb_time_t)luaL_checknumber(lua, 3);

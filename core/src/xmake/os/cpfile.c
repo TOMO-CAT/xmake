@@ -41,7 +41,7 @@ xu_int_t xm_os_cpfile(lua_State* lua)
     // get the source and destination
     xu_char_t const* src = luaL_checkstring(lua, 1);
     xu_char_t const* dst = luaL_checkstring(lua, 2);
-    tb_check_return_val(src && dst, 0);
+    xu_check_return_val(src && dst, 0);
 
     // init copy flags
     xu_size_t flags      = TB_FILE_COPY_NONE;

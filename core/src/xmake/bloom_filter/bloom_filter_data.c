@@ -43,7 +43,7 @@ xu_int_t xm_bloom_filter_data(lua_State* lua)
 
     // get the bloom filter
     tb_bloom_filter_ref_t filter = (tb_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(filter, 0);
+    xu_check_return_val(filter, 0);
 
     // get data
     xu_pointer_t data = (xu_pointer_t)tb_bloom_filter_data(filter);

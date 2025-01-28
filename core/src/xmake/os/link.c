@@ -41,7 +41,7 @@ xu_int_t xm_os_link(lua_State* lua)
     // get the source and destination
     xu_char_t const* src = luaL_checkstring(lua, 1);
     xu_char_t const* dst = luaL_checkstring(lua, 2);
-    tb_check_return_val(src && dst, 0);
+    xu_check_return_val(src && dst, 0);
 
     // do os.link(src, dst)
     lua_pushboolean(lua, tb_file_link(src, dst));

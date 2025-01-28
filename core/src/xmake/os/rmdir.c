@@ -79,7 +79,7 @@ xu_int_t xm_os_rmdir(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // only remove empty directory?
     xu_bool_t rmempty = lua_toboolean(lua, 2);

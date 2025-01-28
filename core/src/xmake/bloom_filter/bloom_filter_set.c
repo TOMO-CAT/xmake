@@ -43,7 +43,7 @@ xu_int_t xm_bloom_filter_set(lua_State* lua)
 
     // get the bloom filter
     tb_bloom_filter_ref_t filter = (tb_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(filter, 0);
+    xu_check_return_val(filter, 0);
 
     // get item
     xu_char_t const* item = luaL_checkstring(lua, 2);

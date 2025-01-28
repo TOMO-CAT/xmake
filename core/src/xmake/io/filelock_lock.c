@@ -60,7 +60,7 @@ xu_int_t xm_io_filelock_lock(lua_State* lua)
 
     // get lock
     tb_filelock_ref_t lock = (tb_filelock_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(lock, 0);
+    xu_check_return_val(lock, 0);
 
     // lock it
     xu_bool_t ok = tb_filelock_enter(lock, is_shared ? TB_FILELOCK_MODE_SH : TB_FILELOCK_MODE_EX);

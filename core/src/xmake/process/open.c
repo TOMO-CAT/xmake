@@ -49,7 +49,7 @@ xu_int_t xm_process_open(lua_State* lua)
     // get command
     size_t           command_size = 0;
     xu_char_t const* command      = luaL_checklstring(lua, 1, &command_size);
-    tb_check_return_val(command, 0);
+    xu_check_return_val(command, 0);
 
     // init attributes
     tb_process_attr_t attr = {0};

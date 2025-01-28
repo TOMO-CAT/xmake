@@ -101,7 +101,7 @@ xu_int_t xm_io_file_write(lua_State* lua)
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // write file data
     xu_int_t narg = lua_gettop(lua);

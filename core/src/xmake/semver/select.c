@@ -59,7 +59,7 @@ static xu_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, xu_int_t f
     }
 
     // no matches?
-    tb_check_return_val(matches->length, xu_false);
+    xu_check_return_val(matches->length, xu_false);
 
     // sort matches
     semvers_psort(matches);
@@ -150,7 +150,7 @@ static xu_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, xu_i
 
         lua_pop(lua, 1);
     }
-    tb_check_return_val(matches->length, xu_false);
+    xu_check_return_val(matches->length, xu_false);
 
     // sort matches
     semvers_psort(matches);

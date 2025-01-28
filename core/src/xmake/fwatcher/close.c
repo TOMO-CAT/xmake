@@ -45,7 +45,7 @@ xu_int_t xm_fwatcher_close(lua_State* lua)
 
     // get the fwatcher
     tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(fwatcher, 0);
+    xu_check_return_val(fwatcher, 0);
 
     // exit fwatcher
     tb_fwatcher_exit(fwatcher);

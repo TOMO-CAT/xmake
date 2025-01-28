@@ -43,7 +43,7 @@ xu_int_t xm_lz4_compress_stream_close(lua_State* lua)
 
     // get the stream
     xm_lz4_cstream_t* stream = (xm_lz4_cstream_t*)xm_lua_topointer(lua, 1);
-    tb_check_return_val(stream, 0);
+    xu_check_return_val(stream, 0);
 
     // exit stream
     xm_lz4_cstream_exit(stream);

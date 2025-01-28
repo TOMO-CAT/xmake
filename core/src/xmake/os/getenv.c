@@ -47,7 +47,7 @@ xu_int_t xm_os_getenv(lua_State* lua)
 
     // get the name
     xu_char_t const* name = luaL_checkstring(lua, 1);
-    tb_check_return_val(name, 0);
+    xu_check_return_val(name, 0);
 
     // init values
     tb_string_t values;

@@ -40,7 +40,7 @@ xu_int_t xm_os_mkdir(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // os.mkdir(path)
     xu_file_info_t info = {0};

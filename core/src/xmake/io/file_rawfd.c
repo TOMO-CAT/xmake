@@ -57,7 +57,7 @@ xu_int_t xm_io_file_rawfd(lua_State* lua)
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // get file raw fd
     if (xm_io_file_is_file(file))

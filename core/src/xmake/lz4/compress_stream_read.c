@@ -49,7 +49,7 @@ xu_int_t xm_lz4_compress_stream_read(lua_State* lua)
 
     // get stream
     xm_lz4_cstream_t* stream = (xm_lz4_cstream_t*)xm_lua_topointer(lua, 1);
-    tb_check_return_val(stream, 0);
+    xu_check_return_val(stream, 0);
 
     // get data
     tb_byte_t* data = xu_null;
