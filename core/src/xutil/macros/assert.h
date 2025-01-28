@@ -1,6 +1,7 @@
 #pragma once
 
 #include "xutil/prefix.h"
+#include "xutil/utils/trace.h"
 
 /* *******************************************************
  *  includes
@@ -388,7 +389,7 @@
 #    define xu_assert_static_msg(x, m) xu_assert_static(x)
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * declaration
  */
 
@@ -406,7 +407,7 @@ xu_void_t xu_backtrace_dump(xu_char_t const* prefix, xu_pointer_t* frames, xu_si
  */
 xu_void_t xu_used_ptr(xu_cpointer_t variable);
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * inlines
  */
 

@@ -1,4 +1,5 @@
 #include "xutil/container/vector.h"
+#include "xutil/algorithm/for.h"
 
 /* *******************************************************
  *  macros

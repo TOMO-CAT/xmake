@@ -192,3 +192,40 @@
     {                                                                                                                  \
         xu_int_t dummy;                                                                                                \
     } const* xu_##object##_ref_t
+
+// macros
+#define __xu_mstring__(x) #x
+#define __xu_mstring_ex__(x) __xu_mstring__(x)
+
+#define __xu_mconcat__(a, b) a##b
+#define __xu_mconcat_ex__(a, b) __xu_mconcat__(a, b)
+
+#define __xu_mconcat3__(a, b, c) a##b##c
+#define __xu_mconcat3_ex__(a, b, c) __xu_mconcat3__(a, b, c)
+
+#define __xu_mconcat4__(a, b, c, d) a##b##c##d
+#define __xu_mconcat4_ex__(a, b, c, d) __xu_mconcat4__(a, b, c, d)
+
+#define __xu_mconcat5__(a, b, c, d, e) a##b##c##d##e
+#define __xu_mconcat5_ex__(a, b, c, d, e) __xu_mconcat5__(a, b, c, d, e)
+
+#define __xu_mconcat6__(a, b, c, d, e, f) a##b##c##d##e##f
+#define __xu_mconcat6_ex__(a, b, c, d, e, f) __xu_mconcat6__(a, b, c, d, e, f)
+
+#define __xu_mconcat7__(a, b, c, d, e, f, g) a##b##c##d##e##f##g
+#define __xu_mconcat7_ex__(a, b, c, d, e, f, g) __xu_mconcat7__(a, b, c, d, e, f, g)
+
+#define __xu_mconcat8__(a, b, c, d, e, f, g, h) a##b##c##d##e##f##g##h
+#define __xu_mconcat8_ex__(a, b, c, d, e, f, g, h) __xu_mconcat8__(a, b, c, d, e, f, g, h)
+
+#define __xu_mconcat9__(a, b, c, d, e, f, g, h, i) a##b##c##d##e##f##g##h##i
+#define __xu_mconcat9_ex__(a, b, c, d, e, f, g, h, i) __xu_mconcat9__(a, b, c, d, e, f, g, h, i)
+
+#define __xu_mstrcat__(a, b) a b
+#define __xu_mstrcat3__(a, b, c) a b c
+#define __xu_mstrcat4__(a, b, c, d) a b c d
+#define __xu_mstrcat5__(a, b, c, d, e) a b c d e
+#define __xu_mstrcat6__(a, b, c, d, e, f) a b c d e f
+#define __xu_mstrcat7__(a, b, c, d, e, f, g) a b c d e f g
+#define __xu_mstrcat8__(a, b, c, d, e, f, g, h) a b c d e f g h
+#define __xu_mstrcat9__(a, b, c, d, e, f, g, h, i) a b c d e f g h i

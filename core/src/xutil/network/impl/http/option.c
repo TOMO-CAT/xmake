@@ -5,6 +5,7 @@
 #define XU_TRACE_MODULE_DEBUG (1)
 
 #include "xutil/network/impl/http/option.h"
+#include "xutil/network/impl/http/method.h"
 #include "xutil/network/impl/http/prefix.h"
 
 /* *******************************************************

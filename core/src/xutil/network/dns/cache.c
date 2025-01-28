@@ -78,8 +78,8 @@ static xu_bool_t               xu_dns_cache_clear(xu_iterator_ref_t iterator, xu
         ok = xu_true;
 
         // trace
-        xu_trace_d("del: %s => %{ipaddr}, time: %u, size: %u", (xu_char_t const*)item->name, &caddr->addr, caddr->time,
-                   xu_hash_map_size(g_cache.hash));
+        xu_trace_d("del: %s => %{ipaddr}, time: %u, size: %u", (xu_char_t const*)((xu_hash_map_item_ref_t)item)->name,
+                   &caddr->addr, caddr->time, xu_hash_map_size(g_cache.hash));
 
         // update times
         xu_assert(g_cache.times >= caddr->time);
