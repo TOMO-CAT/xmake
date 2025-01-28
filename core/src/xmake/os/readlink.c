@@ -60,7 +60,7 @@ xu_int_t xm_os_readlink(lua_State* lua)
             }
             else
                 lua_pushnil(lua);
-            tb_free(data);
+            xu_free(data);
         }
     }
     else if (size >= 0 && size < XU_PATH_MAXN)

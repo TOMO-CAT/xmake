@@ -348,7 +348,7 @@ xu_int_t xm_process_openv(lua_State* lua)
         lua_pushnil(lua);
 
     // exit argv
-    if (argv) tb_free(argv);
+    if (argv) xu_free(argv);
     argv = xu_null;
 
     // ok

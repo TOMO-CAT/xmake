@@ -41,6 +41,7 @@ target "xmake"
     add_defines "__xu_prefix__=\"xmake\""
     if is_mode "debug"; then
         add_defines "__xm_debug__" "{public}"
+        add_defines "__tb_debug__" "{public}"
     fi
 
     # set the auto-generated config.h

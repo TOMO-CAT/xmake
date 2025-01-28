@@ -40,6 +40,6 @@ xu_int_t xm_libc_free(lua_State* lua)
 
     // do free
     xu_pointer_t data = (xu_pointer_t)(xu_size_t)luaL_checkinteger(lua, 1);
-    if (data) tb_free(data);
+    if (data) xu_free(data);
     return 0;
 }

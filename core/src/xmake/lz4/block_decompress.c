@@ -78,7 +78,7 @@ xu_int_t xm_lz4_block_decompress(lua_State* lua)
 
     if (output_data && output_data != buffer)
     {
-        tb_free(output_data);
+        xu_free(output_data);
         output_data = xu_null;
     }
 

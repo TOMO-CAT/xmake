@@ -114,7 +114,7 @@
  * #define XU_TRACE_MODULE_DEBUG    (1)
  *
  * // includes
- * #include "tbox.h"
+ * #include "xutil.h"
  *
  * // trace
  * xu_trace_d("trace debug");

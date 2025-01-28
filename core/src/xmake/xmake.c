@@ -30,13 +30,13 @@
 static __xu_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
 {
 #ifdef __xm_debug__
-    if (!(mode & XM_MODE_DEBUG))
+    if (!(mode & XU_MODE_DEBUG))
     {
         tb_trace_e("libxmake.a has __xm_debug__ but xmake/xmake.h not");
         return xu_false;
     }
 #else
-    if (mode & XM_MODE_DEBUG)
+    if (mode & XU_MODE_DEBUG)
     {
         tb_trace_e("xmake/xmake.h has __xm_debug__ but libxmake.a not");
         return xu_false;
@@ -44,13 +44,13 @@ static __xu_inline__ xu_bool_t xm_check_mode(xu_size_t mode)
 #endif
 
 #ifdef __xm_small__
-    if (!(mode & XM_MODE_SMALL))
+    if (!(mode & XU_MODE_SMALL))
     {
         tb_trace_e("libxmake.a has __xm_small__ but xmake/xmake.h not");
         return xu_false;
     }
 #else
-    if (mode & XM_MODE_SMALL)
+    if (mode & XU_MODE_SMALL)
     {
         tb_trace_e("xmake/xmake.h has __xm_small__ but libxmake.a not");
         return xu_false;
@@ -100,7 +100,11 @@ xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
     if (!tb_init(xu_null, tb_default_allocator(xu_null, 0))) return xu_false;
 #else
     // init tbox, since small compilation mode is enabled, it still uses the native allocator
-    if (!tb_init(xu_null, xu_null)) return xu_false;
+    if (!tb_init(xu_null, xu_null))
+    {
+        return xu_false;
+    }
+
 #endif
 
     // trace

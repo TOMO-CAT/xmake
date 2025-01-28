@@ -91,10 +91,10 @@ static __xu_inline__ xu_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
         }
         if (stream->buffer)
         {
-            tb_free(stream->buffer);
+            xu_free(stream->buffer);
             stream->buffer = xu_null;
         }
-        tb_free(stream);
+        xu_free(stream);
     }
 }
 
@@ -194,10 +194,10 @@ static __xu_inline__ xu_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
         }
         if (stream->buffer)
         {
-            tb_free(stream->buffer);
+            xu_free(stream->buffer);
             stream->buffer = xu_null;
         }
-        tb_free(stream);
+        xu_free(stream);
     }
 }
 

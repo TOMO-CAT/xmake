@@ -24,26 +24,26 @@
 /* //////////////////////////////////////////////////////////////////////////////////////
  * includes
  */
-#include "prefix.h"
-#include "zip/zip.h"
-#include "xml/xml.h"
-#include "libm/libm.h"
-#include "libc/libc.h"
-#include "math/math.h"
-#include "hash/hash.h"
-#include "utils/utils.h"
-#include "regex/regex.h"
-#include "object/object.h"
-#include "memory/memory.h"
-#include "stream/stream.h"
-#include "string/string.h"
-#include "network/network.h"
-#include "charset/charset.h"
-#include "platform/platform.h"
-#include "database/database.h"
 #include "algorithm/algorithm.h"
+#include "charset/charset.h"
 #include "container/container.h"
 #include "coroutine/coroutine.h"
+#include "database/database.h"
+#include "hash/hash.h"
+#include "libc/libc.h"
+#include "libm/libm.h"
+#include "math/math.h"
+#include "memory/memory.h"
+#include "network/network.h"
+#include "object/object.h"
+#include "platform/platform.h"
+#include "prefix.h"
+#include "regex/regex.h"
+#include "stream/stream.h"
+#include "string/string.h"
+#include "utils/utils.h"
+#include "xml/xml.h"
+#include "zip/zip.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * extern
@@ -55,19 +55,19 @@ __tb_extern_c_enter__
  */
 
 // the compile mode
-#define XM_MODE_DEBUG           (1)
-#define XM_MODE_SMALL           (2)
+#define TB_MODE_DEBUG (1)
+#define TB_MODE_SMALL (2)
 
 #ifdef __tb_debug__
-#   define __tb_mode_debug__    XM_MODE_DEBUG
+#    define __tb_mode_debug__ TB_MODE_DEBUG
 #else
-#   define __tb_mode_debug__    (0)
+#    define __tb_mode_debug__ (0)
 #endif
 
 #ifdef __tb_small__
-#   define __tb_mode_small__    XM_MODE_SMALL
+#    define __tb_mode_small__ TB_MODE_SMALL
 #else
-#   define __tb_mode_small__    (0)
+#    define __tb_mode_small__ (0)
 #endif
 
 /*! init tbox
@@ -133,45 +133,47 @@ __tb_extern_c_enter__
     }
  * @endcode
  */
-#define tb_init(priv, allocator)     tb_init_(priv, allocator, (tb_size_t)(__tb_mode_debug__ | __tb_mode_small__), TB_VERSION_BUILD)
+#define tb_init(priv, allocator)                                                                                       \
+    tb_init_(priv, allocator, (tb_size_t)(__tb_mode_debug__ | __tb_mode_small__), TB_VERSION_BUILD)
 
-/* //////////////////////////////////////////////////////////////////////////////////////
- * interfaces
- */
+    /* //////////////////////////////////////////////////////////////////////////////////////
+     * interfaces
+     */
 
-/*! init the tbox library
- *
- * @param priv      the platform private data
- *                  pass JavaVM* jvm for android jni
- *                  pass tb_null for other platform
- *
- * @param allocator the allocator, supports:
- *
- *                  - tb_native_allocator()
- *                      uses native memory directly
- *
- *                  - tb_static_allocator(data, size)
- *                      uses the a static small buffer and we can check memory error and leaking
- *
- *                  - tb_default_allocator(data, size)
- *                      uses the a large pool with the static memory and we can check memory error and leaking
- *
- *                  - tb_default_allocator(tb_null, 0)
- *                      uses the a large pool with the native memory and we can check memory error and leaking
- *
- *                  - tb_null
- *                      uses tb_default_allocator(tb_null, 0) for large mode
- *                      uses tb_native_allocator() for small mode, need define __tb_small__
- *
- * @param mode      the compile mode for check __tb_small__ and __tb_debug__
- * @param build     the build version
- *
- * @return          tb_true or tb_false
- */
-tb_bool_t           tb_init_(tb_handle_t priv, tb_allocator_ref_t allocator, tb_size_t mode, tb_hize_t build);
+    /*! init the tbox library
+     *
+     * @param priv      the platform private data
+     *                  pass JavaVM* jvm for android jni
+     *                  pass tb_null for other platform
+     *
+     * @param allocator the allocator, supports:
+     *
+     *                  - tb_native_allocator()
+     *                      uses native memory directly
+     *
+     *                  - tb_static_allocator(data, size)
+     *                      uses the a static small buffer and we can check memory error and leaking
+     *
+     *                  - tb_default_allocator(data, size)
+     *                      uses the a large pool with the static memory and we can check memory error and leaking
+     *
+     *                  - tb_default_allocator(tb_null, 0)
+     *                      uses the a large pool with the native memory and we can check memory error and leaking
+     *
+     *                  - tb_null
+     *                      uses tb_default_allocator(tb_null, 0) for large mode
+     *                      uses tb_native_allocator() for small mode, need define __tb_small__
+     *
+     * @param mode      the compile mode for check __tb_small__ and __tb_debug__
+     * @param build     the build version
+     *
+     * @return          tb_true or tb_false
+     */
+    tb_bool_t
+    tb_init_(tb_handle_t priv, tb_allocator_ref_t allocator, tb_size_t mode, tb_hize_t build);
 
 /// exit the tbox library
-tb_void_t           tb_exit(tb_noarg_t);
+tb_void_t tb_exit(tb_noarg_t);
 
 /*! the state
  *
@@ -181,7 +183,7 @@ tb_void_t           tb_exit(tb_noarg_t);
  *
  * @return          the tbox state
  */
-tb_size_t           tb_state(tb_noarg_t);
+tb_size_t tb_state(tb_noarg_t);
 
 #ifdef TB_CONFIG_INFO_HAVE_VERSION
 /*! the tbox version

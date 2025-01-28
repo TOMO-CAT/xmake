@@ -44,6 +44,10 @@
  *
  * debug mode
  */
+#ifdef __tb_debug__
+#    define __xm_debug__
+#endif
+
 #ifdef __xu_debug__
 #    define __xm_debug__
 #endif

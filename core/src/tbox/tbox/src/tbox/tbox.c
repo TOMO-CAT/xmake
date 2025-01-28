@@ -26,9 +26,9 @@
 #include "libc/impl/impl.h"
 #include "libm/impl/impl.h"
 #include "math/impl/impl.h"
-#include "object/impl/impl.h"
 #include "memory/impl/impl.h"
 #include "network/impl/impl.h"
+#include "object/impl/impl.h"
 #include "platform/impl/impl.h"
 
 /* //////////////////////////////////////////////////////////////////////////////////////
@@ -36,22 +36,22 @@
  */
 
 // the state
-static tb_atomic32_t  g_state = TB_STATE_END;
+static tb_atomic32_t g_state = TB_STATE_END;
 
 /* //////////////////////////////////////////////////////////////////////////////////////
  * private implementation
  */
 static __tb_inline__ tb_bool_t tb_check_order_word()
 {
-    tb_uint16_t x = 0x1234;
+    tb_uint16_t      x = 0x1234;
     tb_byte_t const* p = (tb_byte_t const*)&x;
 
 #ifdef TB_WORDS_BIGENDIAN
     // is big endian?
-    return (p[0] == 0x12 && p[1] == 0x34)? tb_true : tb_false;
+    return (p[0] == 0x12 && p[1] == 0x34) ? tb_true : tb_false;
 #else
     // is little endian?
-    return (p[0] == 0x34 && p[1] == 0x12)? tb_true : tb_false;
+    return (p[0] == 0x34 && p[1] == 0x12) ? tb_true : tb_false;
 #endif
 }
 static __tb_inline__ tb_bool_t tb_check_order_double()
@@ -65,13 +65,13 @@ static __tb_inline__ tb_bool_t tb_check_order_double()
     } conv;
     conv.f = 1.0f;
 
-#   ifdef TB_FLOAT_BIGENDIAN
+#    ifdef TB_FLOAT_BIGENDIAN
     // is big endian?
-    return (!conv.i[1] && conv.i[0])? tb_true : tb_false;
-#   else
+    return (!conv.i[1] && conv.i[0]) ? tb_true : tb_false;
+#    else
     // is little endian?
-    return (!conv.i[0] && conv.i[1])? tb_true : tb_false;
-#   endif
+    return (!conv.i[0] && conv.i[1]) ? tb_true : tb_false;
+#    endif
 #else
     return tb_true;
 #endif
@@ -79,13 +79,13 @@ static __tb_inline__ tb_bool_t tb_check_order_double()
 static __tb_inline__ tb_bool_t tb_check_mode(tb_size_t mode)
 {
 #ifdef __tb_debug__
-    if (!(mode & XM_MODE_DEBUG))
+    if (!(mode & TB_MODE_DEBUG))
     {
         tb_trace_e("libtbox.a has __tb_debug__ but tbox/tbox.h not");
         return tb_false;
     }
 #else
-    if (mode & XM_MODE_DEBUG)
+    if (mode & TB_MODE_DEBUG)
     {
         tb_trace_e("tbox/tbox.h has __tb_debug__ but libtbox.a not");
         return tb_false;
@@ -93,13 +93,13 @@ static __tb_inline__ tb_bool_t tb_check_mode(tb_size_t mode)
 #endif
 
 #ifdef __tb_small__
-    if (!(mode & XM_MODE_SMALL))
+    if (!(mode & TB_MODE_SMALL))
     {
         tb_trace_e("libtbox.a has __tb_small__ but tbox/tbox.h not");
         return tb_false;
     }
 #else
-    if (mode & XM_MODE_SMALL)
+    if (mode & TB_MODE_SMALL)
     {
         tb_trace_e("tbox/tbox.h has __tb_small__ but libtbox.a not");
         return tb_false;
@@ -113,7 +113,8 @@ static __tb_inline__ tb_bool_t tb_version_check(tb_hize_t build)
 {
 #ifdef TB_CONFIG_INFO_HAVE_VERSION
     // the version oly for link the static vtag string
-    tb_version_t const* version = tb_version(); tb_used(version);
+    tb_version_t const* version = tb_version();
+    tb_used(version);
 #endif
 
     // ok
@@ -186,7 +187,7 @@ tb_bool_t tb_init_(tb_handle_t priv, tb_allocator_ref_t allocator, tb_size_t mod
     // init network environment
     if (!tb_network_init_env()) return tb_false;
 
-    // init object environment
+        // init object environment
 #ifdef TB_CONFIG_MODULE_HAVE_OBJECT
     if (!tb_object_init_env()) return tb_false;
 #endif
@@ -203,7 +204,7 @@ tb_bool_t tb_init_(tb_handle_t priv, tb_allocator_ref_t allocator, tb_size_t mod
 tb_void_t tb_exit()
 {
     // have been exited?
-    if (TB_STATE_OK != tb_atomic32_fetch_and_cmpset(&g_state, TB_STATE_OK, TB_STATE_EXITING)) return ;
+    if (TB_STATE_OK != tb_atomic32_fetch_and_cmpset(&g_state, TB_STATE_OK, TB_STATE_EXITING)) return;
 
     // kill singleton
     tb_singleton_kill();
@@ -252,7 +253,8 @@ tb_size_t tb_state()
 tb_version_t const* tb_version()
 {
     // init version tag for binary search
-    static __tb_volatile__ tb_char_t const* s_vtag = "[tbox]: [vtag]: " TB_VERSION_STRING; tb_used(s_vtag);
+    static __tb_volatile__ tb_char_t const* s_vtag = "[tbox]: [vtag]: " TB_VERSION_STRING;
+    tb_used(s_vtag);
 
     // init version
     static tb_version_t s_version = {0};

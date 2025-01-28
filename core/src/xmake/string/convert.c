@@ -136,7 +136,7 @@ xu_int_t xm_string_convert(lua_State* lua)
         }
         else
             lua_pushnil(lua);
-        tb_free(dst_data);
+        xu_free(dst_data);
     }
 
     // ok

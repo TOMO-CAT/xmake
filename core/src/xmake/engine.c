@@ -826,7 +826,7 @@ static xu_pointer_t xm_engine_lua_realloc(xu_pointer_t udata, xu_pointer_t data,
 {
     xu_pointer_t ptr = xu_null;
     if (nsize == 0 && data)
-        tb_free(data);
+        xu_free(data);
     else if (!data)
         ptr = tb_malloc((xu_size_t)nsize);
     else if (nsize != osize)
@@ -1009,7 +1009,7 @@ xu_void_t xm_engine_exit(xm_engine_ref_t self)
     engine->lua = xu_null;
 
     // exit it
-    tb_free(engine);
+    xu_free(engine);
 }
 xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, xu_char_t** taskargv)
 {

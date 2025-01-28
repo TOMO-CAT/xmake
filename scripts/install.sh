@@ -28,6 +28,7 @@ else
     ./configure --verbose || exit 1
 fi
 
+# 显示具体编译命令可用 make VERBOSE=1
 make || exit 1
 sudo make install PREFIX=/usr/local || exit 1
 
