@@ -36,7 +36,7 @@
 static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
 {
     // check
-    tb_assert(file && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(file && xm_io_file_is_file(file) && file->u.file_ref);
 
     // write bom
     switch (file->encoding)
@@ -64,19 +64,19 @@ static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
 }
 static xu_void_t xm_io_file_write_file_directly(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
-    tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     tb_stream_bwrit(file->u.file_ref, data, size);
 }
 static xu_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
     // check
-    tb_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
     return xm_io_file_write_file_directly(file, data, size);
 }
 static xu_void_t xm_io_file_write_std(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
     // check
-    tb_assert(file && data && xm_io_file_is_std(file));
+    xu_assert(file && data && xm_io_file_is_std(file));
 
     // check type
     xu_size_t type = (file->type & ~XM_IO_FILE_FLAG_TTY);

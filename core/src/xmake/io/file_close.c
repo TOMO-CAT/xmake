@@ -51,7 +51,7 @@ xu_int_t xm_io_file_close(lua_State* lua)
     if (xm_io_file_is_file(file))
     {
         // check
-        tb_assert(file->u.file_ref);
+        xu_assert(file->u.file_ref);
 
         // flush filter stream cache, TODO we should fix it in tbox/stream
         if ((file->mode & TB_FILE_MODE_RW) == TB_FILE_MODE_RW && file->fstream)

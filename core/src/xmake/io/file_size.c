@@ -51,7 +51,7 @@ xu_int_t xm_io_file_size(lua_State* lua)
     if (xm_io_file_is_file(file))
     {
         // get size from raw file stream, because we cannot get size from fstream
-        tb_assert(file->stream);
+        xu_assert(file->stream);
         lua_pushnumber(lua, (lua_Number)tb_stream_size(file->stream));
         return 1;
     }

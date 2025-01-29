@@ -46,7 +46,7 @@
 static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t size)
 {
     // check
-    tb_assert(data_ptr && *data_ptr);
+    xu_assert(data_ptr && *data_ptr);
 
     xu_byte_t const* data    = *data_ptr;
     xu_size_t        charset = XM_IO_FILE_ENCODING_BINARY;

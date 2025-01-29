@@ -36,7 +36,7 @@
 xu_void_t lua_pushsemver(lua_State* lua, semver_t const* semver)
 {
     // check
-    tb_assert(lua && semver);
+    xu_assert(lua && semver);
 
     // return a semver table
     lua_createtable(lua, 0, 7);

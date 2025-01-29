@@ -36,7 +36,7 @@
 static xu_void_t xm_string_trim_space(xu_char_t const** psstr, xu_char_t const** pestr, xu_int_t mode)
 {
     // check
-    tb_assert(psstr && pestr && *psstr && *pestr);
+    xu_assert(psstr && pestr && *psstr && *pestr);
 
     xu_char_t const* p = *psstr;
     xu_char_t const* e = *pestr;
@@ -64,7 +64,7 @@ static xu_char_t const* xm_string_ltrim(xu_char_t const* sstr, xu_char_t const* 
                                         size_t ntrim)
 {
     // check
-    tb_assert(sstr && estr && ctrim);
+    xu_assert(sstr && estr && ctrim);
 
     xu_char_t const* p = sstr;
     while (p < estr && tb_strnchr(ctrim, ntrim, *p))
@@ -76,7 +76,7 @@ static xu_char_t const* xm_string_rtrim(xu_char_t const* sstr, xu_char_t const* 
                                         size_t ntrim)
 {
     // check
-    tb_assert(sstr && estr && ctrim);
+    xu_assert(sstr && estr && ctrim);
 
     xu_char_t const* p = estr - 1;
     while (p >= sstr && tb_strnchr(ctrim, ntrim, *p))

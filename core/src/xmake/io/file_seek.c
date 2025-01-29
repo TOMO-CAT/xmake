@@ -55,7 +55,7 @@ xu_int_t xm_io_file_seek(lua_State* lua)
     // seek file
     if (xm_io_file_is_file(file))
     {
-        tb_assert(file->u.file_ref);
+        xu_assert(file->u.file_ref);
         switch (*whence)
         {
         case 's': // "set"
