@@ -56,7 +56,7 @@ xu_int_t xm_bloom_filter_data_set(lua_State* lua)
         lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
+    xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // set data
     xu_bool_t ok = tb_bloom_filter_data_set(filter, data, size);

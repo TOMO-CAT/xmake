@@ -60,7 +60,7 @@ xu_int_t xm_lz4_compress_stream_read(lua_State* lua)
         lua_pushfstring(lua, "invalid data(%p)!", data);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
+    xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // get size
     xu_long_t size = 0;

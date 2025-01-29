@@ -63,7 +63,7 @@ xu_int_t xm_io_pipe_write(lua_State* lua)
         lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
+    xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // write data
     xu_long_t real = tb_pipe_file_write(pipefile, data, size);

@@ -49,7 +49,7 @@ xu_int_t xm_base64_encode(lua_State* lua)
         lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
+    xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // encode it
     xu_char_t buff[8192];
