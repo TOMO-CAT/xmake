@@ -80,7 +80,7 @@ static xu_void_t xm_io_file_write_std(xm_io_file_t* file, xu_byte_t const* data,
 
     // check type
     xu_size_t type = (file->type & ~XM_IO_FILE_FLAG_TTY);
-    tb_check_return(type != XM_IO_FILE_TYPE_STDIN);
+    xu_check_return(type != XM_IO_FILE_TYPE_STDIN);
 
     // write data to stdout/stderr
     tb_stdfile_writ(file->u.std_ref, data, size);
@@ -133,7 +133,7 @@ xu_int_t xm_io_file_write(lua_State* lua)
                 is_binary = xu_true;
             }
 
-            tb_check_continue(datasize);
+            xu_check_continue(datasize);
             xu_assert_and_check_break(data);
 
             // write data to std or file

@@ -130,7 +130,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
                 {
                     // wait
                     real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, tb_stream_timeout(stream));
-                    tb_check_break(real > 0);
+                    xu_check_break(real > 0);
 
                     // has read?
                     xu_assert_and_check_break(real & TB_STREAM_WAIT_READ);

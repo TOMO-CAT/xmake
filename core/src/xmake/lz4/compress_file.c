@@ -65,7 +65,7 @@ xu_int_t xm_lz4_compress_file(lua_State* lua)
             {
                 xu_long_t r = xm_lz4_cstream_write(stream_lz4, idata, ireal, tb_stream_beof(istream));
                 xu_assert_and_check_break(r >= 0);
-                tb_check_continue(r > 0);
+                xu_check_continue(r > 0);
 
                 xu_long_t oreal;
                 while ((oreal = xm_lz4_cstream_read(stream_lz4, odata, sizeof(odata))) > 0)

@@ -198,7 +198,7 @@ static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
         else if (!real)
         {
             real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, -1);
-            tb_check_break(real > 0);
+            xu_check_break(real > 0);
         }
         else
             break;

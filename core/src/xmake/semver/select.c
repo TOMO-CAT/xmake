@@ -194,7 +194,7 @@ xu_int_t xm_semver_select(lua_State* lua)
     {
         // get the version range string
         range_str = luaL_checkstring(lua, 1);
-        tb_check_break(range_str);
+        xu_check_break(range_str);
 
         // get the range string length
         xu_size_t range_len = tb_strlen(range_str);

@@ -112,7 +112,7 @@ xu_int_t xm_string_trim(lua_State* lua)
     do
     {
         xu_assert_and_check_break(sstr && trimchars);
-        tb_check_break(lstr != 0);
+        xu_check_break(lstr != 0);
 
         xu_char_t const* const rsstr = sstr;
         xu_char_t const* const restr = estr;
@@ -126,7 +126,7 @@ xu_int_t xm_string_trim(lua_State* lua)
         }
 
         // no trimed chars
-        tb_check_break(sstr != rsstr || estr != restr);
+        xu_check_break(sstr != rsstr || estr != restr);
 
         // ok
         lua_pushlstring(lua, sstr, estr - sstr);
