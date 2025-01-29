@@ -1,4 +1,6 @@
 #include "xutil/libm/math.h"
+#include "xutil/platform/time.h"
+#include "xutil/utils/used.h"
 
 /* *******************************************************
  * private implementation
@@ -162,7 +164,7 @@ static xu_uint32_t xu_isqrti_impl(xu_uint32_t x)
     return n;
 #endif
 }
-#ifdef TB_CONFIG_TYPE_HAVE_FLOAT
+#ifdef XU_CONFIG_TYPE_HAVE_FLOAT
 static __xu_inline__ xu_uint32_t xu_isqrti_impl_using_sqrt(xu_uint32_t x)
 {
     return (xu_uint32_t)xu_sqrtf((xu_float_t)x);
@@ -175,7 +177,7 @@ static __xu_inline__ xu_uint32_t xu_isqrti_impl_using_sqrt(xu_uint32_t x)
 
 xu_uint32_t xu_isqrti(xu_uint32_t x)
 {
-#ifdef TB_CONFIG_TYPE_HAVE_FLOAT
+#ifdef XU_CONFIG_TYPE_HAVE_FLOAT
 
     // using the sqrt function?
     static xu_long_t s_using_sqrt = -1;

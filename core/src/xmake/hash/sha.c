@@ -55,11 +55,11 @@ xu_int_t xm_hash_sha(lua_State* lua)
         tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
         // compute sha
-        tb_sha_t  sha;
+        xu_sha_t  sha;
         xu_byte_t buffer[32];
-        tb_sha_init(&sha, mode);
-        tb_sha_spak(&sha, data, size);
-        tb_sha_exit(&sha, buffer, sizeof(buffer));
+        xu_sha_init(&sha, mode);
+        xu_sha_spak(&sha, data, size);
+        xu_sha_exit(&sha, buffer, sizeof(buffer));
 
         // make sha string
         xu_size_t i      = 0;
@@ -86,8 +86,8 @@ xu_int_t xm_hash_sha(lua_State* lua)
         if (tb_stream_open(stream))
         {
             // init sha
-            tb_sha_t sha;
-            tb_sha_init(&sha, mode);
+            xu_sha_t sha;
+            xu_sha_init(&sha, mode);
 
             // read data and update sha
             xu_byte_t data[TB_STREAM_BLOCK_MAXN];
@@ -97,7 +97,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
                 xu_long_t real = tb_stream_read(stream, data, sizeof(data));
 
                 // ok?
-                if (real > 0) tb_sha_spak(&sha, data, real);
+                if (real > 0) xu_sha_spak(&sha, data, real);
                 // no data? continue it
                 else if (!real)
                 {
@@ -115,7 +115,7 @@ xu_int_t xm_hash_sha(lua_State* lua)
 
             // exit sha
             xu_byte_t buffer[32];
-            tb_sha_exit(&sha, buffer, sizeof(buffer));
+            xu_sha_exit(&sha, buffer, sizeof(buffer));
 
             // make sha string
             xu_size_t i      = 0;

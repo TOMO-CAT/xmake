@@ -58,7 +58,7 @@ static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t
         // utf-8 with bom
         if (size >= 3 && data[0] == 239 && data[1] == 187 && data[2] == 191)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             data += 3; // skip bom
             break;
         }
@@ -67,14 +67,14 @@ static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t
             // utf16be
             if (data[0] == 254 && data[1] == 255)
             {
-                charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE;
+                charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE;
                 data += 2; // skip bom
                 break;
             }
             // utf16le
             else if (data[0] == 255 && data[1] == 254)
             {
-                charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE;
+                charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE;
                 data += 2; // skip bom
                 break;
             }
@@ -117,27 +117,27 @@ static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t
 
         if (ascii_conf > 0 && zero_count <= 1)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             break;
         }
         if (utf8_conf > 0 && zero_count <= 1)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             break;
         }
         if (utf16be_conf > 0 && utf16be_conf > utf16le_conf)
         {
-            charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE;
+            charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE;
             break;
         }
         if (utf16le_conf > 0 && utf16le_conf >= utf16be_conf)
         {
-            charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE;
+            charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE;
             break;
         }
         if (utf8_conf > 0)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             break;
         }
 
@@ -197,23 +197,23 @@ xu_int_t xm_io_file_open(lua_State* lua)
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
         encoding = XM_IO_FILE_ENCODING_BINARY;
     else if (tb_strstr(modestr, "utf8") || tb_strstr(modestr, "utf-8"))
-        encoding = TB_CHARSET_TYPE_UTF8;
+        encoding = XU_CHARSET_TYPE_UTF8;
     else if (tb_strstr(modestr, "utf16le") || tb_strstr(modestr, "utf-16le"))
-        encoding = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE;
+        encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE;
     else if (tb_strstr(modestr, "utf16be") || tb_strstr(modestr, "utf-16be"))
-        encoding = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE;
+        encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE;
     else if (tb_strstr(modestr, "utf16") || tb_strstr(modestr, "utf-16"))
-        encoding = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_NE;
+        encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_NE;
     else if (tb_strstr(modestr, "ansi"))
-        encoding = TB_CHARSET_TYPE_ANSI;
+        encoding = XU_CHARSET_TYPE_ANSI;
     else if (tb_strstr(modestr, "gbk"))
-        encoding = TB_CHARSET_TYPE_GBK;
+        encoding = XU_CHARSET_TYPE_GBK;
     else if (tb_strstr(modestr, "gb2312"))
-        encoding = TB_CHARSET_TYPE_GB2312;
+        encoding = XU_CHARSET_TYPE_GB2312;
     else if (tb_strstr(modestr, "iso8859"))
-        encoding = TB_CHARSET_TYPE_ISO8859;
+        encoding = XU_CHARSET_TYPE_ISO8859;
     else if (modestr[0] == 'w' || modestr[0] == 'a') // set to utf-8 if not specified for the writing mode
-        encoding = TB_CHARSET_TYPE_UTF8;
+        encoding = XU_CHARSET_TYPE_UTF8;
     else if (modestr[0] == 'r') // detect encoding if not specified for the reading mode
     {
         stream = tb_stream_init_from_file(path, mode);
@@ -244,13 +244,13 @@ xu_int_t xm_io_file_open(lua_State* lua)
         xu_assert_and_check_break(stream);
 
         // is transcode?
-        xu_bool_t is_transcode = encoding != TB_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
+        xu_bool_t is_transcode = encoding != XU_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
         if (is_transcode)
         {
             if (modestr[0] == 'r')
-                fstream = tb_stream_init_filter_from_charset(stream, encoding, TB_CHARSET_TYPE_UTF8);
+                fstream = tb_stream_init_filter_from_charset(stream, encoding, XU_CHARSET_TYPE_UTF8);
             else
-                fstream = tb_stream_init_filter_from_charset(stream, TB_CHARSET_TYPE_UTF8, encoding);
+                fstream = tb_stream_init_filter_from_charset(stream, XU_CHARSET_TYPE_UTF8, encoding);
             xu_assert_and_check_break(fstream);
 
             // use fstream as file

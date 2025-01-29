@@ -46,20 +46,20 @@ typedef struct __xm_charset_entry_t
 } xm_charset_entry_t, *xm_charset_entry_ref_t;
 
 // the charsets, @note: type & name is sorted
-static xm_charset_entry_t g_charsets[] = {{TB_CHARSET_TYPE_ANSI, "ansi"},
-                                          {TB_CHARSET_TYPE_ASCII, "ascii"},
-                                          {TB_CHARSET_TYPE_GB2312, "gb2312"},
-                                          {TB_CHARSET_TYPE_GBK, "gbk"},
-                                          {TB_CHARSET_TYPE_ISO8859, "iso8859"},
-                                          {TB_CHARSET_TYPE_UCS2 | TB_CHARSET_TYPE_NE, "ucs2"},
-                                          {TB_CHARSET_TYPE_UCS4 | TB_CHARSET_TYPE_NE, "ucs4"},
-                                          {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_NE, "utf16"},
-                                          {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE, "utf16be"},
-                                          {TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE, "utf16le"},
-                                          {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_NE, "utf32"},
-                                          {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_BE, "utf32be"},
-                                          {TB_CHARSET_TYPE_UTF32 | TB_CHARSET_TYPE_LE, "utf32le"},
-                                          {TB_CHARSET_TYPE_UTF8, "utf8"}};
+static xm_charset_entry_t g_charsets[] = {{XU_CHARSET_TYPE_ANSI, "ansi"},
+                                          {XU_CHARSET_TYPE_ASCII, "ascii"},
+                                          {XU_CHARSET_TYPE_GB2312, "gb2312"},
+                                          {XU_CHARSET_TYPE_GBK, "gbk"},
+                                          {XU_CHARSET_TYPE_ISO8859, "iso8859"},
+                                          {XU_CHARSET_TYPE_UCS2 | XU_CHARSET_TYPE_NE, "ucs2"},
+                                          {XU_CHARSET_TYPE_UCS4 | XU_CHARSET_TYPE_NE, "ucs4"},
+                                          {XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_NE, "utf16"},
+                                          {XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE, "utf16be"},
+                                          {XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE, "utf16le"},
+                                          {XU_CHARSET_TYPE_UTF32 | XU_CHARSET_TYPE_NE, "utf32"},
+                                          {XU_CHARSET_TYPE_UTF32 | XU_CHARSET_TYPE_BE, "utf32be"},
+                                          {XU_CHARSET_TYPE_UTF32 | XU_CHARSET_TYPE_LE, "utf32le"},
+                                          {XU_CHARSET_TYPE_UTF8, "utf8"}};
 
 /* *******************************************************
  * finder

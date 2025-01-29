@@ -90,7 +90,7 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
     file->stream    = xu_null;
     file->fstream   = xu_null;
     file->type      = xm_io_stdfile_isatty(type);
-    file->encoding  = TB_CHARSET_TYPE_UTF8;
+    file->encoding  = XU_CHARSET_TYPE_UTF8;
 
     // init stdio buffer
     xm_io_stdfile_init_buffer(type);

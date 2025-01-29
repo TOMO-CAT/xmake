@@ -41,19 +41,19 @@ static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
     // write bom
     switch (file->encoding)
     {
-    case TB_CHARSET_TYPE_UTF8:
+    case XU_CHARSET_TYPE_UTF8:
     {
         static xu_byte_t bom[] = {0xef, 0xbb, 0xbf};
         tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
-    case TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE:
+    case XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE:
     {
         static xu_byte_t bom[] = {0xff, 0xfe};
         tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
-    case TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE:
+    case XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE:
     {
         static xu_byte_t bom[] = {0xfe, 0xff};
         tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));

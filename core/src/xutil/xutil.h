@@ -1,6 +1,8 @@
 #pragma once
 
 // interface headers
+#include "xutil/charset/chartset.h"
+#include "xutil/hash/sha.h"
 #include "xutil/libc/stdio/stdio.h"
 #include "xutil/libc/string/string.h"
 #include "xutil/macros/assert.h"
