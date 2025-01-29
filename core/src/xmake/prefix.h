@@ -57,7 +57,7 @@
  */
 static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, xu_pointer_t ptr)
 {
-    tb_uint64_t ptrval = (tb_uint64_t)ptr;
+    xu_uint64_t ptrval = (xu_uint64_t)ptr;
     if ((ptrval >> 47) == 0)
         lua_pushlightuserdata(lua, ptr);
     else
