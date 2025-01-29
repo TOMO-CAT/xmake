@@ -57,7 +57,7 @@ static xu_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     tb_hong_t  size   = tb_stream_size(stream);
     while (size < 0 || (offset = tb_stream_offset(stream)) < size)
     {
-        xu_long_t real = tb_stream_peek(stream, &data, TB_STREAM_BLOCK_MAXN);
+        xu_long_t real = tb_stream_peek(stream, &data, XU_STREAM_BLOCK_MAXN);
         if (real > 0)
         {
             xu_char_t const* e = tb_strnchr((xu_char_t const*)data, real, '\n');
@@ -76,7 +76,7 @@ static xu_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
         }
         else if (!real)
         {
-            real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, -1);
+            real = tb_stream_wait(stream, XU_STREAM_WAIT_READ, -1);
             if (real <= 0)
             {
                 eof = xu_true;
@@ -188,7 +188,7 @@ static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
     if (!tb_buffer_init(&buf)) xm_io_return_error(lua, "init buffer failed!");
 
     // read all
-    xu_byte_t       data[TB_STREAM_BLOCK_MAXN];
+    xu_byte_t       data[XU_STREAM_BLOCK_MAXN];
     tb_stream_ref_t stream = file->u.file_ref;
     while (!tb_stream_beof(stream))
     {
@@ -197,7 +197,7 @@ static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
             tb_buffer_memncat(&buf, data, real);
         else if (!real)
         {
-            real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, -1);
+            real = tb_stream_wait(stream, XU_STREAM_WAIT_READ, -1);
             xu_check_break(real > 0);
         }
         else

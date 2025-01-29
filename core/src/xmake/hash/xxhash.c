@@ -97,7 +97,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
 
     // load data from file
     xu_bool_t       ok     = xu_false;
-    tb_stream_ref_t stream = tb_stream_init_from_file(filename, TB_FILE_MODE_RO);
+    tb_stream_ref_t stream = tb_stream_init_from_file(filename, XU_FILE_MODE_RO);
     if (stream)
     {
         // open stream
@@ -111,7 +111,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
                 XM_XXH3_128bits_reset(state);
 
             // read data and update xxhash
-            xu_byte_t data[TB_STREAM_BLOCK_MAXN];
+            xu_byte_t data[XU_STREAM_BLOCK_MAXN];
             while (!tb_stream_beof(stream))
             {
                 // read data
@@ -129,11 +129,11 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
                 else if (!real)
                 {
                     // wait
-                    real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, tb_stream_timeout(stream));
+                    real = tb_stream_wait(stream, XU_STREAM_WAIT_READ, tb_stream_timeout(stream));
                     xu_check_break(real > 0);
 
                     // has read?
-                    xu_assert_and_check_break(real & TB_STREAM_WAIT_READ);
+                    xu_assert_and_check_break(real & XU_STREAM_WAIT_READ);
                 }
                 // failed or end?
                 else

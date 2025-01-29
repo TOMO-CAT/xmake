@@ -63,7 +63,7 @@ xu_int_t xm_io_filelock_trylock(lua_State* lua)
     xu_check_return_val(lock, 0);
 
     // try to lock it
-    xu_bool_t ok = tb_filelock_enter_try(lock, is_shared ? TB_FILELOCK_MODE_SH : TB_FILELOCK_MODE_EX);
+    xu_bool_t ok = tb_filelock_enter_try(lock, is_shared ? XU_FILELOCK_MODE_SH : XU_FILELOCK_MODE_EX);
     lua_pushboolean(lua, ok);
     return 1;
 }

@@ -37,15 +37,15 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
 {
     // check
     tb_value_ref_t tuple = (tb_value_ref_t)priv;
-    xu_assert_and_check_return_val(path && info && tuple, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(path && info && tuple, XU_DIRECTORY_WALK_CODE_END);
 
     // the lua
     lua_State* lua = (lua_State*)tuple[0].ptr;
-    xu_assert_and_check_return_val(lua, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(lua, XU_DIRECTORY_WALK_CODE_END);
 
     // the pattern
     xu_char_t const* pattern = (xu_char_t const*)tuple[1].cstr;
-    xu_assert_and_check_return_val(pattern, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(pattern, XU_DIRECTORY_WALK_CODE_END);
 
     // remove ./ for path
     if (path[0] == '.' && (path[1] == '/' || path[1] == '\\')) path = path + 2;
@@ -57,12 +57,12 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
     xu_size_t* pcount = &(tuple[3].ul);
 
     // trace
-    xu_trace_d("path[%c]: %s", info->type == TB_FILE_TYPE_DIRECTORY ? 'd' : 'f', path);
+    xu_trace_d("path[%c]: %s", info->type == XU_FILE_TYPE_DIRECTORY ? 'd' : 'f', path);
 
     // we can ignore it directly if this path is file, but we need directory
-    xu_size_t needtype = (mode == 1) ? TB_FILE_TYPE_DIRECTORY
-                                     : ((mode == 0) ? XU_FILE_TYPE_FILE : (XU_FILE_TYPE_FILE | TB_FILE_TYPE_DIRECTORY));
-    if (info->type == XU_FILE_TYPE_FILE && needtype == TB_FILE_TYPE_DIRECTORY) return TB_DIRECTORY_WALK_CODE_CONTINUE;
+    xu_size_t needtype = (mode == 1) ? XU_FILE_TYPE_DIRECTORY
+                                     : ((mode == 0) ? XU_FILE_TYPE_FILE : (XU_FILE_TYPE_FILE | XU_FILE_TYPE_DIRECTORY));
+    if (info->type == XU_FILE_TYPE_FILE && needtype == XU_FILE_TYPE_DIRECTORY) return XU_DIRECTORY_WALK_CODE_CONTINUE;
 
     // do path:match(pattern)
     lua_getfield(lua, -1, "match");
@@ -72,7 +72,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
     {
         // trace
         xu_printf("error: call string.match(%s, %s) failed: %s!\n", path, pattern, lua_tostring(lua, -1));
-        return TB_DIRECTORY_WALK_CODE_END;
+        return XU_DIRECTORY_WALK_CODE_END;
     }
 
     // match ok?
@@ -87,7 +87,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
             // the root directory
             size_t           rootlen = 0;
             xu_char_t const* rootdir = luaL_checklstring(lua, 1, &rootlen);
-            xu_assert_and_check_return_val(rootdir && rootlen, TB_DIRECTORY_WALK_CODE_END);
+            xu_assert_and_check_return_val(rootdir && rootlen, XU_DIRECTORY_WALK_CODE_END);
 
             // check
             xu_assert(!tb_strncmp(path, rootdir, rootlen));
@@ -144,13 +144,13 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
                     // do callback(path, isdir)
                     lua_pushvalue(lua, 6);
                     lua_pushstring(lua, path);
-                    lua_pushboolean(lua, info->type == TB_FILE_TYPE_DIRECTORY);
+                    lua_pushboolean(lua, info->type == XU_FILE_TYPE_DIRECTORY);
                     lua_call(lua, 2, 1);
 
                     // is continue?
                     xu_bool_t is_continue = lua_toboolean(lua, -1);
                     lua_pop(lua, 1);
-                    if (!is_continue) return TB_DIRECTORY_WALK_CODE_END;
+                    if (!is_continue) return XU_DIRECTORY_WALK_CODE_END;
                 }
                 matched = xu_true;
             }
@@ -160,7 +160,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
             skip_recursion = xu_true;
     }
     if (!matched) lua_pop(lua, 1);
-    return skip_recursion ? TB_DIRECTORY_WALK_CODE_SKIP_RECURSION : TB_DIRECTORY_WALK_CODE_CONTINUE;
+    return skip_recursion ? XU_DIRECTORY_WALK_CODE_SKIP_RECURSION : XU_DIRECTORY_WALK_CODE_CONTINUE;
 }
 /* *******************************************************
  * implementation

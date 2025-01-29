@@ -38,7 +38,7 @@ xu_int_t xm_os_fscase(lua_State* lua)
     // check
     xu_assert_and_check_return_val(lua, 0);
 
-#if ((TB_VERSION_MAJOR * 100) + (TB_VERSION_MINOR * 10) + TB_VERSION_ALTER) >= 174
+#if ((XU_VERSION_MAJOR * 100) + (XU_VERSION_MINOR * 10) + XU_VERSION_ALTER) >= 174
     xu_char_t const* path = luaL_checkstring(lua, 1);
     xu_check_return_val(path, 0);
 

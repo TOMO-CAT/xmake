@@ -63,7 +63,7 @@ xu_int_t xm_io_file_rawfd(lua_State* lua)
     if (xm_io_file_is_file(file))
     {
         tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(file->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile))
+        if (tb_stream_ctrl(file->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile))
         {
             lua_pushnumber(lua, xm_io_file2fd(rawfile));
             return 1;

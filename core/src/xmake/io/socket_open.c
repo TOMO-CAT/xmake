@@ -51,9 +51,9 @@ xu_int_t xm_io_socket_open(lua_State* lua)
     // map socket type
     switch (socktype)
     {
-    case 2: socktype = TB_SOCKET_TYPE_UDP; break;
-    case 3: socktype = TB_SOCKET_TYPE_ICMP; break;
-    default: socktype = TB_SOCKET_TYPE_TCP; break;
+    case 2: socktype = XU_SOCKET_TYPE_UDP; break;
+    case 3: socktype = XU_SOCKET_TYPE_ICMP; break;
+    default: socktype = XU_SOCKET_TYPE_TCP; break;
     }
 
     // init socket

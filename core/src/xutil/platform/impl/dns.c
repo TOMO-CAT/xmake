@@ -1,5 +1,5 @@
 /* *******************************************************
- *  trace
+ * trace
  */
 
 #define XU_TRACE_MODULE_NAME "dns"

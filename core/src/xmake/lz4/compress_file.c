@@ -49,14 +49,14 @@ xu_int_t xm_lz4_compress_file(lua_State* lua)
 
     // do compress
     xu_bool_t       ok      = xu_false;
-    tb_stream_ref_t istream = tb_stream_init_from_file(srcpath, TB_FILE_MODE_RO);
+    tb_stream_ref_t istream = tb_stream_init_from_file(srcpath, XU_FILE_MODE_RO);
     tb_stream_ref_t ostream =
-        tb_stream_init_from_file(dstpath, TB_FILE_MODE_RW | TB_FILE_MODE_CREAT | TB_FILE_MODE_TRUNC);
+        tb_stream_init_from_file(dstpath, XU_FILE_MODE_RW | XU_FILE_MODE_CREAT | XU_FILE_MODE_TRUNC);
     if (istream && ostream && tb_stream_open(istream) && tb_stream_open(ostream))
     {
         xu_bool_t write_ok = xu_false;
-        xu_byte_t idata[TB_STREAM_BLOCK_MAXN];
-        xu_byte_t odata[TB_STREAM_BLOCK_MAXN];
+        xu_byte_t idata[XU_STREAM_BLOCK_MAXN];
+        xu_byte_t odata[XU_STREAM_BLOCK_MAXN];
         while (!tb_stream_beof(istream))
         {
             write_ok        = xu_false;

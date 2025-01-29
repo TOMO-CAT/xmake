@@ -61,7 +61,7 @@ xu_int_t xm_io_socket_connect(lua_State* lua)
 
     // init address
     tb_ipaddr_t addr;
-    if (family == TB_IPADDR_FAMILY_UNIX)
+    if (family == XU_IPADDR_FAMILY_UNIX)
     {
         xu_bool_t is_abstract = (xu_bool_t)lua_toboolean(lua, 3);
         tb_ipaddr_unix_set_cstr(&addr, address, is_abstract);

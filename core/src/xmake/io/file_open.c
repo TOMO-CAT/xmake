@@ -92,7 +92,7 @@ static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t
             if (data[i] < 0x80)
                 ascii_conf++;
             else
-                ascii_conf = TB_MINS16;
+                ascii_conf = XU_MINS16;
 
             if (i % 2 == 0)
             {
@@ -112,7 +112,7 @@ static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t
                      IS_UTF8_TAIL(data[i + 3]))
                 utf8_conf++;
             else
-                utf8_conf = TB_MINS16;
+                utf8_conf = XU_MINS16;
         }
 
         if (ascii_conf > 0 && zero_count <= 1)
@@ -183,10 +183,10 @@ xu_int_t xm_io_file_open(lua_State* lua)
     xu_size_t mode;
     switch (modestr[0])
     {
-    case 'w': mode = TB_FILE_MODE_RW | TB_FILE_MODE_CREAT | TB_FILE_MODE_TRUNC; break;
-    case 'a': mode = TB_FILE_MODE_RW | TB_FILE_MODE_APPEND | TB_FILE_MODE_CREAT; break;
+    case 'w': mode = XU_FILE_MODE_RW | XU_FILE_MODE_CREAT | XU_FILE_MODE_TRUNC; break;
+    case 'a': mode = XU_FILE_MODE_RW | XU_FILE_MODE_APPEND | XU_FILE_MODE_CREAT; break;
     case 'r':
-    default: mode = TB_FILE_MODE_RO; break;
+    default: mode = XU_FILE_MODE_RO; break;
     }
 
     // get file encoding

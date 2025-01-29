@@ -46,7 +46,7 @@
  */
 
 // this issue has been fixed, @see https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
-#if 0 // TB_CPU_BIT64
+#if 0 // XU_CPU_BIT64
 /* we use this interface instead of lua_pushlightuserdata() to fix bad light userdata pointer bug
  *
  * @see https://github.com/xmake-io/xmake/issues/914

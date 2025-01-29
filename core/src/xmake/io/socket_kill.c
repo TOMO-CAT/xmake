@@ -48,6 +48,6 @@ xu_int_t xm_io_socket_kill(lua_State* lua)
     xu_check_return_val(sock, 0);
 
     // kill socket
-    tb_socket_kill(sock, TB_SOCKET_KILL_RW);
+    tb_socket_kill(sock, XU_SOCKET_KILL_RW);
     return 0;
 }

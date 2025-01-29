@@ -35,7 +35,7 @@
  */
 
 // the singleton type of poller
-#define XM_IO_POLLER (TB_SINGLETON_TYPE_USER + 4)
+#define XM_IO_POLLER (XU_SINGLETON_TYPE_USER + 4)
 
 /* *******************************************************
  * private implementation
@@ -58,6 +58,6 @@ static xu_void_t xm_io_poller_instance_exit(tb_handle_t poller, tb_cpointer_t pr
  */
 tb_poller_ref_t xm_io_poller()
 {
-    return (tb_poller_ref_t)tb_singleton_instance(XM_IO_POLLER, xm_io_poller_instance_init, xm_io_poller_instance_exit,
+    return (tb_poller_ref_t)xu_singleton_instance(XM_IO_POLLER, xm_io_poller_instance_init, xm_io_poller_instance_exit,
                                                   xu_null, xu_null);
 }

@@ -57,7 +57,7 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
     else
         lua_pushlightuserdata(g_lua, object->ref.ptr);
     lua_rawseti(g_lua, -2, 2);
-    if (object->type == TB_POLLER_OBJECT_FWATCHER)
+    if (object->type == XU_POLLER_OBJECT_FWATCHER)
     {
         lua_newtable(g_lua);
         tb_fwatcher_event_t* event = (tb_fwatcher_event_t*)events;

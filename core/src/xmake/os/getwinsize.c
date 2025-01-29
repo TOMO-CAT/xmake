@@ -44,7 +44,7 @@ xu_int_t xm_os_getwinsize(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // init default window size (we will not consider winsize limit if cannot get it)
-    xu_int_t w = TB_MAXS16, h = TB_MAXS16;
+    xu_int_t w = XU_MAXS16, h = XU_MAXS16;
 
     // get winsize
     struct winsize size;

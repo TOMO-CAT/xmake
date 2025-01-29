@@ -39,9 +39,9 @@
  */
 
 // the singleton type of stdfile
-#define XM_IO_STDFILE_STDIN (TB_SINGLETON_TYPE_USER + 1)
-#define XM_IO_STDFILE_STDOUT (TB_SINGLETON_TYPE_USER + 2)
-#define XM_IO_STDFILE_STDERR (TB_SINGLETON_TYPE_USER + 3)
+#define XM_IO_STDFILE_STDIN (XU_SINGLETON_TYPE_USER + 1)
+#define XM_IO_STDFILE_STDOUT (XU_SINGLETON_TYPE_USER + 2)
+#define XM_IO_STDFILE_STDERR (XU_SINGLETON_TYPE_USER + 3)
 
 /* *******************************************************
  * private implementation
