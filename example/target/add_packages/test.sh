@@ -1,3 +1,3 @@
 #!/bin/bash
 
-xmake -b --all || exit 1
+xmake build --yes --all || exit 1
