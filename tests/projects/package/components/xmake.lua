@@ -41,8 +41,6 @@ package("sfml", function()
 
     if is_plat("linux") then
         add_syslinks("pthread")
-
-        -- add_syslinks("GL")
     end
 
     add_configs("graphics",   {description = "Use the graphics module", default = true, type = "boolean"})
