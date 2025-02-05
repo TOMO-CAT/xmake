@@ -1031,7 +1031,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     if (!xm_engine_get_program_directory(engine, path, sizeof(path), path)) return -1;
 
     // append the main script path
-    tb_strcat(path, "/core/_xmake_main.lua");
+    xu_strcat(path, "/core/_xmake_main.lua");
 
     // exists this script?
     if (!xu_file_info(path, xu_null))

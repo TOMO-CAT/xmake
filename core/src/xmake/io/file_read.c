@@ -60,7 +60,7 @@ static xu_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
         xu_long_t real = tb_stream_peek(stream, &data, XU_STREAM_BLOCK_MAXN);
         if (real > 0)
         {
-            xu_char_t const* e = tb_strnchr((xu_char_t const*)data, real, '\n');
+            xu_char_t const* e = xu_strnchr((xu_char_t const*)data, real, '\n');
             if (e)
             {
                 xu_size_t n = (xu_byte_t const*)e + 1 - data;

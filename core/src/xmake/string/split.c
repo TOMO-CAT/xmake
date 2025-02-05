@@ -68,7 +68,7 @@ static xu_void_t xm_string_split_chr(lua_State* lua, xu_char_t const* cstr, xu_s
 {
     xu_int_t         num = 0;
     xu_char_t const* end = cstr + nstr;
-    xu_char_t const* pos = tb_strchr(cstr, ch); // faster than tb_strnchr()
+    xu_char_t const* pos = tb_strchr(cstr, ch); // faster than xu_strnchr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
