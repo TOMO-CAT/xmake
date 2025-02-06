@@ -93,7 +93,7 @@ xu_int_t xm_os_argv(lua_State* lua)
                     skip   = 1;
                 }
                 // is argument end with ' '?
-                else if (!quote && tb_isspace(ch))
+                else if (!quote && xu_isspace(ch))
                 {
                     // save this argument
                     tb_string_ltrim(&arg);

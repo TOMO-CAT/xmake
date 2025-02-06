@@ -43,14 +43,14 @@ static xu_void_t xm_string_trim_space(xu_char_t const** psstr, xu_char_t const**
 
     // trim left?
     if (mode <= 0)
-        while (p < e && tb_isspace(*p))
+        while (p < e && xu_isspace(*p))
             p++;
 
     // trim right
     if (mode >= 0)
     {
         e--;
-        while (e >= p && tb_isspace(*e))
+        while (e >= p && xu_isspace(*e))
             e--;
         e++;
     }
