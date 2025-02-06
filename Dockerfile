@@ -20,6 +20,8 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
     binutils-dev \
     python3-distutils \
     lcov \
+    gdb \
+    vim
 
 ENV XMAKE_ROOT=y
 

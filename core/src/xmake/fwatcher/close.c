@@ -44,11 +44,11 @@ xu_int_t xm_fwatcher_close(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the fwatcher
-    tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)xm_lua_topointer(lua, 1);
+    xu_fwatcher_ref_t fwatcher = (xu_fwatcher_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(fwatcher, 0);
 
     // exit fwatcher
-    tb_fwatcher_exit(fwatcher);
+    xu_fwatcher_exit(fwatcher);
 
     // save result: ok
     lua_pushboolean(lua, xu_true);

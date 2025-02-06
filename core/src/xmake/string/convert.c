@@ -128,7 +128,7 @@ xu_int_t xm_string_convert(lua_State* lua)
         xu_size_t  dst_maxn = (xu_size_t)src_size << 2;
         xu_byte_t* dst_data = tb_malloc_bytes(dst_maxn);
         if (dst_data && dst_maxn &&
-            (dst_size = tb_charset_conv_data(fcharset->type, tcharset->type, (xu_byte_t const*)src_cstr,
+            (dst_size = xu_charset_conv_data(fcharset->type, tcharset->type, (xu_byte_t const*)src_cstr,
                                              (xu_size_t)src_size, dst_data, dst_maxn)) >= 0 &&
             dst_size < dst_maxn)
         {

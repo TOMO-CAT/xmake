@@ -3,6 +3,11 @@
 /* *******************************************************
  * includes
  */
+#include "xutil/algorithm/find_if.h"
+#include "xutil/algorithm/for.h"
+#include "xutil/algorithm/remove_first_if.h"
+#include "xutil/container/hash_map.h"
+#include "xutil/container/queue.h"
 #include "xutil/platform/path.h"
 #include "xutil/prefix.h"
 

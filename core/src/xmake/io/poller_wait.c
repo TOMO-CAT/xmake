@@ -60,7 +60,7 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
     if (object->type == XU_POLLER_OBJECT_FWATCHER)
     {
         lua_newtable(g_lua);
-        tb_fwatcher_event_t* event = (tb_fwatcher_event_t*)events;
+        xu_fwatcher_event_t* event = (xu_fwatcher_event_t*)events;
         if (event)
         {
             lua_pushstring(g_lua, "path");

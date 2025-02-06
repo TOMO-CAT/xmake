@@ -39,7 +39,7 @@ xu_int_t xm_fwatcher_open(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // init fwatcher
-    tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)tb_fwatcher_init();
+    xu_fwatcher_ref_t fwatcher = (xu_fwatcher_ref_t)xu_fwatcher_init();
     if (fwatcher)
         xm_lua_pushpointer(lua, (xu_pointer_t)fwatcher);
     else

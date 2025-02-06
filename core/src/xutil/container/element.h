@@ -1,5 +1,8 @@
 #pragma once
 
+#include "xutil/libc/stdio/stdio.h"
+#include "xutil/libc/string/string.h"
+#include "xutil/macros/assert.h"
 #include "xutil/prefix.h"
 
 /* *******************************************************

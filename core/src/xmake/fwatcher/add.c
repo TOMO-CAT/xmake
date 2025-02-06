@@ -44,7 +44,7 @@ xu_int_t xm_fwatcher_add(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the fwatcher
-    tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)xm_lua_topointer(lua, 1);
+    xu_fwatcher_ref_t fwatcher = (xu_fwatcher_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(fwatcher, 0);
 
     // get watchdir
@@ -55,7 +55,7 @@ xu_int_t xm_fwatcher_add(lua_State* lua)
     xu_bool_t recursion = lua_toboolean(lua, 3);
 
     // add watchdir
-    xu_bool_t ok = tb_fwatcher_add(fwatcher, watchdir, recursion);
+    xu_bool_t ok = xu_fwatcher_add(fwatcher, watchdir, recursion);
 
     // save result
     lua_pushboolean(lua, ok);
