@@ -94,7 +94,7 @@ static xu_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, xu_int_t f
         xu_char_t const* source_str = luaL_checkstring(lua, -1);
         xu_size_t        source_len = tb_strlen(source_str);
         lua_pop(lua, 1);
-        if (source_len == version_len && tb_strncmp(source_str, version_str, version_len) == 0)
+        if (source_len == version_len && xu_strncmp(source_str, version_str, version_len) == 0)
         {
             lua_createtable(lua, 0, 2);
             lua_pushlstring(lua, source_str, source_len);

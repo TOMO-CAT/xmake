@@ -151,7 +151,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 
             // has continuation?
             xu_bool_t has_conline = conlen && size >= conlen + 1 &&
-                                    tb_strncmp(continuation, (xu_char_t const*)(data + size - conlen - 1), conlen) == 0;
+                                    xu_strncmp(continuation, (xu_char_t const*)(data + size - conlen - 1), conlen) == 0;
 
             // do not keep crlf, strip the last lf
             if (!keep_crlf && !has_conline) size--;
@@ -355,7 +355,7 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
 
         // has continuation?
         xu_bool_t has_conline =
-            conlen && buflen >= conlen + 1 && tb_strncmp(continuation, (strbuf + buflen - conlen - 1), conlen) == 0;
+            conlen && buflen >= conlen + 1 && xu_strncmp(continuation, (strbuf + buflen - conlen - 1), conlen) == 0;
 
         // do not keep crlf, strip the last lf
         if (!keep_crlf && !has_conline) buflen--;

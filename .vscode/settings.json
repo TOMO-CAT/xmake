@@ -146,6 +146,7 @@
         "isfree",
         "isroot",
         "isystem",
+        "itor",
         "jobfunc",
         "joinenv",
         "joinenvs",

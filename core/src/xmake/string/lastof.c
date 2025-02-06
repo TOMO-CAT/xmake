@@ -41,7 +41,7 @@ static xu_void_t xm_string_lastof_str(lua_State* lua, xu_char_t const* cstr, xu_
     xu_char_t const* next = cstr;
     do
     {
-        next = xu_strstr(next, csubstr); // faster than tb_strnstr()
+        next = xu_strstr(next, csubstr); // faster than xu_strnstr()
         if (next)
         {
             curr = next;

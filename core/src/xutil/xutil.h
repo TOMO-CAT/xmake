@@ -18,6 +18,7 @@
 #include "xutil/platform/poller.h"
 #include "xutil/platform/socket.h"
 #include "xutil/stream/stream.h"
+#include "xutil/utils/base64.h"
 #include "xutil/utils/singleton.h"
 #include "xutil/utils/state.h"
 #include "xutil/utils/trace.h"
