@@ -192,7 +192,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
     // get file encoding
     xu_long_t       bomoff   = 0;
     tb_stream_ref_t stream   = xu_null;
-    xu_bool_t       update   = !!tb_strchr(modestr, '+');
+    xu_bool_t       update   = !!xu_strchr(modestr, '+');
     xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
         encoding = XM_IO_FILE_ENCODING_BINARY;

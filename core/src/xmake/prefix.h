@@ -84,7 +84,7 @@ static __xu_inline__ xu_pointer_t xm_lua_topointer2(lua_State* lua, xu_int_t idx
         size_t len = 0;
         xu_char_t const* str = luaL_checklstring(lua, idx, &len);
         if (str && len > 2 && str[0] == '0' && str[1] == 'x')
-            ptr = (xu_pointer_t)tb_s16tou64(str);
+            ptr = (xu_pointer_t)xu_s16tou64(str);
         if (pstr) *pstr = str;
     }
     return ptr;
