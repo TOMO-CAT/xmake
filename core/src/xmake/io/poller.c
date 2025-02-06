@@ -40,7 +40,7 @@
 /* *******************************************************
  * private implementation
  */
-static tb_handle_t xm_io_poller_instance_init(tb_cpointer_t* ppriv)
+static tb_handle_t xm_io_poller_instance_init(xu_cpointer_t* ppriv)
 {
     // init poller
     tb_poller_ref_t poller = tb_poller_init(xu_null);
@@ -48,7 +48,7 @@ static tb_handle_t xm_io_poller_instance_init(tb_cpointer_t* ppriv)
 
     return (tb_handle_t)poller;
 }
-static xu_void_t xm_io_poller_instance_exit(tb_handle_t poller, tb_cpointer_t priv)
+static xu_void_t xm_io_poller_instance_exit(tb_handle_t poller, xu_cpointer_t priv)
 {
     if (poller) tb_poller_exit((tb_poller_ref_t)poller);
 }

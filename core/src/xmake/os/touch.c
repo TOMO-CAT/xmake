@@ -41,8 +41,8 @@ xu_int_t xm_os_touch(lua_State* lua)
     xu_char_t const* path = luaL_checkstring(lua, 1);
     xu_check_return_val(path, 0);
 
-    tb_time_t atime = (tb_time_t)luaL_checknumber(lua, 2);
-    tb_time_t mtime = (tb_time_t)luaL_checknumber(lua, 3);
+    xu_time_t atime = (xu_time_t)luaL_checknumber(lua, 2);
+    xu_time_t mtime = (xu_time_t)luaL_checknumber(lua, 3);
 
     lua_pushboolean(lua, tb_file_touch(path, atime, mtime));
     return 1;

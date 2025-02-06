@@ -33,7 +33,7 @@
 /* *******************************************************
  * private implementation
  */
-static xu_long_t xm_os_rmdir_empty(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_rmdir_empty(xu_char_t const* path, xu_file_info_t const* info, xu_cpointer_t priv)
 {
     // check
     xu_bool_t* is_emptydir = (xu_bool_t*)priv;
@@ -48,7 +48,7 @@ static xu_long_t xm_os_rmdir_empty(xu_char_t const* path, xu_file_info_t const* 
     }
     return XU_DIRECTORY_WALK_CODE_CONTINUE;
 }
-static xu_long_t xm_os_rmdir_remove(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_rmdir_remove(xu_char_t const* path, xu_file_info_t const* info, xu_cpointer_t priv)
 {
     // check
     xu_assert_and_check_return_val(path, XU_DIRECTORY_WALK_CODE_END);

@@ -64,22 +64,22 @@ static xm_charset_entry_t g_charsets[] = {{XU_CHARSET_TYPE_ANSI, "ansi"},
 /* *******************************************************
  * finder
  */
-static xu_long_t xm_string_charset_comp_by_name(tb_iterator_ref_t iterator, tb_cpointer_t item, tb_cpointer_t name)
+static xu_long_t xm_string_charset_comp_by_name(xu_iterator_ref_t iterator, xu_cpointer_t item, xu_cpointer_t name)
 {
-    return tb_stricmp(((xm_charset_entry_ref_t)item)->name, (xu_char_t const*)name);
+    return xu_stricmp(((xm_charset_entry_ref_t)item)->name, (xu_char_t const*)name);
 }
 static xm_charset_entry_ref_t xm_string_charset_find_by_name(xu_char_t const* name)
 {
     // make iterator
-    tb_array_iterator_t array_iterator;
-    tb_iterator_ref_t   iterator =
-        tb_array_iterator_init_mem(&array_iterator, g_charsets, xu_arrayn(g_charsets), sizeof(xm_charset_entry_t));
+    xu_array_iterator_t array_iterator;
+    xu_iterator_ref_t   iterator =
+        xu_array_iterator_init_mem(&array_iterator, g_charsets, xu_arrayn(g_charsets), sizeof(xm_charset_entry_t));
     xu_assert_and_check_return_val(iterator, xu_null);
 
     // find it by the binary search
-    xu_size_t itor = tb_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
-    if (itor != tb_iterator_tail(iterator))
-        return (xm_charset_entry_ref_t)tb_iterator_item(iterator, itor);
+    xu_size_t itor = xu_binary_find_all_if(iterator, xm_string_charset_comp_by_name, name);
+    if (itor != xu_iterator_tail(iterator))
+        return (xm_charset_entry_ref_t)xu_iterator_item(iterator, itor);
     else
         return xu_null;
 }

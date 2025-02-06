@@ -33,7 +33,7 @@
 /* *******************************************************
  * private implementation
  */
-static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, xu_cpointer_t priv)
 {
     // check
     tb_value_ref_t tuple = (tb_value_ref_t)priv;

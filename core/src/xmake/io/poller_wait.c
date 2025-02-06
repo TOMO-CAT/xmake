@@ -43,7 +43,7 @@ static xu_int_t   g_events_count = 0;
  * private implementation
  */
 static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref_t object, xu_long_t events,
-                                    tb_cpointer_t priv)
+                                    xu_cpointer_t priv)
 {
     // check
     xu_assert_and_check_return(g_lua);
