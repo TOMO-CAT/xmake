@@ -21,6 +21,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
     python3-distutils \
     lcov \
 
+ENV XMAKE_ROOT=y
 
 # packages/2502/l/llvm/14.0.0/source/llvm/tools/gold/gold-plugin.cpp:38:10: fatal error: plugin-api.h: No such file or directory
 # sudo apt install binutils-dev
