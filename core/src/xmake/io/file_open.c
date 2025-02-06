@@ -196,21 +196,21 @@ xu_int_t xm_io_file_open(lua_State* lua)
     xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
         encoding = XM_IO_FILE_ENCODING_BINARY;
-    else if (tb_strstr(modestr, "utf8") || tb_strstr(modestr, "utf-8"))
+    else if (xu_strstr(modestr, "utf8") || xu_strstr(modestr, "utf-8"))
         encoding = XU_CHARSET_TYPE_UTF8;
-    else if (tb_strstr(modestr, "utf16le") || tb_strstr(modestr, "utf-16le"))
+    else if (xu_strstr(modestr, "utf16le") || xu_strstr(modestr, "utf-16le"))
         encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE;
-    else if (tb_strstr(modestr, "utf16be") || tb_strstr(modestr, "utf-16be"))
+    else if (xu_strstr(modestr, "utf16be") || xu_strstr(modestr, "utf-16be"))
         encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE;
-    else if (tb_strstr(modestr, "utf16") || tb_strstr(modestr, "utf-16"))
+    else if (xu_strstr(modestr, "utf16") || xu_strstr(modestr, "utf-16"))
         encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_NE;
-    else if (tb_strstr(modestr, "ansi"))
+    else if (xu_strstr(modestr, "ansi"))
         encoding = XU_CHARSET_TYPE_ANSI;
-    else if (tb_strstr(modestr, "gbk"))
+    else if (xu_strstr(modestr, "gbk"))
         encoding = XU_CHARSET_TYPE_GBK;
-    else if (tb_strstr(modestr, "gb2312"))
+    else if (xu_strstr(modestr, "gb2312"))
         encoding = XU_CHARSET_TYPE_GB2312;
-    else if (tb_strstr(modestr, "iso8859"))
+    else if (xu_strstr(modestr, "iso8859"))
         encoding = XU_CHARSET_TYPE_ISO8859;
     else if (modestr[0] == 'w' || modestr[0] == 'a') // set to utf-8 if not specified for the writing mode
         encoding = XU_CHARSET_TYPE_UTF8;
@@ -231,7 +231,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
 
     // write data with utf bom? e.g. utf8bom, utf16lebom, utf16bom
     xu_bool_t utfbom = xu_false;
-    if (tb_strstr(modestr, "bom")) utfbom = xu_true;
+    if (xu_strstr(modestr, "bom")) utfbom = xu_true;
 
     // open file
     xu_bool_t       open_ok  = xu_false;

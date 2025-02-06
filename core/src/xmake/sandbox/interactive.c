@@ -136,7 +136,7 @@ static xu_int_t xm_sandbox_incomplete(lua_State* lua, xu_int_t status)
         size_t           lmsg;
         xu_char_t const* msg = lua_tolstring(lua, -1, &lmsg);
         xu_char_t const* tp  = msg + lmsg - (sizeof(LUA_QL("<eof>")) - 1);
-        if (tb_strstr(msg, LUA_QL("<eof>")) == tp)
+        if (xu_strstr(msg, LUA_QL("<eof>")) == tp)
         {
             lua_pop(lua, 1);
             return 1;

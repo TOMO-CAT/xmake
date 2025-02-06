@@ -38,7 +38,7 @@ static xu_void_t xm_string_split_str(lua_State* lua, xu_char_t const* cstr, xu_s
 {
     xu_int_t         num = 0;
     xu_char_t const* end = cstr + nstr;
-    xu_char_t const* pos = tb_strstr(cstr, cdls); // faster than tb_strnstr()
+    xu_char_t const* pos = xu_strstr(cstr, cdls); // faster than tb_strnstr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
@@ -50,7 +50,7 @@ static xu_void_t xm_string_split_str(lua_State* lua, xu_char_t const* cstr, xu_s
         }
 
         cstr = pos + ndls;
-        pos  = tb_strstr(cstr, cdls);
+        pos  = xu_strstr(cstr, cdls);
     }
     if (cstr < end)
     {
