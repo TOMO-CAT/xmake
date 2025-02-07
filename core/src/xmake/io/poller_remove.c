@@ -57,9 +57,9 @@ xu_int_t xm_io_poller_remove(lua_State* lua)
     xu_check_return_val(cdata, 0);
 
     // remove events from poller
-    tb_poller_object_t object;
+    xu_poller_object_t object;
     object.type    = otype;
     object.ref.ptr = cdata;
-    lua_pushboolean(lua, tb_poller_remove(xm_io_poller(), &object));
+    lua_pushboolean(lua, xu_poller_remove(xm_io_poller(), &object));
     return 1;
 }

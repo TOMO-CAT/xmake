@@ -49,7 +49,7 @@ xu_int_t xm_io_socket_recv(lua_State* lua)
     }
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get data
@@ -74,7 +74,7 @@ xu_int_t xm_io_socket_recv(lua_State* lua)
     }
 
     // recv data
-    xu_long_t real = tb_socket_recv(sock, data, size);
+    xu_long_t real = xu_socket_recv(sock, data, size);
     lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

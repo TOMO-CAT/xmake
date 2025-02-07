@@ -14,19 +14,6 @@ set_languages "c99"
 set_configvar "_GNU_SOURCE" 1
 set_configvar "_REENTRANT" 1
 
-# add build modes
-if is_mode "debug"; then
-    add_defines "__xu_debug__"
-    set_symbols "debug"
-    set_optimizes "none"
-else
-    set_strip "all"
-    if ! is_kind "shared"; then
-        set_symbols "hidden"
-    fi
-    set_optimizes "smallest"
-fi
-
 # small or micro?
 if has_config "small"; then
     add_defines "__xu_small__"
@@ -76,6 +63,18 @@ fi
 
 target "xutil"
     set_kind "${kind}"
+
+    if is_mode "debug"; then
+        add_defines "__xu_debug__" "{public}"
+        set_configvar "XU_CONFIG_SMALL" 1
+        add_cxflags "-fno-stack-protector"
+    else
+        set_strip "all"
+        if ! is_kind "shared"; then
+            set_symbols "hidden"
+        fi
+        set_optimizes "smallest"
+    fi
 
     # add defines
     add_defines "__xu_prefix__=\"xutil\""

@@ -59,11 +59,11 @@ xu_int_t xm_io_filelock_trylock(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get lock
-    tb_filelock_ref_t lock = (tb_filelock_ref_t)xm_lua_topointer(lua, 1);
+    xu_filelock_ref_t lock = (xu_filelock_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(lock, 0);
 
     // try to lock it
-    xu_bool_t ok = tb_filelock_enter_try(lock, is_shared ? XU_FILELOCK_MODE_SH : XU_FILELOCK_MODE_EX);
+    xu_bool_t ok = xu_filelock_enter_try(lock, is_shared ? XU_FILELOCK_MODE_SH : XU_FILELOCK_MODE_EX);
     lua_pushboolean(lua, ok);
     return 1;
 }

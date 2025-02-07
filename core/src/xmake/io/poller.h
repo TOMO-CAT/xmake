@@ -34,6 +34,6 @@
  *
  * @return          the io poller
  */
-tb_poller_ref_t     xm_io_poller(xu_noarg_t);
+xu_poller_ref_t     xm_io_poller(xu_noarg_t);
 
 #endif

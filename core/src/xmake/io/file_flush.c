@@ -36,14 +36,14 @@
 static xu_bool_t xm_io_std_flush_impl(xm_io_file_t* file)
 {
     xu_assert_and_check_return_val(xm_io_file_is_std(file), xu_false);
-    return (file->u.std_ref != tb_stdfile_input()) ? tb_stdfile_flush(file->u.std_ref) : xu_false;
+    return (file->u.std_ref != xu_stdfile_input()) ? xu_stdfile_flush(file->u.std_ref) : xu_false;
 }
 
 static xu_bool_t xm_io_file_flush_impl(xm_io_file_t* file)
 {
     // check
     xu_assert_and_check_return_val(xm_io_file_is_file(file), xu_false);
-    return tb_stream_sync(file->u.file_ref, xu_false);
+    return xu_stream_sync(file->u.file_ref, xu_false);
 }
 
 /* *******************************************************

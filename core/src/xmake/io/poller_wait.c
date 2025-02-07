@@ -42,7 +42,7 @@ static xu_int_t   g_events_count = 0;
 /* *******************************************************
  * private implementation
  */
-static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref_t object, xu_long_t events,
+static xu_void_t xm_io_poller_event(xu_poller_ref_t poller, xu_poller_object_ref_t object, xu_long_t events,
                                     xu_cpointer_t priv)
 {
     // check
@@ -97,7 +97,7 @@ xu_int_t xm_io_poller_wait(lua_State* lua)
 
     // wait it
     lua_newtable(lua);
-    xu_long_t count = tb_poller_wait(xm_io_poller(), xm_io_poller_event, timeout);
+    xu_long_t count = xu_poller_wait(xm_io_poller(), xm_io_poller_event, timeout);
     if (count > 0)
     {
         lua_pushinteger(lua, (xu_int_t)count);

@@ -50,7 +50,7 @@ xu_int_t xm_bloom_filter_open(lua_State* lua)
     }
 
     // init the bloom filter
-    tb_bloom_filter_ref_t filter = tb_bloom_filter_init(probability, hash_count, item_maxn, tb_element_str(xu_true));
+    xu_bloom_filter_ref_t filter = xu_bloom_filter_init(probability, hash_count, item_maxn, xu_element_str(xu_true));
     if (filter)
         xm_lua_pushpointer(lua, (xu_pointer_t)filter);
     else

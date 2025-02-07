@@ -46,18 +46,18 @@
 #define XM_VERSION_BUILD XM_CONFIG_VERSION_BUILD
 
 /// the build version string
-#define XM_VERSION_BUILD_STRING __tb_mstring_ex__(XM_CONFIG_VERSION_BUILD)
+#define XM_VERSION_BUILD_STRING __xu_mstring_ex__(XM_CONFIG_VERSION_BUILD)
 
 /// the version string
 #define XM_VERSION_STRING                                                                                              \
-    __tb_mstrcat6__("xmake_",                                                                                          \
-                    __tb_mstring_ex__(__tb_mconcat8_ex__(v, XM_VERSION_MAJOR, _, XM_VERSION_MINOR, _,                  \
+    __xu_mstrcat6__("xmake_",                                                                                          \
+                    __xu_mstring_ex__(__xu_mconcat8_ex__(v, XM_VERSION_MAJOR, _, XM_VERSION_MINOR, _,                  \
                                                          XM_VERSION_ALTER, _, XM_CONFIG_VERSION_BUILD)),               \
                     "_", XU_ARCH_VERSION_STRING, " by ", XU_COMPILER_VERSION_STRING)
 
 /// the short version string
 #define XM_VERSION_SHORT_STRING                                                                                        \
-    __tb_mstrcat__("xmake_", __tb_mstring_ex__(__tb_mconcat8_ex__(v, XM_VERSION_MAJOR, _, XM_VERSION_MINOR, _,         \
+    __xu_mstrcat__("xmake_", __xu_mstring_ex__(__xu_mconcat8_ex__(v, XM_VERSION_MAJOR, _, XM_VERSION_MINOR, _,         \
                                                                   XM_VERSION_ALTER, _, XM_CONFIG_VERSION_BUILD)))
 
 #endif

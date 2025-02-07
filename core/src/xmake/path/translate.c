@@ -55,7 +55,7 @@ xu_int_t xm_path_translate(lua_State* lua)
 
     // do path:translate()
     xu_char_t data[XU_PATH_MAXN];
-    xu_size_t size = tb_path_translate_to(path, (xu_size_t)path_size, data, sizeof(data), normalize);
+    xu_size_t size = xu_path_translate_to(path, (xu_size_t)path_size, data, sizeof(data), normalize);
     if (size)
         lua_pushlstring(lua, data, (size_t)size);
     else

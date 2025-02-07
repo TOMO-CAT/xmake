@@ -69,8 +69,8 @@ static xu_void_t xm_sandbox_report(lua_State* lua)
         if (!msg) msg = "(error object is not a string)";
 
         // print it
-        tb_printl(msg);
-        tb_print_sync();
+        xu_printl(msg);
+        xu_print_sync();
 
         // pop this message
         lua_pop(lua, 1);
@@ -171,10 +171,10 @@ static xu_size_t xm_sandbox_readline(xu_char_t* data, xu_size_t maxn, xu_char_t 
 
     // print prompt
     xu_printf(prompt);
-    tb_print_sync();
+    xu_print_sync();
 
     // get input buffer
-    if (tb_stdfile_gets(tb_stdfile_input(), data, maxn)) return xu_strlen(data);
+    if (xu_stdfile_gets(xu_stdfile_input(), data, maxn)) return xu_strlen(data);
 #endif
 
     // no more input
@@ -230,7 +230,7 @@ static xu_int_t xm_sandbox_loadline(lua_State* lua, xu_int_t top)
         if (data[size - 1] == '\n') data[--size] = '\0';
 
         // patch "return "
-        tb_memcpy(data, "return ", 7);
+        xu_memcpy(data, "return ", 7);
 
         // attempt to load "return ..."
         status = luaL_loadbuffer(lua, data, size + 7, "=stdin");
@@ -329,7 +329,7 @@ xu_int_t xm_sandbox_interactive(lua_State* lua)
             lua_pushvalue(lua, -2);
             lua_pushvalue(lua, 1);
             if (lua_pcall(lua, 2, 0, 0) != 0)
-                tb_printl(lua_pushfstring(lua, "error calling " LUA_QL("$interactive_setfenv") " (%s)",
+                xu_printl(lua_pushfstring(lua, "error calling " LUA_QL("$interactive_setfenv") " (%s)",
                                           lua_tostring(lua, -1)));
 #endif
 
@@ -357,15 +357,15 @@ xu_int_t xm_sandbox_interactive(lua_State* lua)
             lua_getfield(lua, 1, "$interactive_dump"); // load $interactive_dump() from sandbox_scope
             lua_insert(lua, -(count + 1));
             if (lua_pcall(lua, count, 0, 0) != 0)
-                tb_printl(
+                xu_printl(
                     lua_pushfstring(lua, "error calling " LUA_QL("$interactive_dump") " (%s)", lua_tostring(lua, -1)));
         }
     }
 
     // clear stack
     lua_settop(lua, top);
-    tb_printl("");
-    tb_print_sync();
+    xu_printl("");
+    xu_print_sync();
 
     // end
     return 0;

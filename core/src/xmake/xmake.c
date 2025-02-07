@@ -97,10 +97,10 @@ xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 
 #if 0
     // init tbox, we always use the tbox's default allocator
-    if (!tb_init(xu_null, tb_default_allocator(xu_null, 0))) return xu_false;
+    if (!xutil_init(xu_null, xu_default_allocator(xu_null, 0))) return xu_false;
 #else
     // init tbox, since small compilation mode is enabled, it still uses the native allocator
-    if (!tb_init(xu_null, xu_null))
+    if (!xutil_init(xu_null, xu_null))
     {
         return xu_false;
     }
@@ -115,13 +115,13 @@ xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
 }
 xu_void_t xm_exit()
 {
-    // exit tbox
-    tb_exit();
+    // exit xutil
+    xutil_exit();
 }
 xu_version_t const* xm_version()
 {
     // init version tag for binary search
-    static __tb_volatile__ xu_char_t const* s_vtag = "[xmake]: [vtag]: " XM_VERSION_STRING;
+    static __xu_volatile__ xu_char_t const* s_vtag = "[xmake]: [vtag]: " XM_VERSION_STRING;
     xu_used(s_vtag);
 
     // init version
@@ -131,7 +131,7 @@ xu_version_t const* xm_version()
         s_version.major = XM_VERSION_MAJOR;
         s_version.minor = XM_VERSION_MINOR;
         s_version.alter = XM_VERSION_ALTER;
-        s_version.build = (xu_hize_t)tb_atoll(XM_VERSION_BUILD_STRING);
+        s_version.build = (xu_hize_t)xu_atoll(XM_VERSION_BUILD_STRING);
     }
 
     return &s_version;

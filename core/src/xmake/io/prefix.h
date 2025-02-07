@@ -79,20 +79,20 @@ typedef struct __xm_io_file_t
          * direct:    file_ref -> stream -> file
          * transcode: file_ref -> fstream -> stream -> file
          */
-        tb_stream_ref_t file_ref;
+        xu_stream_ref_t file_ref;
 
         // the standard io file
-        tb_stdfile_ref_t std_ref;
+        xu_stdfile_ref_t std_ref;
     } u;
 
-    tb_stream_ref_t stream;   // the file stream for XM_IO_FILE_TYPE_FILE
-    tb_stream_ref_t fstream;  // the file charset stream filter
-    xu_size_t       mode;     // tb_file_mode_t
+    xu_stream_ref_t stream;   // the file stream for XM_IO_FILE_TYPE_FILE
+    xu_stream_ref_t fstream;  // the file charset stream filter
+    xu_size_t       mode;     // xu_file_mode_t
     xu_size_t       type;     // xm_io_file_type_e
     xu_size_t       encoding; // value of xm_io_file_encoding_e or xu_charset_type_e
     xu_bool_t       utfbom;   // write utf-bom for utf encoding?
-    tb_buffer_t     rcache;   // the read line cache buffer
-    tb_buffer_t     wcache;   // the write line cache buffer
+    xu_buffer_t     rcache;   // the read line cache buffer
+    xu_buffer_t     wcache;   // the write line cache buffer
 
 } xm_io_file_t;
 

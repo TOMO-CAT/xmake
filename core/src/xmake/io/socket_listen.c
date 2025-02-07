@@ -44,13 +44,13 @@ xu_int_t xm_io_socket_listen(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get backlog
     xu_size_t backlog = (xu_size_t)luaL_checknumber(lua, 2);
 
     // listen socket
-    lua_pushnumber(lua, (xu_int_t)tb_socket_listen(sock, backlog));
+    lua_pushnumber(lua, (xu_int_t)xu_socket_listen(sock, backlog));
     return 1;
 }

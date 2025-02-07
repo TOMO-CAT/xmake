@@ -49,28 +49,28 @@ xu_int_t xm_lz4_decompress_file(lua_State* lua)
 
     // do decompress
     xu_bool_t       ok      = xu_false;
-    tb_stream_ref_t istream = tb_stream_init_from_file(srcpath, XU_FILE_MODE_RO);
-    tb_stream_ref_t ostream =
-        tb_stream_init_from_file(dstpath, XU_FILE_MODE_RW | XU_FILE_MODE_CREAT | XU_FILE_MODE_TRUNC);
-    if (istream && ostream && tb_stream_open(istream) && tb_stream_open(ostream))
+    xu_stream_ref_t istream = xu_stream_init_from_file(srcpath, XU_FILE_MODE_RO);
+    xu_stream_ref_t ostream =
+        xu_stream_init_from_file(dstpath, XU_FILE_MODE_RW | XU_FILE_MODE_CREAT | XU_FILE_MODE_TRUNC);
+    if (istream && ostream && xu_stream_open(istream) && xu_stream_open(ostream))
     {
         xu_bool_t write_ok = xu_false;
         xu_byte_t idata[XU_STREAM_BLOCK_MAXN];
         xu_byte_t odata[XU_STREAM_BLOCK_MAXN];
-        while (!tb_stream_beof(istream))
+        while (!xu_stream_beof(istream))
         {
             write_ok        = xu_false;
-            xu_long_t ireal = (xu_long_t)tb_stream_read(istream, idata, sizeof(idata));
+            xu_long_t ireal = (xu_long_t)xu_stream_read(istream, idata, sizeof(idata));
             if (ireal > 0)
             {
-                xu_long_t r = xm_lz4_dstream_write(stream_lz4, idata, ireal, tb_stream_beof(istream));
+                xu_long_t r = xm_lz4_dstream_write(stream_lz4, idata, ireal, xu_stream_beof(istream));
                 xu_assert_and_check_break(r >= 0);
                 xu_check_continue(r > 0);
 
                 xu_long_t oreal;
                 while ((oreal = xm_lz4_dstream_read(stream_lz4, odata, sizeof(odata))) > 0)
                 {
-                    if (!tb_stream_bwrit(ostream, odata, oreal))
+                    if (!xu_stream_bwrit(ostream, odata, oreal))
                     {
                         oreal = -1;
                         break;
@@ -83,18 +83,18 @@ xu_int_t xm_lz4_decompress_file(lua_State* lua)
             write_ok = xu_true;
         }
 
-        if (tb_stream_beof(istream) && write_ok) ok = xu_true;
+        if (xu_stream_beof(istream) && write_ok) ok = xu_true;
     }
 
     // exit stream
     if (istream)
     {
-        tb_stream_exit(istream);
+        xu_stream_exit(istream);
         istream = xu_null;
     }
     if (ostream)
     {
-        tb_stream_exit(ostream);
+        xu_stream_exit(ostream);
         ostream = xu_null;
     }
     xm_lz4_dstream_exit(stream_lz4);

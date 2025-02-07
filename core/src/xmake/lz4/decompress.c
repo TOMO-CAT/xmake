@@ -55,10 +55,10 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
     xu_bool_t                   ok = xu_false;
     LZ4F_errorCode_t            code;
     LZ4F_decompressionContext_t ctx = xu_null;
-    tb_buffer_t                 result;
+    xu_buffer_t                 result;
     do
     {
-        tb_buffer_init(&result);
+        xu_buffer_init(&result);
 
         code = LZ4F_createDecompressionContext(&ctx, LZ4F_VERSION);
         if (LZ4F_isError(code)) break;
@@ -80,11 +80,11 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
             data += advance;
             size -= advance;
 
-            tb_buffer_memncat(&result, buffer, buffer_size);
+            xu_buffer_memncat(&result, buffer, buffer_size);
         }
-        xu_assert_and_check_break(!failed && tb_buffer_size(&result));
+        xu_assert_and_check_break(!failed && xu_buffer_size(&result));
 
-        lua_pushlstring(lua, (xu_char_t const*)tb_buffer_data(&result), tb_buffer_size(&result));
+        lua_pushlstring(lua, (xu_char_t const*)xu_buffer_data(&result), xu_buffer_size(&result));
         ok = xu_true;
     } while (0);
 
@@ -93,7 +93,7 @@ xu_int_t xm_lz4_decompress(lua_State* lua)
         LZ4F_freeDecompressionContext(ctx);
         ctx = xu_null;
     }
-    tb_buffer_exit(&result);
+    xu_buffer_exit(&result);
 
     if (!ok)
     {

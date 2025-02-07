@@ -106,12 +106,12 @@ static __xu_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
     LZ4F_preferences_t const* prefsPtr = xu_null;
     do
     {
-        stream = tb_malloc0_type(xm_lz4_cstream_t);
+        stream = xu_malloc0_type(xm_lz4_cstream_t);
         xu_assert_and_check_break(stream);
 
         stream->write_maxn  = 64 * 1024;
         stream->buffer_maxn = LZ4F_compressBound(stream->write_maxn, prefsPtr);
-        stream->buffer      = (LZ4_byte*)tb_malloc(stream->buffer_maxn);
+        stream->buffer      = (LZ4_byte*)xu_malloc(stream->buffer_maxn);
         xu_assert_and_check_break(stream->buffer);
 
         ret = LZ4F_createCompressionContext(&stream->cctx, LZ4F_getVersion());
@@ -169,15 +169,15 @@ static __xu_inline__ xu_long_t xm_lz4_cstream_read(xm_lz4_cstream_t* stream, xu_
     xu_size_t read = 0;
     if (stream->header_size)
     {
-        tb_memcpy(odata, stream->header, stream->header_size);
+        xu_memcpy(odata, stream->header, stream->header_size);
         read += stream->header_size;
         osize -= stream->header_size;
         stream->header_size = 0;
     }
 
-    xu_size_t need = tb_min(stream->buffer_size, osize);
-    tb_memcpy(odata + read, stream->buffer, need);
-    if (need < stream->buffer_size) tb_memmov(stream->buffer, stream->buffer + need, stream->buffer_size - need);
+    xu_size_t need = xu_min(stream->buffer_size, osize);
+    xu_memcpy(odata + read, stream->buffer, need);
+    if (need < stream->buffer_size) xu_memmov(stream->buffer, stream->buffer + need, stream->buffer_size - need);
     stream->buffer_size -= need;
     read += need;
     return read;
@@ -208,7 +208,7 @@ static __xu_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
     xm_lz4_dstream_t* stream = xu_null;
     do
     {
-        stream = tb_malloc0_type(xm_lz4_dstream_t);
+        stream = xu_malloc0_type(xm_lz4_dstream_t);
         xu_assert_and_check_break(stream);
 
         ret = LZ4F_createDecompressionContext(&stream->dctx, LZ4F_getVersion());
@@ -236,8 +236,8 @@ static __xu_inline__ xu_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, xu
     const xu_size_t header_size = sizeof(stream->header);
     if (stream->header_size < header_size)
     {
-        xu_size_t size = tb_min(header_size - stream->header_size, isize);
-        tb_memcpy(stream->header + stream->header_size, idata, size);
+        xu_size_t size = xu_min(header_size - stream->header_size, isize);
+        xu_memcpy(stream->header + stream->header_size, idata, size);
         stream->header_size += size;
         idata += size;
         isize -= size;
@@ -260,18 +260,18 @@ static __xu_inline__ xu_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, xu
             default: return -1;
             }
 
-            stream->buffer = (LZ4_byte*)tb_malloc(stream->buffer_maxn);
+            stream->buffer = (LZ4_byte*)xu_malloc(stream->buffer_maxn);
             xu_assert_and_check_return_val(stream->buffer, -1);
 
             stream->buffer_size = header_size - consumed_size;
-            tb_memcpy(stream->buffer, stream->header + consumed_size, stream->buffer_size);
+            xu_memcpy(stream->buffer, stream->header + consumed_size, stream->buffer_size);
         }
     }
     xu_check_return_val(stream->header_size == header_size && isize, 0);
     xu_assert_and_check_return_val(stream->buffer && stream->buffer_size + isize <= stream->buffer_maxn, -1);
 
     // append the input data
-    tb_memcpy(stream->buffer + stream->buffer_size, idata, isize);
+    xu_memcpy(stream->buffer + stream->buffer_size, idata, isize);
     stream->buffer_size += isize;
     return isize;
 }
@@ -290,7 +290,7 @@ static __xu_inline__ xu_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, xu_
 
     // move the left input data
     if (srcsize < stream->buffer_size)
-        tb_memmov(stream->buffer, stream->buffer + srcsize, stream->buffer_size - srcsize);
+        xu_memmov(stream->buffer, stream->buffer + srcsize, stream->buffer_size - srcsize);
     stream->buffer_size -= srcsize;
     return dstsize;
 }

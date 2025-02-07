@@ -36,7 +36,7 @@
 static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, xu_cpointer_t priv)
 {
     // check
-    tb_value_ref_t tuple = (tb_value_ref_t)priv;
+    xu_value_ref_t tuple = (xu_value_ref_t)priv;
     xu_assert_and_check_return_val(path && info && tuple, XU_DIRECTORY_WALK_CODE_END);
 
     // the lua
@@ -191,7 +191,7 @@ xu_int_t xm_os_find(lua_State* lua)
     lua_getglobal(lua, "string");
 
     // do os.find(root, name)
-    tb_value_t tuple[4];
+    xu_value_t tuple[4];
     tuple[0].ptr  = lua;
     tuple[1].cstr = pattern;
     tuple[2].l    = mode;

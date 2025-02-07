@@ -44,10 +44,10 @@ xu_int_t xm_io_pipe_close(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the pipe file
-    tb_pipe_file_ref_t pipefile = (tb_pipe_file_ref_t)xm_lua_topointer(lua, 1);
+    xu_pipe_file_ref_t pipefile = (xu_pipe_file_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(pipefile, 0);
 
     // exit pipe file
-    lua_pushboolean(lua, tb_pipe_file_exit(pipefile));
+    lua_pushboolean(lua, xu_pipe_file_exit(pipefile));
     return 1;
 }

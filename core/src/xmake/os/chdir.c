@@ -43,7 +43,7 @@ xu_int_t xm_os_chdir(lua_State* lua)
     xu_check_return_val(path, 0);
 
     // done os.chdir(path)
-    lua_pushboolean(lua, tb_directory_current_set(path));
+    lua_pushboolean(lua, xu_directory_current_set(path));
 
     // ok
     return 1;

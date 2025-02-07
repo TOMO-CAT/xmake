@@ -61,9 +61,9 @@ xu_int_t xm_io_poller_modify(lua_State* lua)
     xu_size_t events = (xu_size_t)luaL_checknumber(lua, 3);
 
     // modify events in poller
-    tb_poller_object_t object;
+    xu_poller_object_t object;
     object.type    = otype;
     object.ref.ptr = cdata;
-    lua_pushboolean(lua, tb_poller_modify(xm_io_poller(), &object, events, cdata_str));
+    lua_pushboolean(lua, xu_poller_modify(xm_io_poller(), &object, events, cdata_str));
     return 1;
 }

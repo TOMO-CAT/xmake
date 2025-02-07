@@ -57,7 +57,7 @@ xu_int_t xm_package_loadxmi(lua_State* lua)
     xu_check_return_val(name, 0);
 
     // load module library
-    tb_dynamic_ref_t lib = tb_dynamic_init(path);
+    xu_dynamic_ref_t lib = xu_dynamic_init(path);
     if (!lib)
     {
         lua_pushnil(lua);
@@ -66,7 +66,7 @@ xu_int_t xm_package_loadxmi(lua_State* lua)
     }
 
     // get xmiopen_xxx function
-    lua_CFunction luaopen_func = (lua_CFunction)tb_dynamic_func(lib, name);
+    lua_CFunction luaopen_func = (lua_CFunction)xu_dynamic_func(lib, name);
     if (!luaopen_func)
     {
         lua_pushnil(lua);
@@ -75,7 +75,7 @@ xu_int_t xm_package_loadxmi(lua_State* lua)
     }
 
     // get xmisetup function
-    xm_setup_func_t xmisetup_func = (xm_setup_func_t)tb_dynamic_func(lib, "xmisetup");
+    xm_setup_func_t xmisetup_func = (xm_setup_func_t)xu_dynamic_func(lib, "xmisetup");
     if (!xmisetup_func)
     {
         lua_pushnil(lua);

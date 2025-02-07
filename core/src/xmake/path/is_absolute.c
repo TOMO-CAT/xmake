@@ -43,6 +43,6 @@ xu_int_t xm_path_is_absolute(lua_State* lua)
     xu_check_return_val(path, 0);
 
     // path:is_absolute()
-    lua_pushboolean(lua, tb_path_is_absolute(path));
+    lua_pushboolean(lua, xu_path_is_absolute(path));
     return 1;
 }

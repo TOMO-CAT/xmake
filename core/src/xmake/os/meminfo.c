@@ -47,10 +47,10 @@
  * private implementation
  */
 #ifdef XU_CONFIG_OS_LINUX
-static tb_int64_t xm_os_meminfo_get_value(xu_char_t const* buffer, xu_char_t const* name)
+static xu_int64_t xm_os_meminfo_get_value(xu_char_t const* buffer, xu_char_t const* name)
 {
     xu_char_t const* p = xu_strstr(buffer, name);
-    return p ? tb_stoi64(p + xu_strlen(name)) : 0;
+    return p ? xu_stoi64(p + xu_strlen(name)) : 0;
 }
 #endif
 
@@ -62,8 +62,8 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
     mach_msg_type_number_t count = HOST_VM_INFO64_COUNT;
     if (host_statistics64(mach_host_self(), HOST_VM_INFO64, (host_info_t)&vmstat, &count) == KERN_SUCCESS)
     {
-        xu_int_t   pagesize  = (xu_int_t)tb_page_size();
-        tb_int64_t totalsize = (tb_int64_t)(vmstat.inactive_count + vmstat.free_count + vmstat.active_count +
+        xu_int_t   pagesize  = (xu_int_t)xu_page_size();
+        xu_int64_t totalsize = (xu_int64_t)(vmstat.inactive_count + vmstat.free_count + vmstat.active_count +
                                             vmstat.wire_count + vmstat.compressor_page_count) *
                                pagesize;
         /*
@@ -73,8 +73,8 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
          * haven't actually been used by anyone so far.
          *
          */
-        tb_int64_t availsize =
-            (tb_int64_t)(vmstat.inactive_count + vmstat.free_count - vmstat.speculative_count) * pagesize;
+        xu_int64_t availsize =
+            (xu_int64_t)(vmstat.inactive_count + vmstat.free_count - vmstat.speculative_count) * pagesize;
         *ptotalsize = (xu_int_t)(totalsize / (1024 * 1024));
         *pavailsize = (xu_int_t)(availsize / (1024 * 1024));
         return xu_true;
@@ -95,14 +95,14 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
             size_t    len = fread(buffer, 1, sizeof(buffer) - 1, fp);
             if (!ferror(fp) && len)
             {
-                tb_int64_t totalsize = xm_os_meminfo_get_value(buffer, "MemTotal:");
-                tb_int64_t availsize = xm_os_meminfo_get_value(buffer, "MemAvailable:");
+                xu_int64_t totalsize = xm_os_meminfo_get_value(buffer, "MemTotal:");
+                xu_int64_t availsize = xm_os_meminfo_get_value(buffer, "MemAvailable:");
                 if (availsize <= 0)
                 {
-                    tb_int64_t cachesize  = xm_os_meminfo_get_value(buffer, "Cached:");
-                    tb_int64_t freesize   = xm_os_meminfo_get_value(buffer, "MemFree:");
-                    tb_int64_t buffersize = xm_os_meminfo_get_value(buffer, "Buffers:");
-                    tb_int64_t shmemsize  = xm_os_meminfo_get_value(buffer, "Shmem:");
+                    xu_int64_t cachesize  = xm_os_meminfo_get_value(buffer, "Cached:");
+                    xu_int64_t freesize   = xm_os_meminfo_get_value(buffer, "MemFree:");
+                    xu_int64_t buffersize = xm_os_meminfo_get_value(buffer, "Buffers:");
+                    xu_int64_t shmemsize  = xm_os_meminfo_get_value(buffer, "Shmem:");
                     if (cachesize >= 0 && freesize >= 0 && buffersize >= 0 && shmemsize >= 0)
                         availsize = freesize + buffersize + cachesize - shmemsize;
                 }
@@ -142,7 +142,7 @@ static xu_bool_t xm_os_meminfo_stats(xu_int_t* ptotalsize, xu_int_t* pavailsize)
     if (sysctlbyname("vm.stats.vm.v_inactive_count", &v_inactive_count, &size, xu_null, 0) != 0) return xu_false;
 
     *ptotalsize = (xu_int_t)(totalsize / (1024 * 1024));
-    *pavailsize = (xu_int_t)(((tb_int64_t)(v_free_count + v_inactive_count) * tb_page_size()) / (1024 * 1024));
+    *pavailsize = (xu_int_t)(((xu_int64_t)(v_free_count + v_inactive_count) * xu_page_size()) / (1024 * 1024));
     return xu_true;
 #endif
     return xu_false;
@@ -160,7 +160,7 @@ xu_int_t xm_os_meminfo(lua_State* lua)
     lua_newtable(lua);
 
     // get the pagesize (bytes)
-    xu_int_t pagesize = (xu_int_t)tb_page_size();
+    xu_int_t pagesize = (xu_int_t)xu_page_size();
     lua_pushstring(lua, "pagesize");
     lua_pushinteger(lua, pagesize);
     lua_settable(lua, -3);

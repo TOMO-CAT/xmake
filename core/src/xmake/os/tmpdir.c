@@ -40,7 +40,7 @@ xu_int_t xm_os_tmpdir(lua_State* lua)
 
     // os.tmpdir()
     xu_char_t path[XU_PATH_MAXN];
-    if (tb_directory_temporary(path, sizeof(path)))
+    if (xu_directory_temporary(path, sizeof(path)))
         lua_pushstring(lua, path);
     else
         lua_pushnil(lua);

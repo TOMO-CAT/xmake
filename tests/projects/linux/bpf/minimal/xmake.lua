@@ -17,8 +17,9 @@ end
 -- @see https://github.com/libbpf/bpftool/issues/120
 set_symbols("none")
 
-target("minimal")
+target("minimal", function()
     set_kind("binary")
     add_files("src/*.c")
     add_packages("linux-tools", "linux-headers", "libbpf")
     set_license("GPL-2.0")
+end)

@@ -57,7 +57,7 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get file
@@ -73,8 +73,8 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // get file reference
-    tb_file_ref_t rawfile = xu_null;
-    if (!tb_stream_ctrl(file->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) || !rawfile)
+    xu_file_ref_t rawfile = xu_null;
+    if (!xu_stream_ctrl(file->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) || !rawfile)
     {
         lua_pushinteger(lua, -1);
         lua_pushliteral(lua, "cannot get file reference!");
@@ -82,7 +82,7 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // get file size
-    xu_hize_t filesize = tb_file_size(rawfile);
+    xu_hize_t filesize = xu_file_size(rawfile);
     if (!filesize)
     {
         lua_pushinteger(lua, -1);
@@ -111,7 +111,7 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
     }
 
     // send file data
-    xu_long_t real = (xu_long_t)tb_socket_sendf(sock, rawfile, start - 1, last - start + 1);
+    xu_long_t real = (xu_long_t)xu_socket_sendf(sock, rawfile, start - 1, last - start + 1);
     lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

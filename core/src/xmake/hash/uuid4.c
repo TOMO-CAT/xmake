@@ -43,6 +43,6 @@ xu_int_t xm_hash_uuid4(lua_State* lua)
 
     // make uuid, use version 4
     xu_char_t uuid[37];
-    lua_pushstring(lua, tb_uuid4_make_cstr(uuid, name));
+    lua_pushstring(lua, xu_uuid4_make_cstr(uuid, name));
     return 1;
 }

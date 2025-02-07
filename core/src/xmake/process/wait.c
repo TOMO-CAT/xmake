@@ -50,7 +50,7 @@ xu_int_t xm_process_wait(lua_State* lua)
     }
 
     // get the process
-    tb_process_ref_t process = (tb_process_ref_t)xm_lua_topointer(lua, 1);
+    xu_process_ref_t process = (xu_process_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(process, 0);
 
     // get the timeout
@@ -58,7 +58,7 @@ xu_int_t xm_process_wait(lua_State* lua)
 
     // wait it
     xu_long_t status = 0;
-    xu_long_t ok     = tb_process_wait(process, &status, timeout);
+    xu_long_t ok     = xu_process_wait(process, &status, timeout);
 
     // save result
     lua_pushinteger(lua, ok);

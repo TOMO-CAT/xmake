@@ -35,7 +35,7 @@
  */
 
 // socket to fd
-#define xm_io_sock2fd(sock) (lua_Number) tb_sock2fd(sock)
+#define xm_io_sock2fd(sock) (lua_Number) xu_sock2fd(sock)
 
 /* *******************************************************
  * implementation

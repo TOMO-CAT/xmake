@@ -62,7 +62,7 @@ xu_int_t xm_io_file_seek(lua_State* lua)
             break;
         case 'e': // "end"
         {
-            xu_hong_t size = tb_stream_size(file->u.file_ref);
+            xu_hong_t size = xu_stream_size(file->u.file_ref);
             if (size > 0 && size + offset <= size)
                 offset = size + offset;
             else
@@ -70,11 +70,11 @@ xu_int_t xm_io_file_seek(lua_State* lua)
         }
         break;
         default: // "cur"
-            offset = tb_stream_offset(file->u.file_ref) + offset;
+            offset = xu_stream_offset(file->u.file_ref) + offset;
             break;
         }
 
-        if (tb_stream_seek(file->u.file_ref, offset))
+        if (xu_stream_seek(file->u.file_ref, offset))
         {
             lua_pushnumber(lua, (lua_Number)offset);
             return 1;

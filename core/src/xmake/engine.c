@@ -828,9 +828,9 @@ static xu_pointer_t xm_engine_lua_realloc(xu_pointer_t udata, xu_pointer_t data,
     if (nsize == 0 && data)
         xu_free(data);
     else if (!data)
-        ptr = tb_malloc((xu_size_t)nsize);
+        ptr = xu_malloc((xu_size_t)nsize);
     else if (nsize != osize)
-        ptr = tb_ralloc(data, (xu_size_t)nsize);
+        ptr = xu_ralloc(data, (xu_size_t)nsize);
     else
         ptr = data;
     return ptr;
@@ -848,7 +848,7 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
     do
     {
         // init self
-        engine = tb_malloc0_type(xm_engine_t);
+        engine = xu_malloc0_type(xm_engine_t);
         xu_assert_and_check_break(engine);
 
         // init name

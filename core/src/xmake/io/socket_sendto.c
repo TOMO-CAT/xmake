@@ -49,7 +49,7 @@ xu_int_t xm_io_socket_sendto(lua_State* lua)
     }
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get data and size
@@ -67,7 +67,7 @@ xu_int_t xm_io_socket_sendto(lua_State* lua)
 
     // get address
     xu_char_t const* addr = lua_tostring(lua, 4);
-    tb_uint16_t      port = (tb_uint16_t)luaL_checknumber(lua, 5);
+    xu_uint16_t      port = (xu_uint16_t)luaL_checknumber(lua, 5);
     if (!addr || !port)
     {
         lua_pushinteger(lua, -1);
@@ -79,11 +79,11 @@ xu_int_t xm_io_socket_sendto(lua_State* lua)
     xu_size_t family = (xu_size_t)luaL_checknumber(lua, 6);
 
     // init ip address
-    tb_ipaddr_t ipaddr;
-    tb_ipaddr_set(&ipaddr, addr, port, (xu_uint8_t)family);
+    xu_ipaddr_t ipaddr;
+    xu_ipaddr_set(&ipaddr, addr, port, (xu_uint8_t)family);
 
     // send data
-    xu_long_t real = tb_socket_usend(sock, &ipaddr, data, size);
+    xu_long_t real = xu_socket_usend(sock, &ipaddr, data, size);
     lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

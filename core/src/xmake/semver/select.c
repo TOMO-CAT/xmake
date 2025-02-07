@@ -119,7 +119,7 @@ static xu_bool_t xm_semver_select_from_branches(lua_State* lua, xu_int_t fromidx
         xu_char_t const* source_str = luaL_checkstring(lua, -1);
         xu_size_t        source_len = xu_strlen(source_str);
         lua_pop(lua, 1);
-        if (source_len == range_len && tb_memcmp(source_str, range_str, source_len) == 0)
+        if (source_len == range_len && xu_memcmp(source_str, range_str, source_len) == 0)
         {
             lua_createtable(lua, 0, 2);
             lua_pushlstring(lua, source_str, source_len);

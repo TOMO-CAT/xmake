@@ -49,15 +49,15 @@
  * private implementation
  */
 
-static tb_float_t xm_os_cpuinfo_usagerate()
+static xu_float_t xm_os_cpuinfo_usagerate()
 {
 #if defined(XU_CONFIG_OS_MACOSX)
-    tb_float_t             usagerate = 0;
+    xu_float_t             usagerate = 0;
     natural_t              cpu_count = 0;
     processor_info_array_t cpuinfo;
     mach_msg_type_number_t cpuinfo_count;
     static xu_hong_t       s_time = 0;
-    if (tb_mclock() - s_time > 1000 && host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &cpu_count,
+    if (xu_mclock() - s_time > 1000 && host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &cpu_count,
                                                            &cpuinfo, &cpuinfo_count) == KERN_SUCCESS)
     {
         static processor_info_array_t s_cpuinfo_prev       = xu_null;
@@ -82,25 +82,25 @@ static tb_float_t xm_os_cpuinfo_usagerate()
                       cpuinfo[(CPU_STATE_MAX * i) + CPU_STATE_NICE];
                 total = use + cpuinfo[(CPU_STATE_MAX * i) + CPU_STATE_IDLE];
             }
-            usagerate += total > 0 ? ((tb_float_t)use / (tb_float_t)total) : 0;
+            usagerate += total > 0 ? ((xu_float_t)use / (xu_float_t)total) : 0;
         }
         if (s_cpuinfo_prev)
             vm_deallocate(mach_task_self(), (vm_address_t)s_cpuinfo_prev, sizeof(integer_t) * s_cpuinfo_count_prev);
-        s_time               = tb_mclock();
+        s_time               = xu_mclock();
         s_cpuinfo_prev       = cpuinfo;
         s_cpuinfo_count_prev = cpuinfo_count;
     }
     return cpu_count > 0 ? usagerate / cpu_count : 0;
 #elif defined(XU_CONFIG_OS_LINUX)
-    tb_float_t usagerate = 0;
+    xu_float_t usagerate = 0;
     if (xu_file_info("/proc/stat", xu_null))
     {
         FILE* fp = fopen("/proc/stat", "r");
         if (fp)
         {
             xu_char_t         line[8192];
-            static tb_int64_t total_prev  = 0;
-            static tb_int64_t active_prev = 0;
+            static xu_int64_t total_prev  = 0;
+            static xu_int64_t active_prev = 0;
             while (!feof(fp))
             {
                 /* cpu  548760 0 867417 102226682 12430 0 9089 0 0 0
@@ -126,15 +126,15 @@ static tb_float_t xm_os_cpuinfo_usagerate()
                     if (10 == sscanf(line, "cpu  %lld %lld %lld %lld %lld %lld %lld %lld %lld %lld", &user, &nice, &sys,
                                      &idle, &iowait, &irq, &softirq, &steal, &guest, &guest_nice))
                     {
-                        tb_int64_t active =
-                            (tb_int64_t)(user + nice + sys + irq + softirq + steal + guest + guest_nice);
-                        tb_int64_t total = (tb_int64_t)(user + nice + sys + idle + iowait + irq + softirq + steal +
+                        xu_int64_t active =
+                            (xu_int64_t)(user + nice + sys + irq + softirq + steal + guest + guest_nice);
+                        xu_int64_t total = (xu_int64_t)(user + nice + sys + idle + iowait + irq + softirq + steal +
                                                         guest + guest_nice);
                         if (total_prev > 0 && active_prev > 0)
                         {
-                            tb_int64_t total_diff  = total - total_prev;
-                            tb_int64_t active_diff = active - active_prev;
-                            if (total_diff > 0) usagerate = (tb_float_t)((tb_double_t)active_diff / total_diff);
+                            xu_int64_t total_diff  = total - total_prev;
+                            xu_int64_t active_diff = active - active_prev;
+                            if (total_diff > 0) usagerate = (xu_float_t)((xu_double_t)active_diff / total_diff);
                         }
                         total_prev  = total;
                         active_prev = active;
@@ -154,10 +154,10 @@ static tb_float_t xm_os_cpuinfo_usagerate()
 #    define CP_IDLE 4
 #    define CPUSTATES 5
 
-    static tb_int64_t total_prev  = 0;
-    static tb_int64_t active_prev = 0;
+    static xu_int64_t total_prev  = 0;
+    static xu_int64_t active_prev = 0;
 
-    tb_float_t usagerate         = 0;
+    xu_float_t usagerate         = 0;
     long       states[CPUSTATES] = {0};
     size_t     states_size       = sizeof(states);
     if (sysctlbyname("kern.cp_time", &states, &states_size, xu_null, 0) == 0)
@@ -168,13 +168,13 @@ static tb_float_t xm_os_cpuinfo_usagerate()
         xu_long_t intr = states[CP_INTR];
         xu_long_t idle = states[CP_IDLE];
 
-        tb_int64_t active = user + nice + sys + intr;
-        tb_int64_t total  = user + nice + sys + idle + intr;
+        xu_int64_t active = user + nice + sys + intr;
+        xu_int64_t total  = user + nice + sys + idle + intr;
         if (total_prev > 0 && active_prev > 0)
         {
-            tb_int64_t total_diff  = total - total_prev;
-            tb_int64_t active_diff = active - active_prev;
-            if (total_diff > 0) usagerate = (tb_float_t)((tb_double_t)active_diff / total_diff);
+            xu_int64_t total_diff  = total - total_prev;
+            xu_int64_t active_diff = active - active_prev;
+            if (total_diff > 0) usagerate = (xu_float_t)((xu_double_t)active_diff / total_diff);
         }
         total_prev  = total;
         active_prev = active;
@@ -204,13 +204,13 @@ xu_int_t xm_os_cpuinfo(lua_State* lua)
     lua_newtable(lua);
 
     // get cpu number
-    xu_int_t ncpu = (xu_int_t)tb_cpu_count();
+    xu_int_t ncpu = (xu_int_t)xu_cpu_count();
     lua_pushstring(lua, "ncpu");
     lua_pushinteger(lua, ncpu > 0 ? ncpu : 1);
     lua_settable(lua, -3);
 
     // get cpu usage rate
-    tb_float_t usagerate = xm_os_cpuinfo_usagerate();
+    xu_float_t usagerate = xm_os_cpuinfo_usagerate();
     if (usagerate >= 0)
     {
         lua_pushstring(lua, "usagerate");

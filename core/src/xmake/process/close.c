@@ -44,11 +44,11 @@ xu_int_t xm_process_close(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the process
-    tb_process_ref_t process = (tb_process_ref_t)xm_lua_topointer(lua, 1);
+    xu_process_ref_t process = (xu_process_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(process, 0);
 
     // exit process
-    tb_process_exit(process);
+    xu_process_exit(process);
 
     // save result: ok
     lua_pushboolean(lua, xu_true);

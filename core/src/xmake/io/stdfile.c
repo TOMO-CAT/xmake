@@ -73,12 +73,12 @@ static xu_void_t xm_io_stdfile_init_buffer(xu_size_t type)
 static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
 {
     // init stdfile
-    tb_stdfile_ref_t fp = xu_null;
+    xu_stdfile_ref_t fp = xu_null;
     switch (type)
     {
-    case XM_IO_FILE_TYPE_STDIN: fp = tb_stdfile_input(); break;
-    case XM_IO_FILE_TYPE_STDOUT: fp = tb_stdfile_output(); break;
-    case XM_IO_FILE_TYPE_STDERR: fp = tb_stdfile_error(); break;
+    case XM_IO_FILE_TYPE_STDIN: fp = xu_stdfile_input(); break;
+    case XM_IO_FILE_TYPE_STDOUT: fp = xu_stdfile_output(); break;
+    case XM_IO_FILE_TYPE_STDERR: fp = xu_stdfile_error(); break;
     }
 
     // new file
@@ -96,8 +96,8 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
     xm_io_stdfile_init_buffer(type);
 
     // init the read/write line cache buffer
-    tb_buffer_init(&file->rcache);
-    tb_buffer_init(&file->wcache);
+    xu_buffer_init(&file->rcache);
+    xu_buffer_init(&file->wcache);
     return file;
 }
 

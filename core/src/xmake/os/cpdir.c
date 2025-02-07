@@ -49,6 +49,6 @@ xu_int_t xm_os_cpdir(lua_State* lua)
     if (is_symlink) flags |= XU_FILE_COPY_LINK;
 
     // do copy
-    lua_pushboolean(lua, tb_directory_copy(src, dst, flags));
+    lua_pushboolean(lua, xu_directory_copy(src, dst, flags));
     return 1;
 }

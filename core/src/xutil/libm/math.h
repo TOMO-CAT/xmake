@@ -1,6 +1,7 @@
 #pragma once
 
 #include "xutil/prefix.h"
+#include "xutil/macros/assert.h"
 #include "xutil/utils/bits.h"
 
 /* *******************************************************
