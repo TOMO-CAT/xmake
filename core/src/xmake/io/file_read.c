@@ -120,7 +120,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
     // translate line data
     xu_int_t   result = PL_FAIL;
     xu_char_t* data   = xu_null;
-    xu_size_t  conlen = tb_strlen(continuation);
+    xu_size_t  conlen = xu_strlen(continuation);
     do
     {
         // eof?
@@ -334,11 +334,11 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
     xu_size_t buflen = 0;
     xu_size_t result = PL_FAIL;
     if (tb_stdfile_gets(file->u.std_ref, strbuf, xu_arrayn(strbuf) - 1))
-        buflen = tb_strlen(strbuf);
+        buflen = xu_strlen(strbuf);
     else
         return PL_EOF;
 
-    xu_size_t conlen = tb_strlen(continuation);
+    xu_size_t conlen = xu_strlen(continuation);
     if (buflen > 0 && strbuf[buflen - 1] != '\n')
     {
         // end of file, no lf found

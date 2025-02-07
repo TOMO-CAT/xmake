@@ -50,7 +50,7 @@ xu_int_t xm_semver_satisfies(lua_State* lua)
 
     // parse the version range string
     semver_range_t range = {0};
-    if (semver_rangen(&range, range_str, tb_strlen(range_str)))
+    if (semver_rangen(&range, range_str, xu_strlen(range_str)))
     {
         // range is branch name? try to match it
         semver_t range_semver = {0};
@@ -60,10 +60,10 @@ xu_int_t xm_semver_satisfies(lua_State* lua)
             return 1;
         }
         // range is a single version? try to compare it
-        else if (!semver_tryn(&range_semver, range_str, tb_strlen(range_str)))
+        else if (!semver_tryn(&range_semver, range_str, xu_strlen(range_str)))
         {
             semver_t semver = {0};
-            if (!semver_tryn(&semver, version_str, tb_strlen(version_str)))
+            if (!semver_tryn(&semver, version_str, xu_strlen(version_str)))
             {
                 lua_pushboolean(lua, semver_pcmp(&semver, &range_semver) == 0);
                 semver_dtor(&semver);
@@ -88,7 +88,7 @@ xu_int_t xm_semver_satisfies(lua_State* lua)
 
     // try to parse the version string
     semver_t semver = {0};
-    if (semver_tryn(&semver, version_str, tb_strlen(version_str)))
+    if (semver_tryn(&semver, version_str, xu_strlen(version_str)))
     {
         lua_pushnil(lua);
         lua_pushfstring(lua, "unable to parse semver '%s'", version_str);

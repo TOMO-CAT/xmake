@@ -174,7 +174,7 @@ static xu_size_t xm_sandbox_readline(xu_char_t* data, xu_size_t maxn, xu_char_t 
     tb_print_sync();
 
     // get input buffer
-    if (tb_stdfile_gets(tb_stdfile_input(), data, maxn)) return tb_strlen(data);
+    if (tb_stdfile_gets(tb_stdfile_input(), data, maxn)) return xu_strlen(data);
 #endif
 
     // no more input

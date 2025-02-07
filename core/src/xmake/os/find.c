@@ -91,7 +91,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
 
             // check
             xu_assert(!xu_strncmp(path, rootdir, rootlen));
-            xu_assert(rootlen + 1 <= tb_strlen(path));
+            xu_assert(rootlen + 1 <= xu_strlen(path));
 
             // skip the rootdir if not "."
             if (xu_strcmp(rootdir, ".")) path += rootlen + 1;

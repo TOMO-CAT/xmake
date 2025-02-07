@@ -50,7 +50,7 @@
 static tb_int64_t xm_os_meminfo_get_value(xu_char_t const* buffer, xu_char_t const* name)
 {
     xu_char_t const* p = xu_strstr(buffer, name);
-    return p ? tb_stoi64(p + tb_strlen(name)) : 0;
+    return p ? tb_stoi64(p + xu_strlen(name)) : 0;
 }
 #endif
 
