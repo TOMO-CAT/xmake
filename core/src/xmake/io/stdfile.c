@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "stdfile"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "stdfile"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -39,9 +39,9 @@
  */
 
 // the singleton type of stdfile
-#define XM_IO_STDFILE_STDIN (TB_SINGLETON_TYPE_USER + 1)
-#define XM_IO_STDFILE_STDOUT (TB_SINGLETON_TYPE_USER + 2)
-#define XM_IO_STDFILE_STDERR (TB_SINGLETON_TYPE_USER + 3)
+#define XM_IO_STDFILE_STDIN (XU_SINGLETON_TYPE_USER + 1)
+#define XM_IO_STDFILE_STDOUT (XU_SINGLETON_TYPE_USER + 2)
+#define XM_IO_STDFILE_STDERR (XU_SINGLETON_TYPE_USER + 3)
 
 /* *******************************************************
  * private implementation
@@ -90,7 +90,7 @@ static xm_io_file_t* xm_io_stdfile_new(lua_State* lua, xu_size_t type)
     file->stream    = xu_null;
     file->fstream   = xu_null;
     file->type      = xm_io_stdfile_isatty(type);
-    file->encoding  = TB_CHARSET_TYPE_UTF8;
+    file->encoding  = XU_CHARSET_TYPE_UTF8;
 
     // init stdio buffer
     xm_io_stdfile_init_buffer(type);

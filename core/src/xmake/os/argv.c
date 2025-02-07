@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "os.argv"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "os.argv"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,7 +40,7 @@ xu_int_t xm_os_argv(lua_State* lua)
 
     // get the argument string
     xu_char_t const* args = luaL_checkstring(lua, 1);
-    tb_check_return_val(args, 0);
+    xu_check_return_val(args, 0);
 
     // split only? do not escape
     xu_bool_t splitonly = xu_false;
@@ -93,7 +93,7 @@ xu_int_t xm_os_argv(lua_State* lua)
                     skip   = 1;
                 }
                 // is argument end with ' '?
-                else if (!quote && tb_isspace(ch))
+                else if (!quote && xu_isspace(ch))
                 {
                     // save this argument
                     tb_string_ltrim(&arg);

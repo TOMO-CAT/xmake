@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "file_open"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "file_open"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -43,12 +43,12 @@
 /* *******************************************************
  * private implementation
  */
-static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, xu_long_t size)
+static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t size)
 {
     // check
-    tb_assert(data_ptr && *data_ptr);
+    xu_assert(data_ptr && *data_ptr);
 
-    tb_byte_t const* data    = *data_ptr;
+    xu_byte_t const* data    = *data_ptr;
     xu_size_t        charset = XM_IO_FILE_ENCODING_BINARY;
     do
     {
@@ -58,7 +58,7 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, xu_long_t
         // utf-8 with bom
         if (size >= 3 && data[0] == 239 && data[1] == 187 && data[2] == 191)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             data += 3; // skip bom
             break;
         }
@@ -67,14 +67,14 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, xu_long_t
             // utf16be
             if (data[0] == 254 && data[1] == 255)
             {
-                charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE;
+                charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE;
                 data += 2; // skip bom
                 break;
             }
             // utf16le
             else if (data[0] == 255 && data[1] == 254)
             {
-                charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE;
+                charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE;
                 data += 2; // skip bom
                 break;
             }
@@ -92,7 +92,7 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, xu_long_t
             if (data[i] < 0x80)
                 ascii_conf++;
             else
-                ascii_conf = TB_MINS16;
+                ascii_conf = XU_MINS16;
 
             if (i % 2 == 0)
             {
@@ -112,32 +112,32 @@ static xu_size_t xm_io_file_detect_charset(tb_byte_t const** data_ptr, xu_long_t
                      IS_UTF8_TAIL(data[i + 3]))
                 utf8_conf++;
             else
-                utf8_conf = TB_MINS16;
+                utf8_conf = XU_MINS16;
         }
 
         if (ascii_conf > 0 && zero_count <= 1)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             break;
         }
         if (utf8_conf > 0 && zero_count <= 1)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             break;
         }
         if (utf16be_conf > 0 && utf16be_conf > utf16le_conf)
         {
-            charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE;
+            charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE;
             break;
         }
         if (utf16le_conf > 0 && utf16le_conf >= utf16be_conf)
         {
-            charset = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE;
+            charset = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE;
             break;
         }
         if (utf8_conf > 0)
         {
-            charset = TB_CHARSET_TYPE_UTF8;
+            charset = XU_CHARSET_TYPE_UTF8;
             break;
         }
 
@@ -152,12 +152,12 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, xu_long_t* p
     xu_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
 
     // detect encoding
-    tb_byte_t* data     = xu_null;
+    xu_byte_t* data     = xu_null;
     xu_size_t  encoding = XM_IO_FILE_ENCODING_BINARY;
     xu_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
     if (size > 0)
     {
-        tb_byte_t const* p = data;
+        xu_byte_t const* p = data;
         encoding           = xm_io_file_detect_charset(&p, size);
         *pbomoff           = p - data;
     }
@@ -183,37 +183,37 @@ xu_int_t xm_io_file_open(lua_State* lua)
     xu_size_t mode;
     switch (modestr[0])
     {
-    case 'w': mode = TB_FILE_MODE_RW | TB_FILE_MODE_CREAT | TB_FILE_MODE_TRUNC; break;
-    case 'a': mode = TB_FILE_MODE_RW | TB_FILE_MODE_APPEND | TB_FILE_MODE_CREAT; break;
+    case 'w': mode = XU_FILE_MODE_RW | XU_FILE_MODE_CREAT | XU_FILE_MODE_TRUNC; break;
+    case 'a': mode = XU_FILE_MODE_RW | XU_FILE_MODE_APPEND | XU_FILE_MODE_CREAT; break;
     case 'r':
-    default: mode = TB_FILE_MODE_RO; break;
+    default: mode = XU_FILE_MODE_RO; break;
     }
 
     // get file encoding
     xu_long_t       bomoff   = 0;
     tb_stream_ref_t stream   = xu_null;
-    xu_bool_t       update   = !!tb_strchr(modestr, '+');
+    xu_bool_t       update   = !!xu_strchr(modestr, '+');
     xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
         encoding = XM_IO_FILE_ENCODING_BINARY;
-    else if (tb_strstr(modestr, "utf8") || tb_strstr(modestr, "utf-8"))
-        encoding = TB_CHARSET_TYPE_UTF8;
-    else if (tb_strstr(modestr, "utf16le") || tb_strstr(modestr, "utf-16le"))
-        encoding = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_LE;
-    else if (tb_strstr(modestr, "utf16be") || tb_strstr(modestr, "utf-16be"))
-        encoding = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_BE;
-    else if (tb_strstr(modestr, "utf16") || tb_strstr(modestr, "utf-16"))
-        encoding = TB_CHARSET_TYPE_UTF16 | TB_CHARSET_TYPE_NE;
-    else if (tb_strstr(modestr, "ansi"))
-        encoding = TB_CHARSET_TYPE_ANSI;
-    else if (tb_strstr(modestr, "gbk"))
-        encoding = TB_CHARSET_TYPE_GBK;
-    else if (tb_strstr(modestr, "gb2312"))
-        encoding = TB_CHARSET_TYPE_GB2312;
-    else if (tb_strstr(modestr, "iso8859"))
-        encoding = TB_CHARSET_TYPE_ISO8859;
+    else if (xu_strstr(modestr, "utf8") || xu_strstr(modestr, "utf-8"))
+        encoding = XU_CHARSET_TYPE_UTF8;
+    else if (xu_strstr(modestr, "utf16le") || xu_strstr(modestr, "utf-16le"))
+        encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE;
+    else if (xu_strstr(modestr, "utf16be") || xu_strstr(modestr, "utf-16be"))
+        encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE;
+    else if (xu_strstr(modestr, "utf16") || xu_strstr(modestr, "utf-16"))
+        encoding = XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_NE;
+    else if (xu_strstr(modestr, "ansi"))
+        encoding = XU_CHARSET_TYPE_ANSI;
+    else if (xu_strstr(modestr, "gbk"))
+        encoding = XU_CHARSET_TYPE_GBK;
+    else if (xu_strstr(modestr, "gb2312"))
+        encoding = XU_CHARSET_TYPE_GB2312;
+    else if (xu_strstr(modestr, "iso8859"))
+        encoding = XU_CHARSET_TYPE_ISO8859;
     else if (modestr[0] == 'w' || modestr[0] == 'a') // set to utf-8 if not specified for the writing mode
-        encoding = TB_CHARSET_TYPE_UTF8;
+        encoding = XU_CHARSET_TYPE_UTF8;
     else if (modestr[0] == 'r') // detect encoding if not specified for the reading mode
     {
         stream = tb_stream_init_from_file(path, mode);
@@ -231,7 +231,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
 
     // write data with utf bom? e.g. utf8bom, utf16lebom, utf16bom
     xu_bool_t utfbom = xu_false;
-    if (tb_strstr(modestr, "bom")) utfbom = xu_true;
+    if (xu_strstr(modestr, "bom")) utfbom = xu_true;
 
     // open file
     xu_bool_t       open_ok  = xu_false;
@@ -244,13 +244,13 @@ xu_int_t xm_io_file_open(lua_State* lua)
         xu_assert_and_check_break(stream);
 
         // is transcode?
-        xu_bool_t is_transcode = encoding != TB_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
+        xu_bool_t is_transcode = encoding != XU_CHARSET_TYPE_UTF8 && encoding != XM_IO_FILE_ENCODING_BINARY;
         if (is_transcode)
         {
             if (modestr[0] == 'r')
-                fstream = tb_stream_init_filter_from_charset(stream, encoding, TB_CHARSET_TYPE_UTF8);
+                fstream = tb_stream_init_filter_from_charset(stream, encoding, XU_CHARSET_TYPE_UTF8);
             else
-                fstream = tb_stream_init_filter_from_charset(stream, TB_CHARSET_TYPE_UTF8, encoding);
+                fstream = tb_stream_init_filter_from_charset(stream, XU_CHARSET_TYPE_UTF8, encoding);
             xu_assert_and_check_break(fstream);
 
             // use fstream as file

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "file_read"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "file_read"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -53,17 +53,17 @@ static xu_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     // read line and reserve crlf
     xu_bool_t  eof    = xu_false;
     xu_hize_t  offset = 0;
-    tb_byte_t* data   = xu_null;
+    xu_byte_t* data   = xu_null;
     tb_hong_t  size   = tb_stream_size(stream);
     while (size < 0 || (offset = tb_stream_offset(stream)) < size)
     {
-        xu_long_t real = tb_stream_peek(stream, &data, TB_STREAM_BLOCK_MAXN);
+        xu_long_t real = tb_stream_peek(stream, &data, XU_STREAM_BLOCK_MAXN);
         if (real > 0)
         {
-            xu_char_t const* e = tb_strnchr((xu_char_t const*)data, real, '\n');
+            xu_char_t const* e = xu_strnchr((xu_char_t const*)data, real, '\n');
             if (e)
             {
-                xu_size_t n = (tb_byte_t const*)e + 1 - data;
+                xu_size_t n = (xu_byte_t const*)e + 1 - data;
                 if (!tb_stream_skip(stream, n)) return -1;
                 tb_buffer_memncat(line, data, n);
                 break;
@@ -76,7 +76,7 @@ static xu_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
         }
         else if (!real)
         {
-            real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, -1);
+            real = tb_stream_wait(stream, XU_STREAM_WAIT_READ, -1);
             if (real <= 0)
             {
                 eof = xu_true;
@@ -101,7 +101,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
                                            xu_bool_t keep_crlf)
 {
     // check
-    tb_assert(buf && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(buf && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
 
     // is binary?
     xu_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
@@ -131,7 +131,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
         }
 
         // patch two '\0'
-        tb_buffer_memncat(&file->rcache, (tb_byte_t const*)"\0\0", 2);
+        tb_buffer_memncat(&file->rcache, (xu_byte_t const*)"\0\0", 2);
 
         // get line data
         data = (xu_char_t*)tb_buffer_data(&file->rcache);
@@ -151,7 +151,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 
             // has continuation?
             xu_bool_t has_conline = conlen && size >= conlen + 1 &&
-                                    tb_strncmp(continuation, (xu_char_t const*)(data + size - conlen - 1), conlen) == 0;
+                                    xu_strncmp(continuation, (xu_char_t const*)(data + size - conlen - 1), conlen) == 0;
 
             // do not keep crlf, strip the last lf
             if (!keep_crlf && !has_conline) size--;
@@ -173,7 +173,7 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 
     // push line data
     if (data && size > 0 && (result == PL_FIN || result == PL_CONL))
-        tb_buffer_memncat(buf, (tb_byte_t const*)data, size);
+        tb_buffer_memncat(buf, (xu_byte_t const*)data, size);
 
     // return result
     return result;
@@ -181,14 +181,14 @@ static xu_int_t xm_io_file_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_t* fi
 static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
 {
     // check
-    tb_assert(lua && file && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(lua && file && xm_io_file_is_file(file) && file->u.file_ref);
 
     // init buffer
     tb_buffer_t buf;
     if (!tb_buffer_init(&buf)) xm_io_return_error(lua, "init buffer failed!");
 
     // read all
-    tb_byte_t       data[TB_STREAM_BLOCK_MAXN];
+    xu_byte_t       data[XU_STREAM_BLOCK_MAXN];
     tb_stream_ref_t stream = file->u.file_ref;
     while (!tb_stream_beof(stream))
     {
@@ -197,8 +197,8 @@ static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
             tb_buffer_memncat(&buf, data, real);
         else if (!real)
         {
-            real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, -1);
-            tb_check_break(real > 0);
+            real = tb_stream_wait(stream, XU_STREAM_WAIT_READ, -1);
+            xu_check_break(real > 0);
         }
         else
             break;
@@ -214,7 +214,7 @@ static xu_int_t xm_io_file_read_all_directly(lua_State* lua, xm_io_file_t* file)
 static xu_int_t xm_io_file_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
-    tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
 
     // is binary? read all directly
     xu_bool_t is_binary = file->encoding == XM_IO_FILE_ENCODING_BINARY;
@@ -252,7 +252,7 @@ static xu_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, xu_char
                                      xu_bool_t keep_crlf)
 {
     // check
-    tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
 
     // init buffer
     tb_buffer_t buf;
@@ -288,7 +288,7 @@ static xu_int_t xm_io_file_read_line(lua_State* lua, xm_io_file_t* file, xu_char
 static xu_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, xu_long_t n)
 {
     // check
-    tb_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
+    xu_assert(lua && file && continuation && xm_io_file_is_file(file) && file->u.file_ref);
 
     // check continuation
     if (*continuation != '\0') xm_io_return_error(lua, "continuation is not supported for read number of bytes");
@@ -300,7 +300,7 @@ static xu_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t 
     xu_bool_t ok = xu_false;
     if (n == 0)
     {
-        tb_byte_t* data = xu_null;
+        xu_byte_t* data = xu_null;
         if (tb_stream_need(file->u.file_ref, &data, 1))
         {
             lua_pushliteral(lua, "");
@@ -309,7 +309,7 @@ static xu_int_t xm_io_file_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t 
     }
     else
     {
-        tb_byte_t* bufptr = tb_buffer_resize(&file->rcache, n + 1);
+        xu_byte_t* bufptr = tb_buffer_resize(&file->rcache, n + 1);
         if (bufptr)
         {
             if (tb_stream_bread(file->u.file_ref, bufptr, n))
@@ -327,7 +327,7 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
                                                 xu_bool_t keep_crlf)
 {
     // check
-    tb_assert(buf && file && continuation && xm_io_file_is_std(file));
+    xu_assert(buf && file && continuation && xm_io_file_is_std(file));
 
     // get input buffer
     xu_char_t strbuf[8192];
@@ -355,7 +355,7 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
 
         // has continuation?
         xu_bool_t has_conline =
-            conlen && buflen >= conlen + 1 && tb_strncmp(continuation, (strbuf + buflen - conlen - 1), conlen) == 0;
+            conlen && buflen >= conlen + 1 && xu_strncmp(continuation, (strbuf + buflen - conlen - 1), conlen) == 0;
 
         // do not keep crlf, strip the last lf
         if (!keep_crlf && !has_conline) buflen--;
@@ -373,7 +373,7 @@ static xu_size_t xm_io_file_std_buffer_pushline(tb_buffer_ref_t buf, xm_io_file_
         result = PL_FIN;
     }
 
-    if (result == PL_FIN || result == PL_CONL) tb_buffer_memncat(buf, (tb_byte_t const*)strbuf, buflen);
+    if (result == PL_FIN || result == PL_CONL) tb_buffer_memncat(buf, (xu_byte_t const*)strbuf, buflen);
     return result;
 }
 
@@ -381,7 +381,7 @@ static xu_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, xu_
                                          xu_bool_t keep_crlf)
 {
     // check
-    tb_assert(lua && file && continuation && xm_io_file_is_std(file));
+    xu_assert(lua && file && continuation && xm_io_file_is_std(file));
 
     // init buffer
     tb_buffer_t buf;
@@ -417,7 +417,7 @@ static xu_int_t xm_io_file_std_read_line(lua_State* lua, xm_io_file_t* file, xu_
 static xu_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
-    tb_assert(lua && file && continuation && xm_io_file_is_std(file));
+    xu_assert(lua && file && continuation && xm_io_file_is_std(file));
 
     // init buffer
     tb_buffer_t buf;
@@ -450,7 +450,7 @@ static xu_int_t xm_io_file_std_read_all(lua_State* lua, xm_io_file_t* file, xu_c
 static xu_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation, xu_long_t n)
 {
     // check
-    tb_assert(lua && file && continuation && xm_io_file_is_std(file));
+    xu_assert(lua && file && continuation && xm_io_file_is_std(file));
 
     // check continuation
     if (*continuation != '\0') xm_io_return_error(lua, "continuation is not supported for std streams");
@@ -467,8 +467,8 @@ static xu_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_cha
     }
 
     // get line buffer
-    tb_byte_t* buf_ptr = tb_buffer_resize(&file->rcache, (xu_size_t)n);
-    tb_assert(buf_ptr);
+    xu_byte_t* buf_ptr = tb_buffer_resize(&file->rcache, (xu_size_t)n);
+    xu_assert(buf_ptr);
 
     // io.read(n)
     if (tb_stdfile_read(file->u.std_ref, buf_ptr, (xu_size_t)n))
@@ -481,7 +481,7 @@ static xu_int_t xm_io_file_std_read_n(lua_State* lua, xm_io_file_t* file, xu_cha
 static xu_int_t xm_io_file_std_read_num(lua_State* lua, xm_io_file_t* file, xu_char_t const* continuation)
 {
     // check
-    tb_assert(lua && file && continuation && xm_io_file_is_std(file));
+    xu_assert(lua && file && continuation && xm_io_file_is_std(file));
 
     // check continuation
     if (*continuation != '\0') xm_io_return_error(lua, "continuation is not supported for std streams");
@@ -512,7 +512,7 @@ xu_int_t xm_io_file_read(lua_State* lua)
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // get arguments
     xu_char_t const* mode         = luaL_optstring(lua, 2, "l");

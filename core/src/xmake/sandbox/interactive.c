@@ -29,8 +29,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "sandbox.interactive"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "sandbox.interactive"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -136,7 +136,7 @@ static xu_int_t xm_sandbox_incomplete(lua_State* lua, xu_int_t status)
         size_t           lmsg;
         xu_char_t const* msg = lua_tolstring(lua, -1, &lmsg);
         xu_char_t const* tp  = msg + lmsg - (sizeof(LUA_QL("<eof>")) - 1);
-        if (tb_strstr(msg, LUA_QL("<eof>")) == tp)
+        if (xu_strstr(msg, LUA_QL("<eof>")) == tp)
         {
             lua_pop(lua, 1);
             return 1;
@@ -264,7 +264,7 @@ static xu_int_t xm_sandbox_loadline(lua_State* lua, xu_int_t top)
         if (!xm_sandbox_pushline(lua, prompt2)) return -1;
 
         // cancel multi-line input?
-        if (!tb_strcmp(lua_tostring(lua, -1), "q"))
+        if (!xu_strcmp(lua_tostring(lua, -1), "q"))
         {
             lua_pop(lua, 2);
             lua_pushstring(lua, "return ");

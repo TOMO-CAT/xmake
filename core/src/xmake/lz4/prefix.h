@@ -91,10 +91,10 @@ static __xu_inline__ xu_void_t xm_lz4_cstream_exit(xm_lz4_cstream_t* stream)
         }
         if (stream->buffer)
         {
-            tb_free(stream->buffer);
+            xu_free(stream->buffer);
             stream->buffer = xu_null;
         }
-        tb_free(stream);
+        xu_free(stream);
     }
 }
 
@@ -134,7 +134,7 @@ static __xu_inline__ xm_lz4_cstream_t* xm_lz4_cstream_init()
     return stream;
 }
 
-static __xu_inline__ xu_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb_byte_t const* idata, xu_size_t isize,
+static __xu_inline__ xu_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, xu_byte_t const* idata, xu_size_t isize,
                                                     xu_bool_t end)
 {
     // check
@@ -160,7 +160,7 @@ static __xu_inline__ xu_long_t xm_lz4_cstream_write(xm_lz4_cstream_t* stream, tb
     return isize;
 }
 
-static __xu_inline__ xu_long_t xm_lz4_cstream_read(xm_lz4_cstream_t* stream, tb_byte_t* odata, xu_size_t osize)
+static __xu_inline__ xu_long_t xm_lz4_cstream_read(xm_lz4_cstream_t* stream, xu_byte_t* odata, xu_size_t osize)
 {
     // check
     xu_assert_and_check_return_val(stream && stream->cctx && odata && osize, -1);
@@ -194,10 +194,10 @@ static __xu_inline__ xu_void_t xm_lz4_dstream_exit(xm_lz4_dstream_t* stream)
         }
         if (stream->buffer)
         {
-            tb_free(stream->buffer);
+            xu_free(stream->buffer);
             stream->buffer = xu_null;
         }
-        tb_free(stream);
+        xu_free(stream);
     }
 }
 
@@ -226,7 +226,7 @@ static __xu_inline__ xm_lz4_dstream_t* xm_lz4_dstream_init()
     return stream;
 }
 
-static __xu_inline__ xu_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb_byte_t const* idata, xu_size_t isize,
+static __xu_inline__ xu_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, xu_byte_t const* idata, xu_size_t isize,
                                                     xu_bool_t end)
 {
     // check
@@ -267,7 +267,7 @@ static __xu_inline__ xu_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb
             tb_memcpy(stream->buffer, stream->header + consumed_size, stream->buffer_size);
         }
     }
-    tb_check_return_val(stream->header_size == header_size && isize, 0);
+    xu_check_return_val(stream->header_size == header_size && isize, 0);
     xu_assert_and_check_return_val(stream->buffer && stream->buffer_size + isize <= stream->buffer_maxn, -1);
 
     // append the input data
@@ -276,11 +276,11 @@ static __xu_inline__ xu_long_t xm_lz4_dstream_write(xm_lz4_dstream_t* stream, tb
     return isize;
 }
 
-static __xu_inline__ xu_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, tb_byte_t* odata, xu_size_t osize)
+static __xu_inline__ xu_long_t xm_lz4_dstream_read(xm_lz4_dstream_t* stream, xu_byte_t* odata, xu_size_t osize)
 {
     // check
     xu_assert_and_check_return_val(stream && stream->dctx && stream->buffer && odata && osize, -1);
-    tb_check_return_val(stream->buffer_size, 0);
+    xu_check_return_val(stream->buffer_size, 0);
 
     // do decompress
     size_t    srcsize = stream->buffer_size;

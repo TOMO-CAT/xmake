@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "pipe_open"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "pipe_open"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -48,11 +48,11 @@ xu_int_t xm_io_pipe_open(lua_State* lua)
     xu_assert_and_check_return_val(name && modestr, 0);
 
     // get pipe mode value
-    xu_size_t mode = TB_PIPE_MODE_RO;
-    if (modestr[0] == 'w') mode = TB_PIPE_MODE_WO;
+    xu_size_t mode = XU_PIPE_MODE_RO;
+    if (modestr[0] == 'w') mode = XU_PIPE_MODE_WO;
 
     // set block mode
-    if (modestr[1] == 'B') mode |= TB_PIPE_MODE_BLOCK;
+    if (modestr[1] == 'B') mode |= XU_PIPE_MODE_BLOCK;
 
     // get buffer size
     xu_size_t buffsize = (xu_size_t)luaL_checknumber(lua, 3);

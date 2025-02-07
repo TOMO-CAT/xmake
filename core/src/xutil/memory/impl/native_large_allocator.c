@@ -5,6 +5,7 @@
 #define XU_TRACE_MODULE_DEBUG (0)
 
 #include "xutil/memory/impl/native_large_allocator.h"
+#include "xutil/algorithm/for_if.h"
 #include "xutil/container/list_entry.h"
 #include "xutil/memory/impl/prefix.h"
 #include "xutil/platform/native_memory.h"

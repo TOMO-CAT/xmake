@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "file_close"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "file_close"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,21 +41,20 @@ xu_int_t xm_io_file_close(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
-    if (!lua_isuserdata(lua, 1))
-        xm_io_return_error(lua, "close(invalid file)!");
+    if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "close(invalid file)!");
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // close file
     if (xm_io_file_is_file(file))
     {
         // check
-        tb_assert(file->u.file_ref);
+        xu_assert(file->u.file_ref);
 
         // flush filter stream cache, TODO we should fix it in tbox/stream
-        if ((file->mode & TB_FILE_MODE_RW) == TB_FILE_MODE_RW && file->fstream)
+        if ((file->mode & XU_FILE_MODE_RW) == XU_FILE_MODE_RW && file->fstream)
         {
             if (!tb_stream_sync(file->u.file_ref, xu_false)) return xu_false;
         }

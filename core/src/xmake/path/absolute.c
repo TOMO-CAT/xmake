@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "absolute"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "absolute"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,7 +40,7 @@ xu_int_t xm_path_absolute(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // get the root
     xu_char_t const* root = luaL_optstring(lua, 2, xu_null);

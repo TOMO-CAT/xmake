@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_close"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "socket_close"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,12 +41,11 @@ xu_int_t xm_io_socket_close(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // exit socket
     lua_pushboolean(lua, tb_socket_exit(sock));

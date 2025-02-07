@@ -18,7 +18,7 @@ mapfile -t test_scripts < <(find example -type f -name "test.sh")
 
 if [ -z "${GITHUB_ACTIONS+x}" ]; then
     info "not running in github actions"
-    SHOW_OUTPUT=false
+    SHOW_OUTPUT=true
 else
     info "running in github actions, we will show all output"
     SHOW_OUTPUT=true

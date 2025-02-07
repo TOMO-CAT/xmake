@@ -1,6 +1,8 @@
 #pragma once
 
 // interface headers
+#include "xutil/charset/chartset.h"
+#include "xutil/hash/sha.h"
 #include "xutil/libc/stdio/stdio.h"
 #include "xutil/libc/string/string.h"
 #include "xutil/macros/assert.h"
@@ -11,8 +13,13 @@
 #include "xutil/platform/directory.h"
 #include "xutil/platform/environment.h"
 #include "xutil/platform/file.h"
+#include "xutil/platform/filelock.h"
 #include "xutil/platform/path.h"
+#include "xutil/platform/poller.h"
 #include "xutil/platform/socket.h"
+#include "xutil/stream/stream.h"
+#include "xutil/utils/base64.h"
+#include "xutil/utils/singleton.h"
 #include "xutil/utils/state.h"
 #include "xutil/utils/trace.h"
 #include "xutil/utils/used.h"

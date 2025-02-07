@@ -31,7 +31,12 @@ typedef struct __xu_ut_t
  */
 
 // the unit-tests
-static xu_ut_t g_ut[] = {XU_UT_MAIN_ITEM(utils_trace)};
+static xu_ut_t g_ut[] = {
+    XU_UT_MAIN_ITEM(algorithm_sort),
+    XU_UT_MAIN_ITEM(memory_buffer),
+    XU_UT_MAIN_ITEM(memory_check),
+    XU_UT_MAIN_ITEM(utils_trace),
+};
 
 /* *******************************************************
  *  main
@@ -67,14 +72,14 @@ xu_int_t main(xu_int_t argc, xu_char_t** argv)
         }
     }
 
-    // no this demo? help it
+    // no this ut? help it
     if (!name)
     {
         xu_trace_i("======================================================================");
-        xu_trace_i("Usages: xmake r demo [testname] arguments ...");
+        xu_trace_i("Usages: xmake run xutil-ut [testname] arguments ...");
         xu_trace_i("");
         xu_trace_i(".e.g");
-        xu_trace_i("    xmake r demo stream http://www.xxxxx.com /tmp/a");
+        xu_trace_i("    xmake run xutil-ut stream http://www.xxxxx.com /tmp/a");
         xu_trace_i("");
 
         // walk name

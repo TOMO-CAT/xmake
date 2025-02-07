@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "file_readable"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "file_readable"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -44,7 +44,7 @@ xu_int_t xm_io_file_readable(lua_State* lua)
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // has readable data?
     xu_bool_t ok = xu_false;

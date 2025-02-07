@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "file_rawfd"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "file_rawfd"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -35,7 +35,7 @@
  */
 
 // file to fd
-#define xm_io_file2fd(file)            (lua_Number)tb_file2fd(file)
+#define xm_io_file2fd(file) (lua_Number) tb_file2fd(file)
 
 /* *******************************************************
  * implementation
@@ -53,18 +53,17 @@ xu_int_t xm_io_file_rawfd(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is user data?
-    if (!lua_isuserdata(lua, 1))
-        xm_io_return_error(lua, "get rawfd for invalid file!");
+    if (!lua_isuserdata(lua, 1)) xm_io_return_error(lua, "get rawfd for invalid file!");
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // get file raw fd
     if (xm_io_file_is_file(file))
     {
         tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(file->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile))
+        if (tb_stream_ctrl(file->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile))
         {
             lua_pushnumber(lua, xm_io_file2fd(rawfile));
             return 1;

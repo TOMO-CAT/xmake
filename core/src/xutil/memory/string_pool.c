@@ -6,6 +6,7 @@
 #define XU_TRACE_MODULE_DEBUG (0)
 
 #include "xutil/memory/string_pool.h"
+#include "xutil/algorithm/for_if.h"
 #include "xutil/container/hash_map.h"
 #include "xutil/macros/assert.h"
 #include "xutil/macros/malloc.h"

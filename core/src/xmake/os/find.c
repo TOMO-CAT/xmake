@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "find"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "find"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -33,19 +33,19 @@
 /* *******************************************************
  * private implementation
  */
-static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, tb_cpointer_t priv)
+static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* info, xu_cpointer_t priv)
 {
     // check
     tb_value_ref_t tuple = (tb_value_ref_t)priv;
-    xu_assert_and_check_return_val(path && info && tuple, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(path && info && tuple, XU_DIRECTORY_WALK_CODE_END);
 
     // the lua
     lua_State* lua = (lua_State*)tuple[0].ptr;
-    xu_assert_and_check_return_val(lua, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(lua, XU_DIRECTORY_WALK_CODE_END);
 
     // the pattern
     xu_char_t const* pattern = (xu_char_t const*)tuple[1].cstr;
-    xu_assert_and_check_return_val(pattern, TB_DIRECTORY_WALK_CODE_END);
+    xu_assert_and_check_return_val(pattern, XU_DIRECTORY_WALK_CODE_END);
 
     // remove ./ for path
     if (path[0] == '.' && (path[1] == '/' || path[1] == '\\')) path = path + 2;
@@ -57,12 +57,12 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
     xu_size_t* pcount = &(tuple[3].ul);
 
     // trace
-    xu_trace_d("path[%c]: %s", info->type == TB_FILE_TYPE_DIRECTORY ? 'd' : 'f', path);
+    xu_trace_d("path[%c]: %s", info->type == XU_FILE_TYPE_DIRECTORY ? 'd' : 'f', path);
 
     // we can ignore it directly if this path is file, but we need directory
-    xu_size_t needtype = (mode == 1) ? TB_FILE_TYPE_DIRECTORY
-                                     : ((mode == 0) ? XU_FILE_TYPE_FILE : (XU_FILE_TYPE_FILE | TB_FILE_TYPE_DIRECTORY));
-    if (info->type == XU_FILE_TYPE_FILE && needtype == TB_FILE_TYPE_DIRECTORY) return TB_DIRECTORY_WALK_CODE_CONTINUE;
+    xu_size_t needtype = (mode == 1) ? XU_FILE_TYPE_DIRECTORY
+                                     : ((mode == 0) ? XU_FILE_TYPE_FILE : (XU_FILE_TYPE_FILE | XU_FILE_TYPE_DIRECTORY));
+    if (info->type == XU_FILE_TYPE_FILE && needtype == XU_FILE_TYPE_DIRECTORY) return XU_DIRECTORY_WALK_CODE_CONTINUE;
 
     // do path:match(pattern)
     lua_getfield(lua, -1, "match");
@@ -72,13 +72,13 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
     {
         // trace
         xu_printf("error: call string.match(%s, %s) failed: %s!\n", path, pattern, lua_tostring(lua, -1));
-        return TB_DIRECTORY_WALK_CODE_END;
+        return XU_DIRECTORY_WALK_CODE_END;
     }
 
     // match ok?
     xu_bool_t matched        = xu_false;
     xu_bool_t skip_recursion = xu_false;
-    if (lua_isstring(lua, -1) && !tb_strcmp(path, lua_tostring(lua, -1)))
+    if (lua_isstring(lua, -1) && !xu_strcmp(path, lua_tostring(lua, -1)))
     {
         // exists excludes?
         xu_bool_t excluded = xu_false;
@@ -87,14 +87,14 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
             // the root directory
             size_t           rootlen = 0;
             xu_char_t const* rootdir = luaL_checklstring(lua, 1, &rootlen);
-            xu_assert_and_check_return_val(rootdir && rootlen, TB_DIRECTORY_WALK_CODE_END);
+            xu_assert_and_check_return_val(rootdir && rootlen, XU_DIRECTORY_WALK_CODE_END);
 
             // check
-            tb_assert(!tb_strncmp(path, rootdir, rootlen));
-            tb_assert(rootlen + 1 <= tb_strlen(path));
+            xu_assert(!xu_strncmp(path, rootdir, rootlen));
+            xu_assert(rootlen + 1 <= tb_strlen(path));
 
             // skip the rootdir if not "."
-            if (tb_strcmp(rootdir, ".")) path += rootlen + 1;
+            if (xu_strcmp(rootdir, ".")) path += rootlen + 1;
 
             // exclude paths
             xu_int_t i     = 0;
@@ -118,7 +118,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
                     }
 
                     // matched?
-                    excluded = lua_isstring(lua, -1) && !tb_strcmp(path, lua_tostring(lua, -1));
+                    excluded = lua_isstring(lua, -1) && !xu_strcmp(path, lua_tostring(lua, -1));
 
                     // pop the match result
                     lua_pop(lua, 1);
@@ -144,13 +144,13 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
                     // do callback(path, isdir)
                     lua_pushvalue(lua, 6);
                     lua_pushstring(lua, path);
-                    lua_pushboolean(lua, info->type == TB_FILE_TYPE_DIRECTORY);
+                    lua_pushboolean(lua, info->type == XU_FILE_TYPE_DIRECTORY);
                     lua_call(lua, 2, 1);
 
                     // is continue?
                     xu_bool_t is_continue = lua_toboolean(lua, -1);
                     lua_pop(lua, 1);
-                    if (!is_continue) return TB_DIRECTORY_WALK_CODE_END;
+                    if (!is_continue) return XU_DIRECTORY_WALK_CODE_END;
                 }
                 matched = xu_true;
             }
@@ -160,7 +160,7 @@ static xu_long_t xm_os_find_walk(xu_char_t const* path, xu_file_info_t const* in
             skip_recursion = xu_true;
     }
     if (!matched) lua_pop(lua, 1);
-    return skip_recursion ? TB_DIRECTORY_WALK_CODE_SKIP_RECURSION : TB_DIRECTORY_WALK_CODE_CONTINUE;
+    return skip_recursion ? XU_DIRECTORY_WALK_CODE_SKIP_RECURSION : XU_DIRECTORY_WALK_CODE_CONTINUE;
 }
 /* *******************************************************
  * implementation
@@ -172,11 +172,11 @@ xu_int_t xm_os_find(lua_State* lua)
 
     // get the root directory
     xu_char_t const* rootdir = luaL_checkstring(lua, 1);
-    tb_check_return_val(rootdir, 0);
+    xu_check_return_val(rootdir, 0);
 
     // get the pattern
     xu_char_t const* pattern = luaL_checkstring(lua, 2);
-    tb_check_return_val(pattern, 0);
+    xu_check_return_val(pattern, 0);
 
     // the recursion level
     xu_long_t recursion = (xu_long_t)lua_tointeger(lua, 3);

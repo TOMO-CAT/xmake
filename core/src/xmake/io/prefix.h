@@ -59,8 +59,8 @@ typedef enum __xm_io_file_type_e
 
 } xm_io_file_type_e;
 
-/* use negative numbers for this enum, its a extension for tb_charset_type_e
- * before adding new values, make sure they have not conflicts with values in tb_charset_type_e
+/* use negative numbers for this enum, its a extension for xu_charset_type_e
+ * before adding new values, make sure they have not conflicts with values in xu_charset_type_e
  */
 typedef enum __xm_io_file_encoding_e
 {
@@ -89,7 +89,7 @@ typedef struct __xm_io_file_t
     tb_stream_ref_t fstream;  // the file charset stream filter
     xu_size_t       mode;     // tb_file_mode_t
     xu_size_t       type;     // xm_io_file_type_e
-    xu_size_t       encoding; // value of xm_io_file_encoding_e or tb_charset_type_e
+    xu_size_t       encoding; // value of xm_io_file_encoding_e or xu_charset_type_e
     xu_bool_t       utfbom;   // write utf-bom for utf encoding?
     tb_buffer_t     rcache;   // the read line cache buffer
     tb_buffer_t     wcache;   // the write line cache buffer

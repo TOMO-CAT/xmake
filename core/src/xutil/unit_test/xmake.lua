@@ -11,7 +11,7 @@
 --         add_packages("gtest")
 --     end)
 -- end
-target("ut", function()
+target("xutil-ut", function()
     add_deps("xutil")
     set_kind("binary")
     add_defines([[__xu_prefix__="xutil"]])

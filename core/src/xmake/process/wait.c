@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "process.wait"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "process.wait"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -51,7 +51,7 @@ xu_int_t xm_process_wait(lua_State* lua)
 
     // get the process
     tb_process_ref_t process = (tb_process_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(process, 0);
+    xu_check_return_val(process, 0);
 
     // get the timeout
     xu_long_t timeout = (xu_long_t)luaL_checkinteger(lua, 2);

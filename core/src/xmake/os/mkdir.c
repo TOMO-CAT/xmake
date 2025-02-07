@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "mkdir"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "mkdir"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,13 +40,14 @@ xu_int_t xm_os_mkdir(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // os.mkdir(path)
     xu_file_info_t info = {0};
-    if (!xu_file_info(path, &info) || (info.type != TB_FILE_TYPE_DIRECTORY))
+    if (!xu_file_info(path, &info) || (info.type != XU_FILE_TYPE_DIRECTORY))
         lua_pushboolean(lua, tb_directory_create(path));
-    else lua_pushboolean(lua, xu_true);
+    else
+        lua_pushboolean(lua, xu_true);
 
     // ok
     return 1;

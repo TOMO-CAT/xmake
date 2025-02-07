@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "translate"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "translate"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,7 +41,7 @@ xu_int_t xm_path_translate(lua_State* lua)
     // get the path
     size_t           path_size = 0;
     xu_char_t const* path      = luaL_checklstring(lua, 1, &path_size);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // get the option argument, e.g. {normalize = true}
     xu_bool_t normalize = xu_false;

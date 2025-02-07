@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "pipe_openpair"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "pipe_openpair"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -48,8 +48,8 @@ xu_int_t xm_io_pipe_openpair(lua_State* lua)
 
     // init mode
     xu_size_t mode[2] = {0};
-    if (modestr[0] == 'B') mode[0] |= TB_PIPE_MODE_BLOCK;
-    if (modestr[1] == 'B') mode[1] |= TB_PIPE_MODE_BLOCK;
+    if (modestr[0] == 'B') mode[0] |= XU_PIPE_MODE_BLOCK;
+    if (modestr[1] == 'B') mode[1] |= XU_PIPE_MODE_BLOCK;
 
     // get buffer size
     xu_size_t buffsize = (xu_size_t)luaL_checknumber(lua, 2);

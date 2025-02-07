@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "poller_wait"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "poller_wait"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -43,7 +43,7 @@ static xu_int_t   g_events_count = 0;
  * private implementation
  */
 static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref_t object, xu_long_t events,
-                                    tb_cpointer_t priv)
+                                    xu_cpointer_t priv)
 {
     // check
     xu_assert_and_check_return(g_lua);
@@ -57,10 +57,10 @@ static xu_void_t xm_io_poller_event(tb_poller_ref_t poller, tb_poller_object_ref
     else
         lua_pushlightuserdata(g_lua, object->ref.ptr);
     lua_rawseti(g_lua, -2, 2);
-    if (object->type == TB_POLLER_OBJECT_FWATCHER)
+    if (object->type == XU_POLLER_OBJECT_FWATCHER)
     {
         lua_newtable(g_lua);
-        tb_fwatcher_event_t* event = (tb_fwatcher_event_t*)events;
+        xu_fwatcher_event_t* event = (xu_fwatcher_event_t*)events;
         if (event)
         {
             lua_pushstring(g_lua, "path");

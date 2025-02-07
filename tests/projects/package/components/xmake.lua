@@ -2,22 +2,25 @@ add_rules("mode.debug", "mode.release")
 
 add_requires("sfml")
 
-target("graphics")
+target("graphics", function()
     set_kind("static")
     add_files("src/graphics.cpp")
     add_packages("sfml", {components = "graphics", public = true})
+end)
 
-target("network")
+target("network", function()
     set_kind("static")
     add_files("src/network.cpp")
     add_packages("sfml", {components = "network", public = true})
+end)
 
-target("test")
+target("test", function()
     set_kind("binary")
     add_files("src/main.cpp")
     add_deps("graphics", "network")
+end)
 
-package("sfml")
+package("sfml", function()
 
     set_homepage("https://www.sfml-dev.org")
     set_description("Simple and Fast Multimedia Library")
@@ -203,4 +206,4 @@ package("sfml")
             ]]}, {includes = "SFML/Network.hpp"}))
         end
     end)
-package_end()
+end)

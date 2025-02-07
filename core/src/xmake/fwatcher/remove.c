@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "fwatcher.remove"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "fwatcher.remove"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -44,15 +44,15 @@ xu_int_t xm_fwatcher_remove(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the fwatcher
-    tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(fwatcher, 0);
+    xu_fwatcher_ref_t fwatcher = (xu_fwatcher_ref_t)xm_lua_topointer(lua, 1);
+    xu_check_return_val(fwatcher, 0);
 
     // get watchdir
     xu_char_t const* watchdir = luaL_checkstring(lua, 2);
-    tb_check_return_val(watchdir, 0);
+    xu_check_return_val(watchdir, 0);
 
     // remove watchdir
-    xu_bool_t ok = tb_fwatcher_remove(fwatcher, watchdir);
+    xu_bool_t ok = xu_fwatcher_remove(fwatcher, watchdir);
 
     // save result
     lua_pushboolean(lua, ok);

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "compress_file"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "compress_file"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,22 +41,22 @@ xu_int_t xm_lz4_compress_file(lua_State* lua)
     // get the file paths
     xu_char_t const* srcpath = luaL_checkstring(lua, 1);
     xu_char_t const* dstpath = luaL_checkstring(lua, 2);
-    tb_check_return_val(srcpath && dstpath, 0);
+    xu_check_return_val(srcpath && dstpath, 0);
 
     // init lz4 stream
     xm_lz4_cstream_t* stream_lz4 = xm_lz4_cstream_init();
-    tb_check_return_val(stream_lz4, 0);
+    xu_check_return_val(stream_lz4, 0);
 
     // do compress
     xu_bool_t       ok      = xu_false;
-    tb_stream_ref_t istream = tb_stream_init_from_file(srcpath, TB_FILE_MODE_RO);
+    tb_stream_ref_t istream = tb_stream_init_from_file(srcpath, XU_FILE_MODE_RO);
     tb_stream_ref_t ostream =
-        tb_stream_init_from_file(dstpath, TB_FILE_MODE_RW | TB_FILE_MODE_CREAT | TB_FILE_MODE_TRUNC);
+        tb_stream_init_from_file(dstpath, XU_FILE_MODE_RW | XU_FILE_MODE_CREAT | XU_FILE_MODE_TRUNC);
     if (istream && ostream && tb_stream_open(istream) && tb_stream_open(ostream))
     {
         xu_bool_t write_ok = xu_false;
-        tb_byte_t idata[TB_STREAM_BLOCK_MAXN];
-        tb_byte_t odata[TB_STREAM_BLOCK_MAXN];
+        xu_byte_t idata[XU_STREAM_BLOCK_MAXN];
+        xu_byte_t odata[XU_STREAM_BLOCK_MAXN];
         while (!tb_stream_beof(istream))
         {
             write_ok        = xu_false;
@@ -65,7 +65,7 @@ xu_int_t xm_lz4_compress_file(lua_State* lua)
             {
                 xu_long_t r = xm_lz4_cstream_write(stream_lz4, idata, ireal, tb_stream_beof(istream));
                 xu_assert_and_check_break(r >= 0);
-                tb_check_continue(r > 0);
+                xu_check_continue(r > 0);
 
                 xu_long_t oreal;
                 while ((oreal = xm_lz4_cstream_read(stream_lz4, odata, sizeof(odata))) > 0)

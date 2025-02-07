@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "select"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "select"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -59,7 +59,7 @@ static xu_bool_t xm_semver_select_from_versions_tags1(lua_State* lua, xu_int_t f
     }
 
     // no matches?
-    tb_check_return_val(matches->length, xu_false);
+    xu_check_return_val(matches->length, xu_false);
 
     // sort matches
     semvers_psort(matches);
@@ -94,7 +94,7 @@ static xu_bool_t xm_semver_select_from_versions_tags2(lua_State* lua, xu_int_t f
         xu_char_t const* source_str = luaL_checkstring(lua, -1);
         xu_size_t        source_len = tb_strlen(source_str);
         lua_pop(lua, 1);
-        if (source_len == version_len && tb_strncmp(source_str, version_str, version_len) == 0)
+        if (source_len == version_len && xu_strncmp(source_str, version_str, version_len) == 0)
         {
             lua_createtable(lua, 0, 2);
             lua_pushlstring(lua, source_str, source_len);
@@ -150,7 +150,7 @@ static xu_bool_t xm_semver_select_latest_from_versions_tags(lua_State* lua, xu_i
 
         lua_pop(lua, 1);
     }
-    tb_check_return_val(matches->length, xu_false);
+    xu_check_return_val(matches->length, xu_false);
 
     // sort matches
     semvers_psort(matches);
@@ -194,7 +194,7 @@ xu_int_t xm_semver_select(lua_State* lua)
     {
         // get the version range string
         range_str = luaL_checkstring(lua, 1);
-        tb_check_break(range_str);
+        xu_check_break(range_str);
 
         // get the range string length
         xu_size_t range_len = tb_strlen(range_str);
@@ -242,7 +242,7 @@ xu_int_t xm_semver_select(lua_State* lua)
         }
 
         // select the latest version from the tags and versions if be latest
-        if (!tb_strcmp(range_str, "latest"))
+        if (!xu_strcmp(range_str, "latest"))
         {
             // attempt to select latest version from the versions list
             if (xm_semver_select_latest_from_versions_tags(lua, 2, &semver, &matches))

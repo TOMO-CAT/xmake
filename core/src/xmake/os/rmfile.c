@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "rmfile"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "rmfile"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,7 +40,7 @@ xu_int_t xm_os_rmfile(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // do remove
     lua_pushboolean(lua, tb_file_remove(path));

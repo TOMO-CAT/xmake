@@ -1,4 +1,7 @@
 #include "xutil/memory/impl/prefix.h"
+#include "xutil/platform/backtrace.h"
+#include "xutil/utils/dump.h"
+#include "xutil/xutil.h"
 
 /* *******************************************************
  * implementation
@@ -16,7 +19,7 @@ __xu_no_sanitize_address__ xu_size_t xu_pool_data_size(xu_cpointer_t data)
     do
     {
         // tbox must be running normally
-        xu_check_break(xu_state() == XU_STATE_OK);
+        xu_check_break(xutil_state() == XU_STATE_OK);
 
         // get global allocator
         xu_allocator_ref_t allocator = xu_allocator();

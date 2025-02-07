@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "compare"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "compare"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -42,11 +42,11 @@ xu_int_t xm_semver_compare(lua_State* lua)
 
     // get the version1 string
     xu_char_t const* version1_str = luaL_checkstring(lua, 1);
-    tb_check_return_val(version1_str, 0);
+    xu_check_return_val(version1_str, 0);
 
     // get the version2 string
     xu_char_t const* version2_str = luaL_checkstring(lua, 2);
-    tb_check_return_val(version2_str, 0);
+    xu_check_return_val(version2_str, 0);
 
     // try to parse version1 string
     semver_t semver1 = {0};
@@ -56,7 +56,6 @@ xu_int_t xm_semver_compare(lua_State* lua)
         lua_pushfstring(lua, "unable to parse semver '%s'", version1_str);
         return 2;
     }
-
 
     // try to parse version2 string
     semver_t semver2 = {0};

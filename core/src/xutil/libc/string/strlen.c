@@ -1,5 +1,6 @@
 #include "xutil/libc/string/string.h"
 #include "xutil/macros/assert.h"
+#include "xutil/memory/impl/prefix.h"
 
 #ifndef XU_CONFIG_LIBC_HAVE_STRLEN
 #    if defined(XU_ARCH_x86)

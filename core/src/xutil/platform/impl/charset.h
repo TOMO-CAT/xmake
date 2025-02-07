@@ -12,5 +12,8 @@
  *
  * @return          the converted bytes for output or -1
  */
-xu_long_t xu_charset_conv_impl(xu_size_t ftype, xu_size_t ttype, xu_static_stream_ref_t fst,
-                               xu_static_stream_ref_t tst);
+static __xu_inline__ xu_long_t xu_charset_conv_impl(xu_size_t ftype, xu_size_t ttype, xu_static_stream_ref_t fst,
+                                      xu_static_stream_ref_t tst)
+{
+    return -1;
+}

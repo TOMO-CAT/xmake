@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "fwatcher.close"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "fwatcher.close"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,15 +41,14 @@ xu_int_t xm_fwatcher_close(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the fwatcher
-    tb_fwatcher_ref_t fwatcher = (tb_fwatcher_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(fwatcher, 0);
+    xu_fwatcher_ref_t fwatcher = (xu_fwatcher_ref_t)xm_lua_topointer(lua, 1);
+    xu_check_return_val(fwatcher, 0);
 
     // exit fwatcher
-    tb_fwatcher_exit(fwatcher);
+    xu_fwatcher_exit(fwatcher);
 
     // save result: ok
     lua_pushboolean(lua, xu_true);

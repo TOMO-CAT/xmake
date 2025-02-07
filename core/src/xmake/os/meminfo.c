@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "meminfo"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "meminfo"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -49,7 +49,7 @@
 #ifdef XU_CONFIG_OS_LINUX
 static tb_int64_t xm_os_meminfo_get_value(xu_char_t const* buffer, xu_char_t const* name)
 {
-    xu_char_t const* p = tb_strstr(buffer, name);
+    xu_char_t const* p = xu_strstr(buffer, name);
     return p ? tb_stoi64(p + tb_strlen(name)) : 0;
 }
 #endif

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "semver"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "semver"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -36,7 +36,7 @@
 xu_void_t lua_pushsemver(lua_State* lua, semver_t const* semver)
 {
     // check
-    tb_assert(lua && semver);
+    xu_assert(lua && semver);
 
     // return a semver table
     lua_createtable(lua, 0, 7);
@@ -60,7 +60,7 @@ xu_void_t lua_pushsemver(lua_State* lua, semver_t const* semver)
     lua_pushstring(lua, "prerelease");
     lua_newtable(lua);
 
-    tb_uchar_t         i  = 0;
+    xu_uchar_t         i  = 0;
     semver_id_t const* id = &semver->prerelease;
     while (id && id->len)
     {

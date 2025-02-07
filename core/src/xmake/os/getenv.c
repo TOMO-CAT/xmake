@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "getenv"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "getenv"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -47,7 +47,7 @@ xu_int_t xm_os_getenv(lua_State* lua)
 
     // get the name
     xu_char_t const* name = luaL_checkstring(lua, 1);
-    tb_check_return_val(name, 0);
+    xu_check_return_val(name, 0);
 
     // init values
     tb_string_t values;

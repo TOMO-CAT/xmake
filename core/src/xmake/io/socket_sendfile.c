@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "socket_sendfile"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "socket_sendfile"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -58,11 +58,11 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 2);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // does not support stdfile
     if (!xm_io_file_is_file(file) || !file->stream)
@@ -74,7 +74,7 @@ xu_int_t xm_io_socket_sendfile(lua_State* lua)
 
     // get file reference
     tb_file_ref_t rawfile = xu_null;
-    if (!tb_stream_ctrl(file->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) || !rawfile)
+    if (!tb_stream_ctrl(file->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) || !rawfile)
     {
         lua_pushinteger(lua, -1);
         lua_pushliteral(lua, "cannot get file reference!");

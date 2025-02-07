@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "isdir"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "isdir"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -40,10 +40,10 @@ xu_int_t xm_os_isdir(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // is directory?
     xu_file_info_t info = {0};
-    lua_pushboolean(lua, xu_file_info(path, &info) && (info.type == TB_FILE_TYPE_DIRECTORY));
+    lua_pushboolean(lua, xu_file_info(path, &info) && (info.type == XU_FILE_TYPE_DIRECTORY));
     return 1;
 }

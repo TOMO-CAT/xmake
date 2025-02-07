@@ -1,4 +1,6 @@
 #include "xutil/libc/string/string.h"
+#include "xutil/memory/impl/prefix.h"
+#include "xutil/utils/utils.h"
 
 #ifndef XU_CONFIG_LIBC_HAVE_STRLCPY
 #    if defined(XU_ARCH_x86)

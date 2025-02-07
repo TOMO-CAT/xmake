@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "string_trim"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "string_trim"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -36,21 +36,21 @@
 static xu_void_t xm_string_trim_space(xu_char_t const** psstr, xu_char_t const** pestr, xu_int_t mode)
 {
     // check
-    tb_assert(psstr && pestr && *psstr && *pestr);
+    xu_assert(psstr && pestr && *psstr && *pestr);
 
     xu_char_t const* p = *psstr;
     xu_char_t const* e = *pestr;
 
     // trim left?
     if (mode <= 0)
-        while (p < e && tb_isspace(*p))
+        while (p < e && xu_isspace(*p))
             p++;
 
     // trim right
     if (mode >= 0)
     {
         e--;
-        while (e >= p && tb_isspace(*e))
+        while (e >= p && xu_isspace(*e))
             e--;
         e++;
     }
@@ -64,10 +64,10 @@ static xu_char_t const* xm_string_ltrim(xu_char_t const* sstr, xu_char_t const* 
                                         size_t ntrim)
 {
     // check
-    tb_assert(sstr && estr && ctrim);
+    xu_assert(sstr && estr && ctrim);
 
     xu_char_t const* p = sstr;
-    while (p < estr && tb_strnchr(ctrim, ntrim, *p))
+    while (p < estr && xu_strnchr(ctrim, ntrim, *p))
         p++;
     return p;
 }
@@ -76,10 +76,10 @@ static xu_char_t const* xm_string_rtrim(xu_char_t const* sstr, xu_char_t const* 
                                         size_t ntrim)
 {
     // check
-    tb_assert(sstr && estr && ctrim);
+    xu_assert(sstr && estr && ctrim);
 
     xu_char_t const* p = estr - 1;
-    while (p >= sstr && tb_strnchr(ctrim, ntrim, *p))
+    while (p >= sstr && xu_strnchr(ctrim, ntrim, *p))
         p--;
     return p + 1;
 }
@@ -112,7 +112,7 @@ xu_int_t xm_string_trim(lua_State* lua)
     do
     {
         xu_assert_and_check_break(sstr && trimchars);
-        tb_check_break(lstr != 0);
+        xu_check_break(lstr != 0);
 
         xu_char_t const* const rsstr = sstr;
         xu_char_t const* const restr = estr;
@@ -126,7 +126,7 @@ xu_int_t xm_string_trim(lua_State* lua)
         }
 
         // no trimed chars
-        tb_check_break(sstr != rsstr || estr != restr);
+        xu_check_break(sstr != rsstr || estr != restr);
 
         // ok
         lua_pushlstring(lua, sstr, estr - sstr);

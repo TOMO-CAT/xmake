@@ -51,10 +51,10 @@ xu_int_t xm_package_loadxmi(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     xu_char_t const* name = luaL_checkstring(lua, 2);
-    tb_check_return_val(name, 0);
+    xu_check_return_val(name, 0);
 
     // load module library
     tb_dynamic_ref_t lib = tb_dynamic_init(path);

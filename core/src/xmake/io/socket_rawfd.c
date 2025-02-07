@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "socket_rawfd"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "socket_rawfd"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -35,7 +35,7 @@
  */
 
 // socket to fd
-#define xm_io_sock2fd(sock)            (lua_Number)tb_sock2fd(sock)
+#define xm_io_sock2fd(sock) (lua_Number) tb_sock2fd(sock)
 
 /* *******************************************************
  * implementation
@@ -49,12 +49,11 @@ xu_int_t xm_io_socket_rawfd(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // is pointer?
-    if (!xm_lua_ispointer(lua, 1))
-        xm_io_return_error(lua, "get rawfd for invalid sock!");
+    if (!xm_lua_ispointer(lua, 1)) xm_io_return_error(lua, "get rawfd for invalid sock!");
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // return result
     lua_pushnumber(lua, xm_io_sock2fd(sock));

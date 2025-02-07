@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "xxhash"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "xxhash"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -54,7 +54,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
     // is bytes? get data and size
     if (xm_lua_isinteger(lua, 2) && xm_lua_isinteger(lua, 3))
     {
-        tb_byte_t const* data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
+        xu_byte_t const* data = (xu_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
         xu_size_t        size = (xu_size_t)lua_tointeger(lua, 3);
         if (!data || !size)
         {
@@ -62,21 +62,21 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
             return 2;
         }
-        tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
+        xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
         // compute hash
-        tb_byte_t const* buffer;
+        xu_byte_t const* buffer;
         XXH64_hash_t     value64;
         XXH128_hash_t    value128;
         if (mode == 64)
         {
             value64 = XM_XXH3_64bits(data, size);
-            buffer  = (tb_byte_t const*)&value64;
+            buffer  = (xu_byte_t const*)&value64;
         }
         else if (mode == 128)
         {
             value128 = XM_XXH3_128bits(data, size);
-            buffer   = (tb_byte_t const*)&value128;
+            buffer   = (xu_byte_t const*)&value128;
         }
 
         // make xxhash string
@@ -93,11 +93,11 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
 
     // get the filename
     xu_char_t const* filename = luaL_checkstring(lua, 2);
-    tb_check_return_val(filename, 0);
+    xu_check_return_val(filename, 0);
 
     // load data from file
     xu_bool_t       ok     = xu_false;
-    tb_stream_ref_t stream = tb_stream_init_from_file(filename, TB_FILE_MODE_RO);
+    tb_stream_ref_t stream = tb_stream_init_from_file(filename, XU_FILE_MODE_RO);
     if (stream)
     {
         // open stream
@@ -111,7 +111,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
                 XM_XXH3_128bits_reset(state);
 
             // read data and update xxhash
-            tb_byte_t data[TB_STREAM_BLOCK_MAXN];
+            xu_byte_t data[XU_STREAM_BLOCK_MAXN];
             while (!tb_stream_beof(stream))
             {
                 // read data
@@ -129,11 +129,11 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
                 else if (!real)
                 {
                     // wait
-                    real = tb_stream_wait(stream, TB_STREAM_WAIT_READ, tb_stream_timeout(stream));
-                    tb_check_break(real > 0);
+                    real = tb_stream_wait(stream, XU_STREAM_WAIT_READ, tb_stream_timeout(stream));
+                    xu_check_break(real > 0);
 
                     // has read?
-                    xu_assert_and_check_break(real & TB_STREAM_WAIT_READ);
+                    xu_assert_and_check_break(real & XU_STREAM_WAIT_READ);
                 }
                 // failed or end?
                 else
@@ -141,18 +141,18 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             }
 
             // compute hash
-            tb_byte_t const* buffer;
+            xu_byte_t const* buffer;
             XXH64_hash_t     value64;
             XXH128_hash_t    value128;
             if (mode == 64)
             {
                 value64 = XM_XXH3_64bits_digest(state);
-                buffer  = (tb_byte_t const*)&value64;
+                buffer  = (xu_byte_t const*)&value64;
             }
             else
             {
                 value128 = XM_XXH3_128bits_digest(state);
-                buffer   = (tb_byte_t const*)&value128;
+                buffer   = (xu_byte_t const*)&value128;
             }
 
             // make xxhash string

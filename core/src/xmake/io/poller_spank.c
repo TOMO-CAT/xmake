@@ -22,14 +22,14 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "poller_spank"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "poller_spank"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
  */
-#include "xmake/io/prefix.h"
 #include "poller.h"
+#include "xmake/io/prefix.h"
 
 /* *******************************************************
  * interfaces

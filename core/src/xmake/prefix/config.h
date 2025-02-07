@@ -24,8 +24,8 @@
 /* *******************************************************
  * includes
  */
-#include "xmake/config.h"
 #include "tbox/tbox.h"
+#include "xmake/config.h"
 #include "xutil/xutil.h"
 
 /* *******************************************************
@@ -37,15 +37,15 @@
  * small mode
  */
 #if XM_CONFIG_SMALL
-#   define __xm_small__
+#    define __xm_small__
 #endif
 
 /*! @def __xm_debug__
  *
  * debug mode
  */
-#ifdef __xm_debug__
-#   define __xm_debug__
+#if defined(__tb_debug__) || defined(__xu_debug__)
+#    define __xm_debug__
 #endif
 
 #endif

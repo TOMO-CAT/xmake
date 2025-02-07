@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "bloom_filter_size"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "bloom_filter_size"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -43,7 +43,7 @@ xu_int_t xm_bloom_filter_size(lua_State* lua)
 
     // get the bloom filter
     tb_bloom_filter_ref_t filter = (tb_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(filter, 0);
+    xu_check_return_val(filter, 0);
 
     // get size
     xu_size_t size = tb_bloom_filter_size(filter);

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "filelock_open"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "filelock_open"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -50,8 +50,8 @@ xu_int_t xm_io_filelock_open(lua_State* lua)
     xu_long_t         tryn = 2;
     tb_filelock_ref_t lock = xu_null;
     while (!lock && tryn-- > 0)
-        lock = tb_filelock_init_from_path(path, xu_file_info(path, xu_null) ? TB_FILE_MODE_RW
-                                                                            : TB_FILE_MODE_RW | TB_FILE_MODE_CREAT);
+        lock = tb_filelock_init_from_path(path, xu_file_info(path, xu_null) ? XU_FILE_MODE_RW
+                                                                            : XU_FILE_MODE_RW | XU_FILE_MODE_CREAT);
     if (lock)
         xm_lua_pushpointer(lua, (xu_pointer_t)lock);
     else

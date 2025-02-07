@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "file_flush"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "file_flush"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -61,7 +61,7 @@ xu_int_t xm_io_file_flush(lua_State* lua)
 
     // get file
     xm_io_file_t* file = (xm_io_file_t*)lua_touserdata(lua, 1);
-    tb_check_return_val(file, 0);
+    xu_check_return_val(file, 0);
 
     // flush file
     xu_bool_t ok = xm_io_file_is_file(file) ? xm_io_file_flush_impl(file) : xm_io_std_flush_impl(file);

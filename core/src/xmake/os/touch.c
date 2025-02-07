@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "touch"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "touch"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -39,10 +39,10 @@ xu_int_t xm_os_touch(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
-    tb_time_t atime = (tb_time_t)luaL_checknumber(lua, 2);
-    tb_time_t mtime = (tb_time_t)luaL_checknumber(lua, 3);
+    xu_time_t atime = (xu_time_t)luaL_checknumber(lua, 2);
+    xu_time_t mtime = (xu_time_t)luaL_checknumber(lua, 3);
 
     lua_pushboolean(lua, tb_file_touch(path, atime, mtime));
     return 1;

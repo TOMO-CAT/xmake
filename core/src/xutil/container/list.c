@@ -1,4 +1,5 @@
 #include "xutil/container/list.h"
+#include "xutil/algorithm/for.h"
 #include "xutil/container/list_entry.h"
 #include "xutil/macros/malloc.h"
 #include "xutil/memory/fixed_pool.h"

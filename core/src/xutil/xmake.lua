@@ -1,6 +1,11 @@
 -- add module directories
 add_moduledirs("xmake")
 
+-- unit-test
+if has_config("ut") then
+    includes("unit_test")
+end
+
 -- generate compile_commands.json
 add_rules("plugin.compile_commands.autoupdate", {outputdir = "."})
 

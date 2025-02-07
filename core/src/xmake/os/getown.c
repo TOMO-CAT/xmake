@@ -22,15 +22,15 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "getown"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "getown"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
  */
 #include "xmake/os/prefix.h"
-#include <unistd.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 /* *******************************************************
  * implementation
@@ -43,12 +43,11 @@ xu_int_t xm_os_getown(lua_State* lua)
 
     // get the pathname
     xu_char_t const* pathname = luaL_checkstring(lua, 1);
-    tb_check_return_val(pathname, 0);
+    xu_check_return_val(pathname, 0);
 
     // get stat
     struct stat sts;
-    if (stat(pathname, &sts) != 0)
-        return 0;
+    if (stat(pathname, &sts) != 0) return 0;
 
     // push
     lua_newtable(lua);

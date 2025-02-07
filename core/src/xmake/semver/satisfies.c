@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "satisfies"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "satisfies"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -54,7 +54,7 @@ xu_int_t xm_semver_satisfies(lua_State* lua)
     {
         // range is branch name? try to match it
         semver_t range_semver = {0};
-        if (!tb_strcmp(version_str, range_str))
+        if (!xu_strcmp(version_str, range_str))
         {
             lua_pushboolean(lua, xu_true);
             return 1;

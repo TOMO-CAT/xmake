@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "socket_wait"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "socket_wait"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -45,7 +45,7 @@ xu_int_t xm_io_socket_wait(lua_State* lua)
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // get events
     xu_size_t events = (xu_size_t)luaL_checknumber(lua, 2);

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "socket_send"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "socket_send"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -50,12 +50,12 @@ xu_int_t xm_io_socket_send(lua_State* lua)
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // get data and size
     xu_size_t        size = 0;
-    tb_byte_t const* data = xu_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
+    xu_byte_t const* data = xu_null;
+    if (xm_lua_isinteger(lua, 2)) data = (xu_byte_t const*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
     if (xm_lua_isinteger(lua, 3)) size = (xu_size_t)lua_tointeger(lua, 3);
     if (!data || !size)
     {
@@ -63,7 +63,7 @@ xu_int_t xm_io_socket_send(lua_State* lua)
         lua_pushfstring(lua, "invalid data(%p) and size(%d)!", data, (xu_int_t)size);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
+    xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // send data
     xu_long_t real = tb_socket_send(sock, data, size);

@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "cpuinfo"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "cpuinfo"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -120,7 +120,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
                  * guest
                  * guest_nice
                  */
-                if (fgets(line, sizeof(line), fp) && !tb_strncmp(line, "cpu ", 4))
+                if (fgets(line, sizeof(line), fp) && !xu_strncmp(line, "cpu ", 4))
                 {
                     long long user, nice, sys, idle, iowait, irq, softirq, steal, guest, guest_nice;
                     if (10 == sscanf(line, "cpu  %lld %lld %lld %lld %lld %lld %lld %lld %lld %lld", &user, &nice, &sys,

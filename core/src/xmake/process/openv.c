@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "process.openv"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "process.openv"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -61,16 +61,16 @@ xu_int_t xm_process_openv(lua_State* lua)
 
     // get shellname
     xu_char_t const* shellname = lua_tostring(lua, 1);
-    tb_check_return_val(shellname, 0);
+    xu_check_return_val(shellname, 0);
 
     // get the arguments count
     xu_long_t argn = (xu_long_t)lua_objlen(lua, 2);
-    tb_check_return_val(argn >= 0, 0);
+    xu_check_return_val(argn >= 0, 0);
 
     // get arguments
     xu_size_t         argi = 0;
     xu_char_t const** argv = tb_nalloc0_type(1 + argn + 1, xu_char_t const*);
-    tb_check_return_val(argv, 0);
+    xu_check_return_val(argv, 0);
 
     // fill arguments
     argv[0] = shellname;
@@ -126,7 +126,7 @@ xu_int_t xm_process_openv(lua_State* lua)
         // is detached?
         lua_pushstring(lua, "detach");
         lua_gettable(lua, 3);
-        if (lua_toboolean(lua, -1)) attr.flags |= TB_PROCESS_FLAG_DETACH;
+        if (lua_toboolean(lua, -1)) attr.flags |= XU_PROCESS_FLAG_DETACH;
         lua_pop(lua, 1);
 
         // is exclusive?
@@ -263,22 +263,22 @@ xu_int_t xm_process_openv(lua_State* lua)
     {
         // redirect stdin to file
         attr.in.path = inpath;
-        attr.inmode  = TB_FILE_MODE_RO;
-        attr.intype  = TB_PROCESS_REDIRECT_TYPE_FILEPATH;
+        attr.inmode  = XU_FILE_MODE_RO;
+        attr.intype  = XU_PROCESS_REDIRECT_TYPE_FILEPATH;
     }
     else if (infile && xm_io_file_is_file(infile))
     {
         tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(infile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
+        if (tb_stream_ctrl(infile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.in.file = rawfile;
-            attr.intype  = TB_PROCESS_REDIRECT_TYPE_FILE;
+            attr.intype  = XU_PROCESS_REDIRECT_TYPE_FILE;
         }
     }
     else if (inpipe)
     {
         attr.in.pipe = inpipe;
-        attr.intype  = TB_PROCESS_REDIRECT_TYPE_PIPE;
+        attr.intype  = XU_PROCESS_REDIRECT_TYPE_PIPE;
     }
 
     // redirect stdout?
@@ -286,22 +286,22 @@ xu_int_t xm_process_openv(lua_State* lua)
     {
         // redirect stdout to file
         attr.out.path = outpath;
-        attr.outmode  = TB_FILE_MODE_RW | TB_FILE_MODE_TRUNC | TB_FILE_MODE_CREAT;
-        attr.outtype  = TB_PROCESS_REDIRECT_TYPE_FILEPATH;
+        attr.outmode  = XU_FILE_MODE_RW | XU_FILE_MODE_TRUNC | XU_FILE_MODE_CREAT;
+        attr.outtype  = XU_PROCESS_REDIRECT_TYPE_FILEPATH;
     }
     else if (outfile && xm_io_file_is_file(outfile))
     {
         tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(outfile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
+        if (tb_stream_ctrl(outfile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.out.file = rawfile;
-            attr.outtype  = TB_PROCESS_REDIRECT_TYPE_FILE;
+            attr.outtype  = XU_PROCESS_REDIRECT_TYPE_FILE;
         }
     }
     else if (outpipe)
     {
         attr.out.pipe = outpipe;
-        attr.outtype  = TB_PROCESS_REDIRECT_TYPE_PIPE;
+        attr.outtype  = XU_PROCESS_REDIRECT_TYPE_PIPE;
     }
 
     // redirect stderr?
@@ -309,22 +309,22 @@ xu_int_t xm_process_openv(lua_State* lua)
     {
         // redirect stderr to file
         attr.err.path = errpath;
-        attr.errmode  = TB_FILE_MODE_RW | TB_FILE_MODE_TRUNC | TB_FILE_MODE_CREAT;
-        attr.errtype  = TB_PROCESS_REDIRECT_TYPE_FILEPATH;
+        attr.errmode  = XU_FILE_MODE_RW | XU_FILE_MODE_TRUNC | XU_FILE_MODE_CREAT;
+        attr.errtype  = XU_PROCESS_REDIRECT_TYPE_FILEPATH;
     }
     else if (errfile && xm_io_file_is_file(errfile))
     {
         tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(errfile->stream, TB_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
+        if (tb_stream_ctrl(errfile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.err.file = rawfile;
-            attr.errtype  = TB_PROCESS_REDIRECT_TYPE_FILE;
+            attr.errtype  = XU_PROCESS_REDIRECT_TYPE_FILE;
         }
     }
     else if (errpipe)
     {
         attr.err.pipe = errpipe;
-        attr.errtype  = TB_PROCESS_REDIRECT_TYPE_PIPE;
+        attr.errtype  = XU_PROCESS_REDIRECT_TYPE_PIPE;
     }
 
     // set the new environments
@@ -348,7 +348,7 @@ xu_int_t xm_process_openv(lua_State* lua)
         lua_pushnil(lua);
 
     // exit argv
-    if (argv) tb_free(argv);
+    if (argv) xu_free(argv);
     argv = xu_null;
 
     // ok

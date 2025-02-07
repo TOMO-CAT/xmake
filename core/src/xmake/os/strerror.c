@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "strerror"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "strerror"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -42,16 +42,16 @@ xu_int_t xm_os_strerror(lua_State* lua)
 
     // get syserror state
     xu_size_t syserror = tb_syserror_state();
-    if (syserror != TB_STATE_SYSERROR_UNKNOWN_ERROR)
+    if (syserror != XU_STATE_SYSERROR_UNKNOWN_ERROR)
     {
         xu_char_t const* strerr = "Unknown";
         switch (syserror)
         {
-        case TB_STATE_SYSERROR_NOT_PERM: strerr = "Permission denied"; break;
-#if ((TB_VERSION_MAJOR * 100) + (TB_VERSION_MINOR * 10) + TB_VERSION_ALTER) >= 173
-        case TB_STATE_SYSERROR_NOT_ACCESS: strerr = "Not access because it is busy"; break;
+        case XU_STATE_SYSERROR_NOT_PERM: strerr = "Permission denied"; break;
+#if ((XU_VERSION_MAJOR * 100) + (XU_VERSION_MINOR * 10) + XU_VERSION_ALTER) >= 173
+        case XU_STATE_SYSERROR_NOT_ACCESS: strerr = "Not access because it is busy"; break;
 #endif
-        case TB_STATE_SYSERROR_NOT_FILEDIR: strerr = "No such file or directory"; break;
+        case XU_STATE_SYSERROR_NOT_FILEDIR: strerr = "No such file or directory"; break;
         default: break;
         }
         lua_pushstring(lua, strerr);

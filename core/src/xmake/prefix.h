@@ -46,7 +46,7 @@
  */
 
 // this issue has been fixed, @see https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
-#if 0 // TB_CPU_BIT64
+#if 0 // XU_CPU_BIT64
 /* we use this interface instead of lua_pushlightuserdata() to fix bad light userdata pointer bug
  *
  * @see https://github.com/xmake-io/xmake/issues/914
@@ -57,7 +57,7 @@
  */
 static __xu_inline__ xu_void_t xm_lua_pushpointer(lua_State* lua, xu_pointer_t ptr)
 {
-    tb_uint64_t ptrval = (tb_uint64_t)ptr;
+    xu_uint64_t ptrval = (xu_uint64_t)ptr;
     if ((ptrval >> 47) == 0)
         lua_pushlightuserdata(lua, ptr);
     else
@@ -84,7 +84,7 @@ static __xu_inline__ xu_pointer_t xm_lua_topointer2(lua_State* lua, xu_int_t idx
         size_t len = 0;
         xu_char_t const* str = luaL_checklstring(lua, idx, &len);
         if (str && len > 2 && str[0] == '0' && str[1] == 'x')
-            ptr = (xu_pointer_t)tb_s16tou64(str);
+            ptr = (xu_pointer_t)xu_s16tou64(str);
         if (pstr) *pstr = str;
     }
     return ptr;

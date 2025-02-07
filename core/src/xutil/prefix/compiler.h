@@ -87,7 +87,7 @@
 #            endif
 #        elif __GNUC__ >= 4 && defined(__GNUC_MINOR__)
 #            define XU_COMPILER_VERSION_STRING                                                                         \
-                __tb_mstrcat4__("gnu c/c++ ", __tb_mstring_ex__(__GNUC__), ".", __tb_mstring_ex__(__GNUC_MINOR__))
+                __xu_mstrcat4__("gnu c/c++ ", __xu_mstring_ex__(__GNUC__), ".", __xu_mstring_ex__(__GNUC_MINOR__))
 #        else
 #            error Unknown gnu c/c++ Compiler Version
 #        endif
@@ -95,7 +95,7 @@
 
 //========================== unknown compiler
 #else
-#    define TB_COMPILER_STRING "unknown compiler"
-#    define TB_COMPILER_VERSION_STRING "unknown compiler version"
-#    define TB_COMPILER_IS_UNKNOWN
+#    define XU_COMPILER_STRING "unknown compiler"
+#    define XU_COMPILER_VERSION_STRING "unknown compiler version"
+#    define XU_COMPILER_IS_UNKNOWN
 #endif

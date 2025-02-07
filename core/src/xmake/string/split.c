@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "string_split"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "string_split"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -38,7 +38,7 @@ static xu_void_t xm_string_split_str(lua_State* lua, xu_char_t const* cstr, xu_s
 {
     xu_int_t         num = 0;
     xu_char_t const* end = cstr + nstr;
-    xu_char_t const* pos = tb_strstr(cstr, cdls); // faster than tb_strnstr()
+    xu_char_t const* pos = xu_strstr(cstr, cdls); // faster than xu_strnstr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
@@ -50,7 +50,7 @@ static xu_void_t xm_string_split_str(lua_State* lua, xu_char_t const* cstr, xu_s
         }
 
         cstr = pos + ndls;
-        pos  = tb_strstr(cstr, cdls);
+        pos  = xu_strstr(cstr, cdls);
     }
     if (cstr < end)
     {
@@ -68,7 +68,7 @@ static xu_void_t xm_string_split_chr(lua_State* lua, xu_char_t const* cstr, xu_s
 {
     xu_int_t         num = 0;
     xu_char_t const* end = cstr + nstr;
-    xu_char_t const* pos = tb_strchr(cstr, ch); // faster than tb_strnchr()
+    xu_char_t const* pos = xu_strchr(cstr, ch); // faster than xu_strnchr()
     while (pos && pos < end)
     {
         if (pos > cstr || strict)
@@ -80,7 +80,7 @@ static xu_void_t xm_string_split_chr(lua_State* lua, xu_char_t const* cstr, xu_s
         }
 
         cstr = pos + 1;
-        pos  = tb_strchr(cstr, ch);
+        pos  = xu_strchr(cstr, ch);
     }
     if (cstr < end)
     {

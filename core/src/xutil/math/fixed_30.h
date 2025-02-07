@@ -4,7 +4,7 @@
 #include "xutil/math/int32.h"
 #include "xutil/prefix.h"
 
-#ifdef TB_ARCH_ARM
+#ifdef XU_ARCH_ARM
 #    include "xutil/math/impl/fixed16_arm.h"
 #endif
 
@@ -13,16 +13,16 @@
  */
 
 // constant
-#define TB_FIXED30_ONE (1 << 30)
-#define TB_FIXED30_HALF (1 << 29)
-#define TB_FIXED30_MAX (TB_MAXS32)
-#define TB_FIXED30_MIN (-TB_FIXED30_MAX)
-#define TB_FIXED30_NAN ((xu_int_t)0x80000000)
-#define TB_FIXED30_INF (TB_MAXS32)
-#define TB_FIXED30_SQRT2 (0x5a827999)
+#define XU_FIXED30_ONE (1 << 30)
+#define XU_FIXED30_HALF (1 << 29)
+#define XU_FIXED30_MAX (XU_MAXS32)
+#define XU_FIXED30_MIN (-XU_FIXED30_MAX)
+#define XU_FIXED30_NAN ((xu_int_t)0x80000000)
+#define XU_FIXED30_INF (XU_MAXS32)
+#define XU_FIXED30_SQRT2 (0x5a827999)
 
 // conversion
-#ifdef TB_CONFIG_TYPE_HAVE_FLOAT
+#ifdef XU_CONFIG_TYPE_HAVE_FLOAT
 #    ifndef xu_fixed30_to_float
 #        define xu_fixed30_to_float(x) (((x)*0.00000000093132257f))
 #    endif
@@ -30,7 +30,7 @@
 #        ifdef __xu_debug__
 #            define xu_float_to_fixed30(x) xu_float_to_fixed30_check(x)
 #        else
-#            define xu_float_to_fixed30(x) ((xu_fixed30_t)((x)*TB_FIXED30_ONE))
+#            define xu_float_to_fixed30(x) ((xu_fixed30_t)((x)*XU_FIXED30_ONE))
 #        endif
 #    endif
 #endif
@@ -52,7 +52,7 @@
 #ifndef xu_fixed30_mul
 #    if 1
 #        define xu_fixed30_mul(x, y) xu_fixed30_mul_int64(x, y)
-#    elif defined(TB_CONFIG_TYPE_HAVE_FLOAT)
+#    elif defined(XU_CONFIG_TYPE_HAVE_FLOAT)
 #        define xu_fixed30_mul(x, y) xu_fixed30_mul_float(x, y)
 #    else
 #        define xu_fixed30_mul(x, y) xu_fixed30_mul_int32(x, y)
@@ -63,7 +63,7 @@
 #ifndef xu_fixed30_div
 #    if 1
 #        define xu_fixed30_div(x, y) xu_fixed30_div_int64(x, y)
-#    elif defined(TB_CONFIG_TYPE_HAVE_FLOAT)
+#    elif defined(XU_CONFIG_TYPE_HAVE_FLOAT)
 #        define xu_fixed30_div(x, y) xu_fixed30_div_float(x, y)
 #    else
 #        define xu_fixed30_div(x, y) xu_int32_div(x, y, 30)
@@ -74,7 +74,7 @@
 #ifndef xu_fixed30_sqre
 #    if 1
 #        define xu_fixed30_sqre(x) xu_fixed30_sqre_int64(x)
-#    elif defined(TB_CONFIG_TYPE_HAVE_FLOAT)
+#    elif defined(XU_CONFIG_TYPE_HAVE_FLOAT)
 #        define xu_fixed30_sqre(x) xu_fixed30_sqre_float(x)
 #    else
 #        define xu_fixed30_sqre(x) xu_fixed30_sqre_int32(x)
@@ -91,12 +91,12 @@
  */
 
 #ifdef __xu_debug__
-#    ifdef TB_CONFIG_TYPE_HAVE_FLOAT
+#    ifdef XU_CONFIG_TYPE_HAVE_FLOAT
 static __xu_inline__ xu_fixed30_t xu_float_to_fixed30_check(xu_float_t x)
 {
     // check overflow, [-2., 2.]
     xu_assert(x >= -2. && x <= 2.);
-    return ((xu_fixed30_t)((x)*TB_FIXED30_ONE));
+    return ((xu_fixed30_t)((x)*XU_FIXED30_ONE));
 }
 #    endif
 static __xu_inline__ xu_fixed30_t xu_fixed16_to_fixed30_check(xu_fixed16_t x)
@@ -121,7 +121,7 @@ static __xu_inline__ xu_fixed30_t xu_fixed30_sqre_int64(xu_fixed30_t x)
     return (xu_fixed30_t)((xu_hong_t)x * x >> 30);
 }
 
-#ifdef TB_CONFIG_TYPE_HAVE_FLOAT
+#ifdef XU_CONFIG_TYPE_HAVE_FLOAT
 static __xu_inline__ xu_fixed30_t xu_fixed30_mul_float(xu_fixed30_t x, xu_fixed30_t y)
 {
     xu_float_t f = xu_fixed30_to_float(x) * xu_fixed30_to_float(y);

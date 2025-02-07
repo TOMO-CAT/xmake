@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "readlink"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "readlink"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,7 +41,7 @@ xu_int_t xm_os_readlink(lua_State* lua)
 
     // get the path
     xu_char_t const* path = luaL_checkstring(lua, 1);
-    tb_check_return_val(path, 0);
+    xu_check_return_val(path, 0);
 
     // is link?
     xu_char_t srcpath[XU_PATH_MAXN];
@@ -60,7 +60,7 @@ xu_int_t xm_os_readlink(lua_State* lua)
             }
             else
                 lua_pushnil(lua);
-            tb_free(data);
+            xu_free(data);
         }
     }
     else if (size >= 0 && size < XU_PATH_MAXN)

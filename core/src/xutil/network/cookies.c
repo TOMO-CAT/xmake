@@ -6,8 +6,10 @@
 #define XU_TRACE_MODULE_DEBUG (0)
 
 #include "xutil/network/cookies.h"
+#include "xutil/algorithm/for_if.h"
 #include "xutil/algorithm/remove_if.h"
 #include "xutil/container/hash_set.h"
+#include "xutil/libc/misc/time/time.h"
 #include "xutil/libc/stdlib/stdlib.h"
 #include "xutil/memory/string_pool.h"
 #include "xutil/network/impl/http/data.h"
@@ -111,7 +113,8 @@ static xu_bool_t xu_cookies_get_domain_and_path_from_url(xu_char_t const* url, x
     // skip port
     if (*p && *p == ':')
         for (p++; p < e && *p && *p != '/'; p++)
-            ;
+        {
+        }
 
     // get path
     pb = ppath;
@@ -170,7 +173,8 @@ static xu_bool_t xu_cookies_is_child_path(xu_char_t const* parent, xu_char_t con
     xu_char_t const* c = child;
     xu_size_t        n = xu_strlen(parent);
     while (n-- && *p && *c && *p++ == *c++)
-        ;
+    {
+    }
 
     // ok?
     return (!*p && (!*c || *c == '/')) ? xu_true : xu_false;
@@ -332,7 +336,8 @@ static xu_bool_t xu_cookies_entry_init(xu_cookies_t* cookies, xu_cookies_entry_r
                 entry->secure = 1;
             // ignore it
             else if (!xu_strnicmp(b, "HttpOnly", 8))
-                ;
+            {
+            }
             // key=value
             else if (v)
             {
@@ -620,7 +625,6 @@ xu_bool_t xu_cookies_set(xu_cookies_ref_t self, xu_char_t const* domain, xu_char
         // storage to file?
         if (entry.storage)
         {
-            // TODO
             xu_trace1_w("not supports storaging cookies to file now!");
         }
 

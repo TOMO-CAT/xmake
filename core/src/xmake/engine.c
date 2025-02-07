@@ -813,7 +813,7 @@ static xu_void_t xm_engine_init_signal(xm_engine_t* engine)
 {
     // we enable it to catch the current lua stack in ctrl-c signal handler if XMAKE_PROFILE=stuck
     xu_char_t data[64] = {0};
-    if (!xu_environment_first("XMAKE_PROFILE", data, sizeof(data)) || tb_strcmp(data, "stuck")) return;
+    if (!xu_environment_first("XMAKE_PROFILE", data, sizeof(data)) || xu_strcmp(data, "stuck")) return;
 
     g_lua = engine->lua;
 #if defined(SIGINT)
@@ -826,7 +826,7 @@ static xu_pointer_t xm_engine_lua_realloc(xu_pointer_t udata, xu_pointer_t data,
 {
     xu_pointer_t ptr = xu_null;
     if (nsize == 0 && data)
-        tb_free(data);
+        xu_free(data);
     else if (!data)
         ptr = tb_malloc((xu_size_t)nsize);
     else if (nsize != osize)
@@ -945,7 +945,7 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
 
         // init version string
         xu_char_t version_cstr[256] = {0};
-        if (tb_strcmp(XM_CONFIG_VERSION_BRANCH, "") && tb_strcmp(XM_CONFIG_VERSION_COMMIT, ""))
+        if (xu_strcmp(XM_CONFIG_VERSION_BRANCH, "") && xu_strcmp(XM_CONFIG_VERSION_COMMIT, ""))
             xu_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u+%s.%s", version->major, version->minor,
                         version->alter, XM_CONFIG_VERSION_BRANCH, XM_CONFIG_VERSION_COMMIT);
         else
@@ -965,7 +965,7 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
 
         // init git source
         lua_pushstring(engine->lua,
-                       tb_strcmp(XM_CONFIG_VERSION_GIT_SOURCE, "") ? XM_CONFIG_VERSION_GIT_SOURCE : "gitee.com");
+                       xu_strcmp(XM_CONFIG_VERSION_GIT_SOURCE, "") ? XM_CONFIG_VERSION_GIT_SOURCE : "gitee.com");
         lua_setglobal(engine->lua, "_GIT_SOURCE");
 
         // use luajit as runtime?
@@ -1009,7 +1009,7 @@ xu_void_t xm_engine_exit(xm_engine_ref_t self)
     engine->lua = xu_null;
 
     // exit it
-    tb_free(engine);
+    xu_free(engine);
 }
 xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, xu_char_t** taskargv)
 {
@@ -1031,7 +1031,7 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     if (!xm_engine_get_program_directory(engine, path, sizeof(path), path)) return -1;
 
     // append the main script path
-    tb_strcat(path, "/core/_xmake_main.lua");
+    xu_strcat(path, "/core/_xmake_main.lua");
 
     // exists this script?
     if (!xu_file_info(path, xu_null))

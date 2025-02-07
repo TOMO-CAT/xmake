@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "add_history"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "add_history"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -43,7 +43,7 @@ xu_int_t xm_readline_add_history(lua_State* lua)
 
     // get history
     xu_char_t const* history = luaL_checkstring(lua, 1);
-    tb_check_return_val(history, 0);
+    xu_check_return_val(history, 0);
 
     // call add_history
     add_history(history);

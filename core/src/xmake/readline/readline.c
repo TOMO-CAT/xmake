@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME                "readline"
-#define TB_TRACE_MODULE_DEBUG               (0)
+#define XU_TRACE_MODULE_NAME "readline"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -53,9 +53,10 @@ xu_int_t xm_readline_readline(lua_State* lua)
         lua_pushstring(lua, line);
 
         // free it
-        tb_free(line);
+        xu_free(line);
     }
-    else lua_pushnil(lua);
+    else
+        lua_pushnil(lua);
 
     // ok
     return 1;

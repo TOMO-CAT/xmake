@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "pipe_close"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "pipe_close"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -41,12 +41,11 @@ xu_int_t xm_io_pipe_close(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // check pipe?
-    if (!xm_lua_ispointer(lua, 1))
-        return 0;
+    if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the pipe file
     tb_pipe_file_ref_t pipefile = (tb_pipe_file_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(pipefile, 0);
+    xu_check_return_val(pipefile, 0);
 
     // exit pipe file
     lua_pushboolean(lua, tb_pipe_file_exit(pipefile));

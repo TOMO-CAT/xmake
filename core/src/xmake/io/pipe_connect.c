@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME    "pipe_connect"
-#define TB_TRACE_MODULE_DEBUG   (0)
+#define XU_TRACE_MODULE_NAME "pipe_connect"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -50,7 +50,7 @@ xu_int_t xm_io_pipe_connect(lua_State* lua)
 
     // get pipe file
     tb_pipe_file_ref_t pipefile = (tb_pipe_file_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(pipefile, 0);
+    xu_check_return_val(pipefile, 0);
 
     // connect pipe
     lua_pushnumber(lua, (xu_int_t)tb_pipe_file_connect(pipefile));

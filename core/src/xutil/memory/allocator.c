@@ -5,6 +5,7 @@
 #define XU_TRACE_MODULE_DEBUG (0)
 
 #include "xutil/memory/allocator.h"
+#include "xutil/memory/impl/prefix.h"
 
 /* *******************************************************
  *  globals

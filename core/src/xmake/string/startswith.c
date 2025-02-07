@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "startswith"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "startswith"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -42,10 +42,10 @@ xu_int_t xm_string_startswith(lua_State* lua)
     size_t           prefix_size = 0;
     xu_char_t const* string      = luaL_checkstring(lua, 1);
     xu_char_t const* prefix      = luaL_checklstring(lua, 2, &prefix_size);
-    tb_check_return_val(string && prefix, 0);
+    xu_check_return_val(string && prefix, 0);
 
     // string:startswith(prefix)?
-    lua_pushboolean(lua, !tb_strncmp(string, prefix, (xu_size_t)prefix_size));
+    lua_pushboolean(lua, !xu_strncmp(string, prefix, (xu_size_t)prefix_size));
 
     // ok
     return 1;

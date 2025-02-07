@@ -26,6 +26,12 @@ unset CC
 unset CXX
 unset LD
 
+# docker 里无法运行 snap
+if [ -f /.dockerenv ]; then
+  warning "Running inside a Docker container, quit"
+  exit 0
+fi
+
 # 安装 zig
 # https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager
 sudo apt install snapd -y || exit 1

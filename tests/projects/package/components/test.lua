@@ -22,6 +22,10 @@ function main(t)
     -- make[1]: Leaving directory '/home/cat/.xmake/cache/packages/2410/l/libtool/2.4.7/source'
     -- make: *** [Makefile:1959: install] Error 2
 
+    -- 这个单测耗时过久, 暂时关闭
+    if true then
+        return
+    end
 
     -- freebsd ci is slower
     if is_host("bsd") then

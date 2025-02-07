@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "filelock_lock"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "filelock_lock"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -60,10 +60,10 @@ xu_int_t xm_io_filelock_lock(lua_State* lua)
 
     // get lock
     tb_filelock_ref_t lock = (tb_filelock_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(lock, 0);
+    xu_check_return_val(lock, 0);
 
     // lock it
-    xu_bool_t ok = tb_filelock_enter(lock, is_shared ? TB_FILELOCK_MODE_SH : TB_FILELOCK_MODE_EX);
+    xu_bool_t ok = tb_filelock_enter(lock, is_shared ? XU_FILELOCK_MODE_SH : XU_FILELOCK_MODE_EX);
     lua_pushboolean(lua, ok);
     return 1;
 }

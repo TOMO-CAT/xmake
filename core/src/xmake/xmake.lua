@@ -16,7 +16,8 @@ target("xmake", function()
     add_defines("__tb_prefix__=\"xmake\"")
     add_defines("__xu_prefix__=\"xmake\"")
     if is_mode("debug") then
-        add_defines("__xm_debug__", {public = true})
+        add_defines("__tb_debug__", {public = true}) -- TODO: delete this
+        add_defines("__xu_debug__", {public = true})
     end
     add_defines("__xm_prefix__=\"xmake\"")
 
@@ -33,7 +34,8 @@ target("xmake", function()
     -- add header files
     add_headerfiles("../(xmake/*.h)")
     add_headerfiles("../(xmake/prefix/*.h)")
-    add_headerfiles("$(buildir)/$(plat)/$(arch)/$(mode)/xmake.config.h", {prefixdir = "xmake"})
+    add_headerfiles("$(buildir)/$(plat)/$(arch)/$(mode)/xmake.config.h",
+                    {prefixdir = "xmake"})
 
     -- add the common source files
     add_files("**.c")

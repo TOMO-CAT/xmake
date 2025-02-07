@@ -22,8 +22,8 @@
 /* *******************************************************
  * trace
  */
-#define TB_TRACE_MODULE_NAME "socket_recvfrom"
-#define TB_TRACE_MODULE_DEBUG (0)
+#define XU_TRACE_MODULE_NAME "socket_recvfrom"
+#define XU_TRACE_MODULE_DEBUG (0)
 
 /* *******************************************************
  * includes
@@ -50,18 +50,18 @@ xu_int_t xm_io_socket_recvfrom(lua_State* lua)
 
     // get socket
     tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
-    tb_check_return_val(sock, 0);
+    xu_check_return_val(sock, 0);
 
     // get data
-    tb_byte_t* data = xu_null;
-    if (xm_lua_isinteger(lua, 2)) data = (tb_byte_t*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
+    xu_byte_t* data = xu_null;
+    if (xm_lua_isinteger(lua, 2)) data = (xu_byte_t*)(xu_size_t)(xu_long_t)lua_tointeger(lua, 2);
     if (!data)
     {
         lua_pushinteger(lua, -1);
         lua_pushfstring(lua, "invalid data(%p)!", data);
         return 2;
     }
-    tb_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
+    xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // get size
     xu_long_t size = 0;
