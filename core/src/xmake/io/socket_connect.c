@@ -57,7 +57,7 @@ xu_int_t xm_io_socket_connect(lua_State* lua)
     xu_assert_and_check_return_val(address, 0);
 
     // get family
-    tb_uint8_t family = (tb_uint8_t)luaL_checknumber(lua, 4);
+    xu_uint8_t family = (xu_uint8_t)luaL_checknumber(lua, 4);
 
     // init address
     tb_ipaddr_t addr;

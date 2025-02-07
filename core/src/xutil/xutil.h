@@ -2,6 +2,7 @@
 
 // interface headers
 #include "xutil/charset/chartset.h"
+#include "xutil/container/bloom_filter.h"
 #include "xutil/hash/sha.h"
 #include "xutil/libc/stdio/stdio.h"
 #include "xutil/libc/string/string.h"

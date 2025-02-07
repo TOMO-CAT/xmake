@@ -80,7 +80,7 @@ xu_int_t xm_io_socket_sendto(lua_State* lua)
 
     // init ip address
     tb_ipaddr_t ipaddr;
-    tb_ipaddr_set(&ipaddr, addr, port, (tb_uint8_t)family);
+    tb_ipaddr_set(&ipaddr, addr, port, (xu_uint8_t)family);
 
     // send data
     xu_long_t real = tb_socket_usend(sock, &ipaddr, data, size);

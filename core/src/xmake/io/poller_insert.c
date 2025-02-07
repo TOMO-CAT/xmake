@@ -50,7 +50,7 @@ xu_int_t xm_io_poller_insert(lua_State* lua)
     }
 
     // get otype
-    tb_uint8_t otype = (tb_uint8_t)luaL_checknumber(lua, 1);
+    xu_uint8_t otype = (xu_uint8_t)luaL_checknumber(lua, 1);
 
     // get cdata
     xu_char_t const* cdata_str = xu_null;
