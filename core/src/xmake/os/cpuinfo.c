@@ -56,7 +56,7 @@ static tb_float_t xm_os_cpuinfo_usagerate()
     natural_t              cpu_count = 0;
     processor_info_array_t cpuinfo;
     mach_msg_type_number_t cpuinfo_count;
-    static tb_hong_t       s_time = 0;
+    static xu_hong_t       s_time = 0;
     if (tb_mclock() - s_time > 1000 && host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &cpu_count,
                                                            &cpuinfo, &cpuinfo_count) == KERN_SUCCESS)
     {

@@ -54,7 +54,7 @@ static xu_long_t xm_io_file_buffer_readline(tb_stream_ref_t stream, tb_buffer_re
     xu_bool_t  eof    = xu_false;
     xu_hize_t  offset = 0;
     xu_byte_t* data   = xu_null;
-    tb_hong_t  size   = tb_stream_size(stream);
+    xu_hong_t  size   = tb_stream_size(stream);
     while (size < 0 || (offset = tb_stream_offset(stream)) < size)
     {
         xu_long_t real = tb_stream_peek(stream, &data, XU_STREAM_BLOCK_MAXN);
