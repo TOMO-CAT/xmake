@@ -32,8 +32,19 @@ typedef struct __xu_ut_t
 
 // the unit-tests
 static xu_ut_t g_ut[] = {
-    XU_UT_MAIN_ITEM(algorithm_find), XU_UT_MAIN_ITEM(algorithm_sort), XU_UT_MAIN_ITEM(memory_buffer),
-    XU_UT_MAIN_ITEM(memory_check),   XU_UT_MAIN_ITEM(utils_trace),
+    // algorithm
+    XU_UT_MAIN_ITEM(algorithm_find),
+    XU_UT_MAIN_ITEM(algorithm_sort),
+
+    // container
+    XU_UT_MAIN_ITEM(container_bloom_filter),
+
+    // memory
+    XU_UT_MAIN_ITEM(memory_buffer),
+    XU_UT_MAIN_ITEM(memory_check),
+
+    // utils
+    XU_UT_MAIN_ITEM(utils_trace),
 };
 
 /* *******************************************************

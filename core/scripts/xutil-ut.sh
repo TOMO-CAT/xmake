@@ -24,7 +24,9 @@ xmake b -vD --all
 
 # 单测列表
 UNIT_TESTS_ARRAY=(
+    "algorithm_find"
     "algorithm_sort"
+    "container_bloom_filter"
     "memory_buffer"
     "memory_check"
     "utils_trace"

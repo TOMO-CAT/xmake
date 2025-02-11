@@ -13,6 +13,7 @@
 #include "xutil/libc/string/string.h"
 #include "xutil/macros/assert.h"
 #include "xutil/macros/type.h"
+#include "xutil/math/random/random.h"
 #include "xutil/memory/allocator.h"
 #include "xutil/memory/memory.h"
 #include "xutil/platform/atomic.h"

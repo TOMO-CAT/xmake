@@ -15,6 +15,9 @@
 XU_UT_MAIN_DECL(algorithm_find);
 XU_UT_MAIN_DECL(algorithm_sort);
 
+// container
+XU_UT_MAIN_DECL(container_bloom_filter);
+
 // memory
 XU_UT_MAIN_DECL(memory_buffer);
 XU_UT_MAIN_DECL(memory_check);
