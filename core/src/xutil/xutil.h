@@ -4,6 +4,7 @@
 #include "xutil/algorithm/binary_find.h"
 #include "xutil/algorithm/find.h"
 #include "xutil/algorithm/for_if.h"
+#include "xutil/algorithm/remove_if.h"
 #include "xutil/charset/chartset.h"
 #include "xutil/container/bloom_filter.h"
 #include "xutil/container/circle_queue.h"
