@@ -18,10 +18,6 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
-# trace 宏依赖 debug 模式
-xmake f -m debug --ut=y
-xmake b -vD --all
-
 # 单测列表
 UNIT_TESTS_ARRAY=(
     "algorithm_find"
@@ -32,10 +28,21 @@ UNIT_TESTS_ARRAY=(
     "utils_trace"
 )
 
-# 运行单测
-for ut in "${UNIT_TESTS_ARRAY[@]}"; do
+function run_all_uts() {
+  for ut in "${UNIT_TESTS_ARRAY[@]}"; do
     info "start running ut [${ut}] ..."
     xmake run xutil-ut "${ut}" || exit 1
-done
+  done
+}
+
+# trace 宏依赖 debug 模式
+xmake f -m debug --ut=y
+xmake b -vD --all
+run_all_uts
+
+# 非 debug 模式
+xmake f --ut=y -c
+xmake b -vD --all
+run_all_uts
 
 ok "run all uts"
