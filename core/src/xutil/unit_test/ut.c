@@ -40,6 +40,8 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(container_bloom_filter),
     XU_UT_MAIN_ITEM(container_circle_queue),
     XU_UT_MAIN_ITEM(container_hash_map),
+    XU_UT_MAIN_ITEM(container_hash_set),
+    XU_UT_MAIN_ITEM(container_heap),
 
     // memory
     XU_UT_MAIN_ITEM(memory_buffer),

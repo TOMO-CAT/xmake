@@ -19,6 +19,8 @@ XU_UT_MAIN_DECL(algorithm_sort);
 XU_UT_MAIN_DECL(container_bloom_filter);
 XU_UT_MAIN_DECL(container_circle_queue);
 XU_UT_MAIN_DECL(container_hash_map);
+XU_UT_MAIN_DECL(container_hash_set);
+XU_UT_MAIN_DECL(container_heap);
 
 // memory
 XU_UT_MAIN_DECL(memory_buffer);
