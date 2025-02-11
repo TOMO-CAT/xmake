@@ -50,6 +50,20 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(container_stack),
     XU_UT_MAIN_ITEM(container_vector),
 
+    // hash
+    XU_UT_MAIN_ITEM(hash_adler32),
+    XU_UT_MAIN_ITEM(hash_benchmark),
+    XU_UT_MAIN_ITEM(hash_crc8),
+    XU_UT_MAIN_ITEM(hash_crc16),
+    XU_UT_MAIN_ITEM(hash_crc32),
+    XU_UT_MAIN_ITEM(hash_djb2),
+    XU_UT_MAIN_ITEM(hash_fnv32),
+    XU_UT_MAIN_ITEM(hash_fnv64),
+    XU_UT_MAIN_ITEM(hash_md5),
+    XU_UT_MAIN_ITEM(hash_sdbm),
+    XU_UT_MAIN_ITEM(hash_sha),
+    XU_UT_MAIN_ITEM(hash_uuid),
+
     // memory
     XU_UT_MAIN_ITEM(memory_buffer),
     XU_UT_MAIN_ITEM(memory_check),
