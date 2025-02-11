@@ -21,6 +21,13 @@ XU_UT_MAIN_DECL(container_circle_queue);
 XU_UT_MAIN_DECL(container_hash_map);
 XU_UT_MAIN_DECL(container_hash_set);
 XU_UT_MAIN_DECL(container_heap);
+XU_UT_MAIN_DECL(container_list_entry);
+XU_UT_MAIN_DECL(container_list);
+XU_UT_MAIN_DECL(container_queue);
+XU_UT_MAIN_DECL(container_single_list_entry);
+XU_UT_MAIN_DECL(container_single_list);
+XU_UT_MAIN_DECL(container_stack);
+XU_UT_MAIN_DECL(container_vector);
 
 // memory
 XU_UT_MAIN_DECL(memory_buffer);

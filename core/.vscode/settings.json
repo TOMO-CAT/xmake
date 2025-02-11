@@ -203,6 +203,7 @@
         "rentry",
         "REQT",
         "rfds",
+        "rfor",
         "riscv",
         "ritem",
         "rorl",
