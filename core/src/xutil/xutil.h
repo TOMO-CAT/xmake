@@ -6,6 +6,7 @@
 #include "xutil/algorithm/for_if.h"
 #include "xutil/charset/chartset.h"
 #include "xutil/container/bloom_filter.h"
+#include "xutil/container/circle_queue.h"
 #include "xutil/hash/md5.h"
 #include "xutil/hash/sha.h"
 #include "xutil/hash/uuid.h"

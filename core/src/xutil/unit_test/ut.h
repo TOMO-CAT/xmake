@@ -14,6 +14,7 @@
 // algorithm
 XU_UT_MAIN_DECL(algorithm_find);
 XU_UT_MAIN_DECL(algorithm_sort);
+XU_UT_MAIN_DECL(container_circle_queue);
 
 // container
 XU_UT_MAIN_DECL(container_bloom_filter);
