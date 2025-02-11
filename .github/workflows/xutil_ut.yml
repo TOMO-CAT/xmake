@@ -1,0 +1,29 @@
+name: Run xutil ut
+
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Prepare Local Xmake
+        run: cp -rf . ../xmake-source
+      - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: local#../xmake-source
+      - name: Prepare Environment
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential 
+      - name: Run UnitTests
+        run: |
+          cd core
+          bash scripts/xutil-ut.sh
