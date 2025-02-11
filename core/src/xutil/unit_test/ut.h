@@ -12,6 +12,7 @@
  */
 
 // algorithm
+XU_UT_MAIN_DECL(algorithm_find);
 XU_UT_MAIN_DECL(algorithm_sort);
 
 // memory
