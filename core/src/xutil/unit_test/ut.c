@@ -74,9 +74,22 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(libm_float),
     XU_UT_MAIN_ITEM(libm_integer),
 
+    // math
+    XU_UT_MAIN_ITEM(math_fixed),
+    XU_UT_MAIN_ITEM(math_random),
+
     // memory
+    XU_UT_MAIN_ITEM(memory_impl_static_fixed_pool),
     XU_UT_MAIN_ITEM(memory_buffer),
     XU_UT_MAIN_ITEM(memory_check),
+    XU_UT_MAIN_ITEM(memory_default_allocator),
+    XU_UT_MAIN_ITEM(memory_fixed_pool),
+    XU_UT_MAIN_ITEM(memory_large_allocator),
+    XU_UT_MAIN_ITEM(memory_memops),
+    XU_UT_MAIN_ITEM(memory_queue_buffer),
+    XU_UT_MAIN_ITEM(memory_small_allocator),
+    XU_UT_MAIN_ITEM(memory_static_buffer),
+    XU_UT_MAIN_ITEM(memory_string_pool),
 
     // utils
     XU_UT_MAIN_ITEM(utils_trace),
