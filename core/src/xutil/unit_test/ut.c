@@ -69,6 +69,11 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(libc_string),
     XU_UT_MAIN_ITEM(libc_time),
 
+    // libm
+    XU_UT_MAIN_ITEM(libm_double),
+    XU_UT_MAIN_ITEM(libm_float),
+    XU_UT_MAIN_ITEM(libm_integer),
+
     // memory
     XU_UT_MAIN_ITEM(memory_buffer),
     XU_UT_MAIN_ITEM(memory_check),

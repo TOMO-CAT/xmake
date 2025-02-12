@@ -48,6 +48,11 @@ XU_UT_MAIN_DECL(libc_stdlib);
 XU_UT_MAIN_DECL(libc_string);
 XU_UT_MAIN_DECL(libc_time);
 
+// libm
+XU_UT_MAIN_DECL(libm_double);
+XU_UT_MAIN_DECL(libm_float);
+XU_UT_MAIN_DECL(libm_integer);
+
 // memory
 XU_UT_MAIN_DECL(memory_buffer);
 XU_UT_MAIN_DECL(memory_check);
