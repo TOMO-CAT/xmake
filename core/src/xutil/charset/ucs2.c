@@ -1,4 +1,4 @@
-#include "xutil/charset/chartset.h"
+#include "xutil/charset/charset.h"
 
 xu_long_t xu_charset_ucs2_get(xu_static_stream_ref_t sstream, xu_bool_t be, xu_uint32_t* ch);
 xu_long_t xu_charset_ucs2_get(xu_static_stream_ref_t sstream, xu_bool_t be, xu_uint32_t* ch)

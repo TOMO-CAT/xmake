@@ -43,6 +43,11 @@ XU_UT_MAIN_DECL(hash_sdbm);
 XU_UT_MAIN_DECL(hash_sha);
 XU_UT_MAIN_DECL(hash_uuid);
 
+// libc
+XU_UT_MAIN_DECL(libc_stdlib);
+XU_UT_MAIN_DECL(libc_string);
+XU_UT_MAIN_DECL(libc_time);
+
 // memory
 XU_UT_MAIN_DECL(memory_buffer);
 XU_UT_MAIN_DECL(memory_check);

@@ -64,6 +64,11 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(hash_sha),
     XU_UT_MAIN_ITEM(hash_uuid),
 
+    // libc
+    XU_UT_MAIN_ITEM(libc_stdlib),
+    XU_UT_MAIN_ITEM(libc_string),
+    XU_UT_MAIN_ITEM(libc_time),
+
     // memory
     XU_UT_MAIN_ITEM(memory_buffer),
     XU_UT_MAIN_ITEM(memory_check),
