@@ -451,7 +451,7 @@ static xu_void_t xu_heap_itor_remove(xu_iterator_ref_t iterator, xu_size_t itor)
 #endif
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_heap_ref_t xu_heap_init(xu_size_t grow, xu_element_t element)

@@ -4,7 +4,7 @@
 #define XU_TRACE_MODULE_NAME "http_date"
 #define XU_TRACE_MODULE_DEBUG (1)
 
-#include "xutil/network/impl/http/data.h"
+#include "xutil/network/impl/http/date.h"
 #include "xutil/libc/misc/ctype.h"
 #include "xutil/libc/misc/time/time.h"
 #include "xutil/libc/stdlib/stdlib.h"

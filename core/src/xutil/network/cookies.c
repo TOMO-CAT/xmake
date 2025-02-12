@@ -12,7 +12,7 @@
 #include "xutil/libc/misc/time/time.h"
 #include "xutil/libc/stdlib/stdlib.h"
 #include "xutil/memory/string_pool.h"
-#include "xutil/network/impl/http/data.h"
+#include "xutil/network/impl/http/date.h"
 #include "xutil/platform/cache_time.h"
 #include "xutil/platform/path.h"
 #include "xutil/utils/singleton.h"

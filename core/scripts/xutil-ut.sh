@@ -23,8 +23,37 @@ UNIT_TESTS_ARRAY=(
     "algorithm_find"
     "algorithm_sort"
     "container_bloom_filter"
+    "container_circle_queue"
+    "container_hash_map"
+    "container_hash_set"
+    "container_heap"
+    "container_list_entry"
+    "container_list"
+    "container_queue"
+    "container_single_list_entry"
+    "container_single_list"
+    "container_stack"
+    "container_vector"
+    "hash_benchmark"
+    "libc_stdlib"
+    "libc_string"
+    "libc_time"
+    "libm_double"
+    "libm_float"
+    "libm_integer"
+    "math_fixed"
+    "math_random"
+    "memory_impl_static_fixed_pool"
     "memory_buffer"
     "memory_check"
+    "memory_default_allocator"
+    "memory_fixed_pool"
+    "memory_large_allocator"
+    "memory_memops"
+    "memory_queue_buffer"
+    "memory_small_allocator"
+    "memory_static_buffer"
+    "memory_static_buffer"
     "utils_trace"
 )
 
@@ -33,6 +62,19 @@ function run_all_uts() {
     info "start running ut [${ut}] ..."
     xmake run xutil-ut "${ut}" || exit 1
   done
+
+  # 特殊单测
+  xmake run xutil-ut hash_adler32 tomocat
+  xmake run xutil-ut hash_crc8 tomocat
+  xmake run xutil-ut hash_crc16 tomocat
+  xmake run xutil-ut hash_crc32 tomocat
+  xmake run xutil-ut hash_djb2 tomocat
+  xmake run xutil-ut hash_fnv32 tomocat
+  xmake run xutil-ut hash_fnv64 tomocat
+  xmake run xutil-ut hash_md5 tomocat
+  xmake run xutil-ut hash_sdbm tomocat
+  xmake run xutil-ut hash_sha tomocat
+  xmake run xutil-ut hash_uuid tomocat
 }
 
 # trace 宏依赖 debug 模式
