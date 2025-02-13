@@ -206,7 +206,7 @@ xu_int_t main(xu_int_t argc, xu_char_t** argv)
             xu_trace_i("testname: %s", g_ut[i].name);
     }
 
-    // exit tbox
+    // exit xutil
     xutil_exit();
 
     // ok?

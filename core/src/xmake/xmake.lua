@@ -2,7 +2,7 @@ target("xmake", function()
     set_kind("static")
 
     -- add deps
-    add_deps("sv", "lz4", "tbox", "xutil")
+    add_deps("sv", "lz4", "xutil")
     if is_config("runtime", "luajit") then
         add_deps("luajit")
     else

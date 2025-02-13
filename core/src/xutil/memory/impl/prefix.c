@@ -18,7 +18,7 @@ __xu_no_sanitize_address__ xu_size_t xu_pool_data_size(xu_cpointer_t data)
     xu_pool_data_head_t* data_head = xu_null;
     do
     {
-        // tbox must be running normally
+        // xutil must be running normally
         xu_check_break(xutil_state() == XU_STATE_OK);
 
         // get global allocator

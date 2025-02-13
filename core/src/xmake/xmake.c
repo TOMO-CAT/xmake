@@ -96,10 +96,10 @@ xu_bool_t xm_init_(xu_size_t mode, xu_hize_t build)
     xm_version_check(build);
 
 #if 0
-    // init tbox, we always use the tbox's default allocator
+    // init xutil, we always use the xutil's default allocator
     if (!xutil_init(xu_null, xu_default_allocator(xu_null, 0))) return xu_false;
 #else
-    // init tbox, since small compilation mode is enabled, it still uses the native allocator
+    // init xutil, since small compilation mode is enabled, it still uses the native allocator
     if (!xutil_init(xu_null, xu_null))
     {
         return xu_false;

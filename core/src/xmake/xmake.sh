@@ -6,7 +6,7 @@ target "xmake"
 
     # add deps
     if has_config "external"; then
-        local libs="lz4 sv tbox xutil"
+        local libs="lz4 sv xutil"
         for lib in $libs; do
             if has_config "$lib"; then
                 add_options "$lib" "{public}"
@@ -22,7 +22,7 @@ target "xmake"
             fi
         fi
     else
-        local libs="lua_cjson lz4 sv tbox xutil"
+        local libs="lua_cjson lz4 sv xutil"
         for lib in $libs; do
             add_deps "$lib"
         done

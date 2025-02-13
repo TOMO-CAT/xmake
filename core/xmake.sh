@@ -202,35 +202,6 @@ option_find_sv() {
     option_end
 }
 
-# the tbox option
-option "tbox"
-    add_cfuncs "tb_exit" "tb_md5_init" "tb_charset_conv_data"
-    add_cincludes "tbox/tbox.h"
-    add_links "tbox"
-    before_check "option_find_tbox"
-option_end
-
-option_find_tbox() {
-    local ldflags=""
-    local cflags=""
-    option "tbox"
-        cflags=`pkg-config --cflags libtbox 2>/dev/null`
-        ldflags=`pkg-config --libs libtbox 2>/dev/null`
-        if test_z "${cflags}"; then
-            cflags="-I/usr/include"
-        fi
-        if test_z "${ldflags}"; then
-            ldflags="-ltbox"
-        fi
-        add_cflags "${cflags}"
-        add_ldflags "${ldflags}"
-        # ubuntu armv7/armel maybe need it
-        if is_plat "linux" && is_arch "armv7" "arm"; then
-            add_ldflags "-latomic"
-        fi
-    option_end
-}
-
 # add projects
 if ! has_config "external"; then
     if is_config "runtime" "luajit"; then
@@ -241,7 +212,6 @@ if ! has_config "external"; then
     includes "src/lua-cjson"
     includes "src/lz4"
     includes "src/sv"
-    includes "src/tbox"
     includes "src/xutil"
 fi
 includes "src/xmake"
