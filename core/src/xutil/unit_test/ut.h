@@ -121,5 +121,9 @@ XU_UT_MAIN_DECL(stream_charset);
 XU_UT_MAIN_DECL(stream_null);
 XU_UT_MAIN_DECL(stream);
 
+// string
+XU_UT_MAIN_DECL(string_static_string);
+XU_UT_MAIN_DECL(string_string);
+
 // utils
 XU_UT_MAIN_DECL(utils_trace);

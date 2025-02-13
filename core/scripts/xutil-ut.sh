@@ -70,6 +70,8 @@ UNIT_TESTS_ARRAY=(
     "platform_sched"
     "platform_thread"
     "platform_utils"
+    "string_static_string"
+    "string_string"
     "utils_trace"
 )
 

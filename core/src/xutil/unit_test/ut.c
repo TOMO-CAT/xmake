@@ -142,6 +142,10 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(stream_null),
     XU_UT_MAIN_ITEM(stream),
 
+    // string
+    XU_UT_MAIN_ITEM(string_static_string),
+    XU_UT_MAIN_ITEM(string_string),
+
     // utils
     XU_UT_MAIN_ITEM(utils_trace),
 };
