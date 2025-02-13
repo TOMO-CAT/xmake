@@ -147,7 +147,12 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(string_string),
 
     // utils
+    XU_UT_MAIN_ITEM(utils_base32),
+    XU_UT_MAIN_ITEM(utils_base64),
+    XU_UT_MAIN_ITEM(utils_bits),
+    XU_UT_MAIN_ITEM(utils_dump),
     XU_UT_MAIN_ITEM(utils_trace),
+    XU_UT_MAIN_ITEM(utils_url),
 };
 
 /* *******************************************************

@@ -72,6 +72,7 @@ UNIT_TESTS_ARRAY=(
     "platform_utils"
     "string_static_string"
     "string_string"
+    "utils_bits"
     "utils_trace"
 )
 
@@ -106,6 +107,11 @@ function run_all_uts() {
   xmake run xutil-ut platform_addrinfo www.baidu.com
 
   xmake run xutil-ut stream http://www.baidu.com /tmp/a
+
+  xmake run xutil-ut utils_base32 tomocat
+  xmake run xutil-ut utils_base64 tomocat
+  xmake run xutil-ut utils_dump tomocat
+  xmake run xutil-ut utils_url tomocat
 }
 
 # trace 宏依赖 debug 模式

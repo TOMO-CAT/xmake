@@ -81,12 +81,14 @@
 #include "xutil/platform/time.h"
 #include "xutil/stream/stream.h"
 #include "xutil/stream/transfer.h"
+#include "xutil/utils/base32.h"
 #include "xutil/utils/base64.h"
 #include "xutil/utils/dump.h"
 #include "xutil/utils/lock_profiler.h"
 #include "xutil/utils/singleton.h"
 #include "xutil/utils/state.h"
 #include "xutil/utils/trace.h"
+#include "xutil/utils/url.h"
 #include "xutil/utils/used.h"
 
 /* *******************************************************

@@ -126,4 +126,9 @@ XU_UT_MAIN_DECL(string_static_string);
 XU_UT_MAIN_DECL(string_string);
 
 // utils
+XU_UT_MAIN_DECL(utils_base32);
+XU_UT_MAIN_DECL(utils_base64);
+XU_UT_MAIN_DECL(utils_bits);
+XU_UT_MAIN_DECL(utils_dump);
 XU_UT_MAIN_DECL(utils_trace);
+XU_UT_MAIN_DECL(utils_url);
