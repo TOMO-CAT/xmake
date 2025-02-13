@@ -107,6 +107,9 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(network_url),
     XU_UT_MAIN_ITEM(network_whois),
 
+    // other
+    XU_UT_MAIN_ITEM(other_charset),
+
     // utils
     XU_UT_MAIN_ITEM(utils_trace),
 };

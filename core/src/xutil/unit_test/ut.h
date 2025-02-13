@@ -86,5 +86,8 @@ XU_UT_MAIN_DECL(network_unixaddr);
 XU_UT_MAIN_DECL(network_url);
 XU_UT_MAIN_DECL(network_whois);
 
+// other
+XU_UT_MAIN_DECL(other_charset);
+
 // utils
 XU_UT_MAIN_DECL(utils_trace);
