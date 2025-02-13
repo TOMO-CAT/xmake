@@ -3,7 +3,7 @@
 #include "xutil/prefix.h"
 #include "xutil/string/string.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * INTRODUCTION
  * Cookies are a general mechanism which server side connections (such as CGI scripts)
  * can use to both store and retrieve information on the client side of the connection.

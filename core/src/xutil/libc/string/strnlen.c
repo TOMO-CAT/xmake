@@ -1,6 +1,6 @@
 #include "xutil/libc/string/string.h"
 
-#include "../../memory/impl/prefix.h"
+#include "xutil/memory/impl/prefix.h"
 #ifndef XU_CONFIG_LIBC_HAVE_STRNLEN
 #    if defined(XU_ARCH_x86)
 #        include "xutil/libc/string/impl/x86/strnlen.c"

@@ -49,10 +49,10 @@ xu_int_t xm_io_pipe_connect(lua_State* lua)
     }
 
     // get pipe file
-    tb_pipe_file_ref_t pipefile = (tb_pipe_file_ref_t)xm_lua_topointer(lua, 1);
+    xu_pipe_file_ref_t pipefile = (xu_pipe_file_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(pipefile, 0);
 
     // connect pipe
-    lua_pushnumber(lua, (xu_int_t)tb_pipe_file_connect(pipefile));
+    lua_pushnumber(lua, (xu_int_t)xu_pipe_file_connect(pipefile));
     return 1;
 }

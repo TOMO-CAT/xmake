@@ -61,7 +61,7 @@ xu_int_t xm_lz4_compress(lua_State* lua)
         xu_size_t output_size = LZ4F_compressFrameBound(size, xu_null);
         xu_assert_and_check_break(output_size);
 
-        output_data = output_size <= sizeof(buffer) ? buffer : (xu_byte_t*)tb_malloc(output_size);
+        output_data = output_size <= sizeof(buffer) ? buffer : (xu_byte_t*)xu_malloc(output_size);
         xu_assert_and_check_break(output_data);
 
         xu_size_t real_or_errs = LZ4F_compressFrame(output_data, output_size, data, size, xu_null);

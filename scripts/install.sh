@@ -31,7 +31,7 @@ git submodule update --init || exit 1
 ./configure --verbose --runtime="${runtime}" --mode="${mode}" || exit 1
 
 # 显示具体编译命令可用 make VERBOSE=1
-make || exit 1
+make VERBOSE=1 || exit 1
 sudo make install PREFIX=/usr/local || exit 1
 
 ok "install xmake successfully!"

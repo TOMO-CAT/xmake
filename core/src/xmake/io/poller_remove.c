@@ -50,16 +50,16 @@ xu_int_t xm_io_poller_remove(lua_State* lua)
     }
 
     // get otype
-    tb_uint8_t otype = (tb_uint8_t)luaL_checknumber(lua, 1);
+    xu_uint8_t otype = (xu_uint8_t)luaL_checknumber(lua, 1);
 
     // get cdata
     xu_pointer_t cdata = (xu_pointer_t)xm_lua_topointer(lua, 2);
     xu_check_return_val(cdata, 0);
 
     // remove events from poller
-    tb_poller_object_t object;
+    xu_poller_object_t object;
     object.type    = otype;
     object.ref.ptr = cdata;
-    lua_pushboolean(lua, tb_poller_remove(xm_io_poller(), &object));
+    lua_pushboolean(lua, xu_poller_remove(xm_io_poller(), &object));
     return 1;
 }

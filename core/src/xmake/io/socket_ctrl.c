@@ -49,7 +49,7 @@ xu_int_t xm_io_socket_ctrl(lua_State* lua)
     }
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get code
@@ -59,6 +59,6 @@ xu_int_t xm_io_socket_ctrl(lua_State* lua)
     xu_size_t value = (xu_size_t)luaL_checkinteger(lua, 3);
 
     // control socket
-    lua_pushboolean(lua, tb_socket_ctrl(sock, code, value));
+    lua_pushboolean(lua, xu_socket_ctrl(sock, code, value));
     return 1;
 }

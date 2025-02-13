@@ -47,6 +47,6 @@ xu_int_t xm_path_relative(lua_State* lua)
 
     // path:relative(root)
     xu_char_t data[XU_PATH_MAXN];
-    lua_pushstring(lua, tb_path_relative_to(root, path, data, sizeof(data) - 1));
+    lua_pushstring(lua, xu_path_relative_to(root, path, data, sizeof(data) - 1));
     return 1;
 }

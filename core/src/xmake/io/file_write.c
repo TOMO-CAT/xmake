@@ -44,19 +44,19 @@ static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
     case XU_CHARSET_TYPE_UTF8:
     {
         static xu_byte_t bom[] = {0xef, 0xbb, 0xbf};
-        tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
+        xu_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
     case XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_LE:
     {
         static xu_byte_t bom[] = {0xff, 0xfe};
-        tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
+        xu_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
     case XU_CHARSET_TYPE_UTF16 | XU_CHARSET_TYPE_BE:
     {
         static xu_byte_t bom[] = {0xfe, 0xff};
-        tb_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
+        xu_stream_bwrit(file->u.file_ref, bom, sizeof(bom));
     }
     break;
     default: break;
@@ -65,7 +65,7 @@ static xu_void_t xm_io_file_write_file_utfbom(xm_io_file_t* file)
 static xu_void_t xm_io_file_write_file_directly(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
     xu_assert(file && data && xm_io_file_is_file(file) && file->u.file_ref);
-    tb_stream_bwrit(file->u.file_ref, data, size);
+    xu_stream_bwrit(file->u.file_ref, data, size);
 }
 static xu_void_t xm_io_file_write_file_transcrlf(xm_io_file_t* file, xu_byte_t const* data, xu_size_t size)
 {
@@ -83,7 +83,7 @@ static xu_void_t xm_io_file_write_std(xm_io_file_t* file, xu_byte_t const* data,
     xu_check_return(type != XM_IO_FILE_TYPE_STDIN);
 
     // write data to stdout/stderr
-    tb_stdfile_writ(file->u.std_ref, data, size);
+    xu_stdfile_writ(file->u.std_ref, data, size);
 }
 
 /* *******************************************************

@@ -29,7 +29,7 @@
  */
 typedef xu_long_t (*xu_printf_object_func_t)(xu_cpointer_t object, xu_char_t* cstr, xu_size_t maxn);
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 

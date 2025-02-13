@@ -110,7 +110,7 @@ option("small", function()
 end)
 
 -- add projects
-includes("src/sv", "src/lz4", "src/tbox", "src/xmake", "src/demo", "src/xutil")
+includes("src/sv", "src/lz4", "src/xmake", "src/demo", "src/xutil")
 if has_config("lua_cjson") then
     includes("src/lua-cjson")
 end

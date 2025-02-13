@@ -43,6 +43,6 @@ xu_int_t xm_os_rmfile(lua_State* lua)
     xu_check_return_val(path, 0);
 
     // do remove
-    lua_pushboolean(lua, tb_file_remove(path));
+    lua_pushboolean(lua, xu_file_remove(path));
     return 1;
 }

@@ -102,7 +102,7 @@
 #    define xu_atomic32_set(a, v) xu_atomic32_set_explicit(a, v, XU_ATOMIC_SEQ_CST)
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * inlines
  */
 static __xu_inline__ xu_bool_t xu_atomic32_compare_and_swap_explicit_generic(xu_atomic32_t* a, xu_int32_t* p,

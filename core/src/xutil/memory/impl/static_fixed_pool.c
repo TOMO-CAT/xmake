@@ -397,7 +397,7 @@ static xu_void_t xu_static_fixed_pool_check_prev(xu_static_fixed_pool_t*        
 }
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_static_fixed_pool_ref_t xu_static_fixed_pool_init(xu_byte_t* data, xu_size_t size, xu_size_t item_size,

@@ -3,17 +3,12 @@
 ## 开发
 
 ```bash
+# clone
 git clone --recursive https://github.com/xmake-io/xmake.git
 cd core
 
-# 调试 xutil
-cd src/xutil
-xmake build -P . -v
-
 # 运行 xutil 单测
-cd src/xutil
-xmake config --ut=y -P . -v -c
-xmake build -P . -v --all
+bash scripts/xutil-ut.sh
 ```
 
 ## Embed

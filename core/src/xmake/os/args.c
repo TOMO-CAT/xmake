@@ -33,7 +33,7 @@
 /* *******************************************************
  * private implementation
  */
-static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr, xu_size_t size, xu_bool_t escape,
+static xu_void_t xu_os_args_append(xu_string_ref_t result, xu_char_t const* cstr, xu_size_t size, xu_bool_t escape,
                                    xu_bool_t nowrap)
 {
     // check
@@ -53,20 +53,20 @@ static xu_void_t tb_os_args_append(tb_string_ref_t result, xu_char_t const* cstr
     }
 
     // wrap begin quote
-    if (wrap_quote) tb_string_chrcat(result, '\"');
+    if (wrap_quote) xu_string_chrcat(result, '\"');
 
     // escape characters
     p = cstr;
     while ((ch = *p))
     {
         // escape '"' or '\\'
-        if (ch == '\"' || ((escape || wrap_quote) && ch == '\\')) tb_string_chrcat(result, '\\');
-        tb_string_chrcat(result, ch);
+        if (ch == '\"' || ((escape || wrap_quote) && ch == '\\')) xu_string_chrcat(result, '\\');
+        xu_string_chrcat(result, ch);
         p++;
     }
 
     // wrap end quote
-    if (wrap_quote) tb_string_chrcat(result, '\"');
+    if (wrap_quote) xu_string_chrcat(result, '\"');
 }
 
 /* *******************************************************
@@ -101,8 +101,8 @@ xu_int_t xm_os_args(lua_State* lua)
     }
 
     // init result
-    tb_string_t result;
-    tb_string_init(&result);
+    xu_string_t result;
+    xu_string_init(&result);
 
     // make string from arguments list
     if (lua_istable(lua, 1))
@@ -112,7 +112,7 @@ xu_int_t xm_os_args(lua_State* lua)
         for (i = 1; i <= n; i++)
         {
             // add space
-            if (i != 1) tb_string_chrcat(&result, ' ');
+            if (i != 1) xu_string_chrcat(&result, ' ');
 
             // add argument
             lua_pushnumber(lua, (xu_int_t)i);
@@ -123,14 +123,14 @@ xu_int_t xm_os_args(lua_State* lua)
                 lua_gettable(lua, -2);
                 size_t           size = 0;
                 xu_char_t const* cstr = luaL_checklstring(lua, -1, &size);
-                if (cstr && size) tb_os_args_append(&result, cstr, size, escape, nowrap);
+                if (cstr && size) xu_os_args_append(&result, cstr, size, escape, nowrap);
                 lua_pop(lua, 1);
             }
             else
             {
                 size_t           size = 0;
                 xu_char_t const* cstr = luaL_checklstring(lua, -1, &size);
-                if (cstr && size) tb_os_args_append(&result, cstr, size, escape, nowrap);
+                if (cstr && size) xu_os_args_append(&result, cstr, size, escape, nowrap);
             }
             lua_pop(lua, 1);
         }
@@ -139,15 +139,15 @@ xu_int_t xm_os_args(lua_State* lua)
     {
         size_t           size = 0;
         xu_char_t const* cstr = luaL_checklstring(lua, 1, &size);
-        if (cstr && size) tb_os_args_append(&result, cstr, size, escape, nowrap);
+        if (cstr && size) xu_os_args_append(&result, cstr, size, escape, nowrap);
     }
 
     // return result
-    xu_size_t size = tb_string_size(&result);
+    xu_size_t size = xu_string_size(&result);
     if (size)
-        lua_pushlstring(lua, tb_string_cstr(&result), size);
+        lua_pushlstring(lua, xu_string_cstr(&result), size);
     else
         lua_pushliteral(lua, "");
-    tb_string_exit(&result);
+    xu_string_exit(&result);
     return 1;
 }

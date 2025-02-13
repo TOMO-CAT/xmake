@@ -1,12 +1,12 @@
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * includes
  */
 #include "xmake/xmake.h"
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * main
  */
-tb_int_t main(tb_int_t argc, tb_char_t** argv)
+xu_int_t main(xu_int_t argc, xu_char_t** argv)
 {
-    return xm_engine_run("xmake", argc, argv, tb_null, tb_null);
+    return xm_engine_run("xmake", argc, argv, xu_null, xu_null);
 }

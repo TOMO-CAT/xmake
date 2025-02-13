@@ -44,7 +44,7 @@ xu_int_t xm_os_link(lua_State* lua)
     xu_check_return_val(src && dst, 0);
 
     // do os.link(src, dst)
-    lua_pushboolean(lua, tb_file_link(src, dst));
+    lua_pushboolean(lua, xu_file_link(src, dst));
 
     // ok
     return 1;

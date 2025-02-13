@@ -83,7 +83,7 @@ static xu_long_t xu_network_printf_format_hwaddr(xu_cpointer_t object, xu_char_t
 }
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_bool_t xu_network_init_env()

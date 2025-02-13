@@ -58,7 +58,7 @@ static xu_void_t xm_string_lastof_str(lua_State* lua, xu_char_t const* cstr, xu_
 }
 static xu_void_t xm_string_lastof_chr(lua_State* lua, xu_char_t const* cstr, xu_size_t nstr, xu_char_t ch)
 {
-    xu_char_t const* pos = tb_strrchr(cstr, ch); // faster than tb_strnrchr()
+    xu_char_t const* pos = xu_strrchr(cstr, ch); // faster than xu_strnrchr()
     if (pos)
         lua_pushinteger(lua, pos - cstr + 1);
     else

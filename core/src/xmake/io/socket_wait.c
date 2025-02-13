@@ -44,7 +44,7 @@ xu_int_t xm_io_socket_wait(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get events
@@ -54,6 +54,6 @@ xu_int_t xm_io_socket_wait(lua_State* lua)
     xu_long_t timeout = (xu_long_t)luaL_checknumber(lua, 3);
 
     // wait socket
-    lua_pushnumber(lua, (xu_int_t)tb_socket_wait(sock, events, timeout));
+    lua_pushnumber(lua, (xu_int_t)xu_socket_wait(sock, events, timeout));
     return 1;
 }

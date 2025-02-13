@@ -62,7 +62,7 @@ xu_int_t xm_os_getenvs(lua_State* lua)
         xu_size_t n = 0;
         while (*p)
         {
-            n = tb_strlen(*p);
+            n = xu_strlen(*p);
             if (n)
             {
                 lua_pushstring(lua, *p);

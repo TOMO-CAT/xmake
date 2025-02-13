@@ -49,7 +49,7 @@ xu_int_t xm_io_socket_recvfrom(lua_State* lua)
     }
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get data
@@ -74,23 +74,23 @@ xu_int_t xm_io_socket_recvfrom(lua_State* lua)
     }
 
     // recv data
-    tb_ipaddr_t ipaddr;
-    tb_ipaddr_clear(&ipaddr);
+    xu_ipaddr_t ipaddr;
+    xu_ipaddr_clear(&ipaddr);
     xu_int_t  retn = 1;
-    xu_long_t real = tb_socket_urecv(sock, &ipaddr, data, size);
+    xu_long_t real = xu_socket_urecv(sock, &ipaddr, data, size);
     lua_pushinteger(lua, (xu_int_t)real);
     if (real > 0)
     {
         retn = 2;
         lua_pushnil(lua);
-        if (!tb_ipaddr_is_empty(&ipaddr))
+        if (!xu_ipaddr_is_empty(&ipaddr))
         {
             xu_char_t        buffer[256];
-            xu_char_t const* ipstr = tb_ipaddr_ip_cstr(&ipaddr, buffer, sizeof(buffer));
+            xu_char_t const* ipstr = xu_ipaddr_ip_cstr(&ipaddr, buffer, sizeof(buffer));
             if (ipstr)
             {
                 lua_pushstring(lua, ipstr);
-                lua_pushinteger(lua, (xu_int_t)tb_ipaddr_port(&ipaddr));
+                lua_pushinteger(lua, (xu_int_t)xu_ipaddr_port(&ipaddr));
                 retn = 4;
             }
         }

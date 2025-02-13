@@ -42,11 +42,11 @@ xu_int_t xm_bloom_filter_data(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the bloom filter
-    tb_bloom_filter_ref_t filter = (tb_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
+    xu_bloom_filter_ref_t filter = (xu_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(filter, 0);
 
     // get data
-    xu_pointer_t data = (xu_pointer_t)tb_bloom_filter_data(filter);
+    xu_pointer_t data = (xu_pointer_t)xu_bloom_filter_data(filter);
     if (data)
         xm_lua_pushpointer(lua, data);
     else

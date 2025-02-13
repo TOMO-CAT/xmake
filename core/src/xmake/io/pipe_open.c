@@ -58,7 +58,7 @@ xu_int_t xm_io_pipe_open(lua_State* lua)
     xu_size_t buffsize = (xu_size_t)luaL_checknumber(lua, 3);
 
     // open pipe file
-    tb_pipe_file_ref_t pipefile = tb_pipe_file_init(name, mode, buffsize);
+    xu_pipe_file_ref_t pipefile = xu_pipe_file_init(name, mode, buffsize);
     if (pipefile)
         xm_lua_pushpointer(lua, (xu_pointer_t)pipefile);
     else

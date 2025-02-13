@@ -8,6 +8,7 @@
  * includes
  */
 #include "xutil/container/single_list.h"
+#include "xutil/algorithm/for.h"
 #include "xutil/container/single_list_entry.h"
 #include "xutil/libc/libc.h"
 #include "xutil/memory/memory.h"

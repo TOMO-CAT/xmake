@@ -317,7 +317,7 @@ static xu_long_t xu_poller_epoll_wait(xu_poller_t* self, xu_poller_event_func_t 
     return wait;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_poller_t* xu_poller_epoll_init()

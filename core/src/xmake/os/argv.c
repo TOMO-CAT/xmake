@@ -53,14 +53,14 @@ xu_int_t xm_os_argv(lua_State* lua)
     }
 
     // parse argument list
-    tb_string_t arg;
+    xu_string_t arg;
     do
     {
         // init table
         lua_newtable(lua);
 
         // init arg
-        if (!tb_string_init(&arg)) break;
+        if (!xu_string_init(&arg)) break;
 
         // parse command to the arguments
         xu_int_t         i      = 1;
@@ -96,21 +96,21 @@ xu_int_t xm_os_argv(lua_State* lua)
                 else if (!quote && xu_isspace(ch))
                 {
                     // save this argument
-                    tb_string_ltrim(&arg);
-                    if (tb_string_size(&arg))
+                    xu_string_ltrim(&arg);
+                    if (xu_string_size(&arg))
                     {
                         // save argument
-                        lua_pushstring(lua, tb_string_cstr(&arg));
+                        lua_pushstring(lua, xu_string_cstr(&arg));
                         lua_rawseti(lua, -2, i++);
                     }
 
                     // clear argument
-                    tb_string_clear(&arg);
+                    xu_string_clear(&arg);
                 }
             }
 
             // save this charactor to argument
-            if (splitonly || !skip) tb_string_chrcat(&arg, ch);
+            if (splitonly || !skip) xu_string_chrcat(&arg, ch);
 
             // step and cancel escape
             if (escape == 1)
@@ -126,17 +126,17 @@ xu_int_t xm_os_argv(lua_State* lua)
         }
 
         // save this argument
-        tb_string_ltrim(&arg);
-        if (tb_string_size(&arg))
+        xu_string_ltrim(&arg);
+        if (xu_string_size(&arg))
         {
             // save argument
-            lua_pushstring(lua, tb_string_cstr(&arg));
+            lua_pushstring(lua, xu_string_cstr(&arg));
             lua_rawseti(lua, -2, i++);
         }
 
     } while (0);
 
     // exit arg
-    tb_string_exit(&arg);
+    xu_string_exit(&arg);
     return 1;
 }

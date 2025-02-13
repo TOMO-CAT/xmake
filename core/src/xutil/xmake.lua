@@ -50,7 +50,7 @@ end
 add_rules("mode.release", "mode.debug", "mode.profile", "mode.coverage",
           "mode.valgrind", "mode.asan", "mode.tsan", "mode.ubsan")
 if is_mode("debug") then
-    add_defines("__xu_debug__")
+    add_defines("__xu_debug__", {public = true})
 end
 if is_mode("valgrind") then
     add_defines("__xu_valgrind__")

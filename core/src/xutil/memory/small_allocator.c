@@ -116,7 +116,8 @@ static xu_fixed_pool_ref_t xu_small_allocator_find_fixed(xu_small_allocator_ref_
         }
 
         // trace
-        xu_trace_d("find: size: %lu => index: %lu, space: %lu", size, index, space);
+        // 日志太多暂时关闭
+        // xu_trace_d("find: size: %lu => index: %lu, space: %lu", size, index, space);
 
         // make fixed pool if not exists
         if (!allocator->fixed_pool[index])

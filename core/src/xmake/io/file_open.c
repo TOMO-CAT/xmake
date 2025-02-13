@@ -80,11 +80,11 @@ static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t
             }
         }
 
-        tb_sint16_t utf16be_conf = 0;
-        tb_sint16_t utf16le_conf = 0;
-        tb_sint16_t utf8_conf    = 0;
-        tb_sint16_t ascii_conf   = 0;
-        tb_sint16_t zero_count   = 0;
+        xu_sint16_t utf16be_conf = 0;
+        xu_sint16_t utf16le_conf = 0;
+        xu_sint16_t utf8_conf    = 0;
+        xu_sint16_t ascii_conf   = 0;
+        xu_sint16_t zero_count   = 0;
         for (xu_long_t i = 0; i < (size - 4) && i < CHECK_SIZE; i++)
         {
             if (data[i] == 0) zero_count++;
@@ -146,7 +146,7 @@ static xu_size_t xm_io_file_detect_charset(xu_byte_t const** data_ptr, xu_long_t
     *data_ptr = data;
     return charset;
 }
-static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, xu_long_t* pbomoff)
+static xu_size_t xm_io_file_detect_encoding(xu_stream_ref_t stream, xu_long_t* pbomoff)
 {
     // check
     xu_assert_and_check_return_val(stream && pbomoff, XM_IO_FILE_ENCODING_BINARY);
@@ -154,7 +154,7 @@ static xu_size_t xm_io_file_detect_encoding(tb_stream_ref_t stream, xu_long_t* p
     // detect encoding
     xu_byte_t* data     = xu_null;
     xu_size_t  encoding = XM_IO_FILE_ENCODING_BINARY;
-    xu_long_t  size     = tb_stream_peek(stream, &data, CHECK_SIZE);
+    xu_long_t  size     = xu_stream_peek(stream, &data, CHECK_SIZE);
     if (size > 0)
     {
         xu_byte_t const* p = data;
@@ -191,7 +191,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
 
     // get file encoding
     xu_long_t       bomoff   = 0;
-    tb_stream_ref_t stream   = xu_null;
+    xu_stream_ref_t stream   = xu_null;
     xu_bool_t       update   = !!xu_strchr(modestr, '+');
     xu_size_t       encoding = XM_IO_FILE_ENCODING_UNKNOWN;
     if (modestr[1] == 'b' || (update && modestr[2] == 'b'))
@@ -216,12 +216,12 @@ xu_int_t xm_io_file_open(lua_State* lua)
         encoding = XU_CHARSET_TYPE_UTF8;
     else if (modestr[0] == 'r') // detect encoding if not specified for the reading mode
     {
-        stream = tb_stream_init_from_file(path, mode);
-        if (stream && tb_stream_open(stream))
+        stream = xu_stream_init_from_file(path, mode);
+        if (stream && xu_stream_open(stream))
             encoding = xm_io_file_detect_encoding(stream, &bomoff);
         else
         {
-            if (stream) tb_stream_exit(stream);
+            if (stream) xu_stream_exit(stream);
             xm_io_return_error(lua, "file not found!");
         }
     }
@@ -235,12 +235,12 @@ xu_int_t xm_io_file_open(lua_State* lua)
 
     // open file
     xu_bool_t       open_ok  = xu_false;
-    tb_stream_ref_t file_ref = xu_null;
-    tb_stream_ref_t fstream  = xu_null;
+    xu_stream_ref_t file_ref = xu_null;
+    xu_stream_ref_t fstream  = xu_null;
     do
     {
         // init stream from file
-        stream = stream ? stream : tb_stream_init_from_file(path, mode);
+        stream = stream ? stream : xu_stream_init_from_file(path, mode);
         xu_assert_and_check_break(stream);
 
         // is transcode?
@@ -248,9 +248,9 @@ xu_int_t xm_io_file_open(lua_State* lua)
         if (is_transcode)
         {
             if (modestr[0] == 'r')
-                fstream = tb_stream_init_filter_from_charset(stream, encoding, XU_CHARSET_TYPE_UTF8);
+                fstream = xu_stream_init_filter_from_charset(stream, encoding, XU_CHARSET_TYPE_UTF8);
             else
-                fstream = tb_stream_init_filter_from_charset(stream, XU_CHARSET_TYPE_UTF8, encoding);
+                fstream = xu_stream_init_filter_from_charset(stream, XU_CHARSET_TYPE_UTF8, encoding);
             xu_assert_and_check_break(fstream);
 
             // use fstream as file
@@ -260,10 +260,10 @@ xu_int_t xm_io_file_open(lua_State* lua)
             file_ref = stream;
 
         // open file stream
-        if (!tb_stream_open(file_ref)) break;
+        if (!xu_stream_open(file_ref)) break;
 
         // skip bom characters if exists
-        if (bomoff > 0 && !tb_stream_seek(stream, bomoff)) break;
+        if (bomoff > 0 && !xu_stream_seek(stream, bomoff)) break;
 
         // ok
         open_ok = xu_true;
@@ -274,11 +274,11 @@ xu_int_t xm_io_file_open(lua_State* lua)
     if (!open_ok)
     {
         // exit stream
-        if (stream) tb_stream_exit(stream);
+        if (stream) xu_stream_exit(stream);
         stream = xu_null;
 
         // exit charset stream filter
-        if (fstream) tb_stream_exit(fstream);
+        if (fstream) xu_stream_exit(fstream);
         fstream = xu_null;
 
         // return errors
@@ -299,7 +299,7 @@ xu_int_t xm_io_file_open(lua_State* lua)
     file->utfbom     = utfbom;
 
     // init the read/write line cache buffer
-    tb_buffer_init(&file->rcache);
-    tb_buffer_init(&file->wcache);
+    xu_buffer_init(&file->rcache);
+    xu_buffer_init(&file->wcache);
     return 1;
 }

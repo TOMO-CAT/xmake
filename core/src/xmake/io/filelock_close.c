@@ -44,11 +44,11 @@ xu_int_t xm_io_filelock_close(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get lock
-    tb_filelock_ref_t lock = (tb_filelock_ref_t)xm_lua_topointer(lua, 1);
+    xu_filelock_ref_t lock = (xu_filelock_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(lock, 0);
 
     // exit lock
-    tb_filelock_exit(lock);
+    xu_filelock_exit(lock);
 
     // save result: ok
     lua_pushboolean(lua, xu_true);

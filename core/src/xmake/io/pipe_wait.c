@@ -44,7 +44,7 @@ xu_int_t xm_io_pipe_wait(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get pipe file
-    tb_pipe_file_ref_t pipefile = (tb_pipe_file_ref_t)xm_lua_topointer(lua, 1);
+    xu_pipe_file_ref_t pipefile = (xu_pipe_file_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(pipefile, 0);
 
     // get events
@@ -54,6 +54,6 @@ xu_int_t xm_io_pipe_wait(lua_State* lua)
     xu_long_t timeout = (xu_long_t)luaL_checknumber(lua, 3);
 
     // wait pipe
-    lua_pushnumber(lua, (xu_int_t)tb_pipe_file_wait(pipefile, events, timeout));
+    lua_pushnumber(lua, (xu_int_t)xu_pipe_file_wait(pipefile, events, timeout));
     return 1;
 }

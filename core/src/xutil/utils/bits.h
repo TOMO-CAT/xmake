@@ -523,7 +523,7 @@
 
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 
@@ -585,7 +585,7 @@ xu_uint64_t xu_bits_get_ubits64(xu_byte_t const* p, xu_size_t b, xu_size_t n);
  */
 xu_sint64_t xu_bits_get_sbits64(xu_byte_t const* p, xu_size_t b, xu_size_t n);
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * bits
  */
 
@@ -648,7 +648,7 @@ static __xu_inline__ xu_void_t xu_bits_set_u64_be_inline(xu_byte_t* p, xu_uint64
     p[7] = (xu_byte_t)x;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * swap
  */
 
@@ -685,7 +685,7 @@ static __xu_inline__ xu_hize_t xu_bits_swap_u64_inline(xu_hize_t x)
     return r.u64;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * cl0
  */
 static __xu_inline__ xu_size_t xu_bits_cl0_u32_be_inline(xu_uint32_t x)
@@ -775,7 +775,7 @@ static __xu_inline__ xu_size_t xu_bits_cl0_u64_le_inline(xu_uint64_t x)
     return n;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * cb1
  */
 static __xu_inline__ xu_size_t xu_bits_cb1_u32_inline(xu_uint32_t x)
@@ -844,7 +844,7 @@ static __xu_inline__ xu_size_t xu_bits_cb1_u64_inline(xu_uint64_t x)
 }
 
 #ifdef XU_CONFIG_TYPE_HAVE_FLOAT
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * float
  */
 static __xu_inline__ xu_float_t xu_bits_get_float_le_inline(xu_byte_t const* p)
@@ -887,7 +887,7 @@ static __xu_inline__ xu_void_t xu_bits_set_float_be_inline(xu_byte_t* p, xu_floa
     xu_bits_set_u32_be(p, conv.i);
 #    endif
 }
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * double
  */
 static __xu_inline__ xu_double_t xu_bits_get_double_bbe_inline(xu_byte_t const* p)

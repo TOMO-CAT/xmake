@@ -49,7 +49,7 @@ xu_int_t xm_io_pipe_read(lua_State* lua)
     }
 
     // get pipe file
-    tb_pipe_file_ref_t pipefile = (tb_pipe_file_ref_t)xm_lua_topointer(lua, 1);
+    xu_pipe_file_ref_t pipefile = (xu_pipe_file_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(pipefile, 0);
 
     // get data
@@ -74,7 +74,7 @@ xu_int_t xm_io_pipe_read(lua_State* lua)
     }
 
     // read data
-    xu_long_t real = tb_pipe_file_read(pipefile, data, size);
+    xu_long_t real = xu_pipe_file_read(pipefile, data, size);
     lua_pushinteger(lua, (xu_int_t)real);
     return 1;
 }

@@ -95,7 +95,6 @@ function docker_build() {
     -v ${PROJECT_BASE_DIR}:/${PROJECT_NAME} \
     -v ${HOME}/.gitconfig:${docker_home}/.gitconfig\
     -v ${HOME}/.ssh:${docker_home}/.ssh \
-    -v ${HOME}/.profile:${docker_home}/.profile \
     ${devices} \
     -w /${PROJECT_NAME}"
 
@@ -170,8 +169,9 @@ function docker_run() {
   } || {
     # docker exec -it --user $(id -u):$(id -g) ${DOCKER_CONTAINER} /bin/bash -c \
     #   "mkdir -p /zelos/log/{xxka,xxkb,z_topic,z_recorder} && mkdir -p /zelos/record && source /home/$USER/.profile && /bin/bash"
-    docker exec -it --user $(id -u):$(id -g) ${DOCKER_CONTAINER} /bin/bash -c \
-      "source /home/$USER/.profile && /bin/bash"
+    # docker exec -it --user $(id -u):$(id -g) ${DOCKER_CONTAINER} /bin/bash -c \
+    #   "source /home/$USER/.profile && /bin/bash"
+    docker exec -it --user $(id -u):$(id -g) ${DOCKER_CONTAINER} /bin/bash
   }
 }
 

@@ -46,6 +46,6 @@ xu_int_t xm_os_setenv(lua_State* lua)
     xu_check_return_val(name, 0);
 
     // set it
-    lua_pushboolean(lua, value ? tb_environment_set(name, value) : xu_false);
+    lua_pushboolean(lua, value ? xu_environment_set(name, value) : xu_false);
     return 1;
 }

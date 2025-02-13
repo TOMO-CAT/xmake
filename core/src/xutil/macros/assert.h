@@ -430,7 +430,7 @@ static __xu_inline__ xu_bool_t xu_assert_impl(xu_bool_t x, xu_char_t const* expr
     if (!x)
     {
         // trace
-        xu_trace_a("expr[%s] at %s(): %s:%d", expr __xu_debug_args__);
+        xu_trace_a("expr[%s] at %s(): %d, %s", expr __xu_debug_args__);
 
         // dump backtrace
         xu_assert_backtrace_dump();

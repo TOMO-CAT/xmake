@@ -50,43 +50,43 @@ xu_int_t xm_os_getenv(lua_State* lua)
     xu_check_return_val(name, 0);
 
     // init values
-    tb_string_t values;
-    if (!tb_string_init(&values)) return 0;
+    xu_string_t values;
+    if (!xu_string_init(&values)) return 0;
 
     // init environment
-    tb_environment_ref_t environment = tb_environment_init();
+    xu_environment_ref_t environment = xu_environment_init();
     if (environment)
     {
         // load variable
-        if (tb_environment_load(environment, name))
+        if (xu_environment_load(environment, name))
         {
             // make values
             xu_bool_t is_first = xu_true;
-            tb_for_all_if(xu_char_t const*, value, environment, value)
+            xu_for_all_if(xu_char_t const*, value, environment, value)
             {
                 // append separator
                 if (!is_first)
-                    tb_string_chrcat(&values, XM_OS_ENV_SEP);
+                    xu_string_chrcat(&values, XM_OS_ENV_SEP);
                 else
                     is_first = xu_false;
 
                 // append value
-                tb_string_cstrcat(&values, value);
+                xu_string_cstrcat(&values, value);
             }
         }
 
         // exit environment
-        tb_environment_exit(environment);
+        xu_environment_exit(environment);
     }
 
     // save result
-    if (tb_string_size(&values))
-        lua_pushstring(lua, tb_string_cstr(&values));
+    if (xu_string_size(&values))
+        lua_pushstring(lua, xu_string_cstr(&values));
     else
         lua_pushnil(lua);
 
     // exit values
-    tb_string_exit(&values);
+    xu_string_exit(&values);
 
     // ok
     return 1;

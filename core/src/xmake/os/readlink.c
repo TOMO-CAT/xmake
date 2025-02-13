@@ -49,7 +49,7 @@ xu_int_t xm_os_readlink(lua_State* lua)
     if (size == XU_PATH_MAXN)
     {
         xu_size_t  maxn = XU_PATH_MAXN * 2;
-        xu_char_t* data = (xu_char_t*)tb_malloc(maxn);
+        xu_char_t* data = (xu_char_t*)xu_malloc(maxn);
         if (data)
         {
             xu_long_t size = readlink(path, data, maxn);

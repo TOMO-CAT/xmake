@@ -65,7 +65,7 @@ xu_int_t xm_semver_parse(lua_State* lua)
 
     // try to parse version string
     semver_t semver = {0};
-    if (semver_tryn(&semver, version_str, tb_strlen(version_str)))
+    if (semver_tryn(&semver, version_str, xu_strlen(version_str)))
     {
         lua_pushnil(lua);
         lua_pushfstring(lua, "unable to parse semver '%s'", version_str);

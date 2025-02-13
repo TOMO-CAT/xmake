@@ -52,7 +52,7 @@ xu_int_t xm_process_open(lua_State* lua)
     xu_check_return_val(command, 0);
 
     // init attributes
-    tb_process_attr_t attr = {0};
+    xu_process_attr_t attr = {0};
 
     // get option arguments
     xu_size_t          envn       = 0;
@@ -63,9 +63,9 @@ xu_int_t xm_process_open(lua_State* lua)
     xm_io_file_t*      infile     = xu_null;
     xm_io_file_t*      outfile    = xu_null;
     xm_io_file_t*      errfile    = xu_null;
-    tb_pipe_file_ref_t inpipe     = xu_null;
-    tb_pipe_file_ref_t outpipe    = xu_null;
-    tb_pipe_file_ref_t errpipe    = xu_null;
+    xu_pipe_file_ref_t inpipe     = xu_null;
+    xu_pipe_file_ref_t outpipe    = xu_null;
+    xu_pipe_file_ref_t errpipe    = xu_null;
     if (lua_istable(lua, 2))
     {
         // is detached?
@@ -130,7 +130,7 @@ xu_int_t xm_process_open(lua_State* lua)
         {
             lua_pushstring(lua, "inpipe");
             lua_gettable(lua, 3);
-            inpipe = (tb_pipe_file_ref_t)lua_touserdata(lua, -1);
+            inpipe = (xu_pipe_file_ref_t)lua_touserdata(lua, -1);
             lua_pop(lua, 1);
         }
 
@@ -139,7 +139,7 @@ xu_int_t xm_process_open(lua_State* lua)
         {
             lua_pushstring(lua, "outpipe");
             lua_gettable(lua, 3);
-            outpipe = (tb_pipe_file_ref_t)lua_touserdata(lua, -1);
+            outpipe = (xu_pipe_file_ref_t)lua_touserdata(lua, -1);
             lua_pop(lua, 1);
         }
 
@@ -148,7 +148,7 @@ xu_int_t xm_process_open(lua_State* lua)
         {
             lua_pushstring(lua, "errpipe");
             lua_gettable(lua, 3);
-            errpipe = (tb_pipe_file_ref_t)lua_touserdata(lua, -1);
+            errpipe = (xu_pipe_file_ref_t)lua_touserdata(lua, -1);
             lua_pop(lua, 1);
         }
 
@@ -207,8 +207,8 @@ xu_int_t xm_process_open(lua_State* lua)
     }
     else if (infile && xm_io_file_is_file(infile))
     {
-        tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(infile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
+        xu_file_ref_t rawfile = xu_null;
+        if (xu_stream_ctrl(infile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.in.file = rawfile;
             attr.intype  = XU_PROCESS_REDIRECT_TYPE_FILE;
@@ -230,8 +230,8 @@ xu_int_t xm_process_open(lua_State* lua)
     }
     else if (outfile && xm_io_file_is_file(outfile))
     {
-        tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(outfile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
+        xu_file_ref_t rawfile = xu_null;
+        if (xu_stream_ctrl(outfile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.out.file = rawfile;
             attr.outtype  = XU_PROCESS_REDIRECT_TYPE_FILE;
@@ -253,8 +253,8 @@ xu_int_t xm_process_open(lua_State* lua)
     }
     else if (errfile && xm_io_file_is_file(errfile))
     {
-        tb_file_ref_t rawfile = xu_null;
-        if (tb_stream_ctrl(errfile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
+        xu_file_ref_t rawfile = xu_null;
+        if (xu_stream_ctrl(errfile->stream, XU_STREAM_CTRL_FILE_GET_FILE, &rawfile) && rawfile)
         {
             attr.err.file = rawfile;
             attr.errtype  = XU_PROCESS_REDIRECT_TYPE_FILE;
@@ -270,7 +270,7 @@ xu_int_t xm_process_open(lua_State* lua)
     if (envn > 0) attr.envp = envs;
 
     // init process
-    tb_process_ref_t process = (tb_process_ref_t)tb_process_init_cmd(command, &attr);
+    xu_process_ref_t process = (xu_process_ref_t)xu_process_init_cmd(command, &attr);
     if (process)
         xm_lua_pushpointer(lua, (xu_pointer_t)process);
     else

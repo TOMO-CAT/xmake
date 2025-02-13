@@ -42,7 +42,7 @@ xu_int_t xm_bloom_filter_data_set(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the bloom filter
-    tb_bloom_filter_ref_t filter = (tb_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
+    xu_bloom_filter_ref_t filter = (xu_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(filter, 0);
 
     // get data and size
@@ -59,7 +59,7 @@ xu_int_t xm_bloom_filter_data_set(lua_State* lua)
     xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
     // set data
-    xu_bool_t ok = tb_bloom_filter_data_set(filter, data, size);
+    xu_bool_t ok = xu_bloom_filter_data_set(filter, data, size);
     lua_pushboolean(lua, ok);
     return 1;
 }

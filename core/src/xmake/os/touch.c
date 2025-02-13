@@ -44,6 +44,6 @@ xu_int_t xm_os_touch(lua_State* lua)
     xu_time_t atime = (xu_time_t)luaL_checknumber(lua, 2);
     xu_time_t mtime = (xu_time_t)luaL_checknumber(lua, 3);
 
-    lua_pushboolean(lua, tb_file_touch(path, atime, mtime));
+    lua_pushboolean(lua, xu_file_touch(path, atime, mtime));
     return 1;
 }

@@ -507,7 +507,7 @@ static xu_long_t xu_dns_looker_resp(xu_dns_looker_t* looker, xu_ipaddr_ref_t add
     return 1;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 xu_dns_looker_ref_t xu_dns_looker_init(xu_char_t const* name)

@@ -53,27 +53,27 @@ xu_int_t xm_io_file_close(lua_State* lua)
         // check
         xu_assert(file->u.file_ref);
 
-        // flush filter stream cache, TODO we should fix it in tbox/stream
+        // flush filter stream cache, TODO we should fix it in xutil/stream
         if ((file->mode & XU_FILE_MODE_RW) == XU_FILE_MODE_RW && file->fstream)
         {
-            if (!tb_stream_sync(file->u.file_ref, xu_false)) return xu_false;
+            if (!xu_stream_sync(file->u.file_ref, xu_false)) return xu_false;
         }
 
         // close file
-        tb_stream_clos(file->u.file_ref);
+        xu_stream_clos(file->u.file_ref);
         file->u.file_ref = xu_null;
 
         // exit fstream
-        if (file->fstream) tb_stream_exit(file->fstream);
+        if (file->fstream) xu_stream_exit(file->fstream);
         file->fstream = xu_null;
 
         // exit stream
-        if (file->stream) tb_stream_exit(file->stream);
+        if (file->stream) xu_stream_exit(file->stream);
         file->stream = xu_null;
 
         // exit the line cache buffer
-        tb_buffer_exit(&file->rcache);
-        tb_buffer_exit(&file->wcache);
+        xu_buffer_exit(&file->rcache);
+        xu_buffer_exit(&file->wcache);
 
         // gc will free it if no any refs for lua_newuserdata()
         // ...
@@ -85,8 +85,8 @@ xu_int_t xm_io_file_close(lua_State* lua)
     else // for stdfile (gc/close)
     {
         // exit the line cache buffer
-        tb_buffer_exit(&file->rcache);
-        tb_buffer_exit(&file->wcache);
+        xu_buffer_exit(&file->rcache);
+        xu_buffer_exit(&file->wcache);
 
         // gc will free it if no any refs for lua_newuserdata()
         // ...

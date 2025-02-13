@@ -50,7 +50,7 @@ xu_int_t xm_io_poller_insert(lua_State* lua)
     }
 
     // get otype
-    tb_uint8_t otype = (tb_uint8_t)luaL_checknumber(lua, 1);
+    xu_uint8_t otype = (xu_uint8_t)luaL_checknumber(lua, 1);
 
     // get cdata
     xu_char_t const* cdata_str = xu_null;
@@ -61,9 +61,9 @@ xu_int_t xm_io_poller_insert(lua_State* lua)
     xu_size_t events = (xu_size_t)luaL_checknumber(lua, 3);
 
     // insert events to poller
-    tb_poller_object_t object;
+    xu_poller_object_t object;
     object.type    = otype;
     object.ref.ptr = cdata;
-    lua_pushboolean(lua, tb_poller_insert(xm_io_poller(), &object, events, cdata_str));
+    lua_pushboolean(lua, xu_poller_insert(xm_io_poller(), &object, events, cdata_str));
     return 1;
 }

@@ -21,7 +21,7 @@
 #        define xu_atomic32_fetch_and_add_explicit(a, v, mo) xu_atomic32_fetch_and_add_explicit_x86(a, v, mo)
 #    endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * inlines
  */
 static __xu_inline__ xu_int32_t xu_atomic32_fetch_and_set_explicit_x86(xu_atomic32_t* a, xu_int32_t v, xu_int_t mo)

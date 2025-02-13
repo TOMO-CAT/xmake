@@ -1,57 +1,57 @@
-#include "xutil/platform/fwatcher.h"
-#include "xutil/platform/file.h"
-#include "xutil/platform/socket.h"
-#include "xutil/platform/directory.h"
 #include "xutil/libc/libc.h"
-#include <unistd.h>
+#include "xutil/platform/directory.h"
+#include "xutil/platform/file.h"
+#include "xutil/platform/fwatcher.h"
+#include "xutil/platform/socket.h"
+#include <errno.h>
+#include <fcntl.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
-#include <sys/types.h>
+#include <string.h>
 #include <sys/event.h>
 #include <sys/time.h>
-#include <errno.h>
-#include <string.h>
-#include <inttypes.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 /* *******************************************************
  * macros
  */
 #ifndef EV_ENABLE
-#   define EV_ENABLE    (0)
+#    define EV_ENABLE (0)
 #endif
 
 #ifndef NOTE_EOF
-#   define NOTE_EOF     (0)
+#    define NOTE_EOF (0)
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * types
  */
 
 // the watch item type
 typedef struct __xu_fwatcher_item_t
 {
-    xu_int_t            wd;
-    xu_char_t const*    watchdir;
-    xu_bool_t           recursion;
+    xu_int_t         wd;
+    xu_char_t const* watchdir;
+    xu_bool_t        recursion;
 
-}xu_fwatcher_item_t;
+} xu_fwatcher_item_t;
 
 // the fwatcher type
 typedef struct __xu_fwatcher_t
 {
-    xu_int_t             kqfd;
-    struct kevent*       watchevents;
-    xu_size_t            watchevents_size;
-    xu_size_t            watchevents_maxn;
-    struct kevent*       events;
-    xu_size_t            events_count;
-    xu_hash_map_ref_t    watchitems;
-    xu_socket_ref_t      pair[2];
-    xu_queue_ref_t       waited_events;
+    xu_int_t          kqfd;
+    struct kevent*    watchevents;
+    xu_size_t         watchevents_size;
+    xu_size_t         watchevents_maxn;
+    struct kevent*    events;
+    xu_size_t         events_count;
+    xu_hash_map_ref_t watchitems;
+    xu_socket_ref_t   pair[2];
+    xu_queue_ref_t    waited_events;
 
-}xu_fwatcher_t;
+} xu_fwatcher_t;
 
 /* *******************************************************
  * private implementation
@@ -73,24 +73,23 @@ static xu_bool_t xu_fwatcher_add_watch(xu_fwatcher_t* fwatcher, xu_char_t const*
 
     // this path has been added?
     xu_size_t itor = xu_hash_map_find(fwatcher->watchitems, watchdir);
-    if (itor != xu_iterator_tail(fwatcher->watchitems))
-        return xu_true;
+    if (itor != xu_iterator_tail(fwatcher->watchitems)) return xu_true;
 
     // open watch fd
     xu_int_t o_flags = 0;
-#  ifdef O_EVTONLY
+#ifdef O_EVTONLY
     o_flags |= O_EVTONLY;
-#  else
+#else
     o_flags |= O_RDONLY;
-#  endif
+#endif
     xu_int_t wd = open(watchdir, o_flags);
     xu_check_return_val(wd >= 0, xu_false);
 
     // save watch item
     xu_fwatcher_item_t watchitem;
-    watchitem.wd = wd;
+    watchitem.wd        = wd;
     watchitem.recursion = recursion;
-    watchitem.watchdir = xu_null;
+    watchitem.watchdir  = xu_null;
     return xu_hash_map_insert(fwatcher->watchitems, watchdir, &watchitem) != xu_iterator_tail(fwatcher->watchitems);
 }
 
@@ -133,12 +132,12 @@ static xu_long_t xu_fwatcher_rm_watch_filedirs(xu_char_t const* path, xu_file_in
 static xu_bool_t xu_fwatcher_update_watchevents(xu_iterator_ref_t iterator, xu_pointer_t item, xu_cpointer_t priv)
 {
     // check
-    xu_fwatcher_t* fwatcher = (xu_fwatcher_t*)priv;
+    xu_fwatcher_t*         fwatcher = (xu_fwatcher_t*)priv;
     xu_hash_map_item_ref_t hashitem = (xu_hash_map_item_ref_t)item;
     xu_assert_and_check_return_val(fwatcher && fwatcher->watchitems && hashitem, xu_false);
 
     // get watch item and path
-    xu_char_t const* path = (xu_char_t const*)hashitem->name;
+    xu_char_t const*    path      = (xu_char_t const*)hashitem->name;
     xu_fwatcher_item_t* watchitem = (xu_fwatcher_item_t*)hashitem->data;
     xu_assert_and_check_return_val(watchitem->wd >= 0 && path, xu_false);
 
@@ -147,29 +146,32 @@ static xu_bool_t xu_fwatcher_update_watchevents(xu_iterator_ref_t iterator, xu_p
     if (!fwatcher->watchevents)
     {
         fwatcher->watchevents_maxn = watchsize;
-        fwatcher->watchevents = xu_nalloc_type(1 + fwatcher->watchevents_maxn, struct kevent);
+        fwatcher->watchevents      = xu_nalloc_type(1 + fwatcher->watchevents_maxn, struct kevent);
     }
     else if (fwatcher->watchevents_size >= fwatcher->watchevents_maxn)
     {
         fwatcher->watchevents_maxn = watchsize + 64;
-        fwatcher->watchevents = xu_ralloc(fwatcher->watchevents, (1 + fwatcher->watchevents_maxn) * sizeof(struct kevent));
+        fwatcher->watchevents =
+            xu_ralloc(fwatcher->watchevents, (1 + fwatcher->watchevents_maxn) * sizeof(struct kevent));
     }
-    xu_assert_and_check_return_val(fwatcher->watchevents && fwatcher->watchevents_size < fwatcher->watchevents_maxn, xu_false);
+    xu_assert_and_check_return_val(fwatcher->watchevents && fwatcher->watchevents_size < fwatcher->watchevents_maxn,
+                                   xu_false);
 
     // register pair1 to watchevents first
     if (!fwatcher->watchevents_size)
     {
-        EV_SET(&fwatcher->watchevents[0], xu_sock2fd(fwatcher->pair[1]),
-            EVFILT_READ, EV_ADD | EV_ENABLE | EV_CLEAR, NOTE_EOF, 0, xu_null);
+        EV_SET(&fwatcher->watchevents[0], xu_sock2fd(fwatcher->pair[1]), EVFILT_READ, EV_ADD | EV_ENABLE | EV_CLEAR,
+               NOTE_EOF, 0, xu_null);
     }
 
     // register watch events
-    xu_uint_t vnode_events = NOTE_DELETE | NOTE_WRITE | NOTE_EXTEND | NOTE_ATTRIB | NOTE_LINK | NOTE_RENAME | NOTE_REVOKE;
+    xu_uint_t vnode_events =
+        NOTE_DELETE | NOTE_WRITE | NOTE_EXTEND | NOTE_ATTRIB | NOTE_LINK | NOTE_RENAME | NOTE_REVOKE;
     xu_assert_and_check_return_val(vnode_events, xu_false);
 
     watchitem->watchdir = path;
-    EV_SET(&fwatcher->watchevents[1 + fwatcher->watchevents_size], watchitem->wd,
-        EVFILT_VNODE, EV_ADD | EV_ENABLE | EV_CLEAR, vnode_events, 0, (xu_pointer_t)watchitem);
+    EV_SET(&fwatcher->watchevents[1 + fwatcher->watchevents_size], watchitem->wd, EVFILT_VNODE,
+           EV_ADD | EV_ENABLE | EV_CLEAR, vnode_events, 0, (xu_pointer_t)watchitem);
     fwatcher->watchevents_size++;
     return xu_true;
 }
@@ -179,7 +181,7 @@ static xu_bool_t xu_fwatcher_update_watchevents(xu_iterator_ref_t iterator, xu_p
  */
 xu_fwatcher_ref_t xu_fwatcher_init()
 {
-    xu_bool_t ok = xu_false;
+    xu_bool_t      ok       = xu_false;
     xu_fwatcher_t* fwatcher = xu_null;
     do
     {
@@ -195,7 +197,8 @@ xu_fwatcher_ref_t xu_fwatcher_init()
         if (!xu_socket_pair(XU_SOCKET_TYPE_TCP, fwatcher->pair)) break;
 
         // init watch items
-        fwatcher->watchitems = xu_hash_map_init(0, xu_element_str(xu_true), xu_element_mem(sizeof(xu_fwatcher_item_t), xu_fwatcher_item_free, xu_null));
+        fwatcher->watchitems = xu_hash_map_init(
+            0, xu_element_str(xu_true), xu_element_mem(sizeof(xu_fwatcher_item_t), xu_fwatcher_item_free, xu_null));
         xu_assert_and_check_break(fwatcher->watchitems);
 
         // init waited events
@@ -226,12 +229,12 @@ xu_void_t xu_fwatcher_exit(xu_fwatcher_ref_t self)
 
         // exit events
         if (fwatcher->events) xu_free(fwatcher->events);
-        fwatcher->events = xu_null;
+        fwatcher->events       = xu_null;
         fwatcher->events_count = 0;
 
         // exit watch events
         if (fwatcher->watchevents) xu_free(fwatcher->watchevents);
-        fwatcher->watchevents = xu_null;
+        fwatcher->watchevents      = xu_null;
         fwatcher->watchevents_size = 0;
         fwatcher->watchevents_maxn = 0;
 
@@ -269,12 +272,11 @@ xu_bool_t xu_fwatcher_add(xu_fwatcher_ref_t self, xu_char_t const* watchdir, xu_
 
     // file not found
     xu_file_info_t info;
-    if (!xu_file_info(watchdir, &info) || info.type != XU_FILE_TYPE_DIRECTORY)
-        return xu_false;
+    if (!xu_file_info(watchdir, &info) || info.type != XU_FILE_TYPE_DIRECTORY) return xu_false;
 
     // is directory? we need scan it and add all subfiles
     if (info.type == XU_FILE_TYPE_DIRECTORY)
-        xu_directory_walk(watchdir, recursion? -1 : 0, xu_true, xu_fwatcher_add_watch_filedirs, fwatcher);
+        xu_directory_walk(watchdir, recursion ? -1 : 0, xu_true, xu_fwatcher_add_watch_filedirs, fwatcher);
     return xu_fwatcher_add_watch(fwatcher, watchdir, recursion);
 }
 
@@ -307,13 +309,12 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
     xu_fwatcher_t* fwatcher = (xu_fwatcher_t*)self;
     xu_assert_and_check_return_val(fwatcher && fwatcher->kqfd >= 0 && fwatcher->waited_events && event, -1);
 
-#if defined(XU_CONFIG_MODULE_HAVE_COROUTINE) \
-        && !defined(XU_CONFIG_MICRO_ENABLE)
+#if defined(XU_CONFIG_MODULE_HAVE_COROUTINE) && !defined(XU_CONFIG_MICRO_ENABLE)
     // attempt to wait it in coroutine if timeout is non-zero
     if (timeout && xu_coroutine_self())
     {
         xu_poller_object_t object;
-        object.type = XU_POLLER_OBJECT_FWATCHER;
+        object.type         = XU_POLLER_OBJECT_FWATCHER;
         object.ref.fwatcher = self;
         return xu_coroutine_waitfs(&object, event, timeout);
     }
@@ -337,7 +338,7 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
     struct timespec t = {0};
     if (timeout > 0)
     {
-        t.tv_sec = timeout / 1000;
+        t.tv_sec  = timeout / 1000;
         t.tv_nsec = (timeout % 1000) * 1000000;
     }
 
@@ -346,7 +347,7 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
     if (!fwatcher->events)
     {
         fwatcher->events_count = grow;
-        fwatcher->events = xu_nalloc_type(fwatcher->events_count, struct kevent);
+        fwatcher->events       = xu_nalloc_type(fwatcher->events_count, struct kevent);
         xu_assert_and_check_return_val(fwatcher->events, -1);
     }
 
@@ -356,12 +357,11 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
     xu_assert_and_check_return_val(fwatcher->watchevents && fwatcher->watchevents_size, -1);
 
     // wait events
-    xu_long_t events_count = kevent(fwatcher->kqfd, fwatcher->watchevents, fwatcher->watchevents_size,
-        fwatcher->events, fwatcher->events_count, timeout >= 0? &t : xu_null);
+    xu_long_t events_count = kevent(fwatcher->kqfd, fwatcher->watchevents, fwatcher->watchevents_size, fwatcher->events,
+                                    fwatcher->events_count, timeout >= 0 ? &t : xu_null);
 
     // timeout or interrupted?
-    if (!events_count || (events_count == -1 && errno == EINTR))
-        return 0;
+    if (!events_count || (events_count == -1 && errno == EINTR)) return 0;
 
     // error?
     xu_assert_and_check_return_val(events_count >= 0 && events_count <= fwatcher->events_count, -1);
@@ -379,15 +379,14 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
     xu_assert(events_count <= fwatcher->events_count);
 
     // handle events
-    xu_size_t          i = 0;
-    xu_socket_ref_t    pair = fwatcher->pair[1];
-    struct kevent*     kevt = xu_null;
+    xu_size_t       i    = 0;
+    xu_socket_ref_t pair = fwatcher->pair[1];
+    struct kevent*  kevt = xu_null;
     for (i = 0; i < events_count; i++)
     {
         // get event
         kevt = fwatcher->events + i;
-        if (kevt->flags & EV_ERROR)
-            continue;
+        if (kevt->flags & EV_ERROR) continue;
 
         // spank socket events?
         xu_socket_ref_t sock = xu_fd2sock(kevt->ident);
@@ -395,7 +394,7 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
         {
             xu_char_t spak = '\0';
             if (1 != xu_socket_recv(pair, (xu_byte_t*)&spak, 1)) return -1;
-            continue ;
+            continue;
         }
 
         // get watchitem
@@ -413,8 +412,10 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
         if (event_code)
         {
             xu_fwatcher_event_t evt;
-            if (watchitem->watchdir) xu_strlcpy(evt.filepath, watchitem->watchdir, XU_PATH_MAXN);
-            else evt.filepath[0] = '\0';
+            if (watchitem->watchdir)
+                xu_strlcpy(evt.filepath, watchitem->watchdir, XU_PATH_MAXN);
+            else
+                evt.filepath[0] = '\0';
             evt.event = event_code;
             xu_queue_put(fwatcher->waited_events, &evt);
         }
@@ -442,5 +443,5 @@ xu_long_t xu_fwatcher_wait(xu_fwatcher_ref_t self, xu_fwatcher_event_t* event, x
             has_events = xu_true;
         }
     }
-    return has_events? 1 : 0;
+    return has_events ? 1 : 0;
 }

@@ -42,11 +42,11 @@ xu_int_t xm_bloom_filter_size(lua_State* lua)
     if (!xm_lua_ispointer(lua, 1)) return 0;
 
     // get the bloom filter
-    tb_bloom_filter_ref_t filter = (tb_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
+    xu_bloom_filter_ref_t filter = (xu_bloom_filter_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(filter, 0);
 
     // get size
-    xu_size_t size = tb_bloom_filter_size(filter);
+    xu_size_t size = xu_bloom_filter_size(filter);
     lua_pushinteger(lua, (xu_int_t)size);
     return 1;
 }

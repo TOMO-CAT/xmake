@@ -251,7 +251,7 @@ static xu_bool_t xu_stream_file_ctrl(xu_stream_ref_t stream, xu_size_t ctrl, xu_
     return xu_false;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 xu_stream_ref_t xu_stream_init_file()

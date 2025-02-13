@@ -49,7 +49,7 @@ xu_int_t xm_io_socket_bind(lua_State* lua)
     }
 
     // get socket
-    tb_socket_ref_t sock = (tb_socket_ref_t)xm_lua_topointer(lua, 1);
+    xu_socket_ref_t sock = (xu_socket_ref_t)xm_lua_topointer(lua, 1);
     xu_check_return_val(sock, 0);
 
     // get address
@@ -57,22 +57,22 @@ xu_int_t xm_io_socket_bind(lua_State* lua)
     xu_assert_and_check_return_val(address, 0);
 
     // get family
-    tb_uint8_t family = (tb_uint8_t)luaL_checknumber(lua, 4);
+    xu_uint8_t family = (xu_uint8_t)luaL_checknumber(lua, 4);
 
     // init address
-    tb_ipaddr_t addr;
+    xu_ipaddr_t addr;
     if (family == XU_IPADDR_FAMILY_UNIX)
     {
         xu_bool_t is_abstract = (xu_bool_t)lua_toboolean(lua, 3);
-        tb_ipaddr_unix_set_cstr(&addr, address, is_abstract);
+        xu_ipaddr_unix_set_cstr(&addr, address, is_abstract);
     }
     else
     {
-        tb_uint16_t port = (tb_uint16_t)luaL_checknumber(lua, 3);
-        tb_ipaddr_set(&addr, address, port, family);
+        xu_uint16_t port = (xu_uint16_t)luaL_checknumber(lua, 3);
+        xu_ipaddr_set(&addr, address, port, family);
     }
 
     // bind socket
-    lua_pushboolean(lua, tb_socket_bind(sock, &addr));
+    lua_pushboolean(lua, xu_socket_bind(sock, &addr));
     return 1;
 }

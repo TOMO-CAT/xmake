@@ -42,7 +42,7 @@ xu_int_t xm_os_fscase(lua_State* lua)
     xu_char_t const* path = luaL_checkstring(lua, 1);
     xu_check_return_val(path, 0);
 
-    lua_pushinteger(lua, (xu_int_t)tb_file_fscase(path));
+    lua_pushinteger(lua, (xu_int_t)xu_file_fscase(path));
 #else
     lua_pushinteger(lua, -1);
 #endif

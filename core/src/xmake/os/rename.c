@@ -44,6 +44,6 @@ xu_int_t xm_os_rename(lua_State* lua)
     xu_check_return_val(src && dst, 0);
 
     // do rename
-    lua_pushboolean(lua, tb_file_rename(src, dst));
+    lua_pushboolean(lua, xu_file_rename(src, dst));
     return 1;
 }

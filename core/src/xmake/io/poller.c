@@ -40,24 +40,24 @@
 /* *******************************************************
  * private implementation
  */
-static tb_handle_t xm_io_poller_instance_init(xu_cpointer_t* ppriv)
+static xu_handle_t xm_io_poller_instance_init(xu_cpointer_t* ppriv)
 {
     // init poller
-    tb_poller_ref_t poller = tb_poller_init(xu_null);
+    xu_poller_ref_t poller = xu_poller_init(xu_null);
     xu_assert_and_check_return_val(poller, xu_null);
 
-    return (tb_handle_t)poller;
+    return (xu_handle_t)poller;
 }
-static xu_void_t xm_io_poller_instance_exit(tb_handle_t poller, xu_cpointer_t priv)
+static xu_void_t xm_io_poller_instance_exit(xu_handle_t poller, xu_cpointer_t priv)
 {
-    if (poller) tb_poller_exit((tb_poller_ref_t)poller);
+    if (poller) xu_poller_exit((xu_poller_ref_t)poller);
 }
 
 /* *******************************************************
  * implementation
  */
-tb_poller_ref_t xm_io_poller()
+xu_poller_ref_t xm_io_poller()
 {
-    return (tb_poller_ref_t)xu_singleton_instance(XM_IO_POLLER, xm_io_poller_instance_init, xm_io_poller_instance_exit,
+    return (xu_poller_ref_t)xu_singleton_instance(XM_IO_POLLER, xm_io_poller_instance_init, xm_io_poller_instance_exit,
                                                   xu_null, xu_null);
 }

@@ -28,7 +28,7 @@
 #    define xu_memory_barrier() __sync_synchronize()
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * inline implementation
  */
 #ifdef __ATOMIC_SEQ_CST
