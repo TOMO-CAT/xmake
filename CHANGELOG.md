@@ -7,6 +7,8 @@
 * [#131](https://github.com/TOMO-CAT/xmake/issues/131): 支持传递参数控制是否编译 luajit 版本
 * [#140](https://github.com/TOMO-CAT/xmake/issues/140): 支持 io.popen 调用, 运行带管道符的复杂 shell 命令
 * [#154](https://github.com/TOMO-CAT/xmake/issues/154): ubuntu-arm workflow 运行在原生 arm 机器上提升流水线速度
+* [#148](https://github.com/TOMO-CAT/xmake/issues/148): source-embed package 安装在 `pkg:buildir()/.packages` 目录下, 避免重复安装
+* [#149](https://github.com/TOMO-CAT/xmake/issues/149): source-embed package 安装依赖库时也使用库的软链 installdir
 
 ### Bugs 修复
 
