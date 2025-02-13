@@ -102,6 +102,8 @@ function run_all_uts() {
   xmake run xutil-ut network_unixaddr /path/to.sock
 
   xmake run xutil-ut platform_addrinfo www.baidu.com
+
+  xmake run xutil-ut stream http://www.baidu.com /tmp/a
 }
 
 # trace 宏依赖 debug 模式

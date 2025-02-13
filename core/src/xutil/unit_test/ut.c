@@ -136,6 +136,12 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(platform_thread),
     XU_UT_MAIN_ITEM(platform_utils),
 
+    // stream
+    XU_UT_MAIN_ITEM(stream_cache),
+    XU_UT_MAIN_ITEM(stream_charset),
+    XU_UT_MAIN_ITEM(stream_null),
+    XU_UT_MAIN_ITEM(stream),
+
     // utils
     XU_UT_MAIN_ITEM(utils_trace),
 };
@@ -181,7 +187,7 @@ xu_int_t main(xu_int_t argc, xu_char_t** argv)
         xu_trace_i("Usages: xmake run xutil-ut [testname] arguments ...");
         xu_trace_i("");
         xu_trace_i(".e.g");
-        xu_trace_i("    xmake run xutil-ut stream http://www.xxxxx.com /tmp/a");
+        xu_trace_i("    xmake run xutil-ut stream http://www.baidu.com /tmp/a");
         xu_trace_i("");
 
         // walk name

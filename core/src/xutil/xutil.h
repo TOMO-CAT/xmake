@@ -80,6 +80,7 @@
 #include "xutil/platform/thread_local.h"
 #include "xutil/platform/time.h"
 #include "xutil/stream/stream.h"
+#include "xutil/stream/transfer.h"
 #include "xutil/utils/base64.h"
 #include "xutil/utils/dump.h"
 #include "xutil/utils/lock_profiler.h"

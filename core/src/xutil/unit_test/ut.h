@@ -115,5 +115,11 @@ XU_UT_MAIN_DECL(platform_thread_local);
 XU_UT_MAIN_DECL(platform_thread);
 XU_UT_MAIN_DECL(platform_utils);
 
+// stream
+XU_UT_MAIN_DECL(stream_cache);
+XU_UT_MAIN_DECL(stream_charset);
+XU_UT_MAIN_DECL(stream_null);
+XU_UT_MAIN_DECL(stream);
+
 // utils
 XU_UT_MAIN_DECL(utils_trace);
