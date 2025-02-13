@@ -725,7 +725,7 @@ static xu_bool_t xu_http_redirect(xu_http_t* http)
     return ok && !xu_string_size(&http->status.location);
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * interfaces
  */
 xu_http_ref_t xu_http_init()

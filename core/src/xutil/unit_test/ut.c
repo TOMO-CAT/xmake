@@ -91,6 +91,22 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(memory_static_buffer),
     XU_UT_MAIN_ITEM(memory_string_pool),
 
+    // network
+    XU_UT_MAIN_ITEM(network_impl_date),
+    XU_UT_MAIN_ITEM(network_cookies),
+    XU_UT_MAIN_ITEM(network_dns),
+    XU_UT_MAIN_ITEM(network_http),
+    XU_UT_MAIN_ITEM(network_hwaddr),
+    XU_UT_MAIN_ITEM(network_ipaddr),
+    XU_UT_MAIN_ITEM(network_ipv4),
+    XU_UT_MAIN_ITEM(network_ipv6),
+    XU_UT_MAIN_ITEM(network_ping),
+    XU_UT_MAIN_ITEM(network_unix_echo_client),
+    XU_UT_MAIN_ITEM(network_unix_echo_server),
+    XU_UT_MAIN_ITEM(network_unixaddr),
+    XU_UT_MAIN_ITEM(network_url),
+    XU_UT_MAIN_ITEM(network_whois),
+
     // utils
     XU_UT_MAIN_ITEM(utils_trace),
 };

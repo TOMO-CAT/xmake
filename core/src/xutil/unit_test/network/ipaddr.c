@@ -3,7 +3,7 @@
 /* *******************************************************
  * main
  */
-xu_int_t xu_demo_network_ipaddr_main(xu_int_t argc, xu_char_t** argv)
+xu_int_t xu_ut_network_ipaddr_main(xu_int_t argc, xu_char_t** argv)
 {
     // done
     xu_ipaddr_t addr;

@@ -18,9 +18,9 @@
  */
 typedef struct __xu_unixaddr_t
 {
-    /// is abstract
+    // is abstract
     xu_bool_t is_abstract;
-    /// path
+    // path
     xu_char_t path[XU_UNIXADDR_CSTR_MAXN];
 
 } xu_unixaddr_t, *xu_unixaddr_ref_t;

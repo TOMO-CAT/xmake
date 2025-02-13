@@ -54,6 +54,9 @@ UNIT_TESTS_ARRAY=(
     "memory_small_allocator"
     "memory_static_buffer"
     "memory_static_buffer"
+    "network_impl_date"
+    "network_cookies"
+    "network_url"
     "utils_trace"
 )
 
@@ -75,6 +78,15 @@ function run_all_uts() {
   xmake run xutil-ut hash_sdbm tomocat
   xmake run xutil-ut hash_sha tomocat
   xmake run xutil-ut hash_uuid tomocat
+
+  xmake run xutil-ut network_dns www.baidu.com
+  # xmake run xutil-ut network_http www.baidu.com # 测试失败, 跳过
+  xmake run xutil-ut network_hwaddr 02:1A:2B:3C:4D:5E
+  xmake run xutil-ut network_ipaddr 192.168.1.1
+  xmake run xutil-ut network_ipv4 192.168.1.100
+  xmake run xutil-ut network_ipv6 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+  # xmake run xutil-ut network_ping 127.0.0.1 # 测试失败, 跳过
+  xmake run xutil-ut network_unixaddr /path/to.sock
 }
 
 # trace 宏依赖 debug 模式

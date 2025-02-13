@@ -70,5 +70,21 @@ XU_UT_MAIN_DECL(memory_small_allocator);
 XU_UT_MAIN_DECL(memory_static_buffer);
 XU_UT_MAIN_DECL(memory_string_pool);
 
+// network
+XU_UT_MAIN_DECL(network_impl_date);
+XU_UT_MAIN_DECL(network_cookies);
+XU_UT_MAIN_DECL(network_dns);
+XU_UT_MAIN_DECL(network_http);
+XU_UT_MAIN_DECL(network_hwaddr);
+XU_UT_MAIN_DECL(network_ipaddr);
+XU_UT_MAIN_DECL(network_ipv4);
+XU_UT_MAIN_DECL(network_ipv6);
+XU_UT_MAIN_DECL(network_ping);
+XU_UT_MAIN_DECL(network_unix_echo_client);
+XU_UT_MAIN_DECL(network_unix_echo_server);
+XU_UT_MAIN_DECL(network_unixaddr);
+XU_UT_MAIN_DECL(network_url);
+XU_UT_MAIN_DECL(network_whois);
+
 // utils
 XU_UT_MAIN_DECL(utils_trace);

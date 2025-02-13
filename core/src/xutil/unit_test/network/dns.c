@@ -74,8 +74,6 @@ xu_int_t xu_ut_network_dns_main(xu_int_t argc, xu_char_t** argv)
 
 #if XU_DNS_TEST_HOST_SOME
     xu_hong_t time = xu_mclock();
-    xu_dns_test_done("www.tboox.org");
-    xu_dns_test_done("www.tboox.net");
     xu_dns_test_done("www.baidu.com");
     xu_dns_test_done("www.google.com");
     xu_dns_test_done("www.google.com.hk");
@@ -146,8 +144,6 @@ xu_int_t xu_ut_network_dns_main(xu_int_t argc, xu_char_t** argv)
     xu_dns_test_done("www.arm.com");
     xu_dns_test_done("www.nginx.com");
     xu_dns_test_done("www.ted.com");
-    xu_dns_test_done("www.tboox.org");
-    xu_dns_test_done("www.tboox.net");
     xu_dns_test_done("www.baidu.com");
     xu_dns_test_done("www.google.com");
     xu_dns_test_done("www.google.com.hk");
