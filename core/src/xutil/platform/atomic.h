@@ -74,9 +74,9 @@
  * the function is not atomic: concurrent access from another thread, even through an atomic operation, is a data race.
  */
 #if XU_CPU_BIT64
-#    define XU_atomic_init(a, v) XU_atomic64_init(a, (XU_int64_t)(v))
+#    define xu_atomic_init(a, v) xu_atomic64_init(a, (xu_int64_t)(v))
 #else
-#    define XU_atomic_init(a, v) XU_atomic32_init(a, (XU_int32_t)(v))
+#    define xu_atomic_init(a, v) xu_atomic32_init(a, (xu_int32_t)(v))
 #endif
 
 /*! atomically compares the contents of memory pointed to by obj with the contents of memory pointed to by expected,
@@ -198,6 +198,17 @@
 #    define xu_atomic_fetch_and_or_explicit(a, v, mo)                                                                  \
         (xu_long_t) xu_atomic32_fetch_and_or_explicit(a, (xu_int32_t)(v), mo)
 #    define xu_atomic_fetch_and_or(a, v) (xu_long_t) xu_atomic32_fetch_and_or(a, (xu_int32_t)(v))
+#endif
+
+// fetch the atomic value and compute xor operation
+#if XU_CPU_BIT64
+#    define xu_atomic_fetch_and_xor_explicit(a, v, mo)                                                                 \
+        (xu_long_t) xu_atomic64_fetch_and_xor_explicit(a, (xu_int64_t)(v), mo)
+#    define xu_atomic_fetch_and_xor(a, v) (xu_long_t) xu_atomic64_fetch_and_xor(a, (xu_int64_t)(v))
+#else
+#    define xu_atomic_fetch_and_xor_explicit(a, v, mo)                                                                 \
+        (xu_long_t) xu_atomic32_fetch_and_xor_explicit(a, (xu_int32_t)(v), mo)
+#    define xu_atomic_fetch_and_xor(a, v) (xu_long_t) xu_atomic32_fetch_and_xor(a, (xu_int32_t)(v))
 #endif
 
 // fetch the atomic value and compute and operation

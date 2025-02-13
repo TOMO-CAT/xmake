@@ -154,7 +154,7 @@ typedef __xu_pool_data_aligned__ struct __xu_static_large_allocator_t
 
 } __xu_pool_data_aligned__ xu_static_large_allocator_t, *xu_static_large_allocator_ref_t;
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * checker implementation
  */
 #ifdef __xu_debug__
@@ -922,7 +922,7 @@ static xu_bool_t xu_static_large_allocator_have(xu_allocator_ref_t self, xu_cpoi
 }
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_allocator_ref_t xu_static_large_allocator_init(xu_byte_t* data, xu_size_t size, xu_size_t pagesize)

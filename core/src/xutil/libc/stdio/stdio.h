@@ -16,6 +16,9 @@
  *  macros
  */
 
+// eof
+#define XU_EOF (-1)
+
 // vsnprintf format
 #define xu_vsnprintf_format(s, n, format, r)                                                                           \
     do                                                                                                                 \

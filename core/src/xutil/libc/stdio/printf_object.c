@@ -34,7 +34,7 @@ static xu_size_t g_size = 0;
 // the entry maxn
 static xu_size_t g_maxn = 16;
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * private implementation
  */
 static xu_long_t xu_printf_object_comp(xu_iterator_ref_t iterator, xu_cpointer_t item, xu_cpointer_t data)
@@ -47,7 +47,7 @@ static xu_long_t xu_printf_object_comp(xu_iterator_ref_t iterator, xu_cpointer_t
     return xu_strcmp(entry->name, (xu_char_t const*)data);
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_void_t xu_printf_object_register(xu_char_t const* name, xu_printf_object_func_t func)

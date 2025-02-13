@@ -628,7 +628,7 @@ static xu_process_ref_t xu_process_init_fork(xu_char_t const* pathname, xu_char_
 }
 #endif
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_process_ref_t xu_process_init(xu_char_t const* pathname, xu_char_t const* argv[], xu_process_attr_ref_t attr)

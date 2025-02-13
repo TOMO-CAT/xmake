@@ -57,6 +57,19 @@ UNIT_TESTS_ARRAY=(
     "network_impl_date"
     "network_cookies"
     "network_url"
+    "platform_atomic"
+    "platform_atomic32"
+    "platform_atomic64"
+    "platform_backtrace"
+    "platform_cache_time"
+    "platform_hostname"
+    "platform_ifaddrs"
+    "platform_lock"
+    "platform_path"
+    "platform_pipe_pair"
+    "platform_sched"
+    "platform_thread"
+    "platform_utils"
     "utils_trace"
 )
 
@@ -87,6 +100,8 @@ function run_all_uts() {
   xmake run xutil-ut network_ipv6 2001:0db8:85a3:0000:0000:8a2e:0370:7334
   # xmake run xutil-ut network_ping 127.0.0.1 # 测试失败, 跳过
   xmake run xutil-ut network_unixaddr /path/to.sock
+
+  xmake run xutil-ut platform_addrinfo www.baidu.com
 }
 
 # trace 宏依赖 debug 模式

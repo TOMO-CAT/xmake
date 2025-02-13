@@ -89,5 +89,31 @@ XU_UT_MAIN_DECL(network_whois);
 // other
 XU_UT_MAIN_DECL(other_charset);
 
+// platform
+XU_UT_MAIN_DECL(platform_addrinfo);
+XU_UT_MAIN_DECL(platform_atomic);
+XU_UT_MAIN_DECL(platform_atomic32);
+XU_UT_MAIN_DECL(platform_atomic64);
+XU_UT_MAIN_DECL(platform_backtrace);
+XU_UT_MAIN_DECL(platform_cache_time);
+XU_UT_MAIN_DECL(platform_directory);
+XU_UT_MAIN_DECL(platform_environment);
+XU_UT_MAIN_DECL(platform_file);
+XU_UT_MAIN_DECL(platform_filelock);
+XU_UT_MAIN_DECL(platform_fwatcher);
+XU_UT_MAIN_DECL(platform_hostname);
+XU_UT_MAIN_DECL(platform_ifaddrs);
+XU_UT_MAIN_DECL(platform_lock);
+XU_UT_MAIN_DECL(platform_named_pipe);
+XU_UT_MAIN_DECL(platform_path);
+XU_UT_MAIN_DECL(platform_pipe_pair);
+XU_UT_MAIN_DECL(platform_process);
+XU_UT_MAIN_DECL(platform_sched);
+XU_UT_MAIN_DECL(platform_semaphore);
+XU_UT_MAIN_DECL(platform_stdfile);
+XU_UT_MAIN_DECL(platform_thread_local);
+XU_UT_MAIN_DECL(platform_thread);
+XU_UT_MAIN_DECL(platform_utils);
+
 // utils
 XU_UT_MAIN_DECL(utils_trace);

@@ -110,6 +110,32 @@ static xu_ut_t g_ut[] = {
     // other
     XU_UT_MAIN_ITEM(other_charset),
 
+    // platform
+    XU_UT_MAIN_ITEM(platform_addrinfo),
+    XU_UT_MAIN_ITEM(platform_atomic),
+    XU_UT_MAIN_ITEM(platform_atomic32),
+    XU_UT_MAIN_ITEM(platform_atomic64),
+    XU_UT_MAIN_ITEM(platform_backtrace),
+    XU_UT_MAIN_ITEM(platform_cache_time),
+    XU_UT_MAIN_ITEM(platform_directory),
+    XU_UT_MAIN_ITEM(platform_environment),
+    XU_UT_MAIN_ITEM(platform_file),
+    XU_UT_MAIN_ITEM(platform_filelock),
+    XU_UT_MAIN_ITEM(platform_fwatcher),
+    XU_UT_MAIN_ITEM(platform_hostname),
+    XU_UT_MAIN_ITEM(platform_ifaddrs),
+    XU_UT_MAIN_ITEM(platform_lock),
+    XU_UT_MAIN_ITEM(platform_named_pipe),
+    XU_UT_MAIN_ITEM(platform_path),
+    XU_UT_MAIN_ITEM(platform_pipe_pair),
+    XU_UT_MAIN_ITEM(platform_process),
+    XU_UT_MAIN_ITEM(platform_sched),
+    XU_UT_MAIN_ITEM(platform_semaphore),
+    XU_UT_MAIN_ITEM(platform_stdfile),
+    XU_UT_MAIN_ITEM(platform_thread_local),
+    XU_UT_MAIN_ITEM(platform_thread),
+    XU_UT_MAIN_ITEM(platform_utils),
+
     // utils
     XU_UT_MAIN_ITEM(utils_trace),
 };

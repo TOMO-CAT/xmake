@@ -279,7 +279,7 @@ static __xu_inline__ xu_void_t xu_heap_pop0(xu_iterator_ref_t iterator, xu_size_
     //  xu_assert(xu_heap_check(iterator, head, tail - head - 1, comp));
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 

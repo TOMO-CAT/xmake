@@ -107,7 +107,7 @@ static __xu_inline__ xu_bool_t xu_version_check(xu_hize_t build)
     return xu_false;
 }
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * implementation
  */
 xu_bool_t xutil_init_(xu_handle_t priv, xu_allocator_ref_t allocator, xu_size_t mode, xu_hize_t build)

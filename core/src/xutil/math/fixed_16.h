@@ -296,7 +296,7 @@ xu_fixed16_t xu_fixed16_atan_int32(xu_fixed16_t x);
  */
 xu_fixed16_t xu_fixed16_exp_int32(xu_fixed16_t x);
 
-/* //////////////////////////////////////////////////////////////////////////////////////
+/* *******************************************************
  * inlines
  */
 static __xu_inline__ xu_fixed16_t xu_long_to_fixed16_check(xu_long_t x)
