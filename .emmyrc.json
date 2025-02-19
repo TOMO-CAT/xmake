@@ -3,7 +3,8 @@
         "disable": [
             "undefined-global",
             "missing-parameter",
-            "need-import"
+            "param-type-not-match",
+            "need-check-nil"
         ]
     },
     "workspace": {

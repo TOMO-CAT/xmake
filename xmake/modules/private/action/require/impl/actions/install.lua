@@ -386,7 +386,7 @@ function main(package)
             _enter_package_testenvs(package)
 
             -- fetch package and force to flush the cache
-            local fetchinfo = package:fetch({force = true, softlink_installdir = false})
+            local fetchinfo = package:fetch({force = true})
             if option.get("verbose") and option.get("diagnosis") then
                 print(fetchinfo)
             end
