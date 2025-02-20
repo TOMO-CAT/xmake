@@ -498,7 +498,7 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
                 if requires then
                     for requirename, require in pairs(requires) do
                         local pkg_softlink_installdir = path.join(config.buildir(), ".pkg", requirename)
-                        local pkg_installdir = require:installdir()
+                        local pkg_installdir = path.absolute(require:installdir())
                         -- when we `add_requires("zlib")` in a project, require:installdir() may be nil
                         -- this may be because this library is a system library
                         if pkg_installdir then

@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
 -- imports
 import("core.base.option")
 import("core.base.global")
@@ -129,11 +128,13 @@ end
 
 -- get configs for host toolchain
 function _get_configs_for_host_toolchain(package, configs, opt)
-    local bindir = _get_config_from_toolchains(package, "bindir") or get_config("bin")
+    local bindir = _get_config_from_toolchains(package, "bindir") or
+                       get_config("bin")
     if bindir then
         table.insert(configs, "--bin=" .. bindir)
     end
-    local sdkdir = _get_config_from_toolchains(package, "sdkdir") or get_config("sdk")
+    local sdkdir = _get_config_from_toolchains(package, "sdkdir") or
+                       get_config("sdk")
     if sdkdir then
         table.insert(configs, "--sdk=" .. sdkdir)
     end
@@ -151,15 +152,18 @@ end
 
 -- get configs for cross
 function _get_configs_for_cross(package, configs, opt)
-    local cross = _get_config_from_toolchains(package, "cross") or get_config("cross")
+    local cross = _get_config_from_toolchains(package, "cross") or
+                      get_config("cross")
     if cross then
         table.insert(configs, "--cross=" .. cross)
     end
-    local bindir = _get_config_from_toolchains(package, "bindir") or get_config("bin")
+    local bindir = _get_config_from_toolchains(package, "bindir") or
+                       get_config("bin")
     if bindir then
         table.insert(configs, "--bin=" .. bindir)
     end
-    local sdkdir = _get_config_from_toolchains(package, "sdkdir") or get_config("sdk")
+    local sdkdir = _get_config_from_toolchains(package, "sdkdir") or
+                       get_config("sdk")
     if sdkdir then
         table.insert(configs, "--sdk=" .. sdkdir)
     end
@@ -183,26 +187,35 @@ end
 -- get configs
 function _get_configs(package, configs, opt)
     opt = opt or {}
-    local configs  = configs or {}
-    local cflags   = table.join(table.wrap(package:config("cflags")),   get_config("cflags"))
-    local cxflags  = table.join(table.wrap(package:config("cxflags")),  get_config("cxflags"))
-    local cxxflags = table.join(table.wrap(package:config("cxxflags")), get_config("cxxflags"))
-    local asflags  = table.join(table.wrap(package:config("asflags")),  get_config("asflags"))
-    local ldflags  = table.join(table.wrap(package:config("ldflags")),  get_config("ldflags"))
-    local shflags  = table.join(table.wrap(package:config("shflags")),  get_config("shflags"))
+    local configs = configs or {}
+    local cflags = table.join(table.wrap(package:config("cflags")),
+                              get_config("cflags"))
+    local cxflags = table.join(table.wrap(package:config("cxflags")),
+                               get_config("cxflags"))
+    local cxxflags = table.join(table.wrap(package:config("cxxflags")),
+                                get_config("cxxflags"))
+    local asflags = table.join(table.wrap(package:config("asflags")),
+                               get_config("asflags"))
+    local ldflags = table.join(table.wrap(package:config("ldflags")),
+                               get_config("ldflags"))
+    local shflags = table.join(table.wrap(package:config("shflags")),
+                               get_config("shflags"))
     table.insert(configs, "--plat=" .. package:plat())
     table.insert(configs, "--arch=" .. package:arch())
     if configs.mode == nil then
-        table.insert(configs, "--mode=" .. (package:is_debug() and "debug" or "release"))
+        table.insert(configs,
+                     "--mode=" .. (package:is_debug() and "debug" or "release"))
     end
     if configs.kind == nil then
-        table.insert(configs, "--kind=" .. (package:config("shared") and "shared" or "static"))
+        table.insert(configs, "--kind=" ..
+                         (package:config("shared") and "shared" or "static"))
     end
     if package:is_plat("android") then
         _get_configs_for_android(package, configs, opt)
     elseif package:is_plat("iphoneos", "watchos", "appletvos") or
         -- for cross-compilation on macOS, @see https://github.com/xmake-io/xmake/issues/2804
-        (package:is_plat("macosx") and (get_config("appledev") or not package:is_arch(os.subarch()))) then
+        (package:is_plat("macosx") and
+            (get_config("appledev") or not package:is_arch(os.subarch()))) then
         _get_configs_for_appleos(package, configs, opt)
     elseif package:is_cross() then
         _get_configs_for_cross(package, configs, opt)
@@ -219,21 +232,25 @@ function _get_configs(package, configs, opt)
     end
 
     local policies = get_config("policies")
-    if package:config("lto") and (not policies or not policies:find("build.optimization.lto", 1, true)) then
+    if package:config("lto") and
+        (not policies or not policies:find("build.optimization.lto", 1, true)) then
         if policies then
             policies = policies .. ",build.optimization.lto"
         else
             policies = "build.optimization.lto"
         end
     end
-    if package:config("asan") and (not policies or not policies:find("build.sanitizer.address", 1, true)) then
+    if package:config("asan") and
+        (not policies or not policies:find("build.sanitizer.address", 1, true)) then
         if policies then
             policies = policies .. ",build.sanitizer.address"
         else
             policies = "build.sanitizer.address"
         end
     end
-    if not package:use_external_includes() and (not policies or not policies:find("package.include_external_headers", 1, true)) then
+    if not package:use_external_includes() and
+        (not policies or
+            not policies:find("package.include_external_headers", 1, true)) then
         if policies then
             policies = policies .. ",package.include_external_headers:n"
         else
@@ -293,7 +310,9 @@ function _set_builtin_argv(package, argv)
         table.insert(argv, "-P")
         table.insert(argv, os.curdir())
     end
-    for _, name in ipairs({"diagnosis", "verbose", "quiet", "yes", "confirm", "root"}) do
+    for _, name in ipairs({
+        "diagnosis", "verbose", "quiet", "yes", "confirm", "root"
+    }) do
         local value = option.get(name)
         if type(value) == "boolean" then
             table.insert(argv, "--" .. name)
@@ -307,7 +326,8 @@ end
 function _get_package_requireinfo(packagename)
     if os.isfile(os.projectfile()) then
         local requires_str, requires_extra = project.requires_str()
-        local requireitems = require_package.load_requires(requires_str, requires_extra)
+        local requireitems = require_package.load_requires(requires_str,
+                                                           requires_extra)
         for _, requireitem in ipairs(requireitems) do
             local requireinfo = requireitem.info or {}
             local requirename = requireinfo.alias or requireitem.name
@@ -328,9 +348,13 @@ function _get_package_toolchains_envs(envs, package, opt)
         local toolchain_packages = {}
         local toolchains_custom = {}
         for _, name in ipairs(toolchains) do
-            local toolchain_inst = toolchain.load(name, {plat = package:plat(), arch = package:arch()})
+            local toolchain_inst = toolchain.load(name, {
+                plat = package:plat(),
+                arch = package:arch()
+            })
             if toolchain_inst then
-                table.join2(toolchain_packages, toolchain_inst:config("packages"))
+                table.join2(toolchain_packages,
+                            toolchain_inst:config("packages"))
                 if not toolchain_inst:is_builtin() then
                     table.insert(toolchains_custom, toolchain_inst)
                 end
@@ -343,13 +367,18 @@ function _get_package_toolchains_envs(envs, package, opt)
                 local requireinfo = _get_package_requireinfo(packagename)
                 if requireinfo then
                     requireinfo.originstr = nil
-                    rcfile:print("add_requires(\"%s\", %s)", packagename, string.serialize(requireinfo, {strip = true, indent = false}))
+                    rcfile:print("add_requires(\"%s\", %s)", packagename,
+                                 string.serialize(requireinfo, {
+                        strip = true,
+                        indent = false
+                    }))
                 else
                     rcfile:print("add_requires(\"%s\")", packagename)
                 end
             end
         end
-        rcfile:print("add_toolchains(\"%s\")", table.concat(table.wrap(toolchains), '", "'))
+        rcfile:print("add_toolchains(\"%s\")",
+                     table.concat(table.wrap(toolchains), '", "'))
         rcfile:close()
         table.insert(envs.XMAKE_RCFILES, rcfile_path)
 
@@ -360,12 +389,14 @@ function _get_package_toolchains_envs(envs, package, opt)
             if toolchain_inst:check() then
                 toolchain_inst:load()
                 local toolchains_file = os.tmpfile()
-                dprint("passing toolchain(%s) to %s", toolchain_inst:name(), toolchains_file)
+                dprint("passing toolchain(%s) to %s", toolchain_inst:name(),
+                       toolchains_file)
                 local ok, errors = toolchain_inst:savefile(toolchains_file)
                 if not ok then
                     raise("save toolchain failed, %s", errors or "unknown")
                 end
-                envs.XMAKE_TOOLCHAIN_DATAFILES = envs.XMAKE_TOOLCHAIN_DATAFILES or {}
+                envs.XMAKE_TOOLCHAIN_DATAFILES =
+                    envs.XMAKE_TOOLCHAIN_DATAFILES or {}
                 table.insert(envs.XMAKE_TOOLCHAIN_DATAFILES, toolchains_file)
             end
         end
@@ -397,11 +428,15 @@ function _get_package_depconfs_envs(envs, package, opt)
     local requireconfs = {}
     for _, dep in ipairs(package:librarydeps()) do
         local requireinfo = dep:requireinfo()
-        if requireinfo and (requireinfo.override or (requireinfo.configs and not table.empty(requireinfo.configs))) then
+        if requireinfo and (requireinfo.override or
+            (requireinfo.configs and not table.empty(requireinfo.configs))) then
             local requirepaths = {}
             _get_package_requirepaths(requirepaths, package, dep, {})
             if #requirepaths > 0 then
-                table.insert(requireconfs, {requirepaths = requirepaths, requireinfo = requireinfo})
+                table.insert(requireconfs, {
+                    requirepaths = requirepaths,
+                    requireinfo = requireinfo
+                })
             end
         end
     end
@@ -410,7 +445,9 @@ function _get_package_depconfs_envs(envs, package, opt)
         local rcfile = io.open(rcfile_path, 'w')
         for _, requireconf in ipairs(requireconfs) do
             for _, requirepath in ipairs(requireconf.requirepaths) do
-                rcfile:print("add_requireconfs(\"%s\", %s)", requirepath, string.serialize(requireconf.requireinfo, {strip = true, indent = false}))
+                rcfile:print("add_requireconfs(\"%s\", %s)", requirepath,
+                             string.serialize(requireconf.requireinfo,
+                                              {strip = true, indent = false}))
             end
         end
         rcfile:close()
@@ -426,7 +463,11 @@ function buildenvs(package, opt)
     _get_package_depconfs_envs(envs, package, opt)
     -- we should avoid using $XMAKE_CONFIGDIR outside to cause conflicts
     envs.XMAKE_CONFIGDIR = os.curdir()
-    envs.XMAKE_IN_XREPO  = "1"
+    if not package:is_source_embed() then
+        -- source-embed package need build with softlink requires-installdir
+        -- @see https://github.com/TOMO-CAT/xmake/issues/149
+        envs.XMAKE_IN_XREPO = "1"
+    end
     envs.XMAKE_IN_PROJECT_GENERATOR = ""
     return envs
 end
@@ -463,6 +504,11 @@ function install(package, configs, opt)
     end
 
     -- do configure
+    if option.get("verbose") or option.get("diagnosis") or package:is_source_embed() then
+        cprint(format(
+            "${bright blue}[package][tools][xmake] start configure package:${clear} [%s]",
+            package:name()))
+    end
     if not option.get("verbose") and package:is_source_embed() then
         -- print install logs for packages with sourcedir even if we don't set verbose
         -- @see https://github.com/TOMO-CAT/xmake/issues/101
@@ -472,6 +518,11 @@ function install(package, configs, opt)
     end
 
     -- do build
+    if option.get("verbose") or option.get("diagnosis") or package:is_source_embed() then
+        cprint(format(
+                "${bright blue}[package][tools][xmake] start build package:${clear} [%s]",
+                package:name()))
+    end
     argv = {"build"}
     _set_builtin_argv(package, argv)
     local njob = opt.jobs or option.get("jobs")
@@ -490,6 +541,11 @@ function install(package, configs, opt)
     end
 
     -- do install
+    if option.get("verbose") or option.get("diagnosis") or package:is_source_embed() then
+        cprint(format(
+            "${bright blue}[package][tools][xmake] start install package:${clear} [%s]",
+            package:name()))
+    end
     argv = {"install", "-y", "--nopkgs", "-o", package:installdir()}
     _set_builtin_argv(package, argv)
     if opt.target then

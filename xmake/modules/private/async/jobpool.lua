@@ -115,7 +115,7 @@ function jobpool:getfree()
     -- get a free job from the leaf jobs
     local leafjobs = self:_getleafjobs()
     if not leafjobs:empty() then
-        -- try to get next free job fastly
+        -- try to get next free job fast
         if self._nextfree then
             local job = self._nextfree
             local nextfree = leafjobs:prev(job)
