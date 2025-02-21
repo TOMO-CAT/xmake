@@ -36,9 +36,6 @@ import("utils.archive")
 import("lib.detect.find_file")
 import("lib.detect.find_tool")
 
--- the installer filename for windows
-local win_installer_name = "xmake-installer.exe"
-
 -- run program with privilege
 function _sudo_v(program, params)
 
@@ -96,15 +93,6 @@ function _sudo_v(program, params)
     }
 end
 
--- run program witn admin user
-function _run_win_v(program, commands, admin)
-    local sudo_vbs = path.join(os.programdir(), "scripts", "run.vbs")
-    local temp_vbs = os.tmpfile() .. ".vbs"
-    os.cp(sudo_vbs, temp_vbs)
-    local params = table.join("/Nologo", temp_vbs, "W" .. (admin and "A" or "N") , program, commands)
-    process.openv("cscript", params, {detach = true}):close()
-end
-
 -- do uninstall
 function _uninstall()
 
@@ -142,7 +130,7 @@ function _install(sourcedir)
     local install_task = function ()
 
         -- get the install directory
-        local installdir = "~/.local/bin"
+        local installdir = "/usr/local/bin"
 
         -- trace
         tty.erase_line_to_start().cr()
@@ -154,10 +142,12 @@ function _install(sourcedir)
                 -- install it
                 os.cd(sourcedir)
                 if os.isfile("./configure") then
-                    os.vrun("./configure")
+                    os.vrun("./configure", {"--mode=release", "--runtime=lua"})
                 end
                 os.vrunv("make", {"-j4"})
-                process.openv("./scripts/get.sh", {"__local__", "__install_only__"}, {stdout = os.tmpfile(), stderr = os.tmpfile(), detach = true}):close()
+                -- an error will be reported: cannot create regular file '/usr/local/bin/xmake': Text file busy
+                -- _sudo_v("make", {"install", "VERBOSE=1", "PREFIX=/usr/local"})
+                process.openv("make", {"install", "VERBOSE=1", "PREFIX=/usr/local"}, {stdout = os.tmpfile(), stderr = os.tmpfile(), detach = true}):close()
                 return true
             end,
             catch
@@ -288,26 +278,6 @@ function _check_repo(sourcedir)
     end
 end
 
-function _check_win_installer(sourcedir)
-    local file = path.join(sourcedir, win_installer_name)
-    if not os.isfile(file) then
-        raise("installer not found at " .. sourcedir)
-    end
-
-    local fp = io.open(file, "rb")
-    local header = fp:read(math.min(1000, fp:size()))
-    fp:close()
-    if header:startswith("MZ") then
-        return
-    end
-    if header:find('\0', 1, true) or not option.get("verbose") then
-        raise("installer is broken")
-    else
-        -- may be a text file, print content for debug
-        raise("installer is broken: " .. header)
-    end
-end
-
 -- main
 function main()
 
@@ -366,22 +336,7 @@ function main()
             {
                 function ()
                     os.tryrm(sourcedir)
-                    if not install_from_git then
-                        os.mkdir(sourcedir)
-                        local installerfile = path.join(sourcedir, win_installer_name)
-                        if url:endswith(".zip") then
-                            http.download(url, installerfile .. ".zip")
-                            archive.extract(installerfile .. ".zip", installerfile .. ".dir")
-                            local file = find_file("*.exe", installerfile .. ".dir")
-                            if file then
-                                os.cp(file, installerfile)
-                            end
-                        else
-                            http.download(url, installerfile)
-                        end
-                    else
-                        git.clone(url, {depth = 1, recurse_submodules = not script_only, branch = version, outputdir = sourcedir})
-                    end
+                    git.clone(url, {depth = 1, recurse_submodules = not script_only, branch = version, outputdir = sourcedir})
                     return true
                 end,
                 catch
@@ -416,8 +371,6 @@ function main()
 
     if install_from_git then
         _check_repo(sourcedir)
-    else
-        _check_win_installer(sourcedir)
     end
 
     -- do install
