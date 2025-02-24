@@ -2,7 +2,7 @@ add_rules("mode.debug", "mode.release")
 
 includes("@builtin/qt")
 
-target("${TARGETNAME}")
+target("${TARGETNAME}", function()
     add_rules("qt.quickapp_static")
     add_headerfiles("src/*.h")
     add_files("src/*.cpp")
@@ -12,5 +12,4 @@ target("${TARGETNAME}")
     qt_add_static_plugins("QtQuick2WindowPlugin", {linkdirs = "qml/QtQuick/Window.2", links = "windowplugin"})
     qt_add_static_plugins("QtQuickControls2Plugin", {linkdirs = "qml/QtQuick/Controls.2", links = "qtquickcontrols2plugin"})
     qt_add_static_plugins("QtQuickTemplates2Plugin", {linkdirs = "qml/QtQuick/Templates.2", links = "qtquicktemplates2plugin"})
-
-${FAQ}
+end)

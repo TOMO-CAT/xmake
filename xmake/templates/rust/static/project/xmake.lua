@@ -1,10 +1,10 @@
-target("foo")
+target("foo", function()
     set_kind("static")
     add_files("src/foo.rs")
+end)
 
-target("${TARGETNAME}_demo")
+target("${TARGETNAME}_demo", function()
     set_kind("binary")
     add_deps("foo")
     add_files("src/main.rs")
-
-${FAQ}
+end)

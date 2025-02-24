@@ -1,3 +1,3 @@
-template("qt.static")
+template("qt.static", function()
     add_configfiles("xmake.lua")
-
+end)

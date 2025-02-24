@@ -2,7 +2,7 @@ add_rules("mode.debug", "mode.release")
 
 includes("@builtin/qt")
 
-target("${TARGETNAME}")
+target("${TARGETNAME}", function()
     add_rules("qt.widgetapp_static")
     add_headerfiles("src/*.h")
     add_files("src/*.cpp")
@@ -14,5 +14,4 @@ target("${TARGETNAME}")
     -- add plugin: QSvgPlugin (optional)
     add_frameworks("QtSvg")
     qt_add_static_plugins("QSvgPlugin", {linkdirs = "plugins/imageformats", links = {"qsvg"}})
-
-${FAQ}
+end)

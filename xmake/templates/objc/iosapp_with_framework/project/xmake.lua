@@ -1,13 +1,15 @@
 add_rules("mode.debug", "mode.release")
 
-target("test")
+target("test", function()
     add_rules("xcode.framework")
     add_files("src/framework/test.m")
     add_files("src/framework/Info.plist")
     add_headerfiles("src/framework/test.h")
+end)
 
-target("${TARGETNAME}")
+target("${TARGETNAME}", function()
     add_rules("xcode.application")
     add_deps("test")
     add_files("src/app/*.m", "src/app/**.storyboard", "src/app/*.xcassets")
     add_files("src/app/Info.plist")
+end)
