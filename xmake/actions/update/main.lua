@@ -93,36 +93,6 @@ function _sudo_v(program, params)
     }
 end
 
--- do uninstall
-function _uninstall()
-
-    -- remove shell profile
-    local profiles = {}
-    for _, filename in ipairs({".zshrc", ".bashrc", ".kshrc", ".bash_profile", ".profile"}) do
-        table.insert(profiles, path.join(os.getenv("HOME"), filename))
-    end
-    for _, profile in ipairs(profiles) do
-        if os.isfile(profile) then
-            io.gsub(profile, "# >>> xmake >>>.-# <<< xmake <<<", "")
-        end
-    end
-
-    -- remove program
-    if os.programdir():startswith("/usr/") then
-        _sudo_v(os.programfile(), {"lua", "rm", os.programdir()})
-        for _, f in ipairs({"/usr/local/bin/xmake", "/usr/local/bin/xrepo", "/usr/bin/xmake", "/usr/bin/xrepo"}) do
-            if os.isfile(f) then
-                _sudo_v(os.programfile(), {"lua", "rm", f})
-            end
-        end
-    else
-        os.rm(os.programdir())
-        os.rm(os.programfile())
-        os.rm("~/.local/bin/xmake")
-        os.rm("~/.local/bin/xrepo")
-    end
-end
-
 -- do install
 function _install(sourcedir)
 
@@ -280,18 +250,6 @@ end
 
 -- main
 function main()
-
-    -- only uninstall it
-    if option.get("uninstall") then
-
-        -- do uninstall
-        _uninstall()
-
-        -- trace
-        cprint("${color.success}uninstall ok!")
-        return
-    end
-
     -- initialize for shell interaction
     if option.get("integrate") then
         _initialize_shell()
