@@ -54,7 +54,7 @@
 --    add_includedirs("/usr/include", "/usr/local/include")
 --
 --    -- add link libraries and search directories
---    add_links("tbox")
+--    add_links("boost_filesystem")
 --    add_linkdirs("/usr/local/lib", "/usr/lib")
 --
 --    -- add system link libraries

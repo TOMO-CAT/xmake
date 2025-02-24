@@ -1,12 +1,12 @@
 add_rules("mode.debug", "mode.release")
 
-target("foo")
+target("foo", function()
     set_kind("static")
     add_files("src/foo.c")
+end)
 
-target("${TARGETNAME}")
+target("${TARGETNAME}", function()
     set_kind("binary")
     add_deps("foo")
     add_files("src/main.c")
-
-${FAQ}
+end)

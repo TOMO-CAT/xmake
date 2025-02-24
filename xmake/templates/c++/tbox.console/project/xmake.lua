@@ -8,5 +8,3 @@ add_rules("mode.release", "mode.debug")
 add_requires("tbox", {debug = is_mode("debug")})
 
 includes("src")
-
-${FAQ}

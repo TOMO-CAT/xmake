@@ -19,7 +19,7 @@
 --
 
 -- define task
-task("update")
+task("update", function()
 
     -- set category
     set_category("action")
@@ -38,10 +38,9 @@ task("update")
                 -- options
             ,   options =
                 {
-                    {nil, "uninstall",   "k",   nil,    "Uninstall the current xmake program."                     }
-                ,   {                                                                                              }
+                    {                                                                                              }
                 ,   {'s', "scriptonly",  "k",   nil,    "Update scripts only."                                     }
-                ,   {nil, "integrate",   "k",   nil,    "Integrate xmake with default shell."                  }
+                ,   {nil, "integrate",   "k",   nil,    "Integrate xmake with default shell."                      }
                 ,   {'f', "force",       "k",   nil,    "Force to update and reinstall the given version."         }
                 ,   {nil, "xmakever",    "v",   nil,    "The given xmake version, or a git source (and branch). ",
                                                         "e.g.",
@@ -87,6 +86,4 @@ task("update")
                                                         end}
                 }
             }
-
-
-
+end)

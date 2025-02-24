@@ -23,7 +23,7 @@ import("core.project.config")
 import("core.project.project")
 import("core.language.language")
 
--- scan project and generate xmake.lua automaticlly if the project codes exist
+-- scan project and generate xmake.lua automatically if the project codes exist
 function main()
 
     -- trace
@@ -94,12 +94,13 @@ function main()
             file:print("")
 
             -- add target
-            file:print("target(\"%s\")", targetname)
+            file:print("target(\"%s\", function()", targetname)
             file:print("    set_kind(\"%s\")", targetkind)
             for _, sourcefile in ipairs(sourcefiles) do
                 cprint("    ${green}[+]: ${clear}%s", sourcefile)
                 file:print("    add_files(\"%s\")", sourcefile)
             end
+            file:print("end)")
             file:print("")
         end
 
@@ -115,9 +116,10 @@ function main()
             cprint("    ${green}[+]: ${clear}%s", sourcefile)
 
             -- add target
-            file:print("target(\"%s\")", name)
+            file:print("target(\"%s\", function()", name)
             file:print("    set_kind(\"binary\")")
             file:print("    add_files(\"%s\")", sourcefile)
+            file:print("end)")
             file:print("")
 
             -- add deps

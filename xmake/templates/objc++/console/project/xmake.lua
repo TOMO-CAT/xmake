@@ -2,7 +2,7 @@
 add_rules("mode.debug", "mode.release")
 
 -- add target
-target("${TARGETNAME}")
+target("${TARGETNAME}", function()
 
     -- set kind
     set_kind("binary")
@@ -10,4 +10,4 @@ target("${TARGETNAME}")
     -- add files
     add_files("src/*.mm")
 
-${FAQ}
+end)
