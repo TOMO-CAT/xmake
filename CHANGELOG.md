@@ -12,6 +12,7 @@
 ### Bugs 修复
 
 * [#4750](https://github.com/xmake-io/xmake/issues/4750): 修复 compile_commands 生成器，支持 `xmake tests`
+* [#5465](https://github.com/xmake-io/xmake/pull/5465): 修复 package requires lock
 
 ## v3.0.5
 
