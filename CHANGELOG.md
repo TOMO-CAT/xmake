@@ -5,6 +5,7 @@
 ### 新特性
 
 * [#172](https://github.com/TOMO-CAT/xmake/issues/172): `xmake l cli.bisect` 支持快速定位引入问题的 commit
+* [#174](https://github.com/TOMO-CAT/xmake/issues/174): 支持使用 cosmocc 去构建 xmake 自身二进制
 
 ## v3.0.5
 
