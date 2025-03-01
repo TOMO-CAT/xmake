@@ -41,4 +41,19 @@ target("demo", function()
                      {prefixdir = "share"})
     add_installfiles("$(projectdir)/../scripts/xrepo.sh",
                      {prefixdir = "bin", filename = "xrepo"})
+
+    -- embed all script files
+    add_rules("utils.bin2c", {linewidth = 16, extensions = ".xmz"})
+    on_config(function(target)
+        import("utils.archive.archive")
+        if has_config("embed") then
+            local archivefile = path.join(target:autogendir(), "bin2c",
+                                          "xmake.xmz")
+            print("archiving %s ..", archivefile)
+            os.tryrm(archivefile)
+            local rootdir = path.normalize(
+                                path.join(os.projectdir(), "..", "xmake"))
+            archive(archivefile, rootdir, {recurse = true, curdir = rootdir})
+        end
+    end)
 end)

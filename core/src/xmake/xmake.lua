@@ -41,4 +41,21 @@ target("xmake", function()
     -- add options
     add_options("readline")
     add_options("curses")
+
+    -- embed all script files
+    add_rules("utils.bin2c", {linewidth = 16, extensions = ".xmz"})
+    on_config(function(target)
+        import("utils.archive.archive")
+        if has_config("embed") then
+            local archivefile = path.join(target:autogendir(), "bin2c",
+                                          "xmake.xmz")
+            print("archiving %s ..", archivefile)
+            os.tryrm(archivefile)
+            local rootdir = path.normalize(
+                                path.join(os.projectdir(), "..", "xmake"))
+            archive(archivefile, rootdir, {recurse = true, curdir = rootdir})
+            target:add("files", archivefile)
+            target:add("defines", "XM_EMBED_ENABLE=1")
+        end
+    end)
 end)
