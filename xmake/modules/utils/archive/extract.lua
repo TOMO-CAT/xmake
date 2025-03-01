@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -27,10 +27,23 @@ import("detect.tools.find_tar")
 import("detect.tools.find_gzip")
 import("detect.tools.find_unzip")
 import("detect.tools.find_bzip2")
+import("extract_xmz")
 import("extension", {alias = "get_archive_extension"})
+
+-- extract archivefile using xmake decompress module
+function _extract_using_xmz(archivefile, outputdir, extension, opt)
+    extract_xmz(archivefile, outputdir, opt)
+    return true
+end
 
 -- extract archivefile using tar
 function _extract_using_tar(archivefile, outputdir, extension, opt)
+
+    -- the tar of windows can only extract "*.tar"
+    if os.host() == "windows" and extension ~= ".tar" then
+        return false
+    end
+
     -- find tar
     local program = find_tar()
     if not program then
@@ -39,6 +52,24 @@ function _extract_using_tar(archivefile, outputdir, extension, opt)
 
     -- init argv
     local argv = {}
+    if is_host("windows") then
+        -- force "x:\\xx" as local file
+        local force_local = _g.force_local
+        if force_local == nil then
+            force_local = try {
+                function()
+                    local result = os.iorunv(program, {"--help"})
+                    if result and result:find("--force-local", 1, true) then
+                        return true
+                    end
+                end
+            }
+            _g.force_local = force_local or false
+        end
+        if force_local then
+            table.insert(argv, "--force-local")
+        end
+    end
     table.insert(argv, "-xf")
     table.insert(argv, archivefile)
 
@@ -48,8 +79,10 @@ function _extract_using_tar(archivefile, outputdir, extension, opt)
     end
 
     -- set outputdir
-    table.insert(argv, "-C")
-    table.insert(argv, outputdir)
+    if not is_host("windows") then
+        table.insert(argv, "-C")
+        table.insert(argv, outputdir)
+    end
 
     -- excludes files
     if opt.excludes then
@@ -60,7 +93,11 @@ function _extract_using_tar(archivefile, outputdir, extension, opt)
     end
 
     -- extract it
-    os.vrunv(program, argv)
+    if is_host("windows") then
+        os.vrunv(program, argv, {curdir = outputdir})
+    else
+        os.vrunv(program, argv)
+    end
     return true
 end
 
@@ -73,11 +110,23 @@ function _extract_using_7z(archivefile, outputdir, extension, opt)
         return false
     end
 
+    -- p7zip cannot extract other archive format on msys/cygwin, but it can extract .tgz
+    -- https://github.com/xmake-io/xmake/issues/1575#issuecomment-898205462
+    if is_subhost("msys", "cygwin") and program:startswith("sh ") and extension ~=
+        ".7z" and extension ~= ".tgz" then
+        return false
+    end
+
     -- extract to *.tar file first
     local outputdir_old = nil
     if extension:startswith(".tar.") or extension == ".tgz" then
         outputdir_old = outputdir
         outputdir = os.tmpfile({ramdisk = false}) .. ".tar"
+    end
+
+    -- on msys2/cygwin? we need to translate input path to cygwin-like path
+    if is_subhost("msys", "cygwin") and program:gsub("\\", "/"):find("/usr/bin") then
+        archivefile = path.cygwin_path(archivefile)
     end
 
     -- init argv
@@ -120,7 +169,8 @@ function _extract_using_7z(archivefile, outputdir, extension, opt)
     if outputdir_old then
         local tarfile = find_file("**.tar", outputdir)
         if tarfile and os.isfile(tarfile) then
-            return _extract(tarfile, outputdir_old, ".tar", {_extract_using_7z, _extract_using_tar}, opt)
+            return _extract(tarfile, outputdir_old, ".tar",
+                            {_extract_using_7z, _extract_using_tar}, opt)
         end
     end
     return true
@@ -169,7 +219,8 @@ function _extract_using_gzip(archivefile, outputdir, extension, opt)
     if outputdir_old then
         local tarfile = find_file("**.tar", outputdir)
         if tarfile and os.isfile(tarfile) then
-            return _extract(tarfile, outputdir_old, ".tar", {_extract_using_7z, _extract_using_tar}, opt)
+            return _extract(tarfile, outputdir_old, ".tar",
+                            {_extract_using_7z, _extract_using_tar}, opt)
         end
     end
     return true
@@ -218,7 +269,8 @@ function _extract_using_xz(archivefile, outputdir, extension, opt)
     if outputdir_old then
         local tarfile = find_file("**.tar", outputdir)
         if tarfile and os.isfile(tarfile) then
-            return _extract(tarfile, outputdir_old, ".tar", {_extract_using_7z, _extract_using_tar}, opt)
+            return _extract(tarfile, outputdir_old, ".tar",
+                            {_extract_using_7z, _extract_using_tar}, opt)
         end
     end
     return true
@@ -271,7 +323,8 @@ function _extract_using_unzip(archivefile, outputdir, extension, opt)
     if outputdir_old then
         local tarfile = find_file("**.tar", outputdir)
         if tarfile and os.isfile(tarfile) then
-            return _extract(tarfile, outputdir_old, ".tar", {_extract_using_tar, _extract_using_7z}, opt)
+            return _extract(tarfile, outputdir_old, ".tar",
+                            {_extract_using_tar, _extract_using_7z}, opt)
         end
     end
     return true
@@ -291,6 +344,11 @@ function _extract_using_bzip2(archivefile, outputdir, extension, opt)
     if extension:startswith(".tar.") then
         outputdir_old = outputdir
         outputdir = os.tmpfile({ramdisk = false}) .. ".tar"
+    end
+
+    -- on msys2/cygwin? we need to translate input path to cygwin-like path
+    if is_subhost("msys", "cygwin") and program:gsub("\\", "/"):find("/usr/bin") then
+        archivefile = path.cygwin_path(archivefile)
     end
 
     -- init temporary archivefile
@@ -320,7 +378,8 @@ function _extract_using_bzip2(archivefile, outputdir, extension, opt)
     if outputdir_old then
         local tarfile = find_file("**.tar", outputdir)
         if tarfile and os.isfile(tarfile) then
-            return _extract(tarfile, outputdir_old, ".tar", {_extract_using_7z, _extract_using_tar}, opt)
+            return _extract(tarfile, outputdir_old, ".tar",
+                            {_extract_using_7z, _extract_using_tar}, opt)
         end
     end
     return true
@@ -331,11 +390,10 @@ function _extract(archivefile, outputdir, extension, extractors, opt)
     local errors
     for _, extract in ipairs(extractors) do
         local ok = try {
-            function ()
+            function()
                 return extract(archivefile, outputdir, extension, opt)
-            end,
-            catch {
-                function (errs)
+            end, catch {
+                function(errs)
                     if errs then
                         errors = tostring(errs)
                     end
@@ -346,10 +404,11 @@ function _extract(archivefile, outputdir, extension, extractors, opt)
             return true
         end
     end
-    raise("cannot extract %s, %s!", path.filename(archivefile), errors or "extractors not found!")
+    raise("cannot extract %s, %s!", path.filename(archivefile),
+          errors or "extractors not found!")
 end
 
--- extract archive file
+-- extract file
 --
 -- @param archivefile   the archive file. e.g. *.tar.gz, *.zip, *.7z, *.tar.bz2, ..
 -- @param outputdir     the output directory
@@ -364,37 +423,53 @@ function main(archivefile, outputdir, opt)
     if is_subhost("windows") then
         -- we use 7z first, becase xmake package has builtin 7z program on windows
         -- tar/windows can not extract .bz2 ...
-        extractors =
-        {
-            [".zip"]        = {_extract_using_7z, _extract_using_unzip, _extract_using_tar}
-        ,   [".7z"]         = {_extract_using_7z}
-        ,   [".gz"]         = {_extract_using_7z, _extract_using_gzip, _extract_using_tar}
-        ,   [".xz"]         = {_extract_using_7z, _extract_using_xz, _extract_using_tar}
-        ,   [".tgz"]        = {_extract_using_7z, _extract_using_tar}
-        ,   [".bz2"]        = {_extract_using_7z, _extract_using_bzip2}
-        ,   [".tar"]        = {_extract_using_7z, _extract_using_tar}
-        ,   [".tar.gz"]     = {_extract_using_7z, _extract_using_gzip}
-        ,   [".tar.xz"]     = {_extract_using_7z, _extract_using_xz}
-        ,   [".tar.bz2"]    = {_extract_using_7z, _extract_using_bzip2}
-        ,   [".tar.lz"]     = {_extract_using_7z}
-        ,   [".tar.Z"]      = {_extract_using_7z}
+        extractors = {
+            [".zip"] = {
+                _extract_using_7z, _extract_using_unzip, _extract_using_tar
+            },
+            [".7z"] = {_extract_using_7z},
+            [".gz"] = {
+                _extract_using_7z, _extract_using_gzip, _extract_using_tar
+            },
+            [".xz"] = {_extract_using_7z, _extract_using_xz, _extract_using_tar},
+            [".tgz"] = {_extract_using_7z, _extract_using_tar},
+            [".bz2"] = {_extract_using_7z, _extract_using_bzip2},
+            [".tar"] = {_extract_using_7z, _extract_using_tar},
+            [".tar.gz"] = {_extract_using_7z, _extract_using_gzip},
+            [".tar.xz"] = {_extract_using_7z, _extract_using_xz},
+            [".tar.bz2"] = {_extract_using_7z, _extract_using_bzip2},
+            [".tar.lz"] = {_extract_using_7z},
+            [".tar.Z"] = {_extract_using_7z},
+            [".xmz"] = {_extract_using_xmz}
         }
     else
-        extractors =
-        {
+        extractors = {
             -- tar supports .zip on macOS but does not on Linux
-            [".zip"]        = is_host("macosx") and {_extract_using_unzip, _extract_using_tar, _extract_using_7z} or {_extract_using_unzip, _extract_using_7z}
-        ,   [".7z"]         = {_extract_using_7z}
-        ,   [".gz"]         = {_extract_using_gzip, _extract_using_tar, _extract_using_7z}
-        ,   [".xz"]         = {_extract_using_xz, _extract_using_tar, _extract_using_7z}
-        ,   [".tgz"]        = {_extract_using_tar, _extract_using_7z}
-        ,   [".bz2"]        = {_extract_using_bzip2, _extract_using_tar, _extract_using_7z}
-        ,   [".tar"]        = {_extract_using_tar, _extract_using_7z}
-        ,   [".tar.gz"]     = {_extract_using_tar, _extract_using_7z, _extract_using_gzip}
-        ,   [".tar.xz"]     = {_extract_using_tar, _extract_using_7z, _extract_using_xz}
-        ,   [".tar.bz2"]    = {_extract_using_tar, _extract_using_7z, _extract_using_bzip2}
-        ,   [".tar.lz"]     = {_extract_using_tar, _extract_using_7z}
-        ,   [".tar.Z"]      = {_extract_using_tar, _extract_using_7z}
+            [".zip"] = is_host("macosx") and
+                {_extract_using_unzip, _extract_using_tar, _extract_using_7z} or
+                {_extract_using_unzip, _extract_using_7z},
+            [".7z"] = {_extract_using_7z},
+            [".gz"] = {
+                _extract_using_gzip, _extract_using_tar, _extract_using_7z
+            },
+            [".xz"] = {_extract_using_xz, _extract_using_tar, _extract_using_7z},
+            [".tgz"] = {_extract_using_tar, _extract_using_7z},
+            [".bz2"] = {
+                _extract_using_bzip2, _extract_using_tar, _extract_using_7z
+            },
+            [".tar"] = {_extract_using_tar, _extract_using_7z},
+            [".tar.gz"] = {
+                _extract_using_tar, _extract_using_7z, _extract_using_gzip
+            },
+            [".tar.xz"] = {
+                _extract_using_tar, _extract_using_7z, _extract_using_xz
+            },
+            [".tar.bz2"] = {
+                _extract_using_tar, _extract_using_7z, _extract_using_bzip2
+            },
+            [".tar.lz"] = {_extract_using_tar, _extract_using_7z},
+            [".tar.Z"] = {_extract_using_tar, _extract_using_7z},
+            [".xmz"] = {_extract_using_xmz}
         }
     end
 
@@ -402,5 +477,6 @@ function main(archivefile, outputdir, opt)
     local extension = opt.extension or get_archive_extension(archivefile)
 
     -- extract it
-    return _extract(archivefile, outputdir, extension, extractors[extension], opt)
+    return _extract(archivefile, outputdir, extension, extractors[extension],
+                    opt)
 end

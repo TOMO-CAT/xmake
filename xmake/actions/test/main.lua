@@ -379,20 +379,9 @@ function _try_build_target(targetname)
     return passed, errors
 end
 
-function main()
 
-    -- do action for remote?
-    if remote_build_action.enabled() then
-        return remote_build_action()
-    end
-
-    -- lock the whole project
-    project.lock()
-
-    -- load config first
-    task.run("config", {}, {disable_dump = true})
-
-    -- get tests
+-- get tests, export this for the `project` plugin
+function get_tests()
     local tests = {}
     local group_pattern = option.get("group")
     if group_pattern then
@@ -453,6 +442,23 @@ function main()
             end
         end
     end
+    return tests
+end
+
+function main()
+    -- do action for remote?
+    if remote_build_action.enabled() then
+        return remote_build_action()
+    end
+
+    -- lock the whole project
+    project.lock()
+
+    -- load config first
+    task.run("config", {}, {disable_dump = true})
+
+    -- get tests
+    local tests = get_tests()
     local test_patterns = option.get("tests")
     if test_patterns then
         local tests_new = {}

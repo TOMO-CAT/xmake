@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,12 +17,18 @@
 -- @author      ruki
 -- @file        archive.lua
 --
-
 -- imports
 import("core.base.option")
 import("lib.detect.find_file")
 import("lib.detect.find_tool")
+import("archive_xmz")
 import("extension", {alias = "get_archive_extension"})
+
+-- archive archivefile using xmake compress module
+function _archive_using_xmz(archivefile, inputfiles, extension, opt)
+    archive_xmz(archivefile, inputfiles, opt)
+    return true
+end
 
 -- archive archivefile using zip
 function _archive_using_zip(archivefile, inputfiles, extension, opt)
@@ -226,8 +232,13 @@ function _archive_using_tar(archivefile, inputfiles, extension, opt)
     local compress = false
     local archivefile_tar
     if extension ~= ".tar" then
-        compress = true
-        archivefile_tar = path.join(path.directory(archivefile), path.basename(archivefile))
+        if is_host("windows") then
+            return false
+        else
+            compress = true
+            archivefile_tar = path.join(path.directory(archivefile),
+                                        path.basename(archivefile))
+        end
     end
 
     -- init argv
@@ -280,11 +291,10 @@ function _archive(archivefile, inputfiles, extension, archivers, opt)
     local errors
     for _, archive in ipairs(archivers) do
         local ok = try {
-            function ()
+            function()
                 return archive(archivefile, inputfiles, extension, opt)
-            end,
-            catch {
-                function (errs)
+            end, catch {
+                function(errs)
                     if errs then
                         errors = tostring(errs)
                     end
@@ -295,20 +305,21 @@ function _archive(archivefile, inputfiles, extension, archivers, opt)
             return true
         end
     end
-    raise("cannot archive %s, %s!", path.filename(archivefile), errors or "archivers not found!")
+    raise("cannot archive %s, %s!", path.filename(archivefile),
+          errors or "archivers not found!")
 end
 
 -- only archive tar file
 function _archive_tarfile(archivefile, tarfile, opt)
     local archivers = {
-        [".xz"]         = {_archive_using_xz}
-    ,   [".gz"]         = {_archive_using_gzip}
+        [".xz"] = {_archive_using_xz},
+        [".gz"] = {_archive_using_gzip}
     }
     local extension = opt.extension or path.extension(archivefile)
     return _archive(archivefile, tarfile, extension, archivers[extension], opt)
 end
 
--- archive archive file
+-- archive file
 --
 -- @param archivefile   the archive file. e.g. *.tar.gz, *.zip, *.7z, *.tar.bz2, ..
 -- @param inputfiles    the input file or directory or list
@@ -323,13 +334,14 @@ function main(archivefile, inputfiles, opt)
 
     -- init archivers
     local archivers = {
-        [".zip"]        = {_archive_using_zip, _archive_using_7z}
-    ,   [".7z"]         = {_archive_using_7z}
-    ,   [".xz"]         = {_archive_using_xz}
-    ,   [".gz"]         = {_archive_using_gzip}
-    ,   [".tar"]        = {_archive_using_tar}
-    ,   [".tar.gz"]     = {_archive_using_tar, _archive_using_gzip}
-    ,   [".tar.xz"]     = {_archive_using_tar, _archive_using_xz}
+        [".zip"] = {_archive_using_zip, _archive_using_7z},
+        [".7z"] = {_archive_using_7z},
+        [".xz"] = {_archive_using_xz},
+        [".gz"] = {_archive_using_gzip},
+        [".tar"] = {_archive_using_tar},
+        [".tar.gz"] = {_archive_using_tar, _archive_using_gzip},
+        [".tar.xz"] = {_archive_using_tar, _archive_using_xz},
+        [".xmz"] = {_archive_using_xmz}
     }
 
     -- get extension
@@ -342,5 +354,6 @@ function main(archivefile, inputfiles, opt)
     end
 
     -- archive it
-    return _archive(archivefile, inputfiles, extension, archivers[extension], opt)
+    return _archive(archivefile, inputfiles, extension, archivers[extension],
+                    opt)
 end

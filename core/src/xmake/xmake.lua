@@ -13,10 +13,8 @@ target("xmake", function()
     end
 
     -- add definitions
-    add_defines("__tb_prefix__=\"xmake\"")
     add_defines("__xu_prefix__=\"xmake\"")
     if is_mode("debug") then
-        add_defines("__tb_debug__", {public = true}) -- TODO: delete this
         add_defines("__xu_debug__", {public = true})
     end
     add_defines("__xm_prefix__=\"xmake\"")
@@ -43,4 +41,21 @@ target("xmake", function()
     -- add options
     add_options("readline")
     add_options("curses")
+
+    -- embed all script files
+    add_rules("utils.bin2c", {linewidth = 16, extensions = ".xmz"})
+    on_config(function(target)
+        import("utils.archive.archive")
+        if has_config("embed") then
+            local archivefile = path.join(target:autogendir(), "bin2c",
+                                          "xmake.xmz")
+            print("archiving %s ..", archivefile)
+            os.tryrm(archivefile)
+            local rootdir = path.normalize(
+                                path.join(os.projectdir(), "..", "xmake"))
+            archive(archivefile, rootdir, {recurse = true, curdir = rootdir})
+            target:add("files", archivefile)
+            target:add("defines", "XM_EMBED_ENABLE=1")
+        end
+    end)
 end)

@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,27 +17,34 @@
 -- @author      ruki
 -- @file        xmake.lua
 --
-
-rule("utils.bin2c")
+rule("utils.bin2c", function()
     set_extensions(".bin")
-    on_load(function (target)
-        local headerdir = path.join(target:autogendir(), "rules", "utils", "bin2c")
+    on_load(function(target)
+        local headerdir = path.join(target:autogendir(), "rules", "utils",
+                                    "bin2c")
         if not os.isdir(headerdir) then
             os.mkdir(headerdir)
         end
         target:add("includedirs", headerdir)
     end)
-    before_buildcmd_file(function (target, batchcmds, sourcefile_bin, opt)
+    before_buildcmd_file(function(target, batchcmds, sourcefile_bin, opt)
 
         -- get header file
-        local headerdir = path.join(target:autogendir(), "rules", "utils", "bin2c")
-        local headerfile = path.join(headerdir, path.filename(sourcefile_bin) .. ".h")
+        local headerdir = path.join(target:autogendir(), "rules", "utils",
+                                    "bin2c")
+        local headerfile = path.join(headerdir,
+                                     path.filename(sourcefile_bin) .. ".h")
         target:add("includedirs", headerdir)
 
         -- add commands
-        batchcmds:show_progress(opt.progress, "${color.build.object}generating.bin2c %s", sourcefile_bin)
+        batchcmds:show_progress(opt.progress,
+                                "${color.build.object}generating.bin2c %s",
+                                sourcefile_bin)
         batchcmds:mkdir(headerdir)
-        local argv = {"lua", "private.utils.bin2c", "-i", path(sourcefile_bin), "-o", path(headerfile)}
+        local argv = {
+            "lua", "private.utils.bin2c", "-i", path(sourcefile_bin), "-o",
+            path(headerfile)
+        }
         local linewidth = target:extraconf("rules", "utils.bin2c", "linewidth")
         if linewidth then
             table.insert(argv, "-w")
@@ -47,11 +54,12 @@ rule("utils.bin2c")
         if nozeroend then
             table.insert(argv, "--nozeroend")
         end
-        batchcmds:vrunv(os.programfile(), argv, {envs = {XMAKE_SKIP_HISTORY = "y"}})
+        batchcmds:vrunv(os.programfile(), argv,
+                        {envs = {XMAKE_SKIP_HISTORY = "y"}})
 
         -- add deps
         batchcmds:add_depfiles(sourcefile_bin)
         batchcmds:set_depmtime(os.mtime(headerfile))
         batchcmds:set_depcache(target:dependfile(headerfile))
     end)
-
+end)

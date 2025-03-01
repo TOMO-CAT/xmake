@@ -18,7 +18,7 @@
 -- @file        xmake.lua
 --
 
-toolchain("cosmocc")
+toolchain("cosmocc", function()
     set_kind("standalone")
     set_homepage("https://github.com/jart/cosmopolitan")
     set_description("build-once run-anywhere c library")
@@ -46,3 +46,4 @@ toolchain("cosmocc")
             toolchain:set("toolset", "strip", "aarch64-linux-cosmo-strip")
         end
     end)
+end)

@@ -1,5 +1,18 @@
 # 更新日志
 
+## master
+
+### 新特性
+
+* [#168](https://github.com/TOMO-CAT/xmake/issues/168): 支持提供内嵌 lua 文件的单个 xmake 二进制文件
+* [#172](https://github.com/TOMO-CAT/xmake/issues/172): `xmake l cli.bisect` 支持快速定位引入问题的 commit
+* [#174](https://github.com/TOMO-CAT/xmake/issues/174): 支持使用 cosmocc 去构建 xmake 自身二进制
+* [#5580](https://github.com/xmake-io/xmake/issues/5580): 添加 @builtin/xrepo 辅助模块，为 xrepo env shell 实现快速设置环境变量
+
+### Bugs 修复
+
+* [#4750](https://github.com/xmake-io/xmake/issues/4750): 修复 compile_commands 生成器，支持 `xmake tests`
+
 ## v3.0.5
 
 ### 新特性
