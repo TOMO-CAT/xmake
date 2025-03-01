@@ -9,6 +9,10 @@
 * [#174](https://github.com/TOMO-CAT/xmake/issues/174): 支持使用 cosmocc 去构建 xmake 自身二进制
 * [#5580](https://github.com/xmake-io/xmake/issues/5580): 添加 @builtin/xrepo 辅助模块，为 xrepo env shell 实现快速设置环境变量
 
+### Bugs 修复
+
+* [#4750](https://github.com/xmake-io/xmake/issues/4750): 修复 compile_commands 生成器，支持 `xmake tests`
+
 ## v3.0.5
 
 ### 新特性

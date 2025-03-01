@@ -16,3 +16,4 @@ Date:   Wed Jul 24 23:30:07 2024 +0800
 * [#5462](https://github.com/xmake-io/xmake/pull/5462): 添加 `xmake l cli.bisect`
 * [#5488](https://github.com/xmake-io/xmake/pull/5488): 支持使用 cosmocc 去构建 xmake 自身二进制
 * [#5491](https://github.com/xmake-io/xmake/pull/5491): 支持提供内嵌 lua 文件的单个 xmake 二进制文件
+* [#4750](https://github.com/xmake-io/xmake/issues/4750): 修复 compile_commands 生成器，支持 `xmake tests`
