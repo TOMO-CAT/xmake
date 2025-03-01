@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set_project "xmake"
-set_version "3.0.4" "%Y%m%d"
+set_version "3.0.5" "%Y%m%d"
 
 # add includedirs
 add_includedirs "src" "{public}"

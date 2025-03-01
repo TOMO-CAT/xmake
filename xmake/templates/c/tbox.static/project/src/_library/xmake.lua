@@ -1,5 +1,5 @@
 -- add target
-target("${TARGETNAME}")
+target("${TARGETNAME}", function()
 
     -- set kind
     set_kind("static")
@@ -18,4 +18,4 @@ target("${TARGETNAME}")
 
     -- add files
     add_files("*.c")
-
+end)

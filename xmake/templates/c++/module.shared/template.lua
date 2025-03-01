@@ -1,2 +1,3 @@
-template("module.shared")
+template("module.shared", function()
     add_configfiles("xmake.lua")
+end)

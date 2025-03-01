@@ -64,9 +64,11 @@ function main(reftype, url)
     end
 
     -- get refs
+    --
+    -- git ls-remote --refs https://github.com/TOMO-CAT/xmake.git
     local data = os.iorunv(git.program, argv, {envs = envs})
 
-    -- get commmits and tags
+    -- get commits and tags
     local refs = {}
     for _, line in ipairs(data:split('\n')) do
 

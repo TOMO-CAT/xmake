@@ -1,6 +1,6 @@
 add_rules("mode.debug", "mode.release")
 
-target("${TARGETNAME}")
+target("${TARGETNAME}", function()
     set_kind("static")
     add_files("src/**.cu")
     add_includedirs("inc")
@@ -17,4 +17,4 @@ target("${TARGETNAME}")
     -- -- generate PTX code from the highest SM architecture to guarantee forward-compatibility
     -- add_cugencodes("compute_75")
 
-${FAQ}
+end)

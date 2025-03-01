@@ -19,7 +19,7 @@
 --
 
 -- define task
-task("create")
+task("create", function()
 
     -- set category
     set_category("action")
@@ -117,6 +117,4 @@ task("create")
                                                           , "Uses the project name as target if not exists."                }
                 }
             }
-
-
-
+end)
