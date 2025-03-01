@@ -1,5 +1,11 @@
 # 更新日志
 
+## master
+
+### 新特性
+
+* [#172](https://github.com/TOMO-CAT/xmake/issues/172): `xmake l cli.bisect` 支持快速定位引入问题的 commit
+
 ## v3.0.5
 
 ### 新特性

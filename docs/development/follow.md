@@ -13,3 +13,4 @@ Date:   Wed Jul 24 23:30:07 2024 +0800
 ## Update to v2.9.5
 
 * [#4760](https://github.com/xmake-io/xmake/issues/4760): 修复分布式构建报错
+* [#5462](https://github.com/xmake-io/xmake/pull/5462): 添加 `xmake l cli.bisect`
