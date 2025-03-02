@@ -8,6 +8,7 @@
 * [#172](https://github.com/TOMO-CAT/xmake/issues/172): `xmake l cli.bisect` 支持快速定位引入问题的 commit
 * [#174](https://github.com/TOMO-CAT/xmake/issues/174): 支持使用 cosmocc 去构建 xmake 自身二进制
 * [#5580](https://github.com/xmake-io/xmake/issues/5580): 添加 @builtin/xrepo 辅助模块，为 xrepo env shell 实现快速设置环境变量
+* [#5649](https://github.com/xmake-io/xmake/pull/5649): 添加 `package.check_fcsnippets`
 
 ### Bugs 修复
 
