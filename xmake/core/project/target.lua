@@ -1506,6 +1506,20 @@ function _instance:autogenfile(sourcefile, opt)
         relativedir = path.directory(sourcefile)
     end
 
+    -- translate path
+    --
+    -- e.g.
+    --
+    -- src/xxx.c
+    --      project/xmake.lua
+    --          build/.objs
+    --          build/.gens
+    --
+    -- objectfile: project/build/.objs/xxxx/../../xxx.c will be out of range for objectdir
+    -- autogenfile: project/build/.gens/xxxx/../../xxx.c will be out of range for autogendir
+    --
+    -- we need to replace '..' with '__' in this case
+    --
     relativedir = relativedir:gsub("%.%.", "__")
     local rootdir = (opt and opt.rootdir) and opt.rootdir or self:autogendir()
     if relativedir ~= "." then
@@ -2146,7 +2160,7 @@ function _instance:dependfile(objectfile)
         -- @see
         -- https://github.com/xmake-io/xmake/issues/3021
         -- https://github.com/xmake-io/xmake/issues/3715
-        relativedir = hash.uuid4(relativedir):gsub("%-", ""):lower()
+        relativedir = hash.strhash128(relativedir)
     end
 
     -- originfile: project/build/.objs/xxxx/../../xxx.c will be out of range for objectdir

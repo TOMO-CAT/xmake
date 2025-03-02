@@ -40,7 +40,7 @@ function _get_packagedir_from_locked_repo(packagename, locked_repo)
     end
 
     -- @see https://github.com/xmake-io/xmake/issues/5532
-    local reponame = hash.uuid(locked_repo.url .. (locked_repo.commit or "")):gsub("%-", ""):lower() .. ".lock"
+    local reponame = hash.strhash128(locked_repo.url .. (locked_repo.commit or "")) .. ".lock"
 
     -- get local repodir
     local repodir_local
