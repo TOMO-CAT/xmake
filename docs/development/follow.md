@@ -21,3 +21,4 @@ Date:   Wed Jul 24 23:30:07 2024 +0800
 ## Update to v2.9.6
 
 * [#5649](https://github.com/xmake-io/xmake/pull/5649): 添加 `package.check_fcsnippets`
+* [#5631](https://github.com/xmake-io/xmake/pull/5631): 为 `add_linkgroups` 添加 `as_needed`

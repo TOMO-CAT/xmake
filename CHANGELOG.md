@@ -9,6 +9,7 @@
 * [#174](https://github.com/TOMO-CAT/xmake/issues/174): 支持使用 cosmocc 去构建 xmake 自身二进制
 * [#5580](https://github.com/xmake-io/xmake/issues/5580): 添加 @builtin/xrepo 辅助模块，为 xrepo env shell 实现快速设置环境变量
 * [#5649](https://github.com/xmake-io/xmake/pull/5649): 添加 `package.check_fcsnippets`
+* [#5631](https://github.com/xmake-io/xmake/pull/5631): 为 `add_linkgroups` 添加 `as_needed`
 
 ### Bugs 修复
 
