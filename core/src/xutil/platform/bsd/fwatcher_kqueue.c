@@ -275,8 +275,8 @@ xu_bool_t xu_fwatcher_add(xu_fwatcher_ref_t self, xu_char_t const* watchdir, xu_
     if (!xu_file_info(watchdir, &info) || info.type != XU_FILE_TYPE_DIRECTORY) return xu_false;
 
     // is directory? we need scan it and add all subfiles
-    if (info.type == XU_FILE_TYPE_DIRECTORY)
-        xu_directory_walk(watchdir, recursion ? -1 : 0, xu_true, xu_fwatcher_add_watch_filedirs, fwatcher);
+    if (info.type == XU_FILE_TYPE_DIRECTORY && recursion)
+        xu_directory_walk(watchdir, -1, xu_true, xu_fwatcher_add_watch_filedirs, fwatcher);
     return xu_fwatcher_add_watch(fwatcher, watchdir, recursion);
 }
 

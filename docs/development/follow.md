@@ -18,6 +18,7 @@ Date:   Wed Jul 24 23:30:07 2024 +0800
 * [#5688](https://github.com/xmake-io/xmake/pull/5688): 改进 hashset
 * [#5711](https://github.com/xmake-io/xmake/issues/5711): 为 sdcc 支持解析 include 依赖
 * [#5762](https://github.com/xmake-io/xmake/pull/5762): 改进 bin2c 速度
+* [#5645](https://github.com/xmake-io/xmake/issues/5645): 修复 `xmake watch` 在 linux 无法监听递归文件问题
 
 ## Update to v2.9.5
 

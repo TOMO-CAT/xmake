@@ -19,6 +19,7 @@
 
 * [#4750](https://github.com/xmake-io/xmake/issues/4750): 修复 compile_commands 生成器，支持 `xmake tests`
 * [#5465](https://github.com/xmake-io/xmake/pull/5465): 修复 package requires lock
+* [#5645](https://github.com/xmake-io/xmake/issues/5645): 修复 `xmake watch` 在 linux 无法监听递归文件问题
 
 ## v3.0.5
 
