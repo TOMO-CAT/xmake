@@ -836,12 +836,12 @@ end
 
 -- compile the source file
 function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
+    opt = opt or {}
 
     -- ensure the object directory
     os.mkdir(path.directory(objectfile))
 
     -- compile it
-    opt = opt or {}
     local depfile = dependinfo and os.tmpfile() or nil
     try
     {
