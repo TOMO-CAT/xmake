@@ -13,6 +13,7 @@
 * [#5702](https://github.com/xmake-io/xmake/issues/5702): 改进 hash 模块
 * [#5688](https://github.com/xmake-io/xmake/pull/5688): 改进 hashset
 * [#5711](https://github.com/xmake-io/xmake/issues/5711): 为 sdcc 支持解析 include 依赖
+* [#5762](https://github.com/xmake-io/xmake/pull/5762): 改进 bin2c 速度
 
 ### Bugs 修复
 
