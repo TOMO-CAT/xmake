@@ -23,3 +23,4 @@ Date:   Wed Jul 24 23:30:07 2024 +0800
 * [#5649](https://github.com/xmake-io/xmake/pull/5649): 添加 `package.check_fcsnippets`
 * [#5631](https://github.com/xmake-io/xmake/pull/5631): 为 `add_linkgroups` 添加 `as_needed`
 * [#5702](https://github.com/xmake-io/xmake/issues/5702): 改进 hash 模块
+* [#5688](https://github.com/xmake-io/xmake/pull/5688): 改进 hashset
