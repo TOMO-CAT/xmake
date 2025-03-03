@@ -1,5 +1,26 @@
 # 更新日志
 
+## master
+
+### 新特性
+
+* [#168](https://github.com/TOMO-CAT/xmake/issues/168): 支持提供内嵌 lua 文件的单个 xmake 二进制文件
+* [#172](https://github.com/TOMO-CAT/xmake/issues/172): `xmake l cli.bisect` 支持快速定位引入问题的 commit
+* [#174](https://github.com/TOMO-CAT/xmake/issues/174): 支持使用 cosmocc 去构建 xmake 自身二进制
+* [#5580](https://github.com/xmake-io/xmake/issues/5580): 添加 @builtin/xrepo 辅助模块，为 xrepo env shell 实现快速设置环境变量
+* [#5649](https://github.com/xmake-io/xmake/pull/5649): 添加 `package.check_fcsnippets`
+* [#5631](https://github.com/xmake-io/xmake/pull/5631): 为 `add_linkgroups` 添加 `as_needed`
+* [#5702](https://github.com/xmake-io/xmake/issues/5702): 改进 hash 模块
+* [#5688](https://github.com/xmake-io/xmake/pull/5688): 改进 hashset
+* [#5711](https://github.com/xmake-io/xmake/issues/5711): 为 sdcc 支持解析 include 依赖
+* [#5762](https://github.com/xmake-io/xmake/pull/5762): 改进 bin2c 速度
+
+### Bugs 修复
+
+* [#4750](https://github.com/xmake-io/xmake/issues/4750): 修复 compile_commands 生成器，支持 `xmake tests`
+* [#5465](https://github.com/xmake-io/xmake/pull/5465): 修复 package requires lock
+* [#5645](https://github.com/xmake-io/xmake/issues/5645): 修复 `xmake watch` 在 linux 无法监听递归文件问题
+
 ## v3.0.5
 
 ### 新特性

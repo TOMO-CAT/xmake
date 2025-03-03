@@ -250,7 +250,7 @@ end
 
 function get_modulehash(target, modulepath)
     local key = path.directory(modulepath) .. target:name()
-    return hash.uuid(key):split("-", {plain = true})[1]:lower()
+    return hash.strhash32(key)
 end
 
 function get_metafile(target, modulefile)

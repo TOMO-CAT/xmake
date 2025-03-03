@@ -2,6 +2,7 @@
 
 runtime="lua"
 mode="release"
+verbose=0
 
 for arg in "$@"; do
     case $arg in
@@ -11,6 +12,10 @@ for arg in "$@"; do
             ;;
         --mode=*)
             mode="${arg#*=}"
+            shift
+            ;;
+        --verbose)
+            verbose=1
             shift
             ;;
         *)
@@ -28,10 +33,14 @@ rm -rf build
 
 git submodule update --init || exit 1
 
-./configure --verbose --runtime="${runtime}" --mode="${mode}" || exit 1
+if [[ $verbose -eq 1 ]]; then
+    ./configure --verbose --runtime="${runtime}" --mode="${mode}" || exit 1
+    make VERBOSE=1 || exit 1
+else
+    ./configure --verbose --runtime="${runtime}" --mode="${mode}" || exit 1
+    make || exit 1
+fi
 
-# 显示具体编译命令可用 make VERBOSE=1
-make VERBOSE=1 || exit 1
 sudo make install PREFIX=/usr/local || exit 1
 
 ok "install xmake successfully!"

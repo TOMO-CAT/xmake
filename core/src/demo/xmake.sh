@@ -7,7 +7,7 @@ target "demo"
     set_targetdir "${buildir}"
 
     # add definitions
-    add_defines "__tb_prefix__=\"xmake\""
+    add_defines "__xu_prefix__=\"xmake\""
 
     # add includes directory
     add_includedirs "${projectdir}/core" "${projectdir}/core/src"

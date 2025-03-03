@@ -37,10 +37,8 @@ target "xmake"
     add_options "readline" "curses" "{public}"
 
     # add definitions
-    add_defines "__tb_prefix__=\"xmake\""
     add_defines "__xu_prefix__=\"xmake\""
     if is_mode "debug"; then
-        add_defines "__tb_debug__" "{public}"
         add_defines "__xu_debug__" "{public}"
     fi
 
@@ -73,3 +71,4 @@ target "xmake"
     add_files "semver/*.c"
     add_files "string/*.c"
     add_files "tty/*.c"
+    add_files "utils/*.c"

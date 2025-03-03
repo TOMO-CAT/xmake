@@ -333,9 +333,13 @@ xu_long_t xu_file_preadv(xu_file_ref_t file, xu_iovec_t const* list, xu_size_t s
     xu_assert(xu_memberof_eq(xu_iovec_t, data, struct iovec, iov_base));
     xu_assert(xu_memberof_eq(xu_iovec_t, size, struct iovec, iov_len));
 
-    // read it
+// read it
 #    ifdef XU_CONFIG_POSIX_HAVE_PREADV
+#        ifdef __COSMOPOLITAN__
+    return preadv(xu_file2fd(file), (struct iovec*)list, size, offset);
+#        else
     return preadv(xu_file2fd(file), (struct iovec const*)list, size, offset);
+#        endif
 #    else
 
     // FIXME: lock it

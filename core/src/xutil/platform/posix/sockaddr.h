@@ -61,6 +61,7 @@ static __xu_inline__ xu_size_t xu_sockaddr_save(xu_ipaddr_ref_t ipaddr, struct s
         size = sizeof(struct sockaddr_in);
     }
     break;
+#ifndef __COSMOPOLITAN__
     case AF_INET6:
     {
         // the ipv6 ipaddr
@@ -92,6 +93,7 @@ static __xu_inline__ xu_size_t xu_sockaddr_save(xu_ipaddr_ref_t ipaddr, struct s
         size = sizeof(struct sockaddr_in6);
     }
     break;
+#endif
     case AF_UNIX:
     {
         xu_sockaddr_un_ref_t addru = (xu_sockaddr_un_ref_t)saddr;

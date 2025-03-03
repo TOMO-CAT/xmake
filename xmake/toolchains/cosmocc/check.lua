@@ -31,7 +31,7 @@ function main(toolchain)
     local sdkdir = toolchain:sdkdir()
     local bindir = toolchain:bindir()
 
-    -- find cross toolchain from external envirnoment
+    -- find cross toolchain from external environment
     local cross_toolchain = find_cross_toolchain(sdkdir, {bindir = bindir})
     if not cross_toolchain then
         -- find it from packages

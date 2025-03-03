@@ -14,7 +14,7 @@ target("demo", function()
     set_targetdir("$(buildir)")
 
     -- add definitions
-    add_defines("__tb_prefix__=\"xmake\"")
+    add_defines("__xu_prefix__=\"xmake\"")
 
     -- add includes directory
     add_includedirs("$(projectdir)", "$(projectdir)/src")
@@ -35,7 +35,25 @@ target("demo", function()
 
     -- add install files
     add_installfiles("$(projectdir)/../(xmake/**.lua)", {prefixdir = "share"})
-    add_installfiles("$(projectdir)/../(xmake/scripts/**)", {prefixdir = "share"})
-    add_installfiles("$(projectdir)/../(xmake/templates/**)", {prefixdir = "share"})
-    add_installfiles("$(projectdir)/../scripts/xrepo.sh", {prefixdir = "bin", filename = "xrepo"})
+    add_installfiles("$(projectdir)/../(xmake/scripts/**)",
+                     {prefixdir = "share"})
+    add_installfiles("$(projectdir)/../(xmake/templates/**)",
+                     {prefixdir = "share"})
+    add_installfiles("$(projectdir)/../scripts/xrepo.sh",
+                     {prefixdir = "bin", filename = "xrepo"})
+
+    -- embed all script files
+    add_rules("utils.bin2c", {linewidth = 16, extensions = ".xmz"})
+    on_config(function(target)
+        import("utils.archive.archive")
+        if has_config("embed") then
+            local archivefile = path.join(target:autogendir(), "bin2c",
+                                          "xmake.xmz")
+            print("archiving %s ..", archivefile)
+            os.tryrm(archivefile)
+            local rootdir = path.normalize(
+                                path.join(os.projectdir(), "..", "xmake"))
+            archive(archivefile, rootdir, {recurse = true, curdir = rootdir})
+        end
+    end)
 end)

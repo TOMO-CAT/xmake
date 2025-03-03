@@ -48,6 +48,20 @@
 #ifdef XU_CONFIG_OS_HAIKU
 #    include <image.h>
 #endif
+#ifdef __COSMOPOLITAN__
+#    include <sys/utsname.h>
+#endif
+
+// for uid
+#ifndef XU_CONFIG_OS_WINDOWS
+#    include <errno.h>
+#    include <unistd.h>
+#endif
+
+// for embed files
+#ifdef XM_EMBED_ENABLE
+#    include "lz4/prefix.h"
+#endif
 
 /* *******************************************************
  * macros
@@ -79,6 +93,11 @@ typedef struct __xm_engine_t
 
     // the engine name
     xu_char_t name[64];
+
+#ifdef XM_EMBED_ENABLE
+    // the temporary directory
+    xu_char_t tmpdir[XU_PATH_MAXN];
+#endif
 
 } xm_engine_t;
 
@@ -280,6 +299,9 @@ xu_int_t xm_tty_term_mode(lua_State* lua);
 // the package functions
 xu_int_t xm_package_loadxmi(lua_State* lua);
 
+// the utils functions
+xu_int_t xm_utils_bin2c(lua_State* lua);
+
 #ifdef XM_CONFIG_API_HAVE_CURSES
 // register curses functions
 xu_int_t xm_lua_curses_register(lua_State* lua, xu_char_t const* module);
@@ -446,8 +468,18 @@ static luaL_Reg const g_tty_functions[] = {{"term_mode", xm_tty_term_mode}, {xu_
 // the package functions
 static luaL_Reg const g_package_functions[] = {{"loadxmi", xm_package_loadxmi}, {xu_null, xu_null}};
 
+// the utils functions
+static luaL_Reg const g_utils_functions[] = {{"bin2c", xm_utils_bin2c}, {xu_null, xu_null}};
+
 // the lua global instance for signal handler
 static lua_State* g_lua = xu_null;
+
+// the xmake script files data
+#ifdef XM_EMBED_ENABLE
+static xu_byte_t g_xmake_xmz_data[] = {
+#    include "xmake.xmz.h"
+};
+#endif
 
 /* *******************************************************
  * private implementation
@@ -485,7 +517,7 @@ static xu_bool_t xm_engine_save_arguments(xm_engine_t* engine, xu_int_t argc, xu
     return xu_true;
 }
 
-static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path, xu_size_t maxn)
+static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t** argv, xu_char_t* path, xu_size_t maxn)
 {
     // check
     xu_assert_and_check_return_val(engine && path && maxn, xu_false);
@@ -560,6 +592,15 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
         }
 #endif
 
+        if (!ok && argv)
+        {
+            xu_char_t const* p = argv[0];
+            if (p && xu_file_info(p, xu_null))
+            {
+                xu_strlcpy(path, p, maxn);
+                ok = xu_true;
+            }
+        }
     } while (0);
 
     // ok?
@@ -575,17 +616,43 @@ static xu_size_t xm_engine_get_program_file(xm_engine_t* engine, xu_char_t* path
     return ok;
 }
 
+#ifdef XM_EMBED_ENABLE
+static xu_bool_t xm_engine_get_temporary_directory(xu_char_t* path, xu_size_t maxn, xu_char_t const* name,
+                                                   xu_char_t const* version_cstr)
+{
+    xu_char_t data[XU_PATH_MAXN] = {0};
+    if (xu_directory_temporary(data, sizeof(data)))
+    {
+        // get euid
+        xu_int_t euid = 0;
+#    ifndef XU_CONFIG_OS_WINDOWS
+        euid = geteuid();
+#    endif
+
+        xu_snprintf(path, maxn, "%s/.%s%d/%s", data, name, euid, version_cstr);
+        return xu_true;
+    }
+    return xu_false;
+}
+#endif
+
 static xu_bool_t xm_engine_get_program_directory(xm_engine_t* engine, xu_char_t* path, xu_size_t maxn,
                                                  xu_char_t const* programfile)
 {
     // check
     xu_assert_and_check_return_val(engine && path && maxn, xu_false);
 
-    xu_bool_t ok = xu_false;
+    xu_bool_t ok                 = xu_false;
+    xu_char_t data[XU_PATH_MAXN] = {0};
     do
     {
+#ifdef XM_EMBED_ENABLE
+        // get it from the temporary directory
+        xu_strlcpy(path, engine->tmpdir, maxn);
+        ok = xu_true;
+        break;
+#endif
         // get it from the environment variable first
-        xu_char_t data[XU_PATH_MAXN] = {0};
         if (xu_environment_first("XMAKE_PROGRAM_DIR", data, sizeof(data)) && xu_path_absolute(data, path, maxn))
         {
             ok = xu_true;
@@ -729,7 +796,18 @@ static xu_void_t xm_engine_init_host(xm_engine_t* engine)
 
     // init system host
     xu_char_t const* syshost = xu_null;
-#if defined(XU_CONFIG_OS_MACOSX)
+#if defined(__COSMOPOLITAN__)
+    struct utsname buffer;
+    if (uname(&buffer) == 0)
+    {
+        if (xu_strstr(buffer.sysname, "Darwin"))
+            syshost = "macosx";
+        else if (xu_strstr(buffer.sysname, "Linux"))
+            syshost = "linux";
+        else if (xu_strstr(buffer.sysname, "Windows"))
+            syshost = "windows";
+    }
+#elif defined(XU_CONFIG_OS_MACOSX)
     syshost = "macosx";
 #elif defined(XU_CONFIG_OS_LINUX)
     syshost = "linux";
@@ -778,6 +856,22 @@ static xu_void_t xm_engine_init_arch(xm_engine_t* engine)
 
     // init system architecture
     xu_char_t const* sysarch = xu_null;
+#if defined(__COSMOPOLITAN__)
+    struct utsname buffer;
+    if (uname(&buffer) == 0)
+    {
+        sysarch = buffer.machine;
+        if (xu_strstr(buffer.sysname, "Windows"))
+        {
+            if (!xu_strcmp(buffer.machine, "x86_64"))
+                sysarch = "x64";
+            else if (!xu_strcmp(buffer.machine, "i686") || !xu_strcmp(buffer.machine, "i386"))
+                sysarch = "x86";
+        }
+        else if (!xu_strcmp(buffer.machine, "aarch64"))
+            sysarch = "arm64";
+    }
+#endif
     if (!sysarch) sysarch = xmakearch;
     lua_pushstring(engine->lua, sysarch);
     lua_setglobal(engine->lua, "_ARCH");
@@ -834,6 +928,110 @@ static xu_pointer_t xm_engine_lua_realloc(xu_pointer_t udata, xu_pointer_t data,
     else
         ptr = data;
     return ptr;
+}
+#endif
+
+#ifdef XM_EMBED_ENABLE
+static xu_bool_t xm_engine_extract_programfiles(xm_engine_t* engine, xu_char_t const* programdir)
+{
+    xu_file_info_t info = {0};
+    if (xu_file_info(programdir, &info)) return xu_true;
+
+    xu_byte_t const* data = g_xmake_xmz_data;
+    xu_size_t        size = sizeof(g_xmake_xmz_data);
+
+    // do decompress
+    xu_bool_t                   ok = xu_false;
+    LZ4F_errorCode_t            code;
+    LZ4F_decompressionContext_t ctx = xu_null;
+    xu_buffer_t                 result;
+    do
+    {
+        xu_buffer_init(&result);
+
+        code = LZ4F_createDecompressionContext(&ctx, LZ4F_VERSION);
+        if (LZ4F_isError(code)) break;
+
+        xu_byte_t buffer[8192];
+        xu_bool_t failed = xu_false;
+        while (1)
+        {
+            size_t advance     = (size_t)size;
+            size_t buffer_size = sizeof(buffer);
+            code               = LZ4F_decompress(ctx, buffer, &buffer_size, data, &advance, xu_null);
+            if (LZ4F_isError(code))
+            {
+                failed = xu_true;
+                break;
+            }
+
+            if (buffer_size == 0) break;
+            data += advance;
+            size -= advance;
+
+            xu_buffer_memncat(&result, buffer, buffer_size);
+        }
+        xu_assert_and_check_break(!failed && xu_buffer_size(&result));
+
+        ok = xu_true;
+    } while (0);
+
+    // extract files to programdir
+    if (ok)
+    {
+        data               = xu_buffer_data(&result);
+        size               = xu_buffer_size(&result);
+        xu_byte_t const* p = data;
+        xu_byte_t const* e = data + size;
+        xu_size_t        n = 0;
+        xu_char_t        filepath[XU_PATH_MAXN];
+        xu_int_t         pos = xu_snprintf(filepath, sizeof(filepath), "%s/", programdir);
+        while (p < e)
+        {
+            // get filepath
+            n = (xu_size_t)xu_bits_get_u16_be(p);
+            p += 2;
+            xu_assert_and_check_break(pos + n + 1 < sizeof(filepath));
+            xu_strncpy(filepath + pos, (xu_char_t const*)p, n);
+            filepath[pos + n] = '\0';
+            p += n;
+
+            // get filedata
+            n = (xu_size_t)xu_bits_get_u32_be(p);
+            p += 4;
+
+            // write file
+            xu_trace_d("extracting %s, %lu bytes ..", filepath, n);
+            xu_stream_ref_t stream =
+                xu_stream_init_from_file(filepath, XU_FILE_MODE_RW | XU_FILE_MODE_CREAT | XU_FILE_MODE_TRUNC);
+            xu_assert_and_check_break(stream);
+
+            if (xu_stream_open(stream))
+            {
+                xu_stream_bwrit(stream, p, n);
+                xu_stream_exit(stream);
+            }
+
+            p += n;
+        }
+        ok = (p == e);
+        if (!ok)
+        {
+            xu_trace_e("extract program files failed");
+        }
+    }
+    else
+    {
+        xu_trace_e("decompress program files failed, %s", LZ4F_getErrorName(code));
+    }
+
+    if (ctx)
+    {
+        LZ4F_freeDecompressionContext(ctx);
+        ctx = xu_null;
+    }
+    xu_buffer_exit(&result);
+    return ok;
 }
 #endif
 
@@ -916,6 +1114,9 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
         // bind package functions
         xm_lua_register(engine->lua, "package", g_package_functions);
 
+        // bind utils functions
+        xm_lua_register(engine->lua, "utils", g_utils_functions);
+
 #ifdef XM_CONFIG_API_HAVE_CURSES
         // bind curses
         xm_lua_curses_register(engine->lua, "curses");
@@ -953,6 +1154,11 @@ xm_engine_ref_t xm_engine_init(xu_char_t const* name, xm_engine_lni_initializer_
                         version->alter, version->build);
         lua_pushstring(engine->lua, version_cstr);
         lua_setglobal(engine->lua, "_VERSION");
+
+#ifdef XM_EMBED_ENABLE
+        // init the temporary directory
+        if (!xm_engine_get_temporary_directory(engine->tmpdir, sizeof(engine->tmpdir), name, version_cstr)) break;
+#endif
 
         // init short version string
         xu_snprintf(version_cstr, sizeof(version_cstr), "%u.%u.%u", version->major, version->minor, version->alter);
@@ -1025,10 +1231,14 @@ xu_int_t xm_engine_main(xm_engine_ref_t self, xu_int_t argc, xu_char_t** argv, x
     if (!xm_engine_get_project_directory(engine, path, sizeof(path))) return -1;
 
     // get the program file
-    if (!xm_engine_get_program_file(engine, path, sizeof(path))) return -1;
+    if (!xm_engine_get_program_file(engine, argv, path, sizeof(path))) return -1;
 
     // get the program directory
     if (!xm_engine_get_program_directory(engine, path, sizeof(path), path)) return -1;
+
+#ifdef XM_EMBED_ENABLE
+    if (!xm_engine_extract_programfiles(engine, path)) return -1;
+#endif
 
     // append the main script path
     xu_strcat(path, "/core/_xmake_main.lua");

@@ -161,9 +161,9 @@
 
 /**
  * 打印 info, debug 和 warning 信息, 其中 debug 只再调试模式下起作用:
- * tb_trace_i("hello world");
- * tb_trace_d("hello world");
- * tb_trace_w("hello world");
+ * xu_trace_i("hello world");
+ * xu_trace_d("hello world");
+ * xu_trace_w("hello world");
  */
 #if defined(XU_COMPILER_IS_GCC) || defined(XU_COMPILER_IS_TINYC)
 #    define xu_trace_i(fmt, arg...) xu_trace_p(__xu_prefix__, fmt, ##arg)
