@@ -483,7 +483,7 @@ end
 -- import("native.module", {always_build = true})
 -- => always build module when calling import
 --
--- @note the polymiorphism is not supported for import.inherit mode now.
+-- @note the polymorphism is not supported for import.inherit mode now.
 --
 function core_sandbox_module.import(name, opt)
     assert(name)
@@ -616,7 +616,7 @@ end
 --
 -- we can access all super interfaces by _super
 --
--- @note the polymiorphism is not supported for import.inherit mode now.
+-- @note the polymorphism is not supported for import.inherit mode now.
 --
 function core_sandbox_module.inherit(name, opt)
 
