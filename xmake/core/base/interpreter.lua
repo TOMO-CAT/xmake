@@ -30,6 +30,7 @@ local string      = require("base/string")
 local scopeinfo   = require("base/scopeinfo")
 local deprecated  = require("base/deprecated")
 local sandbox     = require("sandbox/sandbox")
+local config        = require("project/config")
 
 -- raise without interpreter stack
 -- @see https://github.com/xmake-io/xmake/issues/3553
@@ -1690,6 +1691,27 @@ function interpreter:api_builtin_includes(...)
                 found = true
             end
         end
+        -- attemp to find files from repo directory
+        if not found then
+            if subpath:startswith("@") then
+                local repo_name = subpath:match("@(.-)/")
+                if repo_name then
+                    local configdir = config.directory()
+                    local repo_dir = path.join(configdir, "repositories", repo_name)
+                    local repo_path = subpath:sub(#repo_name + 3)
+                    if repo_path:endswith(".lua") then
+                        files = os.files(path.join(repo_dir, repo_path))
+                    else
+                        files = os.files(path.join(repo_dir, repo_path, "xmake.lua"))
+                    end
+                    if files and #files > 0 then
+                        table.join2(subpaths_matched, files)
+                        found = true
+                    end
+                end
+            end
+        end
+
         -- find the given files from the project directory
         if not found then
             local files = os.match(subpath, not subpath:endswith(".lua"))

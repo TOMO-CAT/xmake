@@ -67,7 +67,16 @@ bash scripts/test.sh projects/c++/shared_library/xmake.lua
 bash scripts/test.sh projects/c++/shared_library/test.lua
 bash scripts/test.sh projects/c++/shared_library
 
+# 以 Lua 的方式运行某个单测
+xmake lua tests/modules/scheduler/runjobs.lua
+
 # 调试单个单测
 xmake lua -v -D tests/runner.lua tests/projects/c++/shared_library
 xrepo env -b emmylua_debugger -v -- xmake lua -v -D tests/runner.lua tests/projects/c++/shared_library
+```
+
+## 运行示例
+
+```bash
+bash scripts/example.sh
 ```

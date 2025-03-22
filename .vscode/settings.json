@@ -93,6 +93,7 @@
         "distcc",
         "distccjob",
         "dlang",
+        "DLONG",
         "dockerenv",
         "dprint",
         "Dprotobuf",
