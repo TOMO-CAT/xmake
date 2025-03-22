@@ -52,7 +52,7 @@ function docker_build() {
     info "Docker image ${DOCKER_IMAGE} already exists."
   else
     info "Docker image ${DOCKER_IMAGE} does not exist. Start building..."
-    docker build --build-arg USER_NAME="${USER}" -t ${DOCKER_IMAGE} .
+    docker build --build-arg USER_NAME="${USER}" --progress=plain -t ${DOCKER_IMAGE} .
   fi
 
   if docker ps -a | grep -q "${DOCKER_CONTAINER}"; then
