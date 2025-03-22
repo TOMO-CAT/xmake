@@ -29,11 +29,16 @@ unset CC
 unset CXX
 unset LD
 
-# 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 aarch64-none-linux-gnu-g++ 等二进制)
-xmake config --yes -p cross --cross=aarch64-linux-gnu- --arch=armv8-a --sdk=/usr
-xmake build --verbose --all
+sudo apt install -y protobuf-compiler
 
-output=`file build/cross/armv8-a/release/g++-aarch64-linux-gnu` || exit -1
+# --toolchain=aarch64-clang: 指定 toolchain, 只能在最外层 includes
+# --verbose: 详细信息
+# --diagnosis: 调试信息
+# --arch=armv8-a: 指定 arch, 这样产出物就会在 build/linux/armv8-a/release 目录下, 不会放在 build/linux/x86_64 下迷惑人
+xmake f --yes --toolchain=aarch64-clang --arch=armv8-a
+xmake b --yes --verbose --diagnosis --rebuild --all
+
+output=`file build/linux/armv8-a/release/clang-sysroot-target` || exit -1
 if [[ "$output" =~ "ARM" && "$output" =~ "aarch64" ]]; then
     ok "output file is ARM aarch64"
 else
@@ -43,8 +48,8 @@ fi
 
 # 编译 host 版本
 xmake config --yes --verbose --clean
-xmake build --verbose --all --rebuild
-output=`file build/linux/x86_64/release/g++-aarch64-linux-gnu` || exit -1
+xmake build --verbose --all
+output=`file build/linux/x86_64/release/clang-sysroot-target` || exit -1
 if [[ "$output" =~ "x86-64" ]]; then
     ok "output file is x86_64"
 else
