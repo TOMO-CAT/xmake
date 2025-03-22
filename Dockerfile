@@ -41,3 +41,9 @@ ENV XMAKE_ROOT=y
 # Could NOT find OpenGL
 # sudo apt-get install libgl1-mesa-dev
 # @see https://stackoverflow.com/questions/31170869/cmake-could-not-find-opengl-in-ubuntu
+
+ARG USER_NAME=root
+RUN useradd -m ${USER_NAME}
+# 免密执行 sudo 权限
+RUN echo "${USER_NAME} ALL=NOPASSWD: ALL" >> /etc/sudoers
+USER ${USER_NAME}
