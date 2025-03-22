@@ -14,6 +14,7 @@
 * [#5688](https://github.com/xmake-io/xmake/pull/5688): 改进 hashset
 * [#5711](https://github.com/xmake-io/xmake/issues/5711): 为 sdcc 支持解析 include 依赖
 * [#5762](https://github.com/xmake-io/xmake/pull/5762): 改进 bin2c 速度
+* [#177](https://github.com/TOMO-CAT/xmake/issues/177): 支持远程仓库下发 toolchain / option / rule 甚至自定义脚本
 
 ### Bugs 修复
 
