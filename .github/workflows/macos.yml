@@ -42,8 +42,8 @@ jobs:
       - name: Tests
         env:
           XMAKE_ROOT: y
-          XMAKE_MAIN_REPO: https://github.com/TOMO-CAT/xmake-repo.git
-          XMAKE_BINARY_REPO: https://github.com/TOMO-CAT/xmake-build-artifacts.git
+          XMAKE_MAIN_REPO: https://github.com/zxmake/zxmake-repo.git
+          XMAKE_BINARY_REPO: https://github.com/zxmake/zxmake-build-artifacts.git
         run: |
           xmake lua -v -D tests/run.lua
           xrepo --version
