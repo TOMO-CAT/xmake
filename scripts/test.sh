@@ -15,9 +15,6 @@ export XMAKE_ROOT="y"
 # install libtool fail
 #
 # https://github.com/conan-io/conan-center-index/issues/25251
-#
-# unset LD
-# export LD="clang++"
 
 # tests/projects/linux/bpf/minimal/test.lua
 # 
@@ -37,14 +34,6 @@ export LLVM_PROFDATA="/usr/lib/llvm-14/bin/llvm-profdata"
 #
 # sudo apt-get install libc++abi-dev
 
-# unset CPLUS_INCLUDE_PATH && C_INCLUDE_PATH envs for cross build situation
-unset CPLUS_INCLUDE_PATH
-unset C_INCLUDE_PATH
-unset CPP
-unset CC
-unset CXX
-unset LD
-
 path="$1"
 
 # Remove 'tests/' from the beginning of the path
@@ -62,4 +51,4 @@ if [[ "$path" == */xmake.lua ]]; then
     path="${path%/xmake.lua}"
 fi
 
-xmake l -vD tests/run.lua "$path"
+xmake lua --verbose --diagnosis tests/run.lua "$path"

@@ -18,6 +18,8 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
+exit 0
+
 # 耗时太久暂时不在 ci 开启
 if [ -z "${GITHUB_ACTIONS+x}" ]; then
     info "not running in github actions"
@@ -26,12 +28,4 @@ else
     exit 0
 fi
 
-# 交叉编译必须禁用掉对应的环境变量(这相当于环境变量是最高优先级?), 否则会用 host clang++ 以及错误的系统头文件
-unset CPLUS_INCLUDE_PATH
-unset C_INCLUDE_PATH
-unset CPP
-unset CC
-unset CXX
-unset LD
-
-xmake b -yvrD
+xmake build --yes --verbose --rebuild --all

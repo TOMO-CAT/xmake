@@ -33,12 +33,6 @@ wget https://mirror.bjtu.edu.cn/kernel/linux/kernel/tools/perf/v4.19.0/perf-4.19
 tar -zxvf perf-4.19.0.tar.gz
 cd perf-4.19.0/tools/perf
 
-unset CPLUS_INCLUDE_PATH
-unset C_INCLUDE_PATH
-unset CPP
-unset CC
-unset CXX
-unset LD
 make -j10 WERROR=0
 sudo make install WERROR=0
 

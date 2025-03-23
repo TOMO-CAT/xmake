@@ -21,14 +21,6 @@ function ok() {
 # 安装交叉编译工具链
 sudo apt install g++-aarch64-linux-gnu -y || exit 1
 
-# 交叉编译必须禁用掉对应的环境变量(这相当于环境变量是最高优先级?), 否则会用 host clang++ 以及错误的系统头文件
-unset CPLUS_INCLUDE_PATH
-unset C_INCLUDE_PATH
-unset CPP
-unset CC
-unset CXX
-unset LD
-
 sudo apt install -y protobuf-compiler
 
 # --toolchain=aarch64-clang: 指定 toolchain, 只能在最外层 includes

@@ -21,14 +21,6 @@ function ok() {
 # 安装交叉编译工具链
 sudo apt install g++-aarch64-linux-gnu -y || exit 1
 
-# 交叉编译必须禁用掉对应的环境变量(这相当于环境变量是最高优先级?), 否则会用 host clang++ 以及错误的系统头文件
-unset CPLUS_INCLUDE_PATH
-unset C_INCLUDE_PATH
-unset CPP
-unset CC
-unset CXX
-unset LD
-
 # 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 aarch64-none-linux-gnu-g++ 等二进制)
 xmake config --yes -p cross --cross=aarch64-linux-gnu- --arch=armv8-a --sdk=/usr
 xmake build --verbose --all
