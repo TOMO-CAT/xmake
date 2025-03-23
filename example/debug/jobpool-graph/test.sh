@@ -16,8 +16,8 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
-xmake f --debug=y
-xmake b -rD
+xmake f --yes --verbose --clean
+xmake b --rebuild --verbose
 
 is_wsl() {
     if grep -qEi "(Microsoft|WSL)" /proc/version; then

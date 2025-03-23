@@ -939,8 +939,7 @@ function project.ordertargets()
         project._memcache():set("ordertargets", ordertargets)
 
         -- print the ordered targets
-        if config.get("debug") then
-        -- if baseoption.get("verbose") and baseoption.get("diagnosis") then
+        if baseoption.get("verbose") or baseoption.get("diagnosis") then
             local ordertarget_names = {}
             for _, t in ipairs(ordertargets) do
                 table.insert(ordertarget_names, t:name())
@@ -949,7 +948,6 @@ function project.ordertargets()
             -- utils.dump(ordertarget_names)
             io.save(path.join(config.debugdir(), "ordered-targets.txt"), ordertarget_names)
         end
-
     end
     return ordertargets
 end
