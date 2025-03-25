@@ -125,7 +125,9 @@ end
 function _add_batchjobs_for_target(batchjobs, rootjob, target)
 
     -- has been disabled?
-    if not target:is_enabled() then return end
+    if not target:is_enabled() then
+        return
+    end
 
     -- add after_build job for target
     local pkgenvs = _g.pkgenvs or {}
@@ -136,7 +138,9 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
         -- do after_build
         local progress = opt.progress
         local after_build = target:script("build_after")
-        if after_build then after_build(target, {progress = progress}) end
+        if after_build then
+            after_build(target, {progress = progress})
+        end
         for _, r in ipairs(target:orderules()) do
             local after_build = r:script("build_after")
             if after_build then
@@ -205,7 +209,9 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
         -- we cannot add batchjobs for this rule scripts, @see https://github.com/xmake-io/xmake/issues/2684
         local progress = opt.progress
         local before_build = target:script("build_before")
-        if before_build then before_build(target, {progress = progress}) end
+        if before_build then
+            before_build(target, {progress = progress})
+        end
         for _, r in ipairs(target:orderules()) do
             local before_build = r:script("build_before")
             if before_build then
@@ -264,7 +270,9 @@ end
 -- and indirect deps' `after_build` jobs are compiled
 function _add_batchjobs_for_non_object_target(batchjobs, target, root_job,
                                               build_after_jobs, visited_deps)
-    if visited_deps[target] then return end
+    if visited_deps[target] then
+        return
+    end
     visited_deps[target] = true
     for _, dep in ipairs(target:orderdeps()) do
         local dep_job_after = build_after_jobs[dep:name()]
@@ -389,8 +397,6 @@ function main(targetnames, group_pattern)
         utils.cprint(
             "${bright blue}[improvement]${clear} construct batchjobs graph cost [" ..
                 tostring(t_cost / 1000) .. "s]")
-    end
-    if config.get("debug") then
         io.writefile(path.join(config.debugdir(), "build-batchjobs.txt"),
                      tostring(batchjobs))
     end

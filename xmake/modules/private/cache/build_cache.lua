@@ -20,6 +20,7 @@
 
 -- imports
 import("core.base.bytes")
+import("core.base.option")
 import("core.base.hashset")
 import("core.base.global")
 import("core.cache.memcache")
@@ -176,7 +177,7 @@ function dump_stats()
             table.insert(sorted_file2compile_time, {key = key, value = value})
         end
         table.sort(sorted_file2compile_time, function(a, b) return a.value > b.value end)
-        if config.get("debug") then
+        if option.get("verbose") or option.get("diagnosis") then
             io.save(path.join(config.debugdir(), "file-compile-time.txt"), sorted_file2compile_time)
         end
         -- print top 3 files with longest compile time

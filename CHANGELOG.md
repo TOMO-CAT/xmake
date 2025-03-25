@@ -14,6 +14,7 @@
 * [#5688](https://github.com/xmake-io/xmake/pull/5688): 改进 hashset
 * [#5711](https://github.com/xmake-io/xmake/issues/5711): 为 sdcc 支持解析 include 依赖
 * [#5762](https://github.com/xmake-io/xmake/pull/5762): 改进 bin2c 速度
+* [#177](https://github.com/TOMO-CAT/xmake/issues/177): 支持远程仓库下发 toolchain / option / rule 甚至自定义脚本
 
 ### Bugs 修复
 
@@ -47,7 +48,7 @@
 * [#107](https://github.com/TOMO-CAT/xmake/issues/107): 避免配置了 `package.install_always` policy 的 package 在 `import("package.tools.xmake").install(package)` 中被重复安装
 * [#118](https://github.com/TOMO-CAT/xmake/issues/118): 编译完成后输出 ccache 近似的命中率报告
 * [#121](https://github.com/TOMO-CAT/xmake/issues/121): 配置了 `package.install_always` policy 的 package 不应用使用 `-isystem` 从而保证可以触发增量编译
-* [#120](https://github.com/TOMO-CAT/xmake/issues/121): 提供 nvcc 的 ccache 功能
+* [#120](https://github.com/TOMO-CAT/xmake/issues/120): 提供 nvcc 的 ccache 功能
 * [#116](https://github.com/TOMO-CAT/xmake/issues/116): 对于不存在的 packages 直接报错中断运行
 * [#125](https://github.com/TOMO-CAT/xmake/issues/125): 对于不存在的 package-rule 直接报错中断运行
 * [#110](https://github.com/TOMO-CAT/xmake/issues/110): 使用 Luajit 加速

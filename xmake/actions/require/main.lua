@@ -40,7 +40,7 @@ import("private.service.remote_build.action", {alias = "remote_build_action"})
 
 --
 -- the default repositories:
---     xmake-repo https://github.com/xmake-io/xmake-repo.git
+--     xmake-repo https://github.com/zxmake/zxmake-repo.git
 --
 -- add other repositories:
 --     xmake repo --add other-repo https://github.com/other/other-repo.git
@@ -141,4 +141,3 @@ function main()
         install(option.get("requires"))
     end
 end
-

@@ -33,7 +33,7 @@ jobs:
             ./scripts/get.sh __local__ &&
             source ~/.xmake/profile &&
             export XMAKE_ROOT=y &&
-            export XMAKE_MAIN_REPO=https://github.com/TOMO-CAT/xmake-repo.git &&
-            export XMAKE_BINARY_REPO=https://github.com/TOMO-CAT/xmake-build-artifacts.git &&
+            export XMAKE_MAIN_REPO=https://github.com/zxmake/zxmake-repo.git &&
+            export XMAKE_BINARY_REPO=https://github.com/zxmake/zxmake-build-artifacts.git &&
             export XMAKE_TMPDIR=/tmp &&
             xmake lua -v -D tests/run.lua && xrepo --version"

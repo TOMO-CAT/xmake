@@ -23,6 +23,7 @@ import("core.project.config")
 import("lib.detect.find_tool")
 import("core.cache.memcache")
 import("core.project.project")
+import("core.base.option")
 
 -- get ccache tool
 function _ccache()
@@ -118,7 +119,7 @@ function dump_stats()
             table.insert(sorted_file2compile_time, {key = key, value = value})
         end
         table.sort(sorted_file2compile_time, function(a, b) return a.value > b.value end)
-        if config.get("debug") then
+        if option.get("verbose") or option.get("diagnosis") then
             io.save(path.join(config.debugdir(), "file-compile-time.txt"), sorted_file2compile_time)
         end
         -- print top 3 files with longest compile time

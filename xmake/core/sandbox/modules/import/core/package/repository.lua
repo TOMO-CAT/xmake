@@ -123,7 +123,7 @@ function sandbox_core_package_repository.repositories(is_global)
                 artifacts_urls = {binary_repo}
             else
                 if xmake.gitsource() == "github.com" then
-                    artifacts_urls = {"https://github.com/TOMO-CAT/xmake-build-artifacts.git"}
+                    artifacts_urls = {"https://github.com/zxmake/zxmake-build-artifacts.git"}
                 else
                     artifacts_urls = {"https://gitee.com/tomocat/xmake-build-artifacts.git"}
                 end
@@ -155,7 +155,7 @@ function sandbox_core_package_repository.repositories(is_global)
                 mainurls = {mainrepo}
             else
                 if xmake.gitsource() == "github.com" then
-                    mainurls = {"https://github.com/TOMO-CAT/xmake-repo.git"}
+                    mainurls = {"https://github.com/zxmake/zxmake-repo.git"}
                 else
                     mainurls = {"https://gitee.com/tomocat/xmake-repo.git"}
                 end

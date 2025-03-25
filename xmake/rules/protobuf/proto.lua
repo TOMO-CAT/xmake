@@ -458,7 +458,7 @@ function build_cxfiles(target, batchjobs, sourcebatch, opt, sourcekind)
     for _, sourcefile_proto in ipairs(sourcefiles) do
         get_proto_dep_files(target, sourcefile_proto, proto_dep_files_cache, proto_includedirs, visited)
     end
-    if config.get("debug") then
+    if option.get("verbose") or option.get("diagnosis") then
         io.save(path.join(config.debugdir(), "proto-dep-files", target:name() .. ".txt"), proto_dep_files_cache)
     end
 
