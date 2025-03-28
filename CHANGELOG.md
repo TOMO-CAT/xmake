@@ -1,5 +1,11 @@
 # 更新日志
 
+## master
+
+### 新特性
+
+* [#179](https://github.com/TOMO-CAT/xmake/issues/179): 简化普通模式下的编译输出信息
+
 ## v3.0.6
 
 ### 新特性

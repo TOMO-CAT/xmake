@@ -438,5 +438,3 @@ function main(package, opt)
     os.cd(oldir)
     return ok
 end
-
-
