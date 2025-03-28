@@ -103,30 +103,32 @@ function dump_stats()
     local compile_total_time = (_g.compile_total_time or 0)
 
     -- build ccache stats
-    print("")
-    cprint("${color.success}build ccache stats:")
-    print("cache approximate hit rate: %d%%", hitrate())
-    print("cache hit: %d", cache_hit_count)
-    print("cache miss: %d", cache_miss_count)
-    print("compile total time: %0.3fs", compile_total_time / 1000.0)
-    print("")
+    if option.get("verbose") or option.get("diagnosis") then
+        print("")
+        cprint("${color.success}build ccache stats:")
+        print("cache approximate hit rate: %d%%", hitrate())
+        print("cache hit: %d", cache_hit_count)
+        print("cache miss: %d", cache_miss_count)
+        print("compile total time: %0.3fs", compile_total_time / 1000.0)
+        print("")
+    end
 
     -- file compile time stats
-    if _g.file2compile_time then
-        cprint("${color.success}file compile time (top3) stats:")
-        local sorted_file2compile_time = {}
-        for key, value in pairs(_g.file2compile_time) do
-            table.insert(sorted_file2compile_time, {key = key, value = value})
-        end
-        table.sort(sorted_file2compile_time, function(a, b) return a.value > b.value end)
-        if option.get("verbose") or option.get("diagnosis") then
+    if option.get("verbose") or option.get("diagnosis") then
+        if _g.file2compile_time then
+            cprint("${color.success}file compile time (top3) stats:")
+            local sorted_file2compile_time = {}
+            for key, value in pairs(_g.file2compile_time) do
+                table.insert(sorted_file2compile_time, {key = key, value = value})
+            end
+            table.sort(sorted_file2compile_time, function(a, b) return a.value > b.value end)
             io.save(path.join(config.debugdir(), "file-compile-time.txt"), sorted_file2compile_time)
+            -- print top 3 files with longest compile time
+            for i = 1, math.min(3, #sorted_file2compile_time) do
+                print("%s: %0.3fs", sorted_file2compile_time[i].key, sorted_file2compile_time[i].value / 1000.0)
+            end
+            print("")
         end
-        -- print top 3 files with longest compile time
-        for i = 1, math.min(3, #sorted_file2compile_time) do
-            print("%s: %0.3fs", sorted_file2compile_time[i].key, sorted_file2compile_time[i].value / 1000.0)
-        end
-        print("")
     end
 end
 
