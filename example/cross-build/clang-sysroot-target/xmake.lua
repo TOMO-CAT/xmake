@@ -47,7 +47,8 @@ package("protobuf-cpp", function()
                    "set(protobuf_DEBUG_POSTFIX \"\"", {plain = true})
 
         local configs = {
-            "-Dprotobuf_BUILD_TESTS=OFF", "-Dprotobuf_BUILD_PROTOC_BINARIES=ON"
+            "-Dprotobuf_BUILD_TESTS=OFF", "-Dprotobuf_BUILD_PROTOC_BINARIES=ON",
+            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
         }
         table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
                          (package:is_debug() and "Debug" or "Release"))

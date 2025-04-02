@@ -28,7 +28,7 @@ else
         warning "file [${SDK_ZIP_FILE}] exists. skip downloading"
     else
         info "start downloading ndk zip file [${SDK_ZIP_FILE}]"
-        wget "https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz" -O ${SDK_ZIP_FILE}
+        wget -q "https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz" -O ${SDK_ZIP_FILE}
     fi
     tar -xf ${SDK_ZIP_FILE}
 fi

@@ -29,7 +29,7 @@ else
         warning "file [${NDK_ZIP_FILE}] exists. skip downloading"
     else
         info "start downloading ndk zip file [${NDK_ZIP_FILE}]"
-        wget "https://dl.google.com/android/repository/android-ndk-r22-linux-x86_64.zip" -O android-ndk-r22-linux-x86_64.zip
+        wget -q "https://dl.google.com/android/repository/android-ndk-r22-linux-x86_64.zip" -O android-ndk-r22-linux-x86_64.zip
     fi
     set -x
     unzip -q -o ./android-ndk-r22-linux-x86_64.zip

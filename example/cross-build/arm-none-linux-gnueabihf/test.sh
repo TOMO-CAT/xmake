@@ -28,13 +28,13 @@ else
         warning "file [${SDK_ZIP_FILE}] exists. skip downloading"
     else
         info "start downloading ndk zip file [${SDK_ZIP_FILE}]"
-        wget "https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz" -O ${SDK_ZIP_FILE}
+        wget -q "https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz" -O ${SDK_ZIP_FILE}
     fi
     tar -xf ${SDK_ZIP_FILE}
 fi
 
 # 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 arm-none-linux-gnueabihf-g++ 等二进制)
-xmake f -yvD -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf
+xmake f -yD -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf
 xmake b -yvrD
 
 output=`file build/cross/arm/release/arm-none-linux-gnueabihf-cross` || exit -1

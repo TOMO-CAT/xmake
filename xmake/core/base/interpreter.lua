@@ -30,7 +30,7 @@ local string      = require("base/string")
 local scopeinfo   = require("base/scopeinfo")
 local deprecated  = require("base/deprecated")
 local sandbox     = require("sandbox/sandbox")
-local config        = require("project/config")
+local config      = require("project/config")
 
 -- raise without interpreter stack
 -- @see https://github.com/xmake-io/xmake/issues/3553
@@ -1167,6 +1167,9 @@ function interpreter:api_register_add_values(scope_kind, ...)
                 extrascope[value] = extra_config
             end
         end
+
+        -- includes rules / toolchains / options / ... dispatched by repo
+        -- @see https://github.com/TOMO-CAT/xmake/issues/181
     end
 
     -- register implementation
@@ -1696,17 +1699,47 @@ function interpreter:api_builtin_includes(...)
             if subpath:startswith("@") then
                 local repo_name = subpath:match("@(.-)/")
                 if repo_name then
-                    local configdir = config.directory()
-                    local repo_dir = path.join(configdir, "repositories", repo_name)
-                    local repo_path = subpath:sub(#repo_name + 3)
-                    if repo_path:endswith(".lua") then
-                        files = os.files(path.join(repo_dir, repo_path))
-                    else
-                        files = os.files(path.join(repo_dir, repo_path, "xmake.lua"))
+                    local repo_dir = nil
+                    local files = nil
+                    local root_scopes = scopes._ROOT.__rootkind
+
+                    -- copy from xmake/core/sandbox/modules/import/core/package/repository.lua
+                    for _, repo in ipairs(table.wrap(root_scopes.repositories)) do
+                        local repoinfo = repo:split('%s')
+                        if #repoinfo <= 3 then
+                            local name = repoinfo[1]
+                            local url = repoinfo[2]
+                            local branch = repoinfo[3]
+                            if name == repo_name then
+                                local rootdir = nil
+                                if root_scopes.__extra_repositories and root_scopes.__extra_repositories[repo] then
+                                    rootdir = root_scopes.__extra_repositories[repo].rootdir
+                                end
+                                if url:find(":", 1, true) then
+                                    -- remote repo
+                                    repo_dir = path.join(config.directory(), "repositories", repo_name)
+                                else
+                                    -- local repo
+                                    if url and rootdir and not path.is_absolute(url) then
+                                        url = path.join(rootdir, url)
+                                    end
+                                    repo_dir = path.absolute(url)
+                                end
+                                break
+                            end
+                        end
                     end
-                    if files and #files > 0 then
-                        table.join2(subpaths_matched, files)
-                        found = true
+                    if repo_dir then
+                        local repo_path = subpath:sub(#repo_name + 3)
+                        if repo_path:endswith(".lua") then
+                            files = os.files(path.join(repo_dir, repo_path))
+                        else
+                            files = os.files(path.join(repo_dir, repo_path, "xmake.lua"))
+                        end
+                        if files and #files > 0 then
+                            table.join2(subpaths_matched, files)
+                            found = true
+                        end
                     end
                 end
             end
