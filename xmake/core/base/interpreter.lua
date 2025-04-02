@@ -1718,6 +1718,12 @@ function interpreter:api_builtin_includes(...)
                                 if url:find(":", 1, true) then
                                     -- remote repo
                                     repo_dir = path.join(config.directory(), "repositories", repo_name)
+                                    -- pull repository first if not exists
+                                    if not os.isdir(repo_dir) then
+                                        local cmd = string.format("git clone %s -c core.fsmonitor=false -c core.autocrlf=false %s", url, repo_dir)
+                                        utils.cprint("${color.warning}%s${clear}", cmd)
+                                        os.exec(cmd)
+                                    end
                                 else
                                     -- local repo
                                     if url and rootdir and not path.is_absolute(url) then

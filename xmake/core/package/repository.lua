@@ -242,7 +242,7 @@ function repository.add(name, url, branch, is_global)
     return true
 end
 
--- remove repository from gobal or local directory
+-- remove repository from global or local directory
 function repository.remove(name, is_global)
 
     -- get repositories
