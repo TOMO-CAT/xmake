@@ -7,10 +7,10 @@ set_plat("cross")
 set_arch("arm")
 set_toolchains("@muslcc")
 
-add_requires("zlib", "libogg", {system = false})
+add_requires("zlib", {system = false})
 
 target("test", function()
     set_kind("binary")
     add_files("src/*.c")
-    add_packages("zlib", "libogg")
+    add_packages("zlib")
 end)

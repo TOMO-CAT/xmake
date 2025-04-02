@@ -44,7 +44,7 @@ function sandbox_core_package_repository.add(name, url, branch, is_global)
     end
 end
 
--- remove repository from gobal or local directory
+-- remove repository from global or local directory
 function sandbox_core_package_repository.remove(name, is_global)
     local ok, errors = repository.remove(name, is_global)
     if not ok then

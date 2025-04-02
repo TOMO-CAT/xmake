@@ -6,6 +6,10 @@
 
 * [#179](https://github.com/TOMO-CAT/xmake/issues/179): 简化普通模式下的编译输出信息
 
+### Bugs 修复
+
+* [#182](https://github.com/TOMO-CAT/xmake/issues/182): 修复无法 include 本地 repo 下发的自定义脚本的问题
+
 ## v3.0.6
 
 ### 新特性

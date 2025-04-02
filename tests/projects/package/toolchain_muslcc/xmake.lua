@@ -26,7 +26,7 @@ end)
 
 -- add library packages
 -- for testing zlib/xmake, libplist/autoconf, libogg/cmake
-add_requires("zlib", "libogg", {system = false})
+add_requires("zlib", {system = false})
 if is_host("macosx", "linux", "bsd") then
     add_requires("libplist", {system = false})
 end
@@ -43,7 +43,7 @@ set_toolchains("my_muslcc@muslcc")
 target("test", function()
     set_kind("binary")
     add_files("src/*.c")
-    add_packages("zlib", "libplist", "libogg")
+    add_packages("zlib", "libplist")
     if has_package("libplist") then
         add_defines("HAVE_LIBPLIST")
     end
