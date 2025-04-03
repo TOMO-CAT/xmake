@@ -9,6 +9,7 @@
 ### Bugs 修复
 
 * [#182](https://github.com/TOMO-CAT/xmake/issues/182): 修复无法 include 本地 repo 下发的自定义脚本的问题
+* [#183](https://github.com/TOMO-CAT/xmake/issues/183): 在 include 来自 repo 下发的自定义脚本前确保 repo 已经被 pull
 
 ## v3.0.6
 

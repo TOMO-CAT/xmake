@@ -134,6 +134,7 @@
         "frameworkdirs",
         "fsanitize",
         "fscase",
+        "fsmonitor",
         "ftest",
         "funcs",
         "fvisibility",
