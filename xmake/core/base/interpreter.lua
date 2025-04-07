@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,20 +17,19 @@
 -- @author      ruki
 -- @file        interpreter.lua
 --
-
 -- define module: interpreter
 local interpreter = interpreter or {}
 
 -- load modules
-local os          = require("base/os")
-local path        = require("base/path")
-local table       = require("base/table")
-local utils       = require("base/utils")
-local string      = require("base/string")
-local scopeinfo   = require("base/scopeinfo")
-local deprecated  = require("base/deprecated")
-local sandbox     = require("sandbox/sandbox")
-local config      = require("project/config")
+local os = require("base/os")
+local path = require("base/path")
+local table = require("base/table")
+local utils = require("base/utils")
+local string = require("base/string")
+local scopeinfo = require("base/scopeinfo")
+local deprecated = require("base/deprecated")
+local sandbox = require("sandbox/sandbox")
+local config = require("project/config")
 
 -- raise without interpreter stack
 -- @see https://github.com/xmake-io/xmake/issues/3553
@@ -74,7 +73,8 @@ function interpreter._traceback(errors)
                 if #info.source <= 100 then
                     src_file = info.source
                 else
-                    src_file = "..." ..  string.sub(info.source, #info.source - 99)
+                    src_file = "..." ..
+                                   string.sub(info.source, #info.source - 99)
                 end
             end
         end
@@ -82,22 +82,29 @@ function interpreter._traceback(errors)
         -- if the source file is from a specific file (indicated by "[@] [filename:line]")
         -- @see https://github.com/TOMO-CAT/xmake/issues/50
         if src_file:startswith("@") then
-            if not src_file:startswith("@programdir") and not src_file:startswith("@projectdir") then
+            if not src_file:startswith("@programdir") and
+                not src_file:startswith("@projectdir") then
                 src_file = string.format("@] [%s", string.sub(src_file, 2))
             end
         end
 
         -- function?
         if info.what == "C" then
-            results = results .. string.format("    [C]: in function '%s'\n", info.name)
+            results = results ..
+                          string.format("    [C]: in function '%s'\n", info.name)
         elseif info.name then
             results = results ..
-                string.format("    [%s:%d]: in function '%s'\n", src_file, info.currentline, info.name)
+                          string.format("    [%s:%d]: in function '%s'\n",
+                                        src_file, info.currentline, info.name)
         elseif info.what == "main" then
-            results = results .. string.format("    [%s:%d]: in main chunk\n", src_file, info.currentline)
+            results = results ..
+                          string.format("    [%s:%d]: in main chunk\n",
+                                        src_file, info.currentline)
             break
         else
-            results = results .. string.format("    [%s:%d]:\n", src_file, info.currentline)
+            results = results ..
+                          string.format("    [%s:%d]:\n", src_file,
+                                        info.currentline)
         end
 
         -- next
@@ -114,9 +121,10 @@ function interpreter._merge_root_scope(root, root_prev, override)
         -- only merge sub-scope for each kind("target@@xxxx") or __rootkind
         -- we need to ignore the sub-root scope e.g. target{} after fetching root scope
         --
-        if scope_kind_and_name:find("@@", 1, true) or scope_kind_and_name == "__rootkind" then
+        if scope_kind_and_name:find("@@", 1, true) or scope_kind_and_name ==
+            "__rootkind" then
             local scope_values = root_prev[scope_kind_and_name] or {}
-            local scope_root   = root[scope_kind_and_name] or {}
+            local scope_root = root[scope_kind_and_name] or {}
             for name, values in pairs(scope_root) do
                 if not name:startswith("__override_") then
                     if scope_root["__override_" .. name] then
@@ -124,7 +132,8 @@ function interpreter._merge_root_scope(root, root_prev, override)
                             scope_values[name] = values
                         end
                     else
-                        scope_values[name] = table.join(values, scope_values[name] or {})
+                        scope_values[name] = table.join(values,
+                                                        scope_values[name] or {})
                     end
                 end
             end
@@ -142,7 +151,7 @@ function interpreter._fetch_root_scope(root)
     -- fetch it
     for scope_kind_and_name, _ in pairs(root or {}) do
         -- is scope_kind@@scope_name?
-        scope_kind_and_name = scope_kind_and_name:split("@@", { plain = true })
+        scope_kind_and_name = scope_kind_and_name:split("@@", {plain = true})
         if #scope_kind_and_name == 2 then
             local scope_kind = scope_kind_and_name[1]
             local scope_name = scope_kind_and_name[2]
@@ -156,7 +165,8 @@ function interpreter._fetch_root_scope(root)
                             scope_values["__override_" .. name] = true
                         end
                     else
-                        scope_values[name] = table.join(values, scope_values[name] or {})
+                        scope_values[name] = table.join(values,
+                                                        scope_values[name] or {})
                     end
                 end
             end
@@ -170,11 +180,15 @@ function interpreter:_save_sourceinfo_to_scope(scope, apiname, values)
     -- save api source info, e.g. call api() in sourcefile:linenumber
     local sourceinfo = debug.getinfo(3, "Sl")
     if sourceinfo then
-        scope["__sourceinfo_" .. apiname] = scope["__sourceinfo_" .. apiname] or {}
+        scope["__sourceinfo_" .. apiname] =
+            scope["__sourceinfo_" .. apiname] or {}
         local sourcescope = scope["__sourceinfo_" .. apiname]
         for _, value in ipairs(values) do
             if type(value) == "string" then
-                sourcescope[value] = { file = sourceinfo.short_src or sourceinfo.source, line = sourceinfo.currentline }
+                sourcescope[value] = {
+                    file = sourceinfo.short_src or sourceinfo.source,
+                    line = sourceinfo.currentline
+                }
             end
         end
     end
@@ -185,7 +199,7 @@ function interpreter:_api_register_scope_end(...)
     assert(self and self._PUBLIC and self._PRIVATE)
 
     -- done
-    for _, apiname in ipairs({ ... }) do
+    for _, apiname in ipairs({...}) do
         -- check
         assert(apiname)
 
@@ -213,7 +227,7 @@ function interpreter:_api_register_scope_api(scope_kind, action, apifunc, ...)
     assert(apifunc)
 
     -- done
-    for _, apiname in ipairs({ ... }) do
+    for _, apiname in ipairs({...}) do
         -- check
         assert(apiname)
 
@@ -259,7 +273,9 @@ function interpreter:_api_register_xxx_values(scope_kind, action, apifunc, ...)
 
         -- clear the current scope if be not belong to the current scope kind
         if scopes._CURRENT and scopes._CURRENT_KIND ~= scope_kind then
-            os.raise("%s() cannot be called in %s(), please move it to the %s scope!", apiname, scopes._CURRENT_KIND,
+            os.raise(
+                "%s() cannot be called in %s(), please move it to the %s scope!",
+                apiname, scopes._CURRENT_KIND,
                 scope_kind == "__rootkind" and "root" or scope_kind)
             scopes._CURRENT = nil
         end
@@ -269,12 +285,13 @@ function interpreter:_api_register_xxx_values(scope_kind, action, apifunc, ...)
         assert(scope)
 
         -- set values (set, on, before, after ...)? mark as "override"
-        if apiname and (action ~= "add" and action ~= "del" and action ~= "remove") then
+        if apiname and
+            (action ~= "add" and action ~= "del" and action ~= "remove") then
             scope["__override_" .. apiname] = true
         end
 
         -- save api source info, e.g. call api() in sourcefile:linenumber
-        self:_save_sourceinfo_to_scope(scope, apiname, { ... })
+        self:_save_sourceinfo_to_scope(scope, apiname, {...})
 
         -- call function
         return apifunc(self, scope, apiname, ...)
@@ -294,7 +311,7 @@ function interpreter:_api_register_xxx_script(scope_kind, action, ...)
         end
 
         -- get arguments, pattern1, pattern2, ..., script function or name
-        local args = { ... }
+        local args = {...}
 
         -- get and save extra config
         local extra_config = args[#args]
@@ -319,10 +336,12 @@ function interpreter:_api_register_xxx_script(scope_kind, action, ...)
         local script, errors = self:_script(script_func_or_name)
         if not script then
             if #patterns > 0 then
-                os.raise("%s_%s(%s, %s): %s", action, name, table.concat(patterns, ', '), tostring(script_func_or_name),
-                    errors)
+                os.raise("%s_%s(%s, %s): %s", action, name,
+                         table.concat(patterns, ', '),
+                         tostring(script_func_or_name), errors)
             else
-                os.raise("%s_%s(%s): %s", action, name, tostring(script_func_or_name), errors)
+                os.raise("%s_%s(%s): %s", action, name,
+                         tostring(script_func_or_name), errors)
             end
         end
 
@@ -342,7 +361,7 @@ function interpreter:_api_register_xxx_script(scope_kind, action, ...)
                 if type(scripts) == "table" then
                     scripts[pattern] = script
                 elseif type(scripts) == "function" then
-                    scripts = { __generic__ = scripts }
+                    scripts = {__generic__ = scripts}
                     scripts[pattern] = script
                 end
             end
@@ -369,11 +388,15 @@ function interpreter:_api_translate_paths(values, apiname, infolevel)
     for _, p in ipairs(values) do
         if type(p) ~= "string" or #p == 0 then
             local sourceinfo = debug.getinfo(infolevel or 3, "Sl")
-            interpreter._raise(string.format("%s(%s): invalid path value at %s:%d", apiname, tostring(p),
-                sourceinfo.short_src or sourceinfo.source, sourceinfo.currentline))
+            interpreter._raise(string.format(
+                                   "%s(%s): invalid path value at %s:%d",
+                                   apiname, tostring(p),
+                                   sourceinfo.short_src or sourceinfo.source,
+                                   sourceinfo.currentline))
         end
         if not p:find("^%s-%$%(.-%)") and not path.is_absolute(p) then
-            table.insert(results, path.relative(path.absolute(p, self:scriptdir()), self:rootdir()))
+            table.insert(results, path.relative(
+                             path.absolute(p, self:scriptdir()), self:rootdir()))
         else
             table.insert(results, p)
         end
@@ -500,8 +523,11 @@ function interpreter:_handle(scope, deduplicate, enable_filter)
         if deduplicate and not table.is_dictionary(values) then
             local policy = self:deduplication_policy(name)
             if policy ~= false then
-                local unique_func = policy == "toleft" and table.reverse_unique or table.unique
-                values = unique_func(values, function(v) return type(v) == "string" and v:startswith("__remove_") end)
+                local unique_func =
+                    policy == "toleft" and table.reverse_unique or table.unique
+                values = unique_func(values, function(v)
+                    return type(v) == "string" and v:startswith("__remove_")
+                end)
             end
         end
 
@@ -528,7 +554,11 @@ function interpreter:_make(scope_kind, deduplicate, enable_filter)
 
     -- get the root scope info of the given scope kind, e.g. root.target
     local results = {}
-    local scope_opt = { interpreter = self, deduplicate = deduplicate, enable_filter = enable_filter }
+    local scope_opt = {
+        interpreter = self,
+        deduplicate = deduplicate,
+        enable_filter = enable_filter
+    }
     if scope_kind and scope_kind:startswith("root.") then
         local root_scope = scopes._ROOT[scope_kind:sub(6)]
         if root_scope then
@@ -563,18 +593,24 @@ function interpreter:_make(scope_kind, deduplicate, enable_filter)
                 end
 
                 -- merge root values with the given scope name
-                local scope_root = scopes._ROOT[scope_kind .. "@@" .. scope_name]
+                local scope_root =
+                    scopes._ROOT[scope_kind .. "@@" .. scope_name]
                 if scope_root then
                     for name, values in pairs(scope_root) do
                         if not scope["__override_" .. name] then
-                            scope_values[name] = table.join(values, scope_values[name] or {})
+                            scope_values[name] = table.join(values,
+                                                            scope_values[name] or
+                                                                {})
                         end
                     end
                 end
 
                 -- add this scope
-                results[scope_name] = scopeinfo.new(scope_kind, self:_handle(scope_values, deduplicate, enable_filter),
-                    scope_opt)
+                results[scope_name] = scopeinfo.new(scope_kind, self:_handle(
+                                                        scope_values,
+                                                        deduplicate,
+                                                        enable_filter),
+                                                    scope_opt)
             end
         end
     end
@@ -589,13 +625,14 @@ function interpreter:_script(script)
         local modulename = script
         script = function(...)
             -- import it
-            _g._module = _g._module or import(modulename, { anonymous = true })
+            _g._module = _g._module or import(modulename, {anonymous = true})
             return _g._module(...)
         end
     end
 
     -- make sandbox instance with the given script
-    local instance, errors = sandbox.new(script, self:filter(), self:scriptdir())
+    local instance, errors =
+        sandbox.new(script, self:filter(), self:scriptdir())
     if not instance then
         return nil, errors
     end
@@ -609,7 +646,9 @@ function interpreter.builtin_modules()
     local builtin_modules = interpreter._BUILTIN_MODULES
     if builtin_modules == nil then
         builtin_modules = {}
-        local builtin_module_files = os.match(path.join(os.programdir(), "core/sandbox/modules/interpreter/*.lua"))
+        local builtin_module_files = os.match(
+                                         path.join(os.programdir(),
+                                                   "core/sandbox/modules/interpreter/*.lua"))
         if builtin_module_files then
             for _, builtin_module_file in ipairs(builtin_module_files) do
                 local module_name = path.basename(builtin_module_file)
@@ -636,15 +675,11 @@ end
 function interpreter.new()
     -- init an interpreter instance
     local instance = {
-        _PUBLIC = {}
-        ,
+        _PUBLIC = {},
         _PRIVATE = {
-            _SCOPES = {}
-            ,
-            _MTIMES = {}
-            ,
-            _SCRIPT_FILES = {}
-            ,
+            _SCOPES = {},
+            _MTIMES = {},
+            _SCRIPT_FILES = {},
             _FILTER = require("base/filter").new()
         }
     }
@@ -656,17 +691,18 @@ function interpreter.new()
     setmetatable(instance._PUBLIC, {
         __index = function(tbl, key)
             -- get interpreter instance
-            if type(key) == "string" and key == "_INTERPRETER" and rawget(tbl, "_INTERPRETER_READABLE") then
+            if type(key) == "string" and key == "_INTERPRETER" and
+                rawget(tbl, "_INTERPRETER_READABLE") then
                 return instance
             end
 
             -- get the scope kind
-            local priv         = instance._PRIVATE
+            local priv = instance._PRIVATE
             local current_kind = priv._SCOPES._CURRENT_KIND
-            local scope_kind   = current_kind or priv._ROOTSCOPE
+            local scope_kind = current_kind or priv._ROOTSCOPE
 
             -- get the api function from the given scope
-            local apifunc      = instance:_api_within_scope(scope_kind, key)
+            local apifunc = instance:_api_within_scope(scope_kind, key)
 
             -- get the api function from the root scope
             if not apifunc and priv._ROOTAPIS then
@@ -675,10 +711,10 @@ function interpreter.new()
 
             -- ok?
             return apifunc
-        end
-        ,
+        end,
         __newindex = function(tbl, key, val)
-            if type(key) == "string" and (key == "_INTERPRETER" or key == "_INTERPRETER_READABLE") then
+            if type(key) == "string" and
+                (key == "_INTERPRETER" or key == "_INTERPRETER_READABLE") then
                 return
             end
             rawset(tbl, key, val)
@@ -687,16 +723,24 @@ function interpreter.new()
 
     -- register the builtin interfaces
     instance:api_register(nil, "includes", interpreter.api_builtin_includes)
-    instance:api_register(nil, "add_subdirs", interpreter.api_builtin_add_subdirs)
-    instance:api_register(nil, "add_subfiles", interpreter.api_builtin_add_subfiles)
-    instance:api_register(nil, "set_xmakever", interpreter.api_builtin_set_xmakever)
+    instance:api_register(nil, "add_subdirs",
+                          interpreter.api_builtin_add_subdirs)
+    instance:api_register(nil, "add_subfiles",
+                          interpreter.api_builtin_add_subfiles)
+    instance:api_register(nil, "set_xmakever",
+                          interpreter.api_builtin_set_xmakever)
 
     -- register the interpreter interfaces
-    instance:api_register(nil, "interp_save_scope", interpreter.api_interp_save_scope)
-    instance:api_register(nil, "interp_restore_scope", interpreter.api_interp_restore_scope)
-    instance:api_register(nil, "interp_get_scopekind", interpreter.api_interp_get_scopekind)
-    instance:api_register(nil, "interp_get_scopename", interpreter.api_interp_get_scopename)
-    instance:api_register(nil, "interp_add_scopeapis", interpreter.api_interp_add_scopeapis)
+    instance:api_register(nil, "interp_save_scope",
+                          interpreter.api_interp_save_scope)
+    instance:api_register(nil, "interp_restore_scope",
+                          interpreter.api_interp_restore_scope)
+    instance:api_register(nil, "interp_get_scopekind",
+                          interpreter.api_interp_get_scopekind)
+    instance:api_register(nil, "interp_get_scopename",
+                          interpreter.api_interp_get_scopename)
+    instance:api_register(nil, "interp_add_scopeapis",
+                          interpreter.api_interp_add_scopeapis)
 
     -- register the builtin modules
     for module_name, module in pairs(interpreter.builtin_modules()) do
@@ -716,7 +760,7 @@ function interpreter:load(file, opt)
 
     -- load the script
     opt = opt or {}
-    local script, errors = loadfile(file, "bt", { on_load = opt.on_load_data })
+    local script, errors = loadfile(file, "bt", {on_load = opt.on_load_data})
     if not script then
         return nil, errors
     end
@@ -729,14 +773,15 @@ function interpreter:load(file, opt)
 
     -- init the current file
     self._PRIVATE._CURFILE = file
-    self._PRIVATE._SCRIPT_FILES = { file }
+    self._PRIVATE._SCRIPT_FILES = {file}
 
     -- init the root directory
     self._PRIVATE._ROOTDIR = path.directory(file)
     assert(self._PRIVATE._ROOTDIR)
 
     -- init mtime for the current file
-    self._PRIVATE._MTIMES[path.relative(file, self._PRIVATE._ROOTDIR)] = os.mtime(file)
+    self._PRIVATE._MTIMES[path.relative(file, self._PRIVATE._ROOTDIR)] =
+        os.mtime(file)
 
     -- bind public scope
     setfenv(script, self._PUBLIC)
@@ -749,7 +794,8 @@ end
 function interpreter:make(scope_kind, deduplicate, enable_filter)
     -- get the results with the given scope
     self._PENDING = true
-    local ok, results = xpcall(interpreter._make, interpreter._traceback, self, scope_kind, deduplicate, enable_filter)
+    local ok, results = xpcall(interpreter._make, interpreter._traceback, self,
+                               scope_kind, deduplicate, enable_filter)
     self._PENDING = false
     if not ok then
         return nil, results
@@ -831,7 +877,8 @@ end
 -- @see https://github.com/xmake-io/xmake/issues/1903
 --
 function interpreter:deduplication_policy_set(name, policy)
-    self._PRIVATE._DEDUPLICATION_POLICIES = self._PRIVATE._DEDUPLICATION_POLICIES or {}
+    self._PRIVATE._DEDUPLICATION_POLICIES = self._PRIVATE
+                                                ._DEDUPLICATION_POLICIES or {}
     self._PRIVATE._DEDUPLICATION_POLICIES[name] = policy
 end
 
@@ -961,11 +1008,13 @@ function interpreter:api_register_scope(...)
 
         -- check invalid scope name, @see https://github.com/xmake-io/xmake/issues/4547
         if scope_args.n > 0 and type(scope_name) ~= "string" then
-            local errors = string.format("%s(%s): invalid %s name", scope_kind, scope_name, scope_kind)
+            local errors = string.format("%s(%s): invalid %s name", scope_kind,
+                                         scope_name, scope_kind)
             local sourceinfo = debug.getinfo(2, "Sl")
             if sourceinfo then
-                errors = string.format("%s:%s: %s", sourceinfo.short_src or sourceinfo.source, sourceinfo.currentline,
-                    errors)
+                errors = string.format("%s:%s: %s", sourceinfo.short_src or
+                                           sourceinfo.source,
+                                       sourceinfo.currentline, errors)
             end
             interpreter._raise(errors)
         end
@@ -1007,12 +1056,15 @@ function interpreter:api_register_scope(...)
         --
         if scope_info and table.is_dictionary(scope_info) then
             for name, values in pairs(scope_info) do
-                local apifunc = self:api_func("set_" .. name) or self:api_func("add_" .. name) or
-                    self:api_func("on_" .. name) or self:api_func(name)
+                local apifunc = self:api_func("set_" .. name) or
+                                    self:api_func("add_" .. name) or
+                                    self:api_func("on_" .. name) or
+                                    self:api_func(name)
                 if apifunc then
                     apifunc(table.unpack(table.wrap(values)))
                 else
-                    os.raise("unknown %s for %s(\"%s\")", name, scope_kind, scope_name)
+                    os.raise("unknown %s for %s(\"%s\")", name, scope_kind,
+                             scope_name)
                 end
             end
 
@@ -1087,7 +1139,7 @@ function interpreter:api_register_set_values(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1135,7 +1187,7 @@ function interpreter:api_register_add_values(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1170,6 +1222,57 @@ function interpreter:api_register_add_values(scope_kind, ...)
 
         -- includes rules / toolchains / options / ... dispatched by repo
         -- @see https://github.com/TOMO-CAT/xmake/issues/181
+        for _, value in ipairs(values) do
+
+            if name == "repositories" then
+                local repoinfo = value:split('%s')
+                if #repoinfo <= 3 then
+                    -- copy from xmake/core/sandbox/modules/import/core/package/repository.lua
+                    local repo_name = repoinfo[1]
+                    local url = repoinfo[2]
+                    local branch = repoinfo[3]
+                    local repo_dir
+
+                    if url:find(":", 1, true) then
+                        -- remote repo
+                        repo_dir = path.join(config.directory(), "repositories",
+                                             repo_name)
+                        -- pull repo first if not exists
+                        if not os.isdir(repo_dir) then
+                            local cmd = string.format(
+                                            "git clone %s -c core.fsmonitor=false -c core.autocrlf=false %s",
+                                            url, repo_dir)
+                            utils.cprint("${color.warning}%s${clear}", cmd)
+                            os.exec(cmd)
+                        end
+                    else
+                        -- local repo
+                        if extra_config then
+                            local rootdir = extra_config.rootdir
+                            if url and rootdir and not path.is_absolute(url) then
+                                url = path.join(rootdir, url)
+                            end
+                        end
+                        repo_dir = path.absolute(url)
+                    end
+                    local repo_builtin_dirs = {"rules", "toolchains", "options"}
+                    for _, repo_builtin_dir in ipairs(repo_builtin_dirs) do
+                        local pattern = path.join(repo_dir, repo_builtin_dir,
+                                                  "*.lua")
+                        -- disable file-not-found warnings
+                        local repo_builtin_files = os.files(pattern)
+                        if #repo_builtin_files > 0 then
+                            self:api_builtin_includes(pattern)
+                            -- silence this log since it gets printed more than once during a single execution
+                            --
+                            -- utils.cprint(
+                            --     "${bright green}[interpreter]${clear} includes repo builtin scripts [%s]",
+                            --     pattern)
+                        end
+                    end
+                end
+            end
+        end
     end
 
     -- register implementation
@@ -1193,7 +1296,7 @@ function interpreter:api_register_set_keyvalues(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, key, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1232,7 +1335,7 @@ function interpreter:api_register_set_groups(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1265,7 +1368,7 @@ function interpreter:api_register_add_groups(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1305,7 +1408,7 @@ function interpreter:api_register_add_keyvalues(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, key, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1358,12 +1461,13 @@ end
 -- register api for set_dictionary
 function interpreter:api_register_set_dictionary(scope_kind, ...)
     -- define implementation
-    local implementation = function(self, scope, name, dict_or_key, value, extra_config)
+    local implementation = function(self, scope, name, dict_or_key, value,
+                                    extra_config)
         -- check
         if type(dict_or_key) == "table" then
             scope[name] = dict_or_key
         elseif type(dict_or_key) == "string" and value ~= nil then
-            scope[name] = { [dict_or_key] = value }
+            scope[name] = {[dict_or_key] = value}
             -- save extra config
             if extra_config and table.is_dictionary(extra_config) then
                 scope["__extra_" .. name] = scope["__extra_" .. name] or {}
@@ -1383,7 +1487,8 @@ end
 -- register api for add_dictionary
 function interpreter:api_register_add_dictionary(scope_kind, ...)
     -- define implementation
-    local implementation = function(self, scope, name, dict_or_key, value, extra_config)
+    local implementation = function(self, scope, name, dict_or_key, value,
+                                    extra_config)
         -- check
         scope[name] = scope[name] or {}
         if type(dict_or_key) == "table" then
@@ -1412,7 +1517,7 @@ function interpreter:api_register_set_paths(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1453,8 +1558,8 @@ function interpreter:api_register_del_paths(scope_kind, ...)
         local paths = self:_api_translate_paths(values, "del_" .. name)
 
         -- it has been marked as deprecated
-        deprecated.add("remove_" .. name .. "(%s)", "del_" .. name .. "(%s)", table.concat(values, ", "),
-            table.concat(values, ", "))
+        deprecated.add("remove_" .. name .. "(%s)", "del_" .. name .. "(%s)",
+                       table.concat(values, ", "), table.concat(values, ", "))
 
         -- mark these paths as deleted
         local paths_deleted = {}
@@ -1503,7 +1608,7 @@ function interpreter:api_register_add_paths(scope_kind, ...)
     -- define implementation
     local implementation = function(self, scope, name, ...)
         -- get extra config
-        local values = { ... }
+        local values = {...}
         local extra_config = values[#values]
         if table.is_dictionary(extra_config) then
             table.remove(values)
@@ -1583,7 +1688,7 @@ function interpreter:api_define(apis)
 
                 -- get function and script
                 apiscript = apifunc[2]
-                apifunc   = apifunc[1]
+                apifunc = apifunc[1]
             end
 
             -- register api definition, "scope.apiname" => "apitype"
@@ -1592,7 +1697,7 @@ function interpreter:api_define(apis)
             -- get api function
             local apiscope = nil
             local funcname = nil
-            apifunc = apifunc:split('.', { plain = true })
+            apifunc = apifunc:split('.', {plain = true})
             assert(apifunc)
             if #apifunc == 2 then
                 apiscope = apifunc[1]
@@ -1608,7 +1713,9 @@ function interpreter:api_define(apis)
             else
                 -- get function prefix
                 local prefix = nil
-                for _, name in ipairs({ "set", "add", "del", "remove", "on", "before", "after" }) do
+                for _, name in ipairs({
+                    "set", "add", "del", "remove", "on", "before", "after"
+                }) do
                     if funcname:startswith(name .. "_") then
                         prefix = name
                         break
@@ -1620,9 +1727,11 @@ function interpreter:api_define(apis)
                 funcname = funcname:sub(#prefix + 2)
 
                 -- get register
-                local register = self[string.format("api_register_%s_%s", prefix, apitype)]
+                local register = self[string.format("api_register_%s_%s",
+                                                    prefix, apitype)]
                 if not register then
-                    os.raise("interp:api_register_%s_%s() is unknown!", prefix, apitype)
+                    os.raise("interp:api_register_%s_%s() is unknown!", prefix,
+                             apitype)
                 end
 
                 -- register scope first
@@ -1647,30 +1756,34 @@ function interpreter:api_builtin_set_xmakever(minver)
     end
 
     -- parse minimum version
-    local minvers = minver:split('.', { plain = true })
+    local minvers = minver:split('.', {plain = true})
     if not minvers or #minvers ~= 3 then
-        interpreter._raise(string.format("set_xmakever(\"%s\"): invalid version format!", minver))
+        interpreter._raise(string.format(
+                               "set_xmakever(\"%s\"): invalid version format!",
+                               minver))
     end
 
     -- make minimum numerical version
     local minvers_num = minvers[1] * 100 + minvers[2] * 10 + minvers[3]
 
     -- parse current version
-    local curvers = xmake._VERSION_SHORT:split('.', { plain = true })
+    local curvers = xmake._VERSION_SHORT:split('.', {plain = true})
 
     -- make current numerical version
     local curvers_num = curvers[1] * 100 + curvers[2] * 10 + curvers[3]
 
     -- check version
     if curvers_num < minvers_num then
-        interpreter._raise(string.format("xmake v%s < v%s, please run `$xmake update` to upgrade xmake!",
-            xmake._VERSION_SHORT, minver))
+        interpreter._raise(string.format(
+                               "xmake v%s < v%s, please run `$xmake update` to upgrade xmake!",
+                               xmake._VERSION_SHORT, minver))
     end
 end
 
 -- the builtin api: includes()
 function interpreter:api_builtin_includes(...)
-    assert(self and self._PRIVATE and self._PRIVATE._ROOTDIR and self._PRIVATE._MTIMES)
+    assert(self and self._PRIVATE and self._PRIVATE._ROOTDIR and
+               self._PRIVATE._MTIMES)
     local curfile = self._PRIVATE._CURFILE
     local scopes = self._PRIVATE._SCOPES
 
@@ -1685,9 +1798,11 @@ function interpreter:api_builtin_includes(...)
             local builtin_path = subpath:sub(10)
             local files
             if builtin_path:endswith(".lua") then
-                files = os.files(path.join(os.programdir(), "includes", builtin_path))
+                files = os.files(path.join(os.programdir(), "includes",
+                                           builtin_path))
             else
-                files = os.files(path.join(os.programdir(), "includes", builtin_path, "xmake.lua"))
+                files = os.files(path.join(os.programdir(), "includes",
+                                           builtin_path, "xmake.lua"))
             end
             if files and #files > 0 then
                 table.join2(subpaths_matched, files)
@@ -1712,21 +1827,21 @@ function interpreter:api_builtin_includes(...)
                             local branch = repoinfo[3]
                             if name == repo_name then
                                 local rootdir = nil
-                                if root_scopes.__extra_repositories and root_scopes.__extra_repositories[repo] then
-                                    rootdir = root_scopes.__extra_repositories[repo].rootdir
+                                if root_scopes.__extra_repositories and
+                                    root_scopes.__extra_repositories[repo] then
+                                    rootdir =
+                                        root_scopes.__extra_repositories[repo]
+                                            .rootdir
                                 end
                                 if url:find(":", 1, true) then
                                     -- remote repo
-                                    repo_dir = path.join(config.directory(), "repositories", repo_name)
-                                    -- pull repository first if not exists
-                                    if not os.isdir(repo_dir) then
-                                        local cmd = string.format("git clone %s -c core.fsmonitor=false -c core.autocrlf=false %s", url, repo_dir)
-                                        utils.cprint("${color.warning}%s${clear}", cmd)
-                                        os.exec(cmd)
-                                    end
+                                    repo_dir =
+                                        path.join(config.directory(),
+                                                  "repositories", repo_name)
                                 else
                                     -- local repo
-                                    if url and rootdir and not path.is_absolute(url) then
+                                    if url and rootdir and
+                                        not path.is_absolute(url) then
                                         url = path.join(rootdir, url)
                                     end
                                     repo_dir = path.absolute(url)
@@ -1740,7 +1855,9 @@ function interpreter:api_builtin_includes(...)
                         if repo_path:endswith(".lua") then
                             files = os.files(path.join(repo_dir, repo_path))
                         else
-                            files = os.files(path.join(repo_dir, repo_path, "xmake.lua"))
+                            files = os.files(
+                                        path.join(repo_dir, repo_path,
+                                                  "xmake.lua"))
                         end
                         if files and #files > 0 then
                             table.join2(subpaths_matched, files)
@@ -1763,19 +1880,24 @@ function interpreter:api_builtin_includes(...)
         if not found and not path.is_absolute(subpath) then
             -- e.g. includes("check_cflags.lua")
             if subpath:startswith("check_") then
-                local files = os.files(path.join(os.programdir(), "includes", "check", subpath))
+                local files = os.files(path.join(os.programdir(), "includes",
+                                                 "check", subpath))
                 if files and #files > 0 then
                     table.join2(subpaths_matched, files)
                     found = true
-                    utils.warning("deprecated: please use includes(\"@builtin/check\") instead of includes(\"%s\")",
+                    utils.warning(
+                        "deprecated: please use includes(\"@builtin/check\") instead of includes(\"%s\")",
                         subpath)
                 end
             elseif subpath:startswith("qt_") then
-                local files = os.files(path.join(os.programdir(), "includes", "qt", subpath))
+                local files = os.files(path.join(os.programdir(), "includes",
+                                                 "qt", subpath))
                 if files and #files > 0 then
                     table.join2(subpaths_matched, files)
                     found = true
-                    utils.warning("deprecated: please use includes(\"@builtin/qt\") instead of includes(\"%s\")", subpath)
+                    utils.warning(
+                        "deprecated: please use includes(\"@builtin/qt\") instead of includes(\"%s\")",
+                        subpath)
                 end
             end
         end
@@ -1850,10 +1972,12 @@ function interpreter:api_builtin_includes(...)
                 -- restore the previous root scope and merge current root scope
                 -- it will override the previous values if the current values are override mode
                 -- so we priority use the values in subdirs scope
-                scopes._ROOT = interpreter._merge_root_scope(scopes._ROOT, root_prev, true)
+                scopes._ROOT = interpreter._merge_root_scope(scopes._ROOT,
+                                                             root_prev, true)
 
                 -- get mtime of the file
-                self._PRIVATE._MTIMES[path.relative(file, self._PRIVATE._ROOTDIR)] = os.mtime(file)
+                self._PRIVATE._MTIMES[path.relative(file, self._PRIVATE._ROOTDIR)] =
+                    os.mtime(file)
             else
                 interpreter._raise(errors)
             end
@@ -1867,15 +1991,17 @@ end
 -- the builtin api: add_subdirs(), deprecated
 function interpreter:api_builtin_add_subdirs(...)
     self:api_builtin_includes(...)
-    local dirs = { ... }
-    deprecated.add("includes(%s)", "add_subdirs(%s)", table.concat(dirs, ", "), table.concat(dirs, ", "))
+    local dirs = {...}
+    deprecated.add("includes(%s)", "add_subdirs(%s)", table.concat(dirs, ", "),
+                   table.concat(dirs, ", "))
 end
 
 -- the builtin api: add_subfiles(), deprecated
 function interpreter:api_builtin_add_subfiles(...)
     self:api_builtin_includes(...)
-    local files = { ... }
-    deprecated.add("includes(%s)", "add_subfiles(%s)", table.concat(files, ", "), table.concat(files, ", "))
+    local files = {...}
+    deprecated.add("includes(%s)", "add_subfiles(%s)",
+                   table.concat(files, ", "), table.concat(files, ", "))
 end
 
 -- the interpreter api: interp_save_scope()
@@ -1888,9 +2014,9 @@ function interpreter:api_interp_save_scope()
     assert(scopes)
 
     -- save the current scope
-    local scope                 = {}
-    scope._CURRENT              = scopes._CURRENT
-    scope._CURRENT_KIND         = scopes._CURRENT_KIND
+    local scope = {}
+    scope._CURRENT = scopes._CURRENT
+    scope._CURRENT_KIND = scopes._CURRENT_KIND
     self._PRIVATE._SCOPES_SAVED = self._PRIVATE._SCOPES_SAVED or {}
     table.insert(self._PRIVATE._SCOPES_SAVED, scope)
 end
@@ -1909,7 +2035,7 @@ function interpreter:api_interp_restore_scope()
     if scopes_saved and #scopes_saved > 0 then
         local scope = scopes_saved[#scopes_saved]
         if scope then
-            scopes._CURRENT      = scope._CURRENT
+            scopes._CURRENT = scope._CURRENT
             scopes._CURRENT_KIND = scope._CURRENT_KIND
             table.remove(scopes_saved, #scopes_saved)
         end
@@ -1938,7 +2064,7 @@ end
 
 -- the interpreter api: interp_add_scopeapis()
 function interpreter:api_interp_add_scopeapis(...)
-    local apis = { ... }
+    local apis = {...}
     local extra_config = apis[#apis]
     if table.is_dictionary(extra_config) then
         table.remove(apis)
@@ -1952,7 +2078,7 @@ function interpreter:api_interp_add_scopeapis(...)
         if extra_config and extra_config.kind then
             kind = extra_config.kind
         end
-        return self:api_define({ [kind] = apis })
+        return self:api_define({[kind] = apis})
     end
 end
 
@@ -1984,7 +2110,9 @@ function interpreter.instance(script)
             instance = scope._INTERPRETER
             rawset(scope, "_INTERPRETER_READABLE", nil)
         end
-        if instance then return instance end
+        if instance then
+            return instance
+        end
     end
 
     -- find self instance for the current sandbox
