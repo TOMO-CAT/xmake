@@ -19,7 +19,7 @@
 --
 
 -- define rule: protobuf.cpp
-rule("protobuf.cpp")
+rule("protobuf.cpp", function()
     add_deps("c++")
     set_extensions(".proto")
 
@@ -65,10 +65,10 @@ rule("protobuf.cpp")
     before_build_files(function (target, batchjobs, sourcebatch, opt)
         import("proto").build_cxfiles(target, batchjobs, sourcebatch, opt, "cxx")
     end, {batch = true})
-
+end)
 
 -- define rule: protobuf.c
-rule("protobuf.c")
+rule("protobuf.c", function()
     add_deps("c++")
     set_extensions(".proto")
     after_load(function(target)
@@ -83,3 +83,4 @@ rule("protobuf.c")
     before_build_files(function (target, batchjobs, sourcebatch, opt)
         import("proto").build_cxfiles(target, batchjobs, sourcebatch, opt, "cc")
     end, {batch = true})
+end)
