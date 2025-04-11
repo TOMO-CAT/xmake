@@ -244,19 +244,23 @@ function _run_test(target, test)
 
     -- run the target scripts
     local passed
+    local spent = 0
     for i = 1, 5 do
         local script = scripts[i]
         if script ~= nil then
+            local cost = os.mclock()
             local ok = script(target, test)
+            cost = os.mclock() - cost
             if i == 3 then
                 passed = ok
+                spent = cost
             end
         end
     end
 
     -- leave the environments of the target packages
     os.setenvs(oldenvs)
-    return passed
+    return passed, spent
 end
 
 function _show_output(testinfo, kind)
@@ -310,9 +314,7 @@ function _run_tests(tests)
 
             local target = testinfo.target
             testinfo.target = nil
-            local spent = os.mclock()
-            local passed = _run_test(target, testinfo)
-            spent = os.mclock() - spent
+            local passed, spent = _run_test(target, testinfo)
             if passed then
                 report.passed = report.passed + 1
             end
