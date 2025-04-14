@@ -24,6 +24,7 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential lcov
           sudo apt install -y ccache
+          sudo apt install -y g++-aarch64-linux-gnu
       - name: Run Examples
         env:
           XMAKE_ROOT: y
