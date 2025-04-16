@@ -179,7 +179,7 @@ end
 
 -- make the link flag
 function nf_link(self, lib)
-    if lib:endswith(".a") or lib:endswith(".so") or lib:endswith(".dylib") or lib:endswith(".lib") or lib:find(".so.", 1, true) then
+    if lib:endswith(".a") or lib:endswith(".so") or lib:endswith(".dylib") or lib:endswith(".lib") then
         return lib
     else
         return "-l" .. lib
