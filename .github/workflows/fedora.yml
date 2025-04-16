@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    container: fedora:latest
+    container: fedora:41
     runs-on: ubuntu-latest
 
     concurrency:

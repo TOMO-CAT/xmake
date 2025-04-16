@@ -4,9 +4,6 @@ add_rules("mode.debug", "mode.release")
 set_plat("cross")
 set_arch("arm")
 
--- lock requires
--- set_policy("package.requires_lock", true)
-
 -- custom toolchain
 toolchain("my_muslcc", function()
     set_homepage("https://musl.cc/")
@@ -27,9 +24,6 @@ end)
 -- add library packages
 -- for testing zlib/xmake, libplist/autoconf, libogg/cmake
 add_requires("zlib", {system = false})
-if is_host("macosx", "linux", "bsd") then
-    add_requires("libplist", {system = false})
-end
 
 -- add toolchains package
 add_requires("muslcc")
@@ -43,8 +37,5 @@ set_toolchains("my_muslcc@muslcc")
 target("test", function()
     set_kind("binary")
     add_files("src/*.c")
-    add_packages("zlib", "libplist")
-    if has_package("libplist") then
-        add_defines("HAVE_LIBPLIST")
-    end
+    add_packages("zlib")
 end)
