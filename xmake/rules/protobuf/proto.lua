@@ -465,8 +465,18 @@ function build_cxfiles(target, batchjobs, sourcebatch, opt, sourcekind)
     -- build proto && cx jobs
     for _, sourcefile_proto in ipairs(sourcefiles) do
         local nodename = node_rulename .. "/" .. sourcefile_proto
+
+        -- examples: example/bug-fixed/protobuf-missed-deps 
+        -- @see https://github.com/TOMO-CAT/xmake/issues/194
+        local dep_nodes = {}
+        for _, dep_proto_file in ipairs(proto_dep_files_cache[sourcefile_proto]) do
+            local dep_node = node_rulename .. "/" .. dep_proto_file
+            table.insert(dep_nodes, dep_node)
+        end
+
         nodes[nodename] = {
             name = nodename,
+            deps = dep_nodes,
             job = batchjobs:addjob(nodename, function(index, total, jobopt)
                 local batchcmds_ = batchcmds.new({ target = target })
                 -- *.proto file ==> *.pb.h and *.pb.cc file
@@ -477,8 +487,6 @@ function build_cxfiles(target, batchjobs, sourcebatch, opt, sourcekind)
         }
         table.insert(nodenames, nodename)
 
-        -- FIXME: 如果 a.proto 中引用了 b.proto, a.pb.cc 会等待 a.proto 编译完成, 但是不会等待 b.proto 编译完成
-        --        这意味着编译 a.pb.cc 的时候, b.pb.h 可能还没有生成, 导致编译失败
         local cxfile_nodename = nodename .. "/" .. sourcekind
         nodes[cxfile_nodename] = {
             name = cxfile_nodename,

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package github.tomocat.proto;
+
+import "proto/a.proto";
+import "proto/b.proto";
+import "proto/c.proto";
+import "proto/d.proto";
+import "proto/e.proto";
+import "proto/f.proto";

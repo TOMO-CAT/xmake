@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+package github.tomocat.proto;
+
+import "proto/a.proto";
+import "proto/b.proto";
