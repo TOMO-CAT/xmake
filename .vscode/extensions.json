@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+      "DavidAnson.vscode-markdownlint",
+      "xaver.clang-format",
+      "llvm-vs-code-extensions.vscode-clangd",
+      "streetsidesoftware.code-spell-checker",
+      "mine.cpplint",
+      "cschlosser.doxdocgen",
+      "alefragnani.project-manager",
+      "Koihik.vscode-lua-format",
+      "wayou.vscode-todo-highlight"
+    ]
+  }
