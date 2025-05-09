@@ -408,6 +408,7 @@
         "ubsan",
         "uncompr",
         "undefines",
+        "unproxy",
         "vcpkg",
         "vcpkgdir",
         "vectorexts",
