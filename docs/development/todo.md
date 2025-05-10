@@ -65,16 +65,30 @@ end)
 
 我们将 local package 的 builddir 迁移到它项目里的 `build` 目录下，这样就可以保证相对路径统一从而可以复用缓存。
 
-## 清理 xmake 多余的逻辑
+## ✅ 清理 xmake 多余的逻辑
 
 * 清理标记 deprecated 的历史版本包袱
 * 清理 windows 的逻辑
 
-## 重写 core 下的 C++ 代码，力求精简
+## ✅ 重写 core 下的 C++ 代码，力求精简
 
 * 考虑先替换掉 Lua 成 5.4.6
 * 需要足够多的测试用例
 
-## 重构 xmake 文档
+## ✅ 重构 xmake 文档
 
 当前 xmake 文档搜索功能过弱，需要调研比较好的在线文档工具。
+
+## 头文件可见性
+
+参考 Blade / Bazel 代码实现头文件可见性的控制, 解决 object target 丢失依赖的问题。
+
+## 链接库时使用全路径
+
+解决链接库重名的问题。
+
+## 单测 target 优化
+
+* 新增 test target，默认 `set_default(false)`，默认 `add_test("default")`
+* 支持 add_testdata，默认是添加的是只读文件（软链），如果设置非 readonly，则需要拷贝文件
+* 所有单测运行路径都是沙盒
