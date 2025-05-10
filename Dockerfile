@@ -51,7 +51,7 @@ RUN mkdir /software && cd /software \
     && xmake --version \
     && cd / && rm -r software
 
-ARG HOST_IP=127.0.0.1
+ARG HOST_IP
 ENV PROXY_HOST_IP=${HOST_IP}
 RUN cat <<'EOF' >> /etc/bash.bashrc
 
@@ -80,7 +80,7 @@ alias echoproxy='
 #end proxy
 EOF
 
-ARG USER_NAME=root
+ARG USER_NAME
 RUN useradd -m ${USER_NAME}
 RUN echo "root:0000" | chpasswd
 RUN echo "${USER_NAME}:0000" | chpasswd
