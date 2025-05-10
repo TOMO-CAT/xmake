@@ -1,4 +1,4 @@
---!A cross-platform build utility based on Lua
+-- !A cross-platform build utility based on Lua
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 -- @author      ruki
 -- @file        main.lua
 --
-
 -- imports
 import("core.base.option")
 import("core.base.global")
@@ -38,22 +37,21 @@ import("private.action.require.impl.package")
 
 -- filter option
 function _option_filter(name)
-    local options =
-    {
-        target      = true
-    ,   file        = true
-    ,   root        = true
-    ,   yes         = true
-    ,   quiet       = true
-    ,   confirm     = true
-    ,   project     = true
-    ,   verbose     = true
-    ,   diagnosis   = true
-    ,   require     = true
-    ,   export      = true
-    ,   import      = true
-    ,   check       = true
-    ,   menu        = true
+    local options = {
+        target = true,
+        file = true,
+        root = true,
+        yes = true,
+        quiet = true,
+        confirm = true,
+        project = true,
+        verbose = true,
+        diagnosis = true,
+        require = true,
+        export = true,
+        import = true,
+        check = true,
+        menu = true
     }
     return not options[name]
 end
@@ -94,7 +92,8 @@ function _need_check(changed)
 
     -- has xmake been updated? force to check config again
     -- we need to clean the dirty config cache of the old version
-    if os.mtime(path.join(os.programdir(), "core", "main.lua")) > os.mtime(config.filepath()) then
+    if os.mtime(path.join(os.programdir(), "core", "main.lua")) >
+        os.mtime(config.filepath()) then
         return true
     end
 
@@ -127,6 +126,8 @@ function _need_check(changed)
         for _, pkg_dir in ipairs(package_dirs) do
             for _, broken_path in ipairs(package_broken_path) do
                 if broken_path:startswith(pkg_dir) then
+                    cprint("${color.warning} pkg [%s] dir [%s] is broken",
+                           pkg_name, dir)
                     table.insert(need_delete_package_dirs, pkg_dir)
                     break
                 end
@@ -148,20 +149,27 @@ function _need_check(changed)
 
     local requires, requires_extra = get_requires(requires_raw)
     if requires and #requires > 0 then
-        local packages = package.load_packages(requires, {requires_extra = requires_extra})
+        local packages = package.load_packages(requires, {
+            requires_extra = requires_extra
+        })
         for _, pkg in ipairs(packages) do
             -- have package with "package.install_always" policy?
             -- @see https://github.com/TOMO-CAT/xmake/issues/108
             if pkg and pkg:policy("package.install_always") then
                 -- if package with "package.install_always" policy have been installed, then we don't need to recheck it
                 -- @see https://github.com/TOMO-CAT/xmake/issues/107
-                local install_package_result_mtime = os.getenv("XMAKE_INSTALL_PACKAGES_RESULT")
+                local install_package_result_mtime = os.getenv(
+                                                         "XMAKE_INSTALL_PACKAGES_RESULT")
                 if not install_package_result_mtime then
                     return true
                 else
-                    local master_misccache = import("core.cache.master_misccache", {anonymous = true})
+                    local master_misccache = import(
+                                                 "core.cache.master_misccache",
+                                                 {anonymous = true})
                     local key = "install_packages_result"
-                    local cacheinfo = master_misccache:get2(key, install_package_result_mtime) or {}
+                    local cacheinfo = master_misccache:get2(key,
+                                                            install_package_result_mtime) or
+                                          {}
 
                     local pkg_name = pkg:name()
                     local pkg_installdir = pkg:installdir()
@@ -183,9 +191,11 @@ function _check_target(target, checked_targets)
     if not checked_targets[target:name()] then
         checked_targets[target:name()] = target
         for _, depname in ipairs(target:get("deps")) do
-            assert(depname ~= target:name(), "the target(%s) cannot depend self!", depname)
+            assert(depname ~= target:name(),
+                   "the target(%s) cannot depend self!", depname)
             local deptarget = project.target(depname)
-            assert(deptarget, "unknown target(%s) for %s.deps!", depname, target:name())
+            assert(deptarget, "unknown target(%s) for %s.deps!", depname,
+                   target:name())
             _check_target(deptarget, checked_targets)
         end
     end
@@ -193,7 +203,8 @@ end
 
 -- check targets
 function _check_targets()
-    assert(not project.is_loaded(), "project and targets may have been loaded early!")
+    assert(not project.is_loaded(),
+           "project and targets may have been loaded early!")
     local checked_targets = {}
     for _, target in pairs(project.targets()) do
         _check_target(target, checked_targets)
@@ -205,9 +216,9 @@ function _check_target_toolchains()
     -- check toolchains configuration for all target in the current project
     -- @note we must check targets after loading options
     for _, target in pairs(project.targets()) do
-        if target:is_enabled() and (target:get("toolchains") or
-                                    not target:is_plat(config.get("plat")) or
-                                    not target:is_arch(config.get("arch"))) then
+        if target:is_enabled() and
+            (target:get("toolchains") or not target:is_plat(config.get("plat")) or
+                not target:is_arch(config.get("arch"))) then
 
             -- check platform toolchains first
             -- `target/set_plat()` and target:toolchains() need it
@@ -219,8 +230,10 @@ function _check_target_toolchains()
                 target_toolchains = hashset.from(table.wrap(target_toolchains))
                 for _, toolchain_inst in pairs(target:toolchains()) do
                     -- check toolchains for `target/set_toolchains()`
-                    if not toolchain_inst:check() and target_toolchains:has(toolchain_inst:name()) then
-                        raise("toolchain(\"%s\"): not found!", toolchain_inst:name())
+                    if not toolchain_inst:check() and
+                        target_toolchains:has(toolchain_inst:name()) then
+                        raise("toolchain(\"%s\"): not found!",
+                              toolchain_inst:name())
                     end
                 end
             end
@@ -232,7 +245,8 @@ function _check_target_toolchains()
                     toolchain_found = true
                 end
             end
-            assert(toolchain_found, "target(%s): toolchain not found!", target:name())
+            assert(toolchain_found, "target(%s): toolchain not found!",
+                   target:name())
         end
     end
 end
@@ -257,8 +271,11 @@ function _check_configs()
     local allowed_modes = project.allowed_modes()
     if allowed_modes then
         if not allowed_modes:has(mode) then
-            local allowed_modes_str = table.concat(allowed_modes:to_array(), ", ")
-            raise("`%s` is not a valid complation mode for this project, please use one of %s", mode, allowed_modes_str)
+            local allowed_modes_str = table.concat(allowed_modes:to_array(),
+                                                   ", ")
+            raise(
+                "`%s` is not a valid complation mode for this project, please use one of %s",
+                mode, allowed_modes_str)
         end
     end
 
@@ -267,8 +284,11 @@ function _check_configs()
     local allowed_plats = project.allowed_plats()
     if allowed_plats then
         if not allowed_plats:has(plat) then
-            local allowed_plats_str = table.concat(allowed_plats:to_array(), ", ")
-            raise("`%s` is not a valid platform for this project, please use one of %s", plat, allowed_plats_str)
+            local allowed_plats_str = table.concat(allowed_plats:to_array(),
+                                                   ", ")
+            raise(
+                "`%s` is not a valid platform for this project, please use one of %s",
+                plat, allowed_plats_str)
         end
     end
 
@@ -277,8 +297,11 @@ function _check_configs()
     local allowed_archs = project.allowed_archs(config.plat())
     if allowed_archs then
         if not allowed_archs:has(arch) then
-            local allowed_archs_str = table.concat(allowed_archs:to_array(), ", ")
-            raise("`%s` is not a valid complation arch for this project, please use one of %s", arch, allowed_archs_str)
+            local allowed_archs_str = table.concat(allowed_archs:to_array(),
+                                                   ", ")
+            raise(
+                "`%s` is not a valid complation arch for this project, please use one of %s",
+                arch, allowed_archs_str)
         end
     end
 end
@@ -300,14 +323,19 @@ function main(opt)
 
     -- avoid running this task repeatedly
     opt = opt or {}
-    if _g.configured then return end
+    if _g.configured then
+        return
+    end
     _g.configured = true
 
     -- scan project and generate it if xmake.lua not exists
     local autogen = false
     local trybuild = option.get("trybuild")
     if not os.isfile(project.rootfile()) and not trybuild then
-        autogen = utils.confirm({default = false, description = "xmake.lua not found, try generating it"})
+        autogen = utils.confirm({
+            default = false,
+            description = "xmake.lua not found, try generating it"
+        })
         if autogen then
             scangen()
         else
@@ -321,7 +349,8 @@ function main(opt)
         not localcache.get("project", "projectfile") and
         os.isdir(os.projectdir()) then
         if path.translate(os.projectdir()) ~= path.translate(os.workingdir()) then
-            wprint([[You are working in the project directory(%s) and you can also
+            wprint(
+                [[You are working in the project directory(%s) and you can also
 force to build in current directory via run `xmake -P .`]], os.projectdir())
         end
     end
@@ -408,7 +437,9 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
     -- merge the project options after default options
     for name, value in pairs(project.get("config")) do
         value = table.unwrap(value)
-        assert(type(value) == "string" or type(value) == "boolean" or type(value) == "number", "set_config(%s): unsupported value type(%s)", name, type(value))
+        assert(type(value) == "string" or type(value) == "boolean" or
+                   type(value) == "number",
+               "set_config(%s): unsupported value type(%s)", name, type(value))
         if not config.readonly(name) then
             config.set(name, value)
         end
@@ -427,7 +458,8 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
     local instance_plat = platform.load(plat, arch)
 
     -- merge the checked configuration
-    local recheck = _need_check(options_changed or not configcache_loaded or autogen)
+    local recheck = _need_check(options_changed or not configcache_loaded or
+                                    autogen)
     if recheck then
 
         -- clear cached configuration
@@ -456,7 +488,8 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
     -- translate the build directory
     local buildir = config.get("buildir")
     if buildir and path.is_absolute(buildir) then
-        config.set("buildir", path.relative(buildir, project.directory()), {readonly = true, force = true})
+        config.set("buildir", path.relative(buildir, project.directory()),
+                   {readonly = true, force = true})
     end
 
     -- only config for building project using third-party buildsystem
@@ -497,8 +530,11 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
                 local requires = project.required_packages()
                 if requires then
                     for requirename, require in pairs(requires) do
-                        local pkg_softlink_installdir = path.join(config.buildir(), ".pkg", requirename)
-                        local pkg_installdir = path.absolute(require:installdir())
+                        local pkg_softlink_installdir = path.join(
+                                                            config.buildir(),
+                                                            ".pkg", requirename)
+                        local pkg_installdir = path.absolute(
+                                                   require:installdir())
                         -- when we `add_requires("zlib")` in a project, require:installdir() may be nil
                         -- this may be because this library is a system library
                         if pkg_installdir then
