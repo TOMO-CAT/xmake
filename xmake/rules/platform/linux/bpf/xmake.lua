@@ -55,4 +55,3 @@ rule("platform.linux.bpf")
         batchcmds:set_depmtime(os.mtime(headerfile))
         batchcmds:set_depcache(target:dependfile(headerfile))
     end)
-

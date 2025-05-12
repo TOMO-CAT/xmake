@@ -48,4 +48,3 @@ rule("linker.link_scripts")
             target:data_add("linkdepfiles", scriptfile)
         end
     end)
-

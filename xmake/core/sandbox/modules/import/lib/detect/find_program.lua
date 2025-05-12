@@ -177,7 +177,7 @@ function sandbox_lib_detect_find_program._find(name, paths, opt)
         return
     end
 
-    
+
     -- attempt to find it use `which program` command
     local ok, program_path = os.iorunv("which", {name})
     if ok and program_path then

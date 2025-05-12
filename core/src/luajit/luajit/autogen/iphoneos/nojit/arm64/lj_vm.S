@@ -1912,4 +1912,3 @@ _lj_vm_ffi_call:
 
 	.cstring
 	.ascii "DynASM 1.4.0\0"
-

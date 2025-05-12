@@ -29,4 +29,3 @@ function test_workdir(t)
     t:require_not(os.isdir("../../build"))
     t:require_not(os.isdir("../../.xmake"))
 end
-

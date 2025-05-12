@@ -68,4 +68,3 @@ function main(opt)
         return is_bigendian
     end
 end
-

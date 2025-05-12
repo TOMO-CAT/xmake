@@ -165,4 +165,3 @@ function main()
     -- unlock the whole project
     project.unlock()
 end
-

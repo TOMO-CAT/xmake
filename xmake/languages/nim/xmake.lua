@@ -84,4 +84,3 @@ language("nim")
                 ,   {nil, "linkdirs",   "kv", nil,         "The Link Search Directories"     }
                 }
             }
-

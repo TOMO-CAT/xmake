@@ -19,5 +19,3 @@
 --
 
 return require("base/private/is_cross")
-
-

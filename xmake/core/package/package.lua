@@ -2311,7 +2311,7 @@ function _instance:_generate_build_configs(configs, opt)
         if not linker then
             os.raise(errors)
         end
-        local fake_target = {is_shared = function(_) return false end, 
+        local fake_target = {is_shared = function(_) return false end,
                              sourcekinds = function(_) return sourcekind end}
         local compiler = self:compiler(sourcekind)
         local cxflags = compiler:map_flags("runtime", runtimes, {target = fake_target})

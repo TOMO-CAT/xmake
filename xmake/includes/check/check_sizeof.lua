@@ -152,4 +152,3 @@ function configvar_check_sizeof(definition, typename, opt)
         set_configvar(defname, has_config(optname) and (defval or 1) or opt.default, {quote = true})
     end
 end
-

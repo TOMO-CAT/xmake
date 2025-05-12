@@ -18,4 +18,3 @@ target("lz4")
 
     -- add definitions
     add_defines("XXH_NAMESPACE=LZ4_")
-

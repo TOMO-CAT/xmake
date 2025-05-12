@@ -14,4 +14,3 @@ target("test")
     set_kind("binary")
     add_deps("B")
     add_files("src/main.cpp")
-

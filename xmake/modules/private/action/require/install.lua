@@ -85,8 +85,8 @@ function main(requires_raw)
     -- we need to write the installed packages info into local-cache.
     -- @see https://github.com/TOMO-CAT/xmake/issues/107
     --
-    -- We choose to set the install-packages information before install_packages to ensure that the xmake parent 
-    -- process sets the XMAKE_INSTALL_PACKAGES_RESULT environment variable, thereby ensuring that this information 
+    -- We choose to set the install-packages information before install_packages to ensure that the xmake parent
+    -- process sets the XMAKE_INSTALL_PACKAGES_RESULT environment variable, thereby ensuring that this information
     -- is shared throughout the entire xmake build process.
     --
     -- skip `xrepo env -b emmylua_debugger` situation

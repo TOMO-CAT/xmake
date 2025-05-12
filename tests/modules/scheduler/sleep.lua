@@ -22,4 +22,3 @@ function main()
         scheduler.co_start(_session2, i)
     end
 end
-

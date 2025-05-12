@@ -23,4 +23,3 @@
 rule("cuda.build.devlink")
     add_deps("cuda.env")
     before_link("devlink")
-

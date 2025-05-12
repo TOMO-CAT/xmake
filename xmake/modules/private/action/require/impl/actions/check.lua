@@ -37,5 +37,3 @@ function main(package, opt)
         script(package)
     end
 end
-
-

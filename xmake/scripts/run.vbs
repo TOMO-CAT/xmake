@@ -27,7 +27,7 @@ Else
     If InStr(flags, "W") <> 0 Then
         Dim counter
         counter = 0
-        Dim sQuery 
+        Dim sQuery
         sQuery = "select * from win32_process where name='" & PROCESS & "'"
         Do
             Set SVC = getobject("winmgmts:root\cimv2")
@@ -43,11 +43,11 @@ Else
                 wscript.sleep 500
             End If
         Loop Until iniproc = 0
-        
+
         Set cproc = Nothing
         Set SVC = Nothing
     End If
-    
+
     Dim ucCount
     Dim args
     args = ""

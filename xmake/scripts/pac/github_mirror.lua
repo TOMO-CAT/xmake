@@ -9,4 +9,3 @@ function mirror(url)
         return url:replace("/github.com/", "/" .. proxyurls[1] .. "/", {plain = true})
     end
 end
-

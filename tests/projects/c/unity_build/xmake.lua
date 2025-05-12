@@ -5,4 +5,3 @@ target("test")
     add_files("src/*.c", "src/*.cpp")
     add_files("src/foo/*.c", {unity_group = "foo"})
     add_files("src/bar/*.c", {unity_group = "bar"})
-

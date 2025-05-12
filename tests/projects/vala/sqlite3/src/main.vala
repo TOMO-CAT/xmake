@@ -53,7 +53,7 @@ public class SqliteSample : GLib.Object {
             }, null);
         */
 
-        if (rc != Sqlite.OK) { 
+        if (rc != Sqlite.OK) {
             stderr.printf ("SQL error: %d, %s\n", rc, db.errmsg ());
             return 1;
         }

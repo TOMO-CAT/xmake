@@ -31,6 +31,3 @@ function main()
         print("%s: disconnected", client)
     end
 end
-
-
-

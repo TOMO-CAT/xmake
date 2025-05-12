@@ -27,5 +27,3 @@
 #include "xmi.h"
 
 #endif
-
-

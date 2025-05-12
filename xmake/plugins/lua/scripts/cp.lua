@@ -22,4 +22,3 @@
 function main(...)
     os.cp(...)
 end
-

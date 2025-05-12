@@ -258,4 +258,3 @@ function main()
     -- leave project directory
     os.cd(oldir)
 end
-

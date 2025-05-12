@@ -13,4 +13,3 @@ target("test")
         assert(option)
         assert(task)
     end)
-

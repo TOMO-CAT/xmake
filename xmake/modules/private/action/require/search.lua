@@ -68,4 +68,3 @@ function main(names)
     -- leave environment
     environment.leave()
 end
-

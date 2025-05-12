@@ -466,7 +466,7 @@ function build_cxfiles(target, batchjobs, sourcebatch, opt, sourcekind)
     for _, sourcefile_proto in ipairs(sourcefiles) do
         local nodename = node_rulename .. "/" .. sourcefile_proto
 
-        -- examples: example/bug-fixed/protobuf-missed-deps 
+        -- examples: example/bug-fixed/protobuf-missed-deps
         -- @see https://github.com/TOMO-CAT/xmake/issues/194
         local dep_nodes = {}
         for _, dep_proto_file in ipairs(proto_dep_files_cache[sourcefile_proto]) do

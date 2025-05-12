@@ -33,4 +33,3 @@ rule("objc++.build.pcheader")
     before_build(function (target, opt)
         import("private.action.build.pcheader").build(target, "mxx", opt)
     end)
-

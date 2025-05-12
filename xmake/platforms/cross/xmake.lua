@@ -28,5 +28,3 @@ platform("cross")
     set_formats("symbol", "$(name).sym")
 
     set_toolchains("envs", "cross")
-
-

@@ -69,4 +69,3 @@ function main(packages)
         io.writefile(project.requireslock(), string.serialize(results, {orderkeys = true}), {encoding = "binary"})
     end
 end
-

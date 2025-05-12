@@ -40,5 +40,3 @@ function main(opt)
     -- check features
     return check_features(opt)
 end
-
-

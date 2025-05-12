@@ -36,4 +36,3 @@ function nf_symbol(self, level)
         return maps[level .. '_' .. kind] or maps[level]
     end
 end
-

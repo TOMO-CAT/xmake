@@ -30,4 +30,3 @@ function main()
         build_requires = {description = "Set the build requires for conan."}
     }
 end
-

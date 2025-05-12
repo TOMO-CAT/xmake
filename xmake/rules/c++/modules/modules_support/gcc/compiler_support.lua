@@ -256,4 +256,3 @@ function get_cppversionflag(target)
     end
     return cppversionflag or nil
 end
-

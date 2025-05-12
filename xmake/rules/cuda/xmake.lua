@@ -40,4 +40,3 @@ rule("cuda")
 
     -- inherit links and linkdirs of all dependent targets by default
     add_deps("utils.inherit.links")
-

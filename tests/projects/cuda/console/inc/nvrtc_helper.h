@@ -25,7 +25,7 @@ void compileFileToPTX(char *filename, int argc, char **argv,
     std::ifstream inputFile(filename, std::ios::in | std::ios::binary |
                                 std::ios::ate);
 
-    if (!inputFile.is_open()) 
+    if (!inputFile.is_open())
     {
         std::cerr << "\nerror: unable to open " << filename << " for reading!\n";
         exit(1);
@@ -81,14 +81,14 @@ void compileFileToPTX(char *filename, int argc, char **argv,
     NVRTC_SAFE_CALL("nvrtcGetProgramLog", nvrtcGetProgramLog(prog, log));
     log[logSize] = '\x0';
 
-    
+
     if (strlen(log) >= 2)
-    { 
+    {
         std::cerr << "\n compilation log ---\n";
         std::cerr << log;
         std::cerr << "\n end log ---\n";
     }
-    
+
     free(log);
 
     NVRTC_SAFE_CALL("nvrtcCompileProgram", res);
@@ -131,4 +131,3 @@ CUmodule loadPTX(char *ptx, int argc, char **argv)
 }
 
 #endif
-

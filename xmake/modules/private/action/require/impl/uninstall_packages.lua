@@ -44,4 +44,3 @@ function main(requires, opt)
     end
     return packages
 end
-

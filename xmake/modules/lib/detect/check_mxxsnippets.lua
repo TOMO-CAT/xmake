@@ -47,4 +47,3 @@ import("lib.detect.check_cxsnippets")
 function main(snippets, opt)
     return check_cxsnippets(snippets, table.join(table.wrap(opt), {sourcekind = "mxx"}))
 end
-

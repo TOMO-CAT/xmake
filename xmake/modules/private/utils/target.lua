@@ -85,4 +85,3 @@ function translate_flags_in_tool(target, flagkind, flags)
     end
     return result
 end
-

@@ -67,9 +67,3 @@ platform("macosx")
                 ,   {nil, "vcpkg",                   "kv", "auto",       "The Vcpkg Directory"               }
                 }
             }
-
-
-
-
-
-

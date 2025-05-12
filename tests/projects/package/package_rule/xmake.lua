@@ -8,4 +8,3 @@ target("console")
     add_files("src/main.cpp", "src/*.md")
     add_packages("foo")
     add_rules("@foo/markdown")
-

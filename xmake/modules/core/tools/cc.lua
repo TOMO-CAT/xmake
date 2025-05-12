@@ -20,5 +20,3 @@
 
 -- inherit gcc
 inherit("gcc")
-
-

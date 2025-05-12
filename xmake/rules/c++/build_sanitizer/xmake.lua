@@ -41,4 +41,3 @@ rule("objc++.build.sanitizer")
     on_config(function (target)
         import("config")(target, "mxx")
     end)
-

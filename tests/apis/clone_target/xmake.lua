@@ -18,4 +18,3 @@ target("test")
         print("link2", target:name())
         target:data_set("linked", true)
     end)
-

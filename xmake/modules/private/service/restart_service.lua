@@ -27,4 +27,3 @@ function main()
     stop_service();
     start_service({daemon = true});
 end
-

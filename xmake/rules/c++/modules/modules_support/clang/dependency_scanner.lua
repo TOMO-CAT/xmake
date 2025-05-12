@@ -85,4 +85,3 @@ function generate_dependency_for(target, sourcefile, opt)
 
     return changed
 end
-

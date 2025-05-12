@@ -12,4 +12,3 @@ endif
 clean:
 	rm -rf *.o *~ core .depend .*.cmd *.ko *.mod.c .tmp_versions
 	rm -rf src/*.o src/*~ core src/.depend src/.*.cmd src/*.ko src/*.mod.c src/.tmp_versions
-

@@ -668,5 +668,3 @@ int xmisetup(xmi_lua_ops_t* ops);
 
 xmi_extern_c_leave
 #endif
-
-

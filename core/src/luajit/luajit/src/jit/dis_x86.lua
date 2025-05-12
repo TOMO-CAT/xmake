@@ -950,4 +950,3 @@ return {
   regname = regname,
   regname64 = regname64
 }
-

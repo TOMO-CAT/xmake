@@ -20,4 +20,3 @@
 
 -- imports
 inherit("detect.tools.ifort.has_flags")
-

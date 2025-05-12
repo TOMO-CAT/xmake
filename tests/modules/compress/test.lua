@@ -11,4 +11,3 @@ function test_lz4(t)
     lz4.decompress_file(dstfile, dstfile2)
     t:are_equal(io.readfile(srcfile), io.readfile(dstfile2))
 end
-

@@ -59,4 +59,3 @@ rule("utils.merge.object")
         table.insert(dependinfo.files, sourcefile_obj)
         depend.save(dependinfo, dependfile)
     end)
-

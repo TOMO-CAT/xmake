@@ -53,4 +53,3 @@ function test_find_cycle(t)
     local cycle = dag:find_cycle()
     t:are_equal(cycle, {1, 6, 0})
 end
-

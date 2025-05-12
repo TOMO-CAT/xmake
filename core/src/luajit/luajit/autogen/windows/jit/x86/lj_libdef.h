@@ -418,4 +418,3 @@ static const uint8_t lj_lib_init_ffi[] = {
 111,115,250,252,2,196,97,114,99,104,250,255
 };
 #endif
-

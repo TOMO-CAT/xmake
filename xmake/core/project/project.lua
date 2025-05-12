@@ -506,7 +506,7 @@ function project._load_requires()
         -- get alias and requireconfs
         local alias = nil
         local requireconfs = requires_extra[requirestr]
-        if requireconfs then 
+        if requireconfs then
             alias = requireconfs.alias
         end
 

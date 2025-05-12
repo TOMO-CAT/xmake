@@ -22,4 +22,3 @@
 function mv.main(...)
     os.mv(...)
 end
-

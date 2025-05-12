@@ -9,4 +9,3 @@ begin
   Value := 5;
   WriteLn(fib(Value));
 end.
-

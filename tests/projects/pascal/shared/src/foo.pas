@@ -15,5 +15,3 @@ end;
 exports
  fib;
 end.
-
-

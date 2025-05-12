@@ -130,4 +130,3 @@ function test_logical_expr(t)
     t:require_not(_match_patterns("!macosx and !android", {plat = "android"}))
     t:require_not(_match_patterns("!macosx and !android", {plat = "macosx"}))
 end
-

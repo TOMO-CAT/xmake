@@ -25,5 +25,3 @@ import("private.service.remote_build.client", {alias = "remote_build_client"})
 function main(filepattern, outputdir)
     remote_build_client():pull(filepattern, outputdir)
 end
-
-

@@ -7,4 +7,3 @@ target("demo")
     add_files("src/*.c")
     add_files("src/*.zig")
     set_toolchains("@zig", {zigcc = false})
-

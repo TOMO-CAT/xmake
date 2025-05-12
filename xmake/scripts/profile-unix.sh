@@ -32,4 +32,3 @@ fi
 
 # register virtualenvs
 . "$XMAKE_PROGRAM_DIR/scripts/virtualenvs/register-virtualenvs.sh"
-

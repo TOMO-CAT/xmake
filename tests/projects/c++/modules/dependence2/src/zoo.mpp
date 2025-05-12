@@ -5,4 +5,3 @@ export namespace zoo {
         return a + b;
     }
 }
-

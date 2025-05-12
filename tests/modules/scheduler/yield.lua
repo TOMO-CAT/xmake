@@ -11,4 +11,3 @@ function main()
         scheduler.co_start(_session, i)
     end
 end
-

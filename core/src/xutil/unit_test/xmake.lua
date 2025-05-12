@@ -1,5 +1,5 @@
 -- add_requires("gtest v1.14.0")
--- 
+--
 -- for _, file in ipairs(os.files("**_test.c")) do
 --     local name = path.join(path.directory(file), path.basename(file)):gsub("/",
 --                                                                            ".")

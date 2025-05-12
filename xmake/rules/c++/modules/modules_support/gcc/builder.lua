@@ -380,4 +380,3 @@ function make_headerunit_buildcmds(target, batchcmds, headerunit, bmifile, outpu
     batchcmds:add_depfiles(headerunit.path)
     return os.mtime(bmifile)
 end
-

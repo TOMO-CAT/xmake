@@ -339,7 +339,7 @@ function jobpool:prune_redundant_edges()
         if deps then
             local deps_array = deps:to_array()
             table.sort(deps_array,function(a, b)
-                return a.name < b.name 
+                return a.name < b.name
             end)
             local ancestors_merge = table.join(node._parents, node._ancestors)
             for _, dep in ipairs(deps_array) do

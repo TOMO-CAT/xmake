@@ -6,4 +6,3 @@ target "sv"
     set_languages "c99"
     add_includedirs "sv/include" "{public}"
     add_files "sv/src/*.c"
-

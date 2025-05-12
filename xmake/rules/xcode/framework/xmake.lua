@@ -185,4 +185,3 @@ rule("xcode.framework")
 
     -- disable package
     on_package(function (target) end)
-

@@ -11,4 +11,3 @@ target("test")
     add_files("src/*.cpp")
     add_files("src/test.proto", {proto_rootdir = "src", proto_grpc_cpp_plugin = true})
     add_files("src/subdir/test2.proto", {proto_rootdir = "src"})
-

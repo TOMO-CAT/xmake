@@ -4,4 +4,3 @@ func main() {
 
     Run()
 }
-

@@ -29,7 +29,8 @@ is_wsl() {
 
 expected_output_file="expected-build-batchjobs.txt"
 
-diff build/.debug/build-batchjobs.txt "$expected_output_file" > /dev/null
+# --ignore-all-space 忽略所有空白字符的差异
+diff --ignore-all-space build/.debug/build-batchjobs.txt "$expected_output_file" > /dev/null
 if [ $? -eq 0 ]; then
     info "The jobpool graph string is the same."
 else

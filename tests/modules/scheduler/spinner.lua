@@ -7,4 +7,3 @@ function main()
     end, {progress = true})
     print("ok")
 end
-

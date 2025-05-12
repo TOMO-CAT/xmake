@@ -7,4 +7,3 @@ int test()
     pcre2_compile(0, 0, 0, 0, 0, 0);
     return 0;
 }
-

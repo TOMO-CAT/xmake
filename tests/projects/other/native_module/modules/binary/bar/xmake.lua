@@ -7,4 +7,3 @@ target("add")
 target("sub")
     add_rules("module.binary")
     add_files("src/sub.cpp")
-

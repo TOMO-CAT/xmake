@@ -31,5 +31,3 @@ target("demo")
     add_deps("test")
     add_files("src/test.cpp")
     set_toolchains("myclang")
-
-

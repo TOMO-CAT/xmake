@@ -88,4 +88,3 @@ rule("utils.glsl2spv")
         batchcmds:set_depmtime(os.mtime(outputfile))
         batchcmds:set_depcache(target:dependfile(outputfile))
     end)
-

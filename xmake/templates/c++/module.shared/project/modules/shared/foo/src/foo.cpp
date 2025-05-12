@@ -24,4 +24,3 @@ int luaopen(foo, lua_State* lua) {
     luaL_setfuncs(lua, funcs, 0);
     return 1;
 }
-

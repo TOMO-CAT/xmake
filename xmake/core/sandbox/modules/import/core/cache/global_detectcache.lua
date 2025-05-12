@@ -20,4 +20,3 @@
 
 -- return module
 return require("cache/global_detectcache")
-

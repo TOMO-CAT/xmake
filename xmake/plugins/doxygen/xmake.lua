@@ -43,6 +43,3 @@ task("doxygen")
                 ,   {nil, "srcdir",     "v",  "src",    "Set the source code directory."    }
                 }
             }
-
-
-

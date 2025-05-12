@@ -131,4 +131,3 @@ rule("xcode.bundle")
 
     -- disable package
     on_package(function (target) end)
-

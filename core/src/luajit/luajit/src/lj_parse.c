@@ -2744,4 +2744,3 @@ GCproto *lj_parse(LexState *ls)
   lj_assertL(pt->sizeuv == 0, "toplevel proto has upvalues");
   return pt;
 }
-

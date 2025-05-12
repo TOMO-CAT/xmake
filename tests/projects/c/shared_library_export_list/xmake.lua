@@ -17,5 +17,3 @@ target("test")
     set_kind("binary")
     add_deps("foo")
     add_files("src/main.c")
-
-

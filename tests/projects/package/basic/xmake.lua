@@ -14,4 +14,3 @@ target("console")
     add_deps("test")
     add_files("src/main.c")
     add_packages("tbox", "zlib")
-

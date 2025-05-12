@@ -117,4 +117,3 @@ function handle(strval, package)
     _filter():register("package", nil)
     return strval
 end
-

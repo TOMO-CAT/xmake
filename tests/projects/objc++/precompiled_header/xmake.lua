@@ -5,4 +5,3 @@ target("main")
     set_languages("cxx11")
     set_pmxxheader("src/header.h")
     add_files("src/*.mm", "src/*.c", "*.mm")
-

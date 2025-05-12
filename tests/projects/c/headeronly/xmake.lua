@@ -5,5 +5,3 @@ target("foo")
     add_headerfiles("src/foo.h")
     add_rules("utils.install.cmake_importfiles")
     add_rules("utils.install.pkgconfig_importfiles")
-
-

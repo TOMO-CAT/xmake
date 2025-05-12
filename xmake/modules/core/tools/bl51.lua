@@ -36,4 +36,3 @@ function link(self, objectfiles, targetkind, targetfile, flags)
     os.mkdir(path.directory(targetfile))
     os.runv(linkargv(self, objectfiles, targetkind, targetfile, flags))
 end
-

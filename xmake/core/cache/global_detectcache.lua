@@ -19,4 +19,3 @@
 --
 
 return require("cache/globalcache").cache("detect")
-

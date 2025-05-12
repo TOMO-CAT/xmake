@@ -48,4 +48,3 @@ function main(toolchain)
         toolchain:add("shflags", march)
     end
 end
-

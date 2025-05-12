@@ -2024,4 +2024,3 @@ void lj_asm_patchexit(jit_State *J, GCtrace *T, ExitNo exitno, MCode *target)
   if (cstart) lj_mcode_sync(cstart, px+1);
   lj_mcode_patch(J, mcarea, 1);
 }
-

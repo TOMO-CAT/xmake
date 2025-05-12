@@ -254,4 +254,3 @@ for p, c in string.gmatch(x, "()(" .. utf8.charpattern .. ")") do
 end
 
 print'ok'
-

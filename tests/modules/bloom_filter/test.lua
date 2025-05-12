@@ -21,4 +21,3 @@ function test_bloom_filter(t)
     t:are_equal(filter2:get("xmake"), true)
     t:are_equal(filter2:get("not exists"), false)
 end
-

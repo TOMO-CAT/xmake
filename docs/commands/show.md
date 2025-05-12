@@ -66,7 +66,7 @@ $ xmake show -l envs
 XMAKE_PROGRAM_DIR       Set the program scripts directory of xmake.
                         /usr/local/share/xmake
 XMAKE_RCFILES           Set the runtime configuration files.
-                        
+
 XMAKE_RAMDIR            Set the ramdisk directory.
                         <empty>
 XMAKE_PKG_INSTALLDIR    Set the install directory of packages.

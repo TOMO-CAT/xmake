@@ -159,4 +159,3 @@ function test_insert_last(t)
         idx = idx + 1
     end
 end
-

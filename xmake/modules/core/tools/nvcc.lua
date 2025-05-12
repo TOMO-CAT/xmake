@@ -304,7 +304,7 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
             -- generate includes file
             local compflags = flags
             if depfile then
-                -- ccache report "preprocessor error" with "-MMD -MF $depfile" / "-MD -MF $depfile" args 
+                -- ccache report "preprocessor error" with "-MMD -MF $depfile" / "-MD -MF $depfile" args
                 -- @see https://github.com/TOMO-CAT/xmake/issues/120
                 if not ccache.is_enabled() and _has_flags_mmd_mf(self) then
                     compflags = table.join(compflags, "-MMD", "-MF", depfile)

@@ -4,4 +4,3 @@ target("hello")
     add_rules("xmake.cli")
     add_files("src/lni/*.c")
     add_packages("libxmake")
-

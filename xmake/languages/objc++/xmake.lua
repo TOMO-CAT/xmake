@@ -162,7 +162,3 @@ language("objc++")
                 ,   {nil, "frameworkdirs", "kv", nil,          "The Frameworks Search Directories"                  }
                 }
             }
-
-
-
-

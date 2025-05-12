@@ -30,5 +30,3 @@ sandbox_core_base_interpreter.builtin_modules = interpreter.builtin_modules
 
 -- return module
 return sandbox_core_base_interpreter
-
-

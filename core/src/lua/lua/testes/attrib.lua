@@ -447,7 +447,7 @@ do
 end
 
 
--- test of large float/integer indices 
+-- test of large float/integer indices
 
 -- compute maximum integer where all bits fit in a float
 local maxint = math.maxinteger
@@ -524,4 +524,3 @@ assert(a == 3 and b == 14)
 print('OK')
 
 return res
-

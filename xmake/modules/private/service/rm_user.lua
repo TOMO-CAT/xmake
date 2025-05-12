@@ -53,5 +53,3 @@ function main(user)
     config.save(configs)
     cprint("Remove user ${bright}%s${clear} ok!", user)
 end
-
-

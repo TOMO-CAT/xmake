@@ -52,4 +52,3 @@ function main(opt)
     -- ok?
     return program, version
 end
-

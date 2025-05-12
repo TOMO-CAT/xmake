@@ -17,13 +17,13 @@ export XMAKE_ROOT="y"
 # https://github.com/conan-io/conan-center-index/issues/25251
 
 # tests/projects/linux/bpf/minimal/test.lua
-# 
+#
 # configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
 #
 # https://github.com/python/cpython/issues/80183
 export LLVM_PROFDATA="/usr/lib/llvm-14/bin/llvm-profdata"
 
-# /usr/bin/ld: cannot find /usr/lib/llvm-14/lib/clang/14.0.6/lib/linux/libclang_rt.profile-x86_64.a: No such file or directory 
+# /usr/bin/ld: cannot find /usr/lib/llvm-14/lib/clang/14.0.6/lib/linux/libclang_rt.profile-x86_64.a: No such file or directory
 #
 # http://logan.tw/posts/2015/04/28/check-code-coverage-with-clang-and-lcov/
 # sudo apt install libclang-rt-14-dev

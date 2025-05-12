@@ -32,4 +32,3 @@ target("test")
     add_rules("autogen")
     add_files("src/main.cpp")
     add_files("src/*.in")
-

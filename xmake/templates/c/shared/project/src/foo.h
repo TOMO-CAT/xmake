@@ -7,5 +7,3 @@
 #endif
 
 __export int add(int a, int b);
-
-

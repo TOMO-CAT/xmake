@@ -46,4 +46,3 @@ rule("dlang")
 
     -- add linker rules
     add_deps("linker")
-

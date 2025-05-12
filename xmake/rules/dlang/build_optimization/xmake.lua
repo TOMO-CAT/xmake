@@ -21,4 +21,3 @@
 -- define rule: dlang.build.optimization
 rule("dlang.build.optimization")
     on_config("config")
-

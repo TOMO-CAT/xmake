@@ -20,4 +20,3 @@
 
 -- imports
 inherit("detect.tools.gxx.has_flags")
-

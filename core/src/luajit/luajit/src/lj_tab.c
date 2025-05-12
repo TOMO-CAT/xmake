@@ -699,4 +699,3 @@ MSize LJ_FASTCALL lj_tab_len_hint(GCtab *t, size_t hint)
   return lj_tab_len(t);
 }
 #endif
-

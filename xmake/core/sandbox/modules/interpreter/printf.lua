@@ -27,4 +27,3 @@ end
 
 -- load module
 return _printf
-

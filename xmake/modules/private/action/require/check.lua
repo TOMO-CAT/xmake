@@ -44,4 +44,3 @@ function main(requires_raw)
         action_check(instance)
     end
 end
-

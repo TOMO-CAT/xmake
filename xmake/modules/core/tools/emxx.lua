@@ -20,5 +20,3 @@
 
 -- inherit emcc
 inherit("emcc")
-
-

@@ -76,5 +76,3 @@ target("luajit")
     if not is_plat("windows") then
         add_cflags("-Wno-error=unused-function")
     end]]
-
-

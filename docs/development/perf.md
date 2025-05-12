@@ -5,7 +5,7 @@
 安装对应的依赖：
 
 ```bash
-sudo apt install flex bison systemtap-sdt-dev libssl-dev libslang2-dev libperl-dev liblzma-dev libcap-dev libnuma-dev libbabeltrace-ctf-dev binutils libelf1 python3 libunwind8 zstd 
+sudo apt install flex bison systemtap-sdt-dev libssl-dev libslang2-dev libperl-dev liblzma-dev libcap-dev libnuma-dev libbabeltrace-ctf-dev binutils libelf1 python3 libunwind8 zstd
 ```
 
 下载源码：

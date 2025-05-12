@@ -19,7 +19,7 @@ function ok() {
 contains_string() {
     local file="$1"
     local string="$2"
-    
+
     # `--` 用于告诉 grep 选项结束, 后面的是要搜索的字符串
     if grep -q -- "$string" "$file"; then
         return 0

@@ -8,4 +8,3 @@ target("test")
         assert(defines:find("TEST1", 1, true))
         assert(defines:find("TEST2", 1, true))
     end)
-

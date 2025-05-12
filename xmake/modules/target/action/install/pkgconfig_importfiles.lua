@@ -86,4 +86,3 @@ function main(target, opt)
         file:close()
     end
 end
-

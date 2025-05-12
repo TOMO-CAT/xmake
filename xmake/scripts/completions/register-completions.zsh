@@ -37,4 +37,3 @@ _xrepo_zsh_complete()
   reply=( "${(ps:\n:)completions}" )
 }
 compctl -f -S "" -K _xrepo_zsh_complete xrepo
-

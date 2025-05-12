@@ -20,4 +20,3 @@
 
 -- load module: application
 return require("ui/application")
-

@@ -45,4 +45,3 @@ toolchain("go")
         end
         toolchain:set("gcldflags", "")
     end)
-

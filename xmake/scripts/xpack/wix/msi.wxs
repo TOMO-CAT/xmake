@@ -19,7 +19,7 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
     <Package Language="1033" Manufacturer="$(PackageCompany)" Name="$(PackageName)" UpgradeCode="$(UpgradeCode)" Version="$(PackageVersion)">
         <MajorUpgrade DowngradeErrorMessage="A later version of $(PackageName) is already installed. Setup will now exit." />
-        <?if $(PackageIconFile) != "" ?>  
+        <?if $(PackageIconFile) != "" ?>
             <Icon Id="Icon" SourceFile="$(PackageIconFile)"/>
             <Property Id="ARPPRODUCTICON" Value="Icon" />
             <WixVariable Id="WixUIBannerBmp" Value="$(PackageIconFile)" />

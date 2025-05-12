@@ -10,5 +10,3 @@ target "lz4"
     add_files "lz4/lib/lz4hc.c"
     add_files "lz4/lib/xxhash.c"
     add_defines "XXH_NAMESPACE=LZ4_"
-
-

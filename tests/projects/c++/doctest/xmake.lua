@@ -25,4 +25,3 @@ target("doctest_shared")
             packages = "doctest",
             defines = "DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN"})
     end
-

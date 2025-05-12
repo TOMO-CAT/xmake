@@ -20,4 +20,3 @@
 
 -- return module
 return require("base/os").is_subhost
-

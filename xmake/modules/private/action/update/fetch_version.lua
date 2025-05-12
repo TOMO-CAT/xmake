@@ -59,7 +59,7 @@ function main(xmakever)
         else
             urls = {"https://gitee.com/tomocat/xmake.git"}
         end
-    
+
     end
     commitish = (commitish and #commitish > 0) and commitish or "latest"
 

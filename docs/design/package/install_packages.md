@@ -28,7 +28,7 @@ function main(requires_raw)
     -- @requires: {"protobuf 21.7", "zproto", "gtest 1.13.0", "zelos"}
     -- @requires_extra: {"gtest 1.13.0": {configs: {main = true}}}
     local packages = install_packages(requires, {requires_extra = requires_extra})
-    
+
     ...
 end)
 ```
@@ -172,7 +172,7 @@ fetch 完 package 后会将结果写入到 detechcache 中（`.xmake/linux/x86_6
 ```txt
 {
    ...
-   
+
     protobuf = {
         __requirestr = "protobuf 21.7",
         links = {

@@ -42,4 +42,3 @@ task("check")
                                             "    - xmake check clang.tidy [arguments]"}
         }
     }
-

@@ -20,4 +20,3 @@
 
 -- load modules
 return require("sandbox/modules/import/core/sandbox/module").inherit
-

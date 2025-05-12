@@ -5,4 +5,3 @@ target("test")
     set_kind("binary")
     add_files("src/*.zig")
     set_toolchains("@zig")
-

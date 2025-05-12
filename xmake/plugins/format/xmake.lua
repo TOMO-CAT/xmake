@@ -30,7 +30,7 @@ task("format")
                     {nil, "create", "k", nil,   "Create a .clang-format file from a coding style"},
                     {'a', "all",    "k", nil,   "Format all targets."},
                     {'g', "group",  "kv", nil,  "Format all targets of the given group. It support path pattern matching.",
-                                                "e.g.", 
+                                                "e.g.",
                                                 "    xmake format -g test",
                                                 "    xmake format -g test_*",
                                                 "    xmake format --group=benchmark/*"},
@@ -45,6 +45,3 @@ task("format")
                                                     , values = function (complete, opt) return import("private.utils.complete_helper.targets")(complete, opt) end }
                 }
             }
-
-
-

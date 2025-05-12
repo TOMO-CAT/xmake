@@ -71,4 +71,3 @@ function main(requires_raw)
         register_packages(packages)
     end
 end
-

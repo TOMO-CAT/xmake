@@ -89,5 +89,3 @@ function main (target, opt)
         raise("we can only run application on macOS or simulator!")
     end
 end
-
-
