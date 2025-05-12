@@ -43,19 +43,46 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
 ENV XMAKE_ROOT=y
 ENV XMAKE_STATS=n
 ENV XMAKE_PROGRAM_DIR=/usr/local/share/xmake
-ENV XMAKE_MAIN_REPO=https://github.com/zxmake/zxmake-repo.git
-ENV XMAKE_BINARY_REPO=https://github.com/zxmake/zxmake-build-artifacts.git
 
 RUN mkdir /software && cd /software \
-    && git clone --recursive https://github.com/TOMO-CAT/xmake.git \
+    && git clone --progress -v --recursive https://gitee.com/tomocat/xmake.git \
     && cd xmake \
-    && git checkout ${XMAKE_COMMIT_VERSION} \
     && bash scripts/install.sh \
     && xmake --version \
     && cd / && rm -r software
 
-ARG USER_NAME=root
+ARG HOST_IP
+ENV PROXY_HOST_IP=${HOST_IP}
+RUN cat <<'EOF' >> /etc/bash.bashrc
+
+# add proxy
+export hostip="${PROXY_HOST_IP}"
+export socks_hostport=7890
+export http_hostport=7890
+alias proxy='
+    export https_proxy="http://${hostip}:${http_hostport}"
+    export http_proxy="http://${hostip}:${http_hostport}"
+    export ALL_PROXY="socks5://${hostip}:${socks_hostport}"
+    export all_proxy="socks5://${hostip}:${socks_hostport}"
+'
+alias unproxy='
+    unset ALL_PROXY
+    unset https_proxy
+    unset http_proxy
+    unset all_proxy
+'
+alias echoproxy='
+    echo $ALL_PROXY
+    echo $all_proxy
+    echo $https_proxy
+    echo $http_proxy
+'
+#end proxy
+EOF
+
+ARG USER_NAME
 RUN useradd -m ${USER_NAME}
-# 免密执行 sudo 权限
+RUN echo "root:0000" | chpasswd
+RUN echo "${USER_NAME}:0000" | chpasswd
 RUN echo "${USER_NAME} ALL=NOPASSWD: ALL" >> /etc/sudoers
 USER ${USER_NAME}
