@@ -4,6 +4,8 @@ exclude: |
   (?x)^(
     (.*/)?\.xmake/.+|
     (.*/)?build/.+|
+    \.vscode/.+|
+    (.*/)?\.luarc.json|
   )$
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
