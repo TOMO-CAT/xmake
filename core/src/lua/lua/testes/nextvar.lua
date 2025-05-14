@@ -819,7 +819,7 @@ do
   co()     -- start coroutine
   co(1)    -- continue after yield
   assert(res[1] == 30 and res[2] == 20 and res[3] == 10 and #res == 3)
-  
+
 end
 
 print"OK"

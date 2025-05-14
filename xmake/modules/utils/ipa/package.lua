@@ -75,4 +75,3 @@ function main (appdir, ipafile, iconfile)
     -- check
     assert(os.isfile(ipafile), "generate %s failed!", ipafile)
 end
-

@@ -27,4 +27,3 @@ export XMAKE_SHELL=fish
 
 # register completions
 . "$XMAKE_PROGRAM_DIR/scripts/completions/register-completions.fish"
-

@@ -55,4 +55,3 @@ function test_will_raise(t)
         t:will_raise(function() end)
     end, "aborting because of ${red}failed assertion${reset}")
 end
-

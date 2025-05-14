@@ -29,4 +29,3 @@ function nf_strip(self, level)
     }
     return maps[level]
 end
-

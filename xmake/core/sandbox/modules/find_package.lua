@@ -23,4 +23,3 @@ return function (name, opt)
     local find_package = require("sandbox/modules/import/core/sandbox/module").import("lib.detect.find_package", {anonymous = true})
     return find_package(name, opt)
 end
-

@@ -61,5 +61,3 @@ if [ "$target" == "osxpkg" ]; then
 elif [ "$target" == "deb" ]; then
     mv "xmake_${version}_amd64.deb" "$artifactsdir/xmake.deb"
 fi
-
-

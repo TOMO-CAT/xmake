@@ -70,5 +70,3 @@ end
 function main()
     return {apis = _get_apis()}
 end
-
-

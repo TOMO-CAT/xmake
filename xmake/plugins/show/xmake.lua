@@ -36,6 +36,3 @@ task("show")
                 end}
         }
     }
-
-
-

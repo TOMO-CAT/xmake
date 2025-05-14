@@ -38,10 +38,10 @@ end
 
 ```lua
 $ utils.dump(interpreter._BUILTIN_MODULES)
-{ 
+{
   print = function ...l/share/xmake/core/sandbox/modules/interpreter/print.lua:27,
   pairs = function /usr/local/share/xmake/core/sandbox/modules/pairs.lua:25,
-  os = { 
+  os = {
     term = function /usr/local/share/xmake/core/base/os.lua:1186,
     arch = function /usr/local/share/xmake/core/base/os.lua:1023,
     default_njob = function /usr/local/share/xmake/core/base/os.lua:1410,
@@ -67,15 +67,15 @@ $ utils.dump(interpreter._BUILTIN_MODULES)
     scriptdir = function ...ocal/share/xmake/core/sandbox/modules/interpreter/os.lua:69,
     exists = function [C],
     isfile = function [C],
-    files = function ...ocal/share/xmake/core/sandbox/modules/interpreter/os.lua:54 
+    files = function ...ocal/share/xmake/core/sandbox/modules/interpreter/os.lua:54
   },
-  macos = { 
-    version = function /usr/local/share/xmake/core/base/macos.lua:29 
+  macos = {
+    version = function /usr/local/share/xmake/core/base/macos.lua:29
   },
   format = function [C],
   tonumber = function [C],
   getenv = function [C],
-  table = { 
+  table = {
     wrap_lock = function /usr/local/share/xmake/core/base/table.lua:366,
     append = function /usr/local/share/xmake/core/base/table.lua:149,
     is_dictionary = function /usr/local/share/xmake/core/base/table.lua:270,
@@ -121,30 +121,30 @@ $ utils.dump(interpreter._BUILTIN_MODULES)
     inherit = function /usr/local/share/xmake/core/base/table.lua:205,
     keys = function /usr/local/share/xmake/core/base/table.lua:446,
     join = function /usr/local/share/xmake/core/base/table.lua:93,
-    wrap_unlock = function /usr/local/share/xmake/core/base/table.lua:374 
+    wrap_unlock = function /usr/local/share/xmake/core/base/table.lua:374
   },
-  hash = { 
+  hash = {
     xxhash64 = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:70,
     xxhash128 = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:79,
     uuid4 = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:34,
     uuid = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:29,
     md5 = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:61,
     sha256 = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:52,
-    sha1 = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:43 
+    sha1 = function /usr/local/share/xmake/core/sandbox/modules/hash.lua:43
   },
   unpack = function [C],
   is_subhost = function /usr/local/share/xmake/core/base/os.lua:1053,
-  xmake = { 
+  xmake = {
     luajit = function /usr/local/share/xmake/core/base/xmake.lua:66,
     gitsource = function /usr/local/share/xmake/core/base/xmake.lua:51,
     programdir = function /usr/local/share/xmake/core/base/xmake.lua:56,
     programfile = function /usr/local/share/xmake/core/base/xmake.lua:61,
-    version = function /usr/local/share/xmake/core/base/xmake.lua:33 
+    version = function /usr/local/share/xmake/core/base/xmake.lua:33
   },
   tostring = function [C],
   ipairs = function /usr/local/share/xmake/core/sandbox/modules/ipairs.lua:25,
   type = function [C],
-  math = { 
+  math = {
     sin = function [C],
     deg = function [C],
     min = function [C],
@@ -185,10 +185,10 @@ $ utils.dump(interpreter._BUILTIN_MODULES)
     tan = function [C],
     modf = function [C],
     atan = function [C],
-    acos = function [C] 
+    acos = function [C]
   },
   is_host = function /usr/local/share/xmake/core/base/os.lua:1043,
-  string = { 
+  string = {
     startswith = function [C],
     ipattern = function /usr/local/share/xmake/core/base/string.lua:180,
     lower = function [C],
@@ -224,15 +224,15 @@ $ utils.dump(interpreter._BUILTIN_MODULES)
     ltrim = function /usr/local/share/xmake/core/base/string.lua:125,
     gmatch = function [C],
     levenshtein = function /usr/local/share/xmake/core/base/string.lua:386,
-    char = function [C] 
+    char = function [C]
   },
-  linuxos = { 
+  linuxos = {
     kernelver = function /usr/local/share/xmake/core/base/linuxos.lua:186,
     name = function /usr/local/share/xmake/core/base/linuxos.lua:80,
-    version = function /usr/local/share/xmake/core/base/linuxos.lua:135 
+    version = function /usr/local/share/xmake/core/base/linuxos.lua:135
   },
   printf = function .../share/xmake/core/sandbox/modules/interpreter/printf.lua:22,
-  path = { 
+  path = {
     _translate = function [C],
     normalize = function /usr/local/share/xmake/core/base/path.lua:191,
     basename = function /usr/local/share/xmake/core/base/path.lua:249,
@@ -256,7 +256,7 @@ $ utils.dump(interpreter._BUILTIN_MODULES)
     _SEP = "/",
     unix = function /usr/local/share/xmake/core/base/path.lua:161,
     join = function /usr/local/share/xmake/core/base/path.lua:279,
-    absolute = function /usr/local/share/xmake/core/base/path.lua:216 
-  } 
+    absolute = function /usr/local/share/xmake/core/base/path.lua:216
+  }
 }
 ```

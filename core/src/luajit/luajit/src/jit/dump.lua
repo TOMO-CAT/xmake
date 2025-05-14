@@ -711,4 +711,3 @@ return {
   off = dumpoff,
   start = dumpon -- For -j command line option.
 }
-

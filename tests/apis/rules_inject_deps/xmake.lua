@@ -20,4 +20,3 @@ target("test")
         local objectfile = target:objectfile(sourcefile)
         os.tryrm(objectfile)
     end)
-

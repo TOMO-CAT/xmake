@@ -66,4 +66,3 @@ Anyone can file an expense. If the expense makes sense for the development of th
 * 为了规范化提交日志的格式，commit消息，不要用中文，请用英文描述
 
 [1]: https://github.com/xmake-io/xmake/issues
-

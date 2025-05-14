@@ -184,7 +184,7 @@ end
 function _initialize_shell()
 
     local target, command
-    
+
     target = "~/.profile"
     local shell = os.shell()
     if shell:endswith("bash") then target = (is_host("macosx") and "~/.bash_profile" or "~/.bashrc")

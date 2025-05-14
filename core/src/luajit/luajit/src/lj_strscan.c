@@ -547,4 +547,3 @@ int LJ_FASTCALL lj_strscan_number(GCstr *str, TValue *o)
 #undef DNEXT
 #undef DPREV
 #undef DLEN
-

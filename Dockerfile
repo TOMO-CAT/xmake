@@ -51,6 +51,11 @@ RUN mkdir /software && cd /software \
     && xmake --version \
     && cd / && rm -r software
 
+# pre-commit lua 格式化依赖 luarocks
+RUN apt-get install -y \
+    python3-pip \
+    luarocks
+
 ARG HOST_IP
 ENV PROXY_HOST_IP=${HOST_IP}
 RUN cat <<'EOF' >> /etc/bash.bashrc
@@ -86,3 +91,8 @@ RUN echo "root:0000" | chpasswd
 RUN echo "${USER_NAME}:0000" | chpasswd
 RUN echo "${USER_NAME} ALL=NOPASSWD: ALL" >> /etc/sudoers
 USER ${USER_NAME}
+
+# pre-commit
+RUN python3 -m pip install pre-commit==3.5.0
+
+ENV PATH=${PATH}:/home/${USER_NAME}/.local/bin

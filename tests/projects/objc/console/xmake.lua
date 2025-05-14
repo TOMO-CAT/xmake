@@ -9,4 +9,3 @@ target("console_objc")
 
     -- add files
     add_files("src/*.m")
-

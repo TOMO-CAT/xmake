@@ -21,4 +21,3 @@ target("demo2")
     if not is_plat("macosx") then
         set_enabled(false)
     end
-

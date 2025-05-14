@@ -31,4 +31,3 @@ rule("platform.wasm.preloadfiles")
             end
         end
     end)
-

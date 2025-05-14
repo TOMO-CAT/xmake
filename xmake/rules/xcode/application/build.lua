@@ -108,4 +108,3 @@ function main (target, opt)
 
     end, {dependfile = target:dependfile(bundledir), files = {bundledir, target:targetfile()}, changed = target:is_rebuilt()})
 end
-

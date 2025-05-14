@@ -52,4 +52,3 @@ target "lua"
     else
         add_defines "LUA_USE_LINUX"
     fi
-

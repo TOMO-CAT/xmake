@@ -46,4 +46,3 @@ function main (ipafile)
         os.tryrm(ipafile)
     end
 end
-

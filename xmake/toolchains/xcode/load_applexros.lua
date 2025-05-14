@@ -57,4 +57,3 @@ function main(toolchain)
     toolchain:add("scshflags", "-sdk " .. xcode_sysroot)
     toolchain:add("scldflags", "-sdk " .. xcode_sysroot)
 end
-

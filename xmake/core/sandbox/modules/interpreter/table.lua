@@ -20,4 +20,3 @@
 
 -- load module
 return require("sandbox/modules/table")
-

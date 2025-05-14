@@ -71,4 +71,3 @@ rule("utils.merge.archive")
             end, {dependfile = target:dependfile(target:targetfile() .. ".merge_archive"), files = libraryfiles, changed = target:is_rebuilt()})
         end
     end)
-

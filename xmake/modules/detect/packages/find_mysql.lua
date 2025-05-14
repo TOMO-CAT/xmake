@@ -38,4 +38,3 @@ function main(opt)
     end
     return result
 end
-

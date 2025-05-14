@@ -12,4 +12,3 @@ target("${TARGETNAME}")
 
     -- add files
     add_files("*.cpp")
-

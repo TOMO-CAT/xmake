@@ -37,4 +37,3 @@ end
 
 -- return module
 return sandbox_core_base_profiler
-

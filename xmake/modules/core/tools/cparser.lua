@@ -206,4 +206,3 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
         }
     }
 end
-

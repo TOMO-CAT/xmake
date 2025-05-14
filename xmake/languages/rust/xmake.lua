@@ -109,4 +109,3 @@ language("rust")
                 ,   {nil, "linkdirs",   "kv", nil,          "The Link Search Directories"      }
                 }
             }
-

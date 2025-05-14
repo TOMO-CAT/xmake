@@ -27,4 +27,3 @@ function main(targetname)
     config.load()
     print(build.get_batchjobs(targetname))
 end
-

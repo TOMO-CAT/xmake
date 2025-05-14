@@ -176,4 +176,3 @@ function compile(self, sourcefile, objectfile, dependinfo, flags)
     os.mkdir(path.directory(objectfile))
     os.runv(compargv(self, sourcefile, objectfile, flags))
 end
-

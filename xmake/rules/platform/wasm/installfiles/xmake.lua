@@ -30,4 +30,3 @@ rule("platform.wasm.installfiles")
         target:add("installfiles", targetfile:gsub("%.html", ".mjs"), { prefixdir = "bin" })
         target:add("installfiles", targetfile:gsub("%.html", ".wasm"), { prefixdir = "bin" })
     end)
-

@@ -313,4 +313,3 @@ function main(snippets, opt)
     end
     return ok, ok and output or errors
 end
-

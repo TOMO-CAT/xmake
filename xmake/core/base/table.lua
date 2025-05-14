@@ -190,11 +190,11 @@ end
 
 -- Inherits properties and methods from multiple classes to create a new instance.
 
--- This function takes any number of class tables as arguments and combines their 
--- functions into a single instance. If a function name starts with "__", it is 
--- treated as a meta-method and stored in the metainfo table. Regular methods are 
--- added to the instance. If a method name conflicts with an existing one in the 
--- instance, the existing method is stored with a "_super_" prefix, allowing access 
+-- This function takes any number of class tables as arguments and combines their
+-- functions into a single instance. If a function name starts with "__", it is
+-- treated as a meta-method and stored in the metainfo table. Regular methods are
+-- added to the instance. If a method name conflicts with an existing one in the
+-- instance, the existing method is stored with a "_super_" prefix, allowing access
 -- to the parent class method.
 
 -- Parameters:
@@ -458,15 +458,15 @@ end
 --
 -- Parameters:
 --   - tbl (table): The table whose keys will be sorted.
---   - callback (function, optional): A custom comparison function for sorting the keys. 
+--   - callback (function, optional): A custom comparison function for sorting the keys.
 --                                    If not provided or not a function, default sorting is used.
 --
 -- Returns:
 --   - keys (table): A list of the sorted keys from the table.
 --
 -- Notes:
---   - If the table contains keys of mixed types (e.g., numbers and strings), 
---     the default sorting may raise an error. In such cases, the function will fall back to sorting 
+--   - If the table contains keys of mixed types (e.g., numbers and strings),
+--     the default sorting may raise an error. In such cases, the function will fall back to sorting
 --     by converting the keys to strings.
 --
 -- Examples:

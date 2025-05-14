@@ -20,5 +20,3 @@
 
 -- load module
 return require("sandbox/modules/math")
-
-

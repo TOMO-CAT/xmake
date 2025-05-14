@@ -107,4 +107,3 @@ end
 
 -- return module
 return sandbox_core_base_bloom_filter
-

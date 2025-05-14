@@ -76,4 +76,3 @@ function generate_dependency_for(target, sourcefile, opt)
     end, {dependfile = dependfile, files = {sourcefile}, changed = target:is_rebuilt()})
     return changed
 end
-

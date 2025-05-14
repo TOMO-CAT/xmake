@@ -104,4 +104,3 @@ function compile(self, sourcefiles, objectfile, dependinfo, flags)
     local program, argv = compargv(self, sourcefiles, objectfile, flags)
     os.runv(program, argv, {envs = self:runenvs()})
 end
-

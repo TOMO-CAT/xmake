@@ -328,7 +328,7 @@ do print("testing 'format %a %A'")
     assert(string.find(string.format("%a", 0/0), "^%-?nan"))
     assert(string.find(string.format("%a", -0.0), "^%-0x0"))
   end
-  
+
   if not pcall(string.format, "%.3a", 0) then
     (Message or print)("\n >>> modifiers for format '%a' not available <<<\n")
   else
@@ -520,4 +520,3 @@ end
 
 
 print('OK')
-

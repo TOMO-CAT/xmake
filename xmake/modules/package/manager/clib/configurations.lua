@@ -27,4 +27,3 @@ function main()
         outputdir = {description = "package installation directory relative to project root", default = "clib"},
     }
 end
-

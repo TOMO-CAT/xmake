@@ -75,4 +75,3 @@ function main()
         start_service()
     end
 end
-

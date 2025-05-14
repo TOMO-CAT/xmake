@@ -50,5 +50,3 @@ platform("bsd")
                 ,   {nil, "qt",             "kv", "auto",       "The Qt SDK Directory"              }
                 }
             }
-
-

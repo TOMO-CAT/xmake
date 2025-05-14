@@ -63,4 +63,3 @@ function main(package)
     cprint("packing %s .. ", package:outputfile())
     _pack_archive(package)
 end
-

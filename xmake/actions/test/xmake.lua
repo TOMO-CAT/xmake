@@ -44,6 +44,3 @@ task("test")
                                               "    xmake test targetname/*"                                         }
         }
     }
-
-
-

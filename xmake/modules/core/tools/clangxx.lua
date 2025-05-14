@@ -20,5 +20,3 @@
 
 -- inherit clang
 inherit("clang")
-
-

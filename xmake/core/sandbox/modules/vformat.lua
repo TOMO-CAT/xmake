@@ -20,5 +20,3 @@
 
 -- return module
 return require("sandbox/modules/string").vformat
-
-

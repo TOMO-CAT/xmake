@@ -158,4 +158,3 @@ end
 function main(...)
     return _has_flags(...)
 end
-

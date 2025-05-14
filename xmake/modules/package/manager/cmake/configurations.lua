@@ -31,4 +31,3 @@ function main()
         envs                = {description = "Set the run environments of cmake, e.g. {CMAKE_PREFIX_PATH = \"xxx\"}"},
     }
 end
-

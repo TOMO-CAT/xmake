@@ -53,5 +53,3 @@ platform("linux")
                 ,   {nil, "vcpkg",          "kv", "auto",       "The Vcpkg Directory"               }
                 }
             }
-
-

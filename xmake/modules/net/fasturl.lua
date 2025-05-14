@@ -60,4 +60,3 @@ function sort(urls)
     _g._PINGHOSTS = {}
     return urls
 end
-

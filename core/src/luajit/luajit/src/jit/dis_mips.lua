@@ -691,4 +691,3 @@ return {
   disass_r6_el = disass_r6_el,
   regname = regname
 }
-

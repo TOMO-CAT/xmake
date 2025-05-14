@@ -7,4 +7,3 @@ target("test")
     add_rules("protobuf.c")
     add_files("src/*.c")
     add_files("src/**.proto", {proto_rootdir = "src"})
-

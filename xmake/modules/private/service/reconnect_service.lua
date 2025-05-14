@@ -26,4 +26,3 @@ function main()
     disconnect_service();
     connect_service();
 end
-

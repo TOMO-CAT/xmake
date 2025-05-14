@@ -116,4 +116,3 @@ function main(flags, opt)
     -- try running to check it
     return _check_try_running(flags, opt, islinker)
 end
-

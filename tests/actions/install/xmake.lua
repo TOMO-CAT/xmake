@@ -24,4 +24,3 @@ includes("@builtin/xpack")
 xpack("test")
   add_targets("app")
   set_formats("zip")
-

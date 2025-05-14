@@ -51,6 +51,3 @@ task("watch")
                                                             "    $ xmake watch -- xmake -rv"}
                 }
             }
-
-
-

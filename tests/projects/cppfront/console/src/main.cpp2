@@ -1,5 +1,3 @@
 #include "println.h2"
 main: () -> int =
     println("Hello world!\n");
-
-

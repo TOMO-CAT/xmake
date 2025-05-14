@@ -20,5 +20,3 @@
 
 -- return module
 return string.format
-
-

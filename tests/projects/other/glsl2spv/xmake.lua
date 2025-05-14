@@ -8,4 +8,3 @@ target("test")
     add_files("src/*.c")
     add_files("src/*.vert", "src/*.frag")
     add_packages("glslang")
-

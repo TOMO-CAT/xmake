@@ -46,5 +46,3 @@ function nf_optimize(self, level)
     }
     return maps[level]
 end
-
-

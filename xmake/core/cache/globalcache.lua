@@ -202,5 +202,3 @@ end
 
 -- return module: globalcache
 return globalcache
-
-

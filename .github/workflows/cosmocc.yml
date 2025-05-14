@@ -68,7 +68,7 @@ jobs:
         with:
           name: xmake-bundle.cosmocc.x86_64
           path: core/build/xmake
-          
+
       - name: Publish bundle binary
         if: github.event.action == 'published' && matrix.os == 'ubuntu-latest'
         uses: actions/upload-release-asset@v1.0.1

@@ -8,4 +8,3 @@ target("test")
     set_kind("binary")
     add_deps("testlib")
     add_files("src/main.zig")
-

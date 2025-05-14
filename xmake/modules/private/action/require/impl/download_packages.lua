@@ -301,4 +301,3 @@ function main(requires, opt)
     cprint("${color.success}install packages ok")
     return packages
 end
-

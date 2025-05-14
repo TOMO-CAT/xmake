@@ -20,4 +20,3 @@
 
 -- return module
 return require("project/config").is_value
-

@@ -50,4 +50,3 @@ function main(toolchain)
     toolchain:add("scshflags", format("-target %s-apple-tvos%s", arch, target_minver) , "-sdk " .. xcode_sysroot)
     toolchain:add("scldflags", format("-target %s-apple-tvos%s", arch, target_minver) , "-sdk " .. xcode_sysroot)
 end
-

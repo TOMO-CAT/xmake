@@ -65,4 +65,3 @@ end
 function main(flags, opt)
     return _check_from_arglist(flags, opt)
 end
-

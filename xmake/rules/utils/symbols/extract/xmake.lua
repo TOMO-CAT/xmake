@@ -133,4 +133,3 @@ rule("utils.symbols.extract")
               changed = target:is_rebuilt(),
               dryrun = dryrun})
     end)
-

@@ -21,4 +21,3 @@ int main (string[] args) {
     Gtk.main ();
     return 0;
 }
-

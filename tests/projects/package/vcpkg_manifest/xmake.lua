@@ -6,4 +6,3 @@ target("test")
     set_kind("binary")
     add_files("src/*.cpp")
     add_packages("vcpkg::zlib", "vcpkg::fmt", "vcpkg::libpng")
-

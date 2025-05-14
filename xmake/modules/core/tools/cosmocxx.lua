@@ -20,5 +20,3 @@
 
 -- inherit cosmocc
 inherit("cosmocc")
-
-

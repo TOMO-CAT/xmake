@@ -13,4 +13,3 @@ target("test")
         print("bar: 1 + 1 = %s", bar.add(1, 1))
         print("bar: 1 - 1 = %s", bar.sub(1, 1))
     end)
-

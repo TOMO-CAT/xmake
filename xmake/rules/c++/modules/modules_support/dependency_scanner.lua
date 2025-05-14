@@ -209,7 +209,7 @@ function _generate_dependencies(target, sourcebatch, opt)
     local changed = false
     if opt.batchjobs then
         local jobs = option.get("jobs") or os.default_njob()
-        runjobs(target:name() .. "_module_dependency_scanner", function(index) 
+        runjobs(target:name() .. "_module_dependency_scanner", function(index)
             local sourcefile = sourcebatch.sourcefiles[index]
             changed = _dependency_scanner(target).generate_dependency_for(target, sourcefile, opt) or changed
         end, {comax = jobs, total = #sourcebatch.sourcefiles})

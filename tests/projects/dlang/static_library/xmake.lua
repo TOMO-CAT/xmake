@@ -9,4 +9,3 @@ target("test")
     set_kind("binary")
     add_deps("interfaces")
     add_files("src/main.d")
-

@@ -37,5 +37,3 @@ function main(sourcefile)
     -- no main function
     return false
 end
-
-

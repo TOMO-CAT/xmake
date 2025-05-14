@@ -3,7 +3,7 @@ index dc45ecbca..d0e0d0069 100755
 --- a/core/src/xmake/xmake.sh
 +++ b/core/src/xmake/xmake.sh
 @@ -6,6 +6,8 @@ target "xmake"
- 
+
      # add deps
      if has_config "external"; then
 +        add_deps "sv"

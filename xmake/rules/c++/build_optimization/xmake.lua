@@ -29,4 +29,3 @@ rule("c++.build.optimization")
     on_config(function (target)
         import("config")(target, "cxx")
     end)
-

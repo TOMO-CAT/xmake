@@ -78,7 +78,7 @@ static const AAPLVertex triangleVertices[] =
 ```
 
 The vertex stage generates data for a vertex, so it needs to provide a color and a transformed position.
-Declare a `RasterizerData` structure containing a position and a color value, again using SIMD types. 
+Declare a `RasterizerData` structure containing a position and a color value, again using SIMD types.
 
 ``` metal
 struct RasterizerData
@@ -132,7 +132,7 @@ The function's output is a `RasterizerData` struct.
 
 ## Write the Vertex Function
 
-Your vertex function must generate both fields of the output struct. 
+Your vertex function must generate both fields of the output struct.
 Use the `vertexID` argument to index into the `vertices` array and read the input data for the vertex.
 Also, retrieve the viewport dimensions.
 
@@ -163,7 +163,7 @@ Because this is a 2D application and does not need homogenous coordinates, first
 This means that the coordinates are already in the normalized device coordinate space and the vertex function should generate (x,y) coordinates in that coordinate space.
 Divide the input position by half the viewport size to generate normalized device coordinates.
 Since this calculation is performed using SIMD types, both channels can be divided at the same time using a single line of code.
-Perform the divide and put the results in the x and y channels of the output position. 
+Perform the divide and put the results in the x and y channels of the output position.
 
 ``` metal
 out.position = vector_float4(0.0, 0.0, 0.0, 1.0);
@@ -204,7 +204,7 @@ The closer a fragment is to a vertex, the more that vertex contributes to the fi
 **Figure 4** Interpolated fragment colors
 ![Interpolated Fragment Colors](Documentation/Interpolation.png)
 
-Return the interpolated color as the function's output. 
+Return the interpolated color as the function's output.
 
 ``` metal
 return in.color;
@@ -247,7 +247,7 @@ When Metal creates the render pipeline state object, the pipeline is configured 
 If you want to target a different pixel format, you need to create a different pipeline state object.
 You can reuse the same shaders in multiple pipelines targeting different pixel formats.
 
- 
+
 ## Set a Viewport
 
 Now that you have the render pipeline state object for the pipeline, you'll render the triangle. You do this using a render command encoder. First, set the viewport, so that Metal knows which part of the render target you want to draw into.
@@ -272,7 +272,7 @@ However, when you need to pass only a small amount of data to the vertex functio
 
 The sample copies data for both parameters into the command buffer.
 The vertex data is copied from an array defined in the sample.
-The viewport data is copied from the same variable that you used to set the viewport. 
+The viewport data is copied from the same variable that you used to set the viewport.
 
 In this sample, the fragment function uses only the data it receives from the rasterizer, so there are no arguments to set.
 

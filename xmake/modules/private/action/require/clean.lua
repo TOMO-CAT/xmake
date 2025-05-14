@@ -52,4 +52,3 @@ function main(package_names)
         remove_packages(package_names, {clean = true})
     end
 end
-

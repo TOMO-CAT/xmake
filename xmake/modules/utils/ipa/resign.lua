@@ -127,4 +127,3 @@ function main (filepath, codesign_identity, mobile_provision, bundle_identifier)
     -- ok
     cprint("${color.success}resign ok!")
 end
-

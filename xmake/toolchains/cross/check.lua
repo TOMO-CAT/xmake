@@ -62,4 +62,3 @@ function main(toolchain)
     end
     return cross_toolchain
 end
-

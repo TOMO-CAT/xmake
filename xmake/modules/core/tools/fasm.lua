@@ -81,4 +81,3 @@ function compile(self, sourcefiles, objectfile, dependinfo, flags)
     -- for only single source file
     _compile1(self, sourcefiles, objectfile, dependinfo, flags)
 end
-

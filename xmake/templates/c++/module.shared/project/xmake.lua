@@ -10,5 +10,5 @@ target("${TARGETNAME}", function()
         print("shared: 1 + 1 = %s", foo.add(1, 1))
         print("shared: 1 - 1 = %s", foo.sub(1, 1))
     end)
-    
+
 end)

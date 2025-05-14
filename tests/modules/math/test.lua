@@ -31,4 +31,3 @@ function test_isint(t)
     t:require_not(math.isint(math.huge))
     t:require_not(math.isint(-math.huge))
 end
-

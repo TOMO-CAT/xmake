@@ -32,4 +32,3 @@ function main()
     end
     return on_ci
 end
-

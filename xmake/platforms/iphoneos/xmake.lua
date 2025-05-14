@@ -53,9 +53,3 @@ platform("iphoneos")
                 ,   {nil, "xcode_mobile_provision",  "kv", "auto",       "The Mobile Provision for Xcode"    }
                 }
             }
-
-
-
-
-
-

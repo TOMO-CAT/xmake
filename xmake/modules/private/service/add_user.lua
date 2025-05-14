@@ -51,4 +51,3 @@ function main(user)
     config.save(configs)
     cprint("Add user ${bright}%s${clear} ok!", user)
 end
-

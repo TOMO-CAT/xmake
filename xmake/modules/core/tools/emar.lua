@@ -20,5 +20,3 @@
 
 -- inherit ar
 inherit("ar")
-
-

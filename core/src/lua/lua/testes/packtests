@@ -51,5 +51,3 @@ $NAME/ltests/ltests.c
 \rm -I ltests
 
 echo ${NAME}.tar.gz" created"
-
-

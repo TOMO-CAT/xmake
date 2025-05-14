@@ -10,5 +10,3 @@ extern "C" {
 static inline void say2(char const* s) {
     printf("%s\n", s);
 }
-
-

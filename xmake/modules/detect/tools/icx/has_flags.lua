@@ -20,4 +20,3 @@
 
 -- imports
 inherit("detect.tools.clang.has_flags")
-

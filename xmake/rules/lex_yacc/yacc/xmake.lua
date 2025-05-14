@@ -58,4 +58,3 @@ rule("yacc")
         batchcmds:set_depmtime(os.mtime(objectfile))
         batchcmds:set_depcache(target:dependfile(objectfile))
     end)
-

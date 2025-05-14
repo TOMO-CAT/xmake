@@ -381,4 +381,3 @@ Section "Uninstall"
   ${unRMEmptyParentDirs} "$InstDir\uninstall.exe"
 
 SectionEnd
-

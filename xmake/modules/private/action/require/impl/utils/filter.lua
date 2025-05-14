@@ -132,4 +132,3 @@ function handle(strval, package)
     -- ok
     return strval
 end
-

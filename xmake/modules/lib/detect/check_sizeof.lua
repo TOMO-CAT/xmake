@@ -70,4 +70,3 @@ function main(typename, opt)
         return size
     end
 end
-

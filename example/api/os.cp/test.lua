@@ -2,7 +2,7 @@
 function main(opt)
     os.cd(os.scriptdir())
     os.tryrm("output")
-    
+
     -- 1) 这种做法会丢失 A/1 A/2 的文件夹, 相当于有同名文件夹会直接覆盖
     os.mkdir("output/test1")
     os.cp("A/conf", "output/test1", {rootdir = "A/conf"})

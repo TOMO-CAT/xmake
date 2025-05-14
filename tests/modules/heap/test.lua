@@ -37,4 +37,3 @@ function test_valueheap(t)
     t:are_equal(h:pop().priority, 10)
     t:are_equal(h:pop().priority, 20)
 end
-

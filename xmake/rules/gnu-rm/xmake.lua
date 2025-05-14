@@ -60,4 +60,3 @@ rule("gnu-rm.object")
         -- set default output binary
         target:set("kind", "object")
     end)
-

@@ -25,5 +25,3 @@ import("private.service.remote_build.client", {alias = "remote_build_client"})
 function main()
     remote_build_client():sync()
 end
-
-

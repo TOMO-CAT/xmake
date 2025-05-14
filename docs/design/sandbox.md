@@ -72,7 +72,7 @@ print("hello $(var)")
 ```lua
 function test(array)
     if array ~= nil then
-        for _, item in ipairs(array) do 
+        for _, item in ipairs(array) do
             -- ...
         end
     end
@@ -83,7 +83,7 @@ end
 
 ```lua
 function test(array)
-    for _, item in ipairs(array) do 
+    for _, item in ipairs(array) do
         -- ...
     end
 end

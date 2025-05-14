@@ -367,4 +367,3 @@ void LJ_FASTCALL lj_str_init(lua_State *L)
   g->str.seed = lj_prng_u64(&g->prng);
   lj_str_resize(L, LJ_MIN_STRTAB-1);
 }
-

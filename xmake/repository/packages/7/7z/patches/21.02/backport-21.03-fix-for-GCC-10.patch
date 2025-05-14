@@ -3,7 +3,7 @@ index b3e710f..b16124c 100644
 --- a/CPP/7zip/Common/OffsetStream.cpp
 +++ b/CPP/7zip/Common/OffsetStream.cpp
 @@ -20,13 +20,13 @@ STDMETHODIMP COffsetOutStream::Write(const void *data, UInt32 size, UInt32 *proc
- 
+
  STDMETHODIMP COffsetOutStream::Seek(Int64 offset, UInt32 seekOrigin, UInt64 *newPosition)
  {
 -  UInt64 absoluteNewPosition;

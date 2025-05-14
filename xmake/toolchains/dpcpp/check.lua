@@ -43,4 +43,3 @@ function main(toolchain)
         return true
     end
 end
-

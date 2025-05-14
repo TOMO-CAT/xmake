@@ -281,12 +281,12 @@ static const char *_cudaGetErrorEnum(cudaError_t error)
         case cudaErrorApiFailureBase:
             return "cudaErrorApiFailureBase";
 
-        /* Since CUDA 8.0*/        
-        case cudaErrorNvlinkUncorrectable :   
+        /* Since CUDA 8.0*/
+        case cudaErrorNvlinkUncorrectable :
             return "cudaErrorNvlinkUncorrectable";
 
-        /* Since CUDA 8.5*/        
-        case cudaErrorJitCompilerNotFound :   
+        /* Since CUDA 8.5*/
+        case cudaErrorJitCompilerNotFound :
             return "cudaErrorJitCompilerNotFound";
 
         /* Since CUDA 9.0*/
@@ -1154,7 +1154,7 @@ inline int gpuGetMaxGflopsDeviceId()
     int max_perf_device    = 0;
     int device_count       = 0, best_SM_arch      = 0;
     int devices_prohibited = 0;
-    
+
     unsigned long long max_compute_perf = 0;
     cudaDeviceProp deviceProp;
     checkCudaErrors(cudaGetDeviceCount(&device_count));
@@ -1284,7 +1284,7 @@ inline int findIntegratedGPU()
     int current_device     = 0;
     int device_count       = 0;
     int devices_prohibited = 0;
-    
+
     cudaDeviceProp deviceProp;
     checkCudaErrors(cudaGetDeviceCount(&device_count));
 

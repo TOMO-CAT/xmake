@@ -288,4 +288,3 @@ man(1), man(7), http://www.tldp.org/HOWTO/Man-Page/
       </citerefentry> system.</para>
   </refsect1>
 </refentry>
-

@@ -152,4 +152,3 @@ function is_stl_header(header)
     end
     return get_stl_headers():has(header)
 end
-

@@ -37,7 +37,7 @@ function help_info() {
   echo "Commands:"
   echo "  run              Run container."
   echo "  build            Build container."
-  echo "  clear            Delete image && container for this project." 
+  echo "  clear            Delete image && container for this project."
   echo "  help             Print help text."
   echo ""
   echo "[OPTIONS] for docker clear:"

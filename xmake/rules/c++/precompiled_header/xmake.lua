@@ -33,4 +33,3 @@ rule("c++.build.pcheader")
     before_build(function (target, opt)
         import("private.action.build.pcheader").build(target, "cxx", opt)
     end)
-

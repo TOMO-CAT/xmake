@@ -2632,4 +2632,3 @@ lj_vm_ffi_call:
 	.uleb128 0xb
 	.align 2
 .LEFDE1:
-

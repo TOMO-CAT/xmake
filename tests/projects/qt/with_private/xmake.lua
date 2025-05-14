@@ -7,5 +7,3 @@ target("demo")
     add_files("src/*.cpp")
     add_files("src/mainwindow.ui")
     add_files("src/mainwindow.h")
-
-

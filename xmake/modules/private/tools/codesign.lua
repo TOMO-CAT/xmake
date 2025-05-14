@@ -202,4 +202,3 @@ function main (programdir, codesign_identity, mobile_provision, opt)
         os.tryrm(entitlements)
     end
 end
-

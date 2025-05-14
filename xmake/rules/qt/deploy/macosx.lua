@@ -150,4 +150,3 @@ function main(target, opt)
     dependinfo.files = {targetfile}
     depend.save(dependinfo, dependfile)
 end
-

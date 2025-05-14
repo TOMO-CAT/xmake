@@ -10,5 +10,3 @@ target("demo")
     add_deps("test")
     add_files("s r c/test.c")
     set_pcheader("$(projectdir)/i n c/stdafx.h")
-
-

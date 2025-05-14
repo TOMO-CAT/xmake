@@ -9,4 +9,3 @@ target("test")
         import("lua.cjson", {always_build = true})
         print(cjson.decode('{"foo": 1, "bar": [1, 2, 3]}'))
     end)
-

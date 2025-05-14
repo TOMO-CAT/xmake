@@ -20,4 +20,3 @@
 
 -- inherit icc
 inherit("icc")
-

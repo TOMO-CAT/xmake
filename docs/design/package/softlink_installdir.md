@@ -83,7 +83,7 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
         end
     end
     ...
-            -- use softlink installdir for top-level package to make brief __FILE__ symbol 
+            -- use softlink installdir for top-level package to make brief __FILE__ symbol
             -- @see https://github.com/TOMO-CAT/xmake/issues/129
             -- @see https://github.com/TOMO-CAT/xmake/issues/62
             if name == "includedirs" then

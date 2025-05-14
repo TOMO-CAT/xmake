@@ -8,4 +8,3 @@ target("test")
     add_rules("protobuf.cpp")
     add_files("src/*.cpp")
     add_files("src/**.proto", {proto_rootdir = "src"})
-

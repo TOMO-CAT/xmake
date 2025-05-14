@@ -48,4 +48,3 @@ function main()
     config.save(configs)
     cprint("New token ${yellow bright}%s${clear} is generated!", token)
 end
-

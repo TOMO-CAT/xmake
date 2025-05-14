@@ -209,4 +209,3 @@ function libinfo(name, opt)
     end
     return result
 end
-

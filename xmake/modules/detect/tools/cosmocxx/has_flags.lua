@@ -20,4 +20,3 @@
 
 -- imports
 inherit("detect.tools.cosmocc.has_flags")
-

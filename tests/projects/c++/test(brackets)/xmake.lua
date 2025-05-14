@@ -5,4 +5,3 @@ target("demo")
     add_files("src/*.cpp")
     add_includedirs("inc(brackets)")
     add_defines("WORD=\"(world)\"")
-

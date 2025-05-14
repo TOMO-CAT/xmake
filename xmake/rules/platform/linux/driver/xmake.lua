@@ -36,5 +36,3 @@ rule("platform.linux.driver")
     on_uninstall(function (target)
         import("driver_modules").uninstall(target)
     end)
-
-

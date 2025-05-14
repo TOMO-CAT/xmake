@@ -60,4 +60,3 @@ function test_int(t)
     t:are_equal(bytes(20):u32le_set(5, 12345678):u32le(5), 12345678)
     t:are_equal(bytes(20):u32be_set(5, 12345678):u32be(5), 12345678)
 end
-

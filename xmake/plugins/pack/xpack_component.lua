@@ -173,4 +173,3 @@ end
 function new(name, info, package)
     return xpack_component {name, info:clone(), package}
 end
-

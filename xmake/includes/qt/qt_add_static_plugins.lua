@@ -40,4 +40,3 @@ function qt_add_static_plugins(plugin, opt)
         add_values("qt.linkdirs", table.unpack(table.wrap(opt.linkdirs)))
     end
 end
-

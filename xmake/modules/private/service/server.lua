@@ -231,4 +231,3 @@ function main()
     instance:init()
     return instance
 end
-

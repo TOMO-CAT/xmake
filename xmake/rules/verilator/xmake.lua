@@ -72,4 +72,3 @@ rule("verilator.static")
     on_buildcmd_files(function (target, batchcmds, sourcebatch, opt)
         import("verilator").buildcmd_cppfiles(target, batchcmds, sourcebatch, opt)
     end)
-

@@ -42,4 +42,3 @@ function main(...)
     -- run it
     os.run("%s %s", lipo, args)
 end
-

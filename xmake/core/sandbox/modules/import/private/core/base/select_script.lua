@@ -19,5 +19,3 @@
 --
 
 return require("base/private/select_script")
-
-

@@ -255,4 +255,3 @@ function main()
         _directory(option.get("global"))
     end
 end
-

@@ -29,12 +29,12 @@ end
 print(table.orderkeys(data))
 -- output:
 --
--- { 
+-- {
 --   "apple",
 --   "banana",
 --   "cherry",
 --   "date",
---   "fig" 
+--   "fig"
 -- }
 ```
 

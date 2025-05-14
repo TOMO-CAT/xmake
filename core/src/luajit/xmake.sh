@@ -65,4 +65,3 @@ target "luajit"
         add_asflags "-fPIE"
         add_ldflags "-fPIE"
     fi
-
