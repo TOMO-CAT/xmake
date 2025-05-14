@@ -233,6 +233,7 @@
         "lpthread",
         "LTCG",
         "LTLIBRARIES",
+        "luaformatter",
         "Luajit",
         "lualib",
         "luaopen",
