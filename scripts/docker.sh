@@ -10,7 +10,7 @@ PROJECT_NAME="$(basename ${PROJECT_BASE_DIR})"
 DOCKER_IMAGE="${PROJECT_NAME}:latest"
 
 # 获取第一个非回环 IP
-HOST_IP=$(hostname -I 2>/dev/null | awk '{print $1}' | sed 's/ //g')
+# HOST_IP=$(hostname -I 2>/dev/null | awk '{print $1}' | sed 's/ //g')
 
 function info() {
   (>&2 printf "[\e[34m\e[1mINFO\e[0m] $*\n")
@@ -54,7 +54,7 @@ function docker_build() {
     info "Docker image ${DOCKER_IMAGE} already exists."
   else
     info "Docker image ${DOCKER_IMAGE} does not exist. Start building..."
-    docker build --build-arg USER_NAME="${USER}" --build-arg HOST_IP="${HOST_IP}" --progress=plain -t ${DOCKER_IMAGE} .
+    docker build --build-arg USER_NAME="${USER}" --progress=plain -t ${DOCKER_IMAGE} .
   fi
 
   if docker ps -a | grep -q "${DOCKER_CONTAINER}"; then

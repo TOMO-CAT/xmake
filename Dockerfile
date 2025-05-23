@@ -56,12 +56,10 @@ RUN apt-get install -y \
     python3-pip \
     luarocks
 
-ARG HOST_IP
-ENV PROXY_HOST_IP=${HOST_IP}
 RUN cat <<'EOF' >> /etc/bash.bashrc
 
 # add proxy
-export hostip="${PROXY_HOST_IP}"
+export hostip="host.docker.internal"
 export socks_hostport=7890
 export http_hostport=7890
 alias proxy='
