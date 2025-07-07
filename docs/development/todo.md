@@ -83,6 +83,10 @@ end)
 
 参考 Blade / Bazel 代码实现头文件可见性的控制, 解决 object target 丢失依赖的问题。
 
+## object target 默认编译出来 shared target
+
+可以检查符号是否存在。
+
 ## 链接库时使用全路径
 
 解决链接库重名的问题。
@@ -92,3 +96,7 @@ end)
 * 新增 test target，默认 `set_default(false)`，默认 `add_test("default")`
 * 支持 add_testdata，默认是添加的是只读文件（软链），如果设置非 readonly，则需要拷贝文件
 * 所有单测运行路径都是沙盒
+
+## build/.pkg 也能存储非直接依赖三方库的软链
+
+目前 `build/.pkg` 只有直接依赖三方库的软链，对于一些场景不好调试。
