@@ -126,8 +126,7 @@ function _need_check(changed)
         for _, pkg_dir in ipairs(package_dirs) do
             for _, broken_path in ipairs(package_broken_path) do
                 if broken_path:startswith(pkg_dir) then
-                    cprint("${color.warning} pkg [%s] dir [%s] is broken",
-                           pkg_name, dir)
+                    -- cprint("${color.warning} pkg dir [%s] is broken", broken_path)
                     table.insert(need_delete_package_dirs, pkg_dir)
                     break
                 end
