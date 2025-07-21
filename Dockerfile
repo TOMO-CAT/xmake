@@ -12,6 +12,8 @@ FROM ubuntu:22.04
 # sudo apt-get install libc++abi-dev libc++-dev
 # @see https://stackoverflow.com/questions/55390435/iostream-file-not-found-when-compiling-on-wsl/55393044
 # @see https://stackoverflow.com/questions/58364711/xcode-11-1-iostream-file-not-found
+# 如果是交叉编译找不到 iostream 的话
+# sudo apt-get install g++-aarch64-linux-gnu
 
 # Could NOT find OpenGL
 # sudo apt-get install libgl1-mesa-dev
@@ -55,6 +57,11 @@ RUN mkdir /software && cd /software \
 RUN apt-get install -y \
     python3-pip \
     luarocks
+
+# 安装其他的 apt 包
+RUN apt-get install -y --fix-missing \
+    g++-aarch64-linux-gnu \
+    apt-file
 
 RUN cat <<'EOF' >> /etc/bash.bashrc
 
