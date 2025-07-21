@@ -8,6 +8,7 @@
       "cschlosser.doxdocgen",
       "alefragnani.project-manager",
       "Koihik.vscode-lua-format",
-      "wayou.vscode-todo-highlight"
+      "wayou.vscode-todo-highlight",
+      "iliazeus.vscode-ansi"
     ]
   }

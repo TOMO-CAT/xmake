@@ -19,7 +19,6 @@ tags
 !tags/
 
 # Ignore packaging files
-winenv/
 *.exe
 *.zip
 *.gz
@@ -55,3 +54,6 @@ compile_commands.json
 *.mod.c
 Module.symvers
 modules.order
+
+# log
+*.ansi
