@@ -6,6 +6,7 @@
 
 * [#179](https://github.com/TOMO-CAT/xmake/issues/179): 简化普通模式下的编译输出信息
 * [#181](https://github.com/TOMO-CAT/xmake/issues/181): 支持自动引用 xrepo 里内置的 toolchains、options 和 rules
+* [#201](https://github.com/TOMO-CAT/xmake/issues/201): object target 默认编译隐式动态库, 提前暴露丢失的 syslinks 和 packages 信息
 
 ### Bugs 修复
 
