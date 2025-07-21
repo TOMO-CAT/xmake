@@ -191,6 +191,7 @@
         "jsonstr",
         "konsole",
         "kshrc",
+        "lastmtime",
         "lastof",
         "latomic",
         "lauxlib",

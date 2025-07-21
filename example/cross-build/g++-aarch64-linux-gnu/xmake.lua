@@ -17,7 +17,7 @@ target("proto", function()
     add_files("pb/*.proto", {proto_public = true})
     add_rules("protobuf.cpp")
     add_packages("protobuf-cpp", {public = true})
-    add_packages("protoc", {links = {}}) -- 只是为了获取 host protoc, 不引入 linkflags
+    add_packages("protoc", {links = {}, linkdirs = {}}) -- 只是为了获取 host protoc, 不引入 linkflags
     set_policy('build.fence', true)
 end)
 

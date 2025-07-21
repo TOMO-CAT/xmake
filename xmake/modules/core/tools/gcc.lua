@@ -75,6 +75,10 @@ function load(self)
         self:add("shflags", "-fPIC")
         self:add("shared.cxflags", "-fPIC")
     end
+
+    -- 所有 .o 的生成都带上 -fPIC 选项, 用于 object target 生成 dynamic library
+    -- @see https://github.com/TOMO-CAT/xmake/issues/201
+    self:add("cxflags", "-fPIC")
 end
 
 -- make the strip flag
