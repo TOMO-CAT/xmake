@@ -2,32 +2,37 @@ set_default(false)
 set_languages("c99")
 set_kind("binary")
 add_deps("sv")
-add_links("sv")
 add_includedirs("../include")
-add_linkdirs("$(buildir)")
 
-target("version_test")
+target("version_test", function()
     add_files("version.c")
+end)
 
-target("comp_test")
+target("comp_test", function()
     add_files("comp.c")
+end)
 
-target("range_test")
+target("range_test", function()
     add_files("range.c")
+end)
 
-target("match_test")
+target("match_test", function()
     add_files("match.c")
+end)
 
-target("semvers_test")
+target("semvers_test", function()
     add_files("semvers.c")
+end)
 
-target("utils_test")
+target("utils_test", function()
     add_files("utils.c")
+end)
 
-target("usage_test")
+target("usage_test", function()
     add_files("usage.c")
+end)
 
-task("check")
+task("check", function()
     on_run(function ()
         import("core.project.task")
         task.run("run", {target = "version_test"})
@@ -43,3 +48,4 @@ task("check")
     ,   description = "Run tests !"
     ,   options = {}
     }
+end)

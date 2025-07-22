@@ -72,7 +72,12 @@ function main(target)
         -- rust maybe will disable inherit links, only inherit linkdirs
         if target:data("inherit.links.deplink") ~= false then
             -- we need to move target link to head
-            _add_export_value(target, "links", target:linkname())
+            if target:rule("c++") then
+                -- static / shared target 的 link 需要转化成绝对路径, 避免库重名导致的问题
+                _add_export_value(target, "links", target:targetfile())
+            else
+                _add_export_value(target, "links", target:linkname())
+            end
             local links = target:get("links", {rawref = true})
             if links and type(links) == "table" and #links > 1 then
                 table.insert(links, 1, links[#links])
@@ -80,7 +85,11 @@ function main(target)
             end
         end
 
-        _add_export_value(target, "linkdirs", path.directory(targetfile))
+        -- 对于 c++ 而言 static / shared target 的 link 转化成绝对路径, 这里就不再需要导出 linkdirs 了
+        if not target:rule("c++") then
+            _add_export_value(target, "linkdirs", path.directory(targetfile))
+        end
+
         if target:rule("go") then
             -- we need to add includedirs to support import modules for golang
             _add_export_value(target, "includedirs", path.directory(targetfile))

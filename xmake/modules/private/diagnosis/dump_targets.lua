@@ -38,7 +38,8 @@ function _get_targets(targetname)
     return targets
 end
 
--- dump the build jobs, e.g. xmake l private.diagnosis.dump_buildjobs [targetname]
+-- dump the build jobs, e.g. xmake l private.diagnosis.dump_targets [targetname]
+-- xmake show -t [targetname] 会显示更详细的信息
 function main(targetname)
     config.load()
     for _, target in ipairs(_get_targets(targetname)) do

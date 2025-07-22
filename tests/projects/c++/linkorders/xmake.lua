@@ -1,6 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
-add_requires("libpng")
+-- MacOS 默认装了 libpng, 可能会报错
+add_requires("libpng", {system = false})
 
 target("bar", function()
     set_kind("shared")

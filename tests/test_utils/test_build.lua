@@ -10,7 +10,7 @@ function test_build:build(argv)
 
     -- generic?
     os.exec("xmake f -c -D -y")
-    os.exec("xmake")
+    os.exec("xmake b -v")
     os.exec("xmake p -D")
     os.exec("xmake install -o $(tmpdir) -a -D")
     os.exec("xmake uninstall --installdir=$(tmpdir) -D")

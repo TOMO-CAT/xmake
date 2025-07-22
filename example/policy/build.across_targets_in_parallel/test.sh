@@ -1,3 +1,5 @@
 #!/bin/bash
 
-xmake -br --all || exit 1
+rm -rf build
+rm -rf .xmake
+xmake build -r --all -v || exit 1
