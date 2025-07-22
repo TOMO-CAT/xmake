@@ -18,8 +18,8 @@ git rm --cached -r core/src/lua
 # 删除 submodule 的跟踪
 git submodule deinit -f core/src/lua/lua
 
-# 删除子模块目录
-rm -rf core/src/lua/lua
+# 删除子模块目录中的 .git
+rm -rf core/src/sv/sv/.git
 
 # 删除 .gitmodules 文件中的子模块配置
 
