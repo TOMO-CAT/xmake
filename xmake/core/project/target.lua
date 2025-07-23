@@ -1587,6 +1587,11 @@ function _instance:filename()
         return
     end
 
+    if self:is_object() and #self:objectfiles() == 0 then
+        -- 跳过没有 add_files() 添加源文件的 object target
+        return
+    end
+
     -- make the target file name and attempt to use the format of linker first
     -- object target 需要编译出动态库 (仿造 BLADE), 提前暴露出来丢失的 syslinks 和 packages 信息
     -- @see https://github.com/TOMO-CAT/xmake/issues/201
