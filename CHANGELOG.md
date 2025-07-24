@@ -8,6 +8,7 @@
 * [#181](https://github.com/TOMO-CAT/xmake/issues/181): 支持自动引用 xrepo 里内置的 toolchains、options 和 rules
 * [#189](https://github.com/TOMO-CAT/xmake/issues/189): 默认使用 package full linkpath，避免库重名导致的问题
 * [#201](https://github.com/TOMO-CAT/xmake/issues/201): object target 默认编译隐式动态库, 提前暴露丢失的 syslinks 和 packages 信息
+* [#210](https://github.com/TOMO-CAT/xmake/issues/210): 新增 test kind, 简化单测描述域逻辑
 
 ### Bugs 修复
 
