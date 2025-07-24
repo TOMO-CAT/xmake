@@ -18,7 +18,8 @@
 -- @file        xmake.lua
 --
 
-rule("linker")
+rule("linker", function()
     add_deps("linker.link_scripts")
     add_deps("linker.version_scripts")
     add_deps("linker.soname")
+end)
