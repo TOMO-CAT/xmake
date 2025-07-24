@@ -10,12 +10,13 @@ end
 
 add_rules("mode.debug", "mode.release")
 
-target("sv")
+target("sv", function()
     set_default(true)
     set_languages("c99")
     set_kind("$(kind)")
     add_headerfiles("include/(*.h)")
     add_includedirs("include", {public = true})
     add_files("src/*.c")
+end)
 
 includes("test")

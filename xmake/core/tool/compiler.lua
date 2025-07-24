@@ -127,7 +127,7 @@ function compiler.load(sourcekind, target)
     local arch = compiler_tool:arch() or config.arch() or os.arch()
     local cachekey = sourcekind .. (program_or_errors or "") .. plat .. arch
 
-    -- get it directly from cache dirst
+    -- get it directly from cache
     compiler._INSTANCES = compiler._INSTANCES or {}
     local instance = compiler._INSTANCES[cachekey]
     if not instance then
@@ -139,6 +139,7 @@ function compiler.load(sourcekind, target)
         instance._TOOL = compiler_tool
 
         -- load the compiler language from the source kind
+        -- eg. sourcekind 为 cxx 时返回 `xmake/languages/c++` 实例
         local result, errors = language.load_sk(sourcekind)
         if not result then
             return nil, errors
@@ -151,7 +152,7 @@ function compiler.load(sourcekind, target)
         -- init target kind
         instance._TARGETKIND = "object"
 
-        -- init name flags
+        -- init name flags (language instance 对应的 nameflags)
         instance._NAMEFLAGS = result:nameflags()[instance:_targetkind()]
 
         -- init flag kinds

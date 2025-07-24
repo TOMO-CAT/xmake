@@ -307,13 +307,13 @@ function language.load_sk(sourcekind)
     -- make source kind as lower
     sourcekind = sourcekind:lower()
 
-    -- get it directly from cache dirst
+    -- get it directly from cache
     language._LANGUAGES_OF_SK = language._LANGUAGES_OF_SK or {}
     if language._LANGUAGES_OF_SK[sourcekind] then
         return language._LANGUAGES_OF_SK[sourcekind]
     end
 
-    -- find language instance
+    -- find language instance (找到第一个包含 sourcekind 的 language instance)
     local result = nil
     for _, instance in pairs(languages) do
         if instance:sourcekinds()[sourcekind] ~= nil then

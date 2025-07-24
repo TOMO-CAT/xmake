@@ -236,9 +236,11 @@ function _add_batchjobs_for_target(batchjobs, rootjob, target)
 end
 
 -- add batch jobs for the given target and deps
+-- 为给定的 target 和其依赖构造依赖图, 存储到 batchjobs 中
 function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target,
                                             all_target_jobs)
-    local targetjob_ref = all_target_jobs.after_build[target:name()] -- store targets that has been processed
+    -- 存储已经处理过的 target, 避免重复处理
+    local targetjob_ref = all_target_jobs.after_build[target:name()]
     if targetjob_ref then
         batchjobs:add(targetjob_ref, rootjob)
     else
@@ -248,6 +250,8 @@ function _add_batchjobs_for_target_and_deps(batchjobs, rootjob, target,
             all_target_jobs.build_root[target:name()] = job_build
             all_target_jobs.after_build[target:name()] = job_build_after
             all_target_jobs.before_build[target:name()] = job_build_before
+
+            -- 注意这里只会处理直接依赖, 所以对于一些间接依赖我们后面需要打补丁
             for _, depname in ipairs(target:get("deps")) do
                 local dep = project.target(depname)
                 local targetjob
@@ -268,6 +272,7 @@ end
 
 -- add batch jobs for non-object target to make sure it's build job will wait for all it's direct
 -- and indirect deps' `after_build` jobs are compiled
+-- 确保 non-object target 的 `before_build` 任务依赖它的所有直接和间接 target 的 `after_build` 任务
 function _add_batchjobs_for_non_object_target(batchjobs, target, root_job,
                                               build_after_jobs, visited_deps)
     if visited_deps[target] then
@@ -285,11 +290,15 @@ function _add_batchjobs_for_non_object_target(batchjobs, target, root_job,
 end
 
 -- get batch jobs, @note we need to export it for private.diagnosis.dump_buildjobs
+--
+-- 可以通过 xmake l private.diagnosis.dump_buildjobs [targetname] 命令来查看编译依赖图
 function get_batchjobs(targetnames, group_pattern)
 
     -- get root targets (not depended on by any other target)
+    -- 获取 root target (不被任何其他 target 依赖的 target)
     local targets_root = {}
     if targetnames then
+        -- 如果指定了 targetnames, 则将这个 targetnames 全部添加到 targets_root 中
         for _, targetname in ipairs(table.wrap(targetnames)) do
             local target = project.target(targetname)
             if target then
@@ -305,7 +314,9 @@ function get_batchjobs(targetnames, group_pattern)
             end
         end
     else
+        -- 所有被依赖的 target 集合
         local depset = hashset.new()
+        -- 所有编译目标的 target 列表
         local targets = {}
         for _, target in ipairs(project.ordertargets()) do
             if target:is_enabled() then
@@ -321,6 +332,7 @@ function get_batchjobs(targetnames, group_pattern)
             end
         end
         for _, target in ipairs(targets) do
+            -- 没有被任何其他 target 依赖的 target 入队 targets_root
             if not depset:has(target:name()) then
                 table.insert(targets_root, target)
             end
@@ -331,6 +343,7 @@ function get_batchjobs(targetnames, group_pattern)
     end
 
     -- contains several tables, each table's key is target_name and the value is a job function
+    -- 编译任务表， key 是 target 名, value 对应的编译任务
     local all_target_jobs = {
         after_build = {}, -- each target's `after_build` job
         before_build = {}, -- each target's `before_build` job
@@ -338,6 +351,7 @@ function get_batchjobs(targetnames, group_pattern)
     }
 
     -- generate batch jobs for default or all targets
+    -- 遍历所有的 targets_root, 准备生成编译依赖图 batchjobs
     local batchjobs = jobpool.new()
     for _, target in ipairs(targets_root) do
         _add_batchjobs_for_target_and_deps(batchjobs, batchjobs:rootjob(),
@@ -346,6 +360,10 @@ function get_batchjobs(targetnames, group_pattern)
 
     -- make sure static/shared/binary target's `build_root` job waits until all of it's direct and indirect
     -- dependent `after_build` tasks are compiled
+    --
+    -- non-object target 的依赖补丁
+    -- 由于我们让 target 尽可能并行, 但是 non-object target 是需要等待所有直接依赖和间接依赖 target 的 .o 文件编译完成才能启动的
+    -- 所以我们让 non-object target 的 `build_root` 任务等待所有直接依赖和间接依赖 target 的 `after_build` 任务完成
     for _, target in ipairs(project.ordertargets()) do
         local target_kind = target:kind()
         local non_object_kind = target_kind == "static" or target_kind ==
@@ -358,6 +376,27 @@ function get_batchjobs(targetnames, group_pattern)
                                                      root_job,
                                                      all_target_jobs.after_build,
                                                      visited_deps)
+            end
+        end
+    end
+
+    -- object target 的依赖补丁
+    -- 由于我们给所有 object target 都默认生成动态库来提前检查缺失的符号, 考虑这么一个例子 (example/policy/build.across_targets_in_parallel)
+    -- object target B 依赖 static target C, 由于 B 需要生成 libB.so 来检查缺失符号, 那么 libB.so 必须要等待 libC.a 编译完成
+    for _, target in ipairs(project.ordertargets()) do
+        local target_kind = target:kind()
+        local target_root_job = all_target_jobs.build_root[target:name()]
+
+        if target_kind == "object" then
+            -- 遍历 object target 的所有直接依赖和间接依赖, 如果是 static / shared / binary 则需要等其 build_root 任务结束才能开始编译
+            for _, dep in ipairs(target:orderdeps({inherit = true})) do
+                local dep_kind = dep:kind()
+                if dep_kind == "static"  or dep_kind == "shared" or dep_kind == "binary" then
+                    local dep_root_job = all_target_jobs.build_root[dep:name()]
+                    if dep_root_job then
+                        batchjobs:add(dep_root_job, target_root_job)
+                    end
+                end
             end
         end
     end

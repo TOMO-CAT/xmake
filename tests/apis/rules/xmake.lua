@@ -1,6 +1,6 @@
 
 -- define rule: markdown
-rule("markdown")
+rule("markdown", function()
     set_extensions(".md", ".markdown")
     on_load(function (target)
         print("markdown: on_load")
@@ -9,18 +9,20 @@ rule("markdown")
         print("compile %s", sourcefile)
         os.cp(sourcefile, path.join(target:targetdir(), path.basename(sourcefile) .. ".html"))
     end)
+end)
 
 -- define rule: man
-rule("man")
+rule("man", function()
     add_imports("core.project.rule")
     on_build_files(function (target, sourcefiles)
         for _, sourcefile in ipairs(sourcefiles) do
             print("generating man: %s", sourcefile)
         end
     end)
+end)
 
 -- define rule: c code
-rule("c code")
+rule("c code", function()
     add_imports("core.tool.compiler")
     before_build_file(function (target, sourcefile)
         print("before_build_file: ", sourcefile)
@@ -38,16 +40,18 @@ rule("c code")
     after_build_file(function (target, sourcefile)
         print("after_build_file: ", sourcefile)
     end)
+end)
 
 -- define rule: stub3
-rule("stub3")
+rule("stub3", function()
     add_deps("markdown")
     on_load(function (target)
         print("rule(stub3): on_load")
     end)
+end)
 
 -- define rule: stub2
-rule("stub2")
+rule("stub2", function()
     add_deps("stub3")
     on_load(function (target)
         print("rule(stub2): on_load")
@@ -64,9 +68,10 @@ rule("stub2")
     after_build_files(function (target)
         print("rule(stub2): after_build_files")
     end)
+end)
 
 -- define rule: stub1
-rule("stub1")
+rule("stub1", function()
     add_deps("stub2")
     on_load(function (target)
         print("rule(stub1): on_load")
@@ -125,21 +130,24 @@ rule("stub1")
     after_run(function (target)
         print("rule(stub1): after_run")
     end)
+end)
 
 -- define rule: stub0b
-rule("stub0b")
+rule("stub0b", function()
     before_build_file(function (target, sourcefile)
         print("rule(stub0b): before_build_file", sourcefile)
     end)
+end)
 
 -- define rule: stub0a
-rule("stub0a")
+rule("stub0a", function()
     after_build_file(function (target, sourcefile)
         print("rule(stub0a): after_build_file", sourcefile)
     end)
+end)
 
 -- define target
-target("test")
+target("test", function()
 
     -- set kind
     set_kind("binary")
@@ -161,3 +169,4 @@ target("test")
     after_build(function (target)
         print("target: after_build")
     end)
+end)

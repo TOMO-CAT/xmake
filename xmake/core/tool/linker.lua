@@ -40,7 +40,7 @@ local compiler  = require("tool/compiler")
 -- add flags from the toolchains
 function linker:_add_flags_from_toolchains(flags, targetkind, target)
 
-    -- attempt to add special lanugage flags first for target kind, e.g. binary.go.gcldflags, static.dcarflags
+    -- attempt to add special language flags first for target kind, e.g. binary.go.gcldflags, static.dcarflags
     if targetkind then
         local toolkind = self:kind()
         local toolname = self:name()
@@ -62,7 +62,7 @@ end
 function linker:_add_flags_from_linker(flags)
     local toolkind = self:kind()
     for _, flagkind in ipairs(self:_flagkinds()) do
-        -- attempt to add special lanugage flags first, e.g. gcldflags, dcarflags
+        -- attempt to add special language flags first, e.g. gcldflags, dcarflags
         table.join2(flags, self:get(toolkind .. 'flags') or self:get(flagkind))
     end
 end
@@ -135,7 +135,7 @@ function linker.load(targetkind, sourcekinds, target)
     local cachekey = targetkind .. "_" .. linkerinfo.linkerkind .. (linkerinfo.program or "") .. plat .. arch
     cachekey = cachekey .. table.concat(sourcekinds, "") -- @see https://github.com/xmake-io/xmake/issues/5360
 
-    -- get it directly from cache dirst
+    -- get it directly from cache
     builder._INSTANCES = builder._INSTANCES or {}
     local instance = builder._INSTANCES[cachekey]
     if not instance then
@@ -178,7 +178,7 @@ function linker.load(targetkind, sourcekinds, target)
         instance._FLAGKINDS = {linkerinfo.linkerflag}
 
         -- add toolchains flags to the linker tool
-        -- add special lanugage flags first, e.g. go.gcldflags or gcc.ldflags or gcldflags or ldflags
+        -- add special language flags first, e.g. go.gcldflags or gcc.ldflags or gcldflags or ldflags
         local toolkind = linkertool:kind()
         local toolname = linkertool:name()
         if target and target.toolconfig then
