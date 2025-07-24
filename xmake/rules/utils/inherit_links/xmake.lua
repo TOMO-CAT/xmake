@@ -19,5 +19,6 @@
 --
 
 -- define rule: utils.inherit.links
-rule("utils.inherit.links")
+rule("utils.inherit.links", function()
     on_config("inherit_links")
+end)
