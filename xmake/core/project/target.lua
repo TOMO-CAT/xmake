@@ -1583,7 +1583,7 @@ end
 function _instance:filename()
 
     -- no target file?
-    if self:is_phony() or self:is_headeronly() or self:is_moduleonly() then
+    if self:is_object() or self:is_phony() or self:is_headeronly() or self:is_moduleonly() then
         return
     end
 
@@ -1593,9 +1593,7 @@ function _instance:filename()
     end
 
     -- make the target file name and attempt to use the format of linker first
-    -- object target 需要编译出动态库 (仿造 BLADE), 提前暴露出来丢失的 syslinks 和 packages 信息
-    -- @see https://github.com/TOMO-CAT/xmake/issues/201
-    local targetkind = self:is_object() and "shared" or self:targetkind()
+    local targetkind = self:targetkind()
     local filename = self:get("filename")
     if not filename then
         local prefixname = self:get("prefixname")

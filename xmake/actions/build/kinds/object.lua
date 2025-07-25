@@ -23,13 +23,9 @@ import("core.base.option")
 import("core.project.rule")
 import("core.project.config")
 import("core.project.project")
-import("utils.progress")
-import("core.tool.linker")
-import("core.project.depend")
 import("async.runjobs")
 import("private.utils.batchcmds")
 import("private.utils.rule_groups")
-import("linkdepfiles", {alias = "get_linkdepfiles"})
 
 -- has scripts for the custom rule
 function _has_scripts_for_rule(ruleinst, suffix)
@@ -261,59 +257,11 @@ function add_batchjobs_for_object(batchjobs, rootjob, target)
     return add_batchjobs_for_sourcefiles(batchjobs, rootjob, target, target:sourcebatches())
 end
 
--- do link target
-function _do_link_target(target, opt)
-    if #target:objectfiles() == 0 then
-        -- 跳过没有 add_files() 添加源文件的 target
-        return
-    end
-
-    local linkinst = linker.load("shared", target:sourcekinds(), {target = target})
-    local linkflags = linkinst:linkflags({target = target})
-
-    -- need build this target?
-    local depfiles = get_linkdepfiles(target)
-    local dryrun = option.get("dry-run")
-    local depvalues = {linkinst:program(), linkflags}
-    depend.on_changed(function ()
-        local targetfile = target:targetfile()
-        progress.show(opt.progress, "${color.build.target}linking.$(mode) %s", path.filename(targetfile))
-
-        local objectfiles = target:objectfiles()
-        local verbose = option.get("verbose")
-        if verbose then
-            -- show the full link command with raw arguments
-            print(linkinst:linkcmd(objectfiles, targetfile, {linkflags = linkflags, rawargs = true}))
-        end
-
-        if not dryrun then
-            assert(linkinst:link(objectfiles, targetfile, {linkflags = linkflags}))
-        end
-
-    end, {dependfile = target:dependfile(),
-          lastmtime = os.mtime(target:targetfile()),
-          changed = target:is_rebuilt(),
-          values = depvalues, files = depfiles, dryrun = dryrun})
-end
-
--- on link the given target
-function _on_link_target(target, opt)
-    -- do link
-    _do_link_target(target, opt)
-end
-
--- link target
-function _link_target(target, opt)
-    -- on link
-    target:script("link", _on_link_target)(target, opt)
-end
-
 -- add batch jobs for building object target
 function main(batchjobs, rootjob, target)
 
     -- add a fake link job
     local job_link = batchjobs:addjob(target:name() .. "/fakelink", function (index, total, opt)
-        _link_target(target, {progress = opt.progress})
     end, {rootjob = rootjob, high_priority = target:policy("build.high_priority")})
 
     -- we only need to return and depend the link job for each target,
