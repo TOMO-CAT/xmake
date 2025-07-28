@@ -8,6 +8,7 @@
 * [#181](https://github.com/TOMO-CAT/xmake/issues/181): 支持自动引用 xrepo 里内置的 toolchains、options 和 rules
 * [#189](https://github.com/TOMO-CAT/xmake/issues/189): 默认使用 package full linkpath，避免库重名导致的问题
 * [#201](https://github.com/TOMO-CAT/xmake/issues/201): object target 默认编译隐式动态库, 提前暴露丢失的 syslinks 和 packages 信息
+* [#211](https://github.com/TOMO-CAT/xmake/issues/211): 支持 xmake_root.lua 确定 xmake 项目根目录
 
 ### Bugs 修复
 

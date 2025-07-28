@@ -82,6 +82,9 @@ end
 function main._find_root(projectfile)
 
     -- make all parent directories
+    -- 从根目录开始搜索出 projectfile 文件所有 parent directories
+    -- 比如 projectfile 是 /root/k/documents/github/foo/xmake.lua, 那么 dirs 搜索出来就是
+    -- {"/", "/root", "/root/k", "/root/k/documents", "/root/k/documents/github", "/root/k/documents/github/foo"}
     local dirs = {}
     local dir = path.directory(projectfile)
     while os.isdir(dir) do
@@ -94,6 +97,16 @@ function main._find_root(projectfile)
         end
     end
 
+    -- 倒序遍历, 找到 parent direcotry 中存在的最近的一个 xmake_root.lua 作为工作目录
+    for i = #dirs, 1, -1 do
+        local dir = dirs[i]
+        local file = path.join(dir, "xmake_root.lua")
+        if os.isfile(file) then
+            return file
+        end
+    end
+
+    -- 正序遍历, 找到 parent directory 中存在的第一个 xmake.lua 作为工作目录
     -- find the first `xmake.lua` from it's parent directory
     for _, dir in ipairs(dirs) do
         local file = path.join(dir, "xmake.lua")
