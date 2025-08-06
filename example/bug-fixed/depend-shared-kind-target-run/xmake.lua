@@ -1,0 +1,10 @@
+target("add", function()
+    set_kind("shared")
+    add_files("src/add.cc")
+end)
+
+target("main", function()
+    set_kind("binary")
+    add_files("src/main.cc")
+    add_deps("add")
+end)

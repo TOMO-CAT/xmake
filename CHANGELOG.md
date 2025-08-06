@@ -17,6 +17,7 @@
 * [#183](https://github.com/TOMO-CAT/xmake/issues/183): 在 include 来自 repo 下发的自定义脚本前确保 repo 已经被 pull
 * [#191](https://github.com/TOMO-CAT/xmake/issues/191): 修复单测耗时统计不准的问题
 * [#194](https://github.com/TOMO-CAT/xmake/issues/194): 修复 protobuf rule 可能丢失 proto 文件依赖顺序的问题
+* [#220](https://github.com/TOMO-CAT/xmake/issues/220): 修复依赖 shared target 时以全路径链接该动态库导致运行时难以加载动态库的问题
 
 ## v3.0.6
 
