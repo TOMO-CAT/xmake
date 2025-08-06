@@ -23,8 +23,9 @@ rule("c.build", function()
     on_build_files("private.action.build.object", {batch = true, distcc = true})
     on_config(function(target)
     end)
+end)
 
-    rule("c++.build")
+rule("c++.build", function()
     set_sourcekinds("cxx")
     add_deps("c++.build.pcheader", "c++.build.modules",
              "c++.build.optimization", "c++.build.sanitizer")
@@ -56,6 +57,9 @@ rule("c", function()
 
     -- add linker rules
     add_deps("linker")
+
+    -- add unittest rules
+    add_deps("unittest")
 end)
 
 rule("c++", function()
@@ -81,4 +85,7 @@ rule("c++", function()
 
     -- add linker rules
     add_deps("linker")
+
+    -- add unittest rules
+    add_deps("unittest")
 end)

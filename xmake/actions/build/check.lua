@@ -68,6 +68,7 @@ function main(targetnames, opt)
     local checkers = checker.checkers()
     for name, info in table.orderpairs(checkers) do
         if (info.build and opt.build) or (info.build_failure and opt.build_failure) then
+            -- 基于 import 实现动态调用
             local check = import("private.check.checkers." .. name, {anonymous = true})
             for _, target in ipairs(targets) do
                 check({target = target, show = _show})

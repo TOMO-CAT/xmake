@@ -18,7 +18,7 @@
 -- @file        xmake.lua
 --
 
-task("test")
+task("test", function()
     set_category("action")
     on_run("main")
     set_menu {
@@ -44,3 +44,4 @@ task("test")
                                               "    xmake test targetname/*"                                         }
         }
     }
+end)

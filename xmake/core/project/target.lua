@@ -2831,6 +2831,7 @@ function target.apis()
         ,   "target.add_vectorexts"
         ,   "target.add_toolchains"
         ,   "target.add_tests"
+        ,   "target.add_testfiles"
         }
     ,   keyvalues =
         {
