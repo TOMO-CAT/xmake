@@ -72,8 +72,10 @@ function main(target)
         -- rust maybe will disable inherit links, only inherit linkdirs
         if target:data("inherit.links.deplink") ~= false then
             -- we need to move target link to head
-            if target:rule("c++") then
-                -- static / shared target 的 link 需要转化成绝对路径, 避免库重名导致的问题
+            if target:rule("c++") and target:is_static() then
+                -- static target 的 link 需要转化成绝对路径, 避免库重名导致的问题
+                -- shared target 的 link 不转换成绝对路径了, 这样要求运行时也必须将该动态库放在指定路径
+                -- @see https://github.com/TOMO-CAT/xmake/issues/220
                 _add_export_value(target, "links", target:targetfile())
             else
                 _add_export_value(target, "links", target:linkname())
@@ -85,8 +87,8 @@ function main(target)
             end
         end
 
-        -- 对于 c++ 而言 static / shared target 的 link 转化成绝对路径, 这里就不再需要导出 linkdirs 了
-        if not target:rule("c++") then
+        -- 对于 c++ 而言 static target 的 link 转化成绝对路径, 这里就不再需要导出 linkdirs 了
+        if not target:rule("c++") or target:is_shared() then
             _add_export_value(target, "linkdirs", path.directory(targetfile))
         end
 

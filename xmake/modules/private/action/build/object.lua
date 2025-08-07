@@ -41,6 +41,7 @@ function _do_build_file(target, sourcefile, opt)
     local compinst = compiler.load(sourcekind, {target = target})
 
     -- get compile flags
+    -- 获取编译参数
     local compflags = compinst:compflags({target = target, sourcefile = sourcefile, configs = opt.configs})
 
     -- load dependent info
