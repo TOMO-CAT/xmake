@@ -10,6 +10,7 @@
 * [#201](https://github.com/TOMO-CAT/xmake/issues/201): object target 默认编译隐式动态库, 提前暴露丢失的 syslinks 和 packages 信息
 * [#211](https://github.com/TOMO-CAT/xmake/issues/211): 支持 xmake_root.lua 确定 xmake 项目根目录
 * [#210](https://github.com/TOMO-CAT/xmake/issues/210): 新增 test kind, 简化单测描述域逻辑
+* [#207](https://github.com/TOMO-CAT/xmake/issues/207): xmake test 支持默认情况下运行 default test, 和 xmake run 保持统一
 
 ### Bugs 修复
 
