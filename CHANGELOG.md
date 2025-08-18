@@ -19,6 +19,7 @@
 * [#191](https://github.com/TOMO-CAT/xmake/issues/191): 修复单测耗时统计不准的问题
 * [#194](https://github.com/TOMO-CAT/xmake/issues/194): 修复 protobuf rule 可能丢失 proto 文件依赖顺序的问题
 * [#220](https://github.com/TOMO-CAT/xmake/issues/220): 修复依赖 shared target 时以全路径链接该动态库导致运行时难以加载动态库的问题
+* [#225](https://github.com/TOMO-CAT/xmake/issues/225): 包含动态库的 package 禁用 fullpath
 
 ## v3.0.6
 

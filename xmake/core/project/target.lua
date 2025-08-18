@@ -314,7 +314,8 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
 
                 -- 优先使用动态库
                 if libfile_name == "lib" .. link .. ".so" then
-                    table.insert(result, libfile)
+                    -- 动态库不使用绝对路径, 否则迁移起来很麻烦
+                    table.insert(result, link)
                     find = true
                     break
                 elseif libfile_name == "lib" .. link .. ".a" then
@@ -323,7 +324,7 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
                     break
                 elseif libfile_name == "lib" .. link .. ".dylib" then
                     -- Mac 动态库
-                    table.insert(result, libfile)
+                    table.insert(result, link)
                     find = true
                     break
                 end
@@ -341,10 +342,19 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
     -- @see https://github.com/xmake-io/xmake/issues/5066
     -- @see https://github.com/TOMO-CAT/xmake/issues/189
     local function _modify_pkg_linkflags(config, libfiles, config_key, config_value, pkg_name)
+        local all_static_lib = true
+        for _, libfile in ipairs(table.wrap(libfiles)) do
+            local libfile_name = path.filename(libfile)
+            if not (libfile_name:startswith("lib") and libfile_name:endswith(".a")) then
+                all_static_lib = false
+                break
+            end
+        end
+
         -- 允许用户通过 add_packages("xxx", {linkpath = false}) 来禁用使用绝对路径
-        if config and config.linkpath ~= false then
-            -- 使用绝对路径时 linkdirs 应该返回 nil, 避免引入多余的 -L 库搜索路径
-            if config_key == "linkdirs" then
+        if not config or config.linkpath ~= false then
+            -- 使用绝对路径且都是静态库时 linkdirs 应该返回 nil, 避免引入多余的 -L 库搜索路径
+            if config_key == "linkdirs" and all_static_lib then
                 config_value = nil
             elseif config_key == "links" then
                 config_value = _filter_libfiles(libfiles, config_value, pkg_name)
