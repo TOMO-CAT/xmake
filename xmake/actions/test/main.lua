@@ -465,9 +465,15 @@ function main()
     if test_patterns then
         local tests_new = {}
         for _, pattern in ipairs(test_patterns) do
+            -- 利用 string:match 来匹配单测
+            -- 同时假设要跑的单测默认是 `${test}/default` 类型
+            -- @see https://github.com/TOMO-CAT/xmake/issues/207
+            local default_test_target_name = pattern .. "/default"
             pattern = "^" .. path.pattern(pattern) .. "$"
             for name, testinfo in pairs(tests) do
-                if name:match(pattern) then
+                if default_test_target_name == name then
+                    tests_new[name] = testinfo
+                elseif name:match(pattern) then
                     tests_new[name] = testinfo
                 end
             end

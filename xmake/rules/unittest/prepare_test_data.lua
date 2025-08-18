@@ -4,6 +4,11 @@ function main(target, opt)
         return
     end
 
+    -- 建立单测二进制软链
+    -- @see https://github.com/TOMO-CAT/xmake/pull/222
+    os.ln(path.absolute(target:targetfile()), path.join(target:rundir(), path.basename(target:targetfile())))
+
+
     -- 拷贝 testfiles 到 rundir
     for _, dst_path in ipairs(table.wrap(target:get("testfiles"))) do
         local extra = target:extraconf("testfiles", dst_path) or {}

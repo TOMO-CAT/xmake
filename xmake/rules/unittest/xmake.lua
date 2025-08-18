@@ -32,7 +32,7 @@ rule("unittest", function()
             end
         end
 
-        -- 如果只有一个 test (绝大多数场景), 不需要显式写 add_tests, 默认添加一个 default tetes
+        -- 如果只有一个 test (绝大多数场景), 不需要显式写 add_tests, 默认添加一个 default tests
         if not target:get("tests") then
             target:add("tests", "default")
         end
