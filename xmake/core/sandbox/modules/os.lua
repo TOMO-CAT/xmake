@@ -83,6 +83,8 @@ sandbox_os.projectfile  = os.projectfile
 sandbox_os.getwinsize   = os.getwinsize
 sandbox_os.getpid       = os.getpid
 
+sandbox_os.get_process_info = os.get_process_info
+
 -- syserror code
 sandbox_os.SYSERR_UNKNOWN     = os.SYSERR_UNKNOWN
 sandbox_os.SYSERR_NONE        = os.SYSERR_NONE

@@ -12,6 +12,7 @@
 * [#210](https://github.com/TOMO-CAT/xmake/issues/210): 新增 test kind, 简化单测描述域逻辑
 * [#207](https://github.com/TOMO-CAT/xmake/issues/207): xmake test 支持默认情况下运行 default test, 和 xmake run 保持统一
 * [#224](https://github.com/TOMO-CAT/xmake/issues/224): 在单测沙盒中建立单测二进制软链, 方便调试
+* [#217](https://github.com/TOMO-CAT/xmake/issues/217): 如果获取文件锁失败, 打印持有文件锁的进程信息
 
 ### Bugs 修复
 
