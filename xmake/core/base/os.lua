@@ -1125,6 +1125,38 @@ function os.getpid(...)
     return pid
 end
 
+-- get_process_info
+function os.get_process_info()
+    local process_info = os._PROCESS_INFO
+    if process_info == nil then
+        os._PROCESS_INFO = {}
+        local pid = os.getpid()
+        os._PROCESS_INFO["pid"] = pid
+        if os.host() == "linux" and pid > 0 then
+            -- cmdline 文件是以 \0 分隔的, 需要替换成空格
+            local cmdline_file = path.join("/proc", pid, "cmdline")
+            if os.isfile(cmdline_file) then
+                local f_cmdline = io.popen("cat " .. cmdline_file)
+                if f_cmdline then
+                    local content = f_cmdline:read("*a"):gsub("%z", " ")
+                    local trimmed_content = content:gsub("%s+$", "")
+                    f_cmdline:close()
+                    os._PROCESS_INFO["cmdline"] = trimmed_content
+                end
+            end
+            local cwd_path = path.join("/proc", pid, "cwd")
+            if os.isdir(cwd_path) then
+                os._PROCESS_INFO["cwd"] = os.readlink(cwd_path)
+            end
+            local exe_path = path.join("/proc", pid, "exe")
+            if os.isfile(exe_path) then
+                os._PROCESS_INFO["exe"] = os.readlink(exe_path)
+            end
+        end
+    end
+    return os._PROCESS_INFO
+end
+
 -- check the current command is running as root
 function os.isroot()
     return os.uid().euid == 0
