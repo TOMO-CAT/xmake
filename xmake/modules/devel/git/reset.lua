@@ -79,6 +79,12 @@ function main(opt)
         table.insert(argv, opt.commit)
     end
 
+    if opt.branch then
+        local remote = opt.remote or "origin"
+        local remote_branch = remote .. "/" .. opt.branch
+        table.insert(argv, remote_branch)
+    end
+
     -- reset it
     os.vrunv(git.program, argv, {curdir = opt.repodir})
 end

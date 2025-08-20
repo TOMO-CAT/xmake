@@ -13,6 +13,7 @@
 * [#207](https://github.com/TOMO-CAT/xmake/issues/207): xmake test 支持默认情况下运行 default test, 和 xmake run 保持统一
 * [#224](https://github.com/TOMO-CAT/xmake/issues/224): 在单测沙盒中建立单测二进制软链, 方便调试
 * [#217](https://github.com/TOMO-CAT/xmake/issues/217): 如果获取文件锁失败, 打印持有文件锁的进程信息
+* [#223](https://github.com/TOMO-CAT/xmake/issues/223): 更新 repo 时使用 git fetch + git reset 的方式, 避免 pull -f 失败
 
 ### Bugs 修复
 
