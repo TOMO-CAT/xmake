@@ -142,6 +142,7 @@
         "fsanitize",
         "fscase",
         "fsmonitor",
+        "ftemplate",
         "ftest",
         "funcname",
         "funcs",
