@@ -1,4 +1,7 @@
+#include "xutil/macros/type.h"
+#include "xutil/platform/process.h"
 #include "xutil/unit_test/ut.h"
+#include "xutil/utils/trace.h"
 
 /* *******************************************************
  * private implementation
@@ -117,15 +120,55 @@ static xu_void_t xu_demo_process_test_waitlist(xu_char_t** argv)
         }
     }
 }
+
+static xu_void_t xu_demo_process_test_kill()
+{
+    xu_process_attr_t attr = {0};
+    xu_char_t const* argv[] = {"sleep", "20", NULL};
+    // 启动一个进程 sleep 20 秒
+    xu_process_ref_t process = xu_process_init(argv[0], argv, &attr);
+    if (process) {
+        xu_trace_i("start process (%p)", process);
+        xu_trace_i("sleep for 5 seconds ...");
+        // 5 秒后 kill
+        xu_sleep(5);
+        xu_trace_i("try to kill process (%p)", process);
+        xu_process_kill(process);
+
+        // wait process (防止成为僵尸进程)
+        xu_long_t status = 0;
+        xu_process_wait(process, &status, -1);
+        xu_trace_i("run: %s, status: %ld", argv[1], status);
+        // exit process
+        xu_process_exit(process);
+
+        xu_trace_i("kill process (%p) successfully!", process);
+        // 等待 10 秒, 方便通过 ps 查看是否已删除
+        xu_trace_i("sleep for another 10 seconds...");
+        xu_sleep(10);
+    }
+}
+
 static xu_void_t xu_demo_process_test_exit(xu_char_t** argv, xu_bool_t detach)
 {
     xu_size_t         i    = 0;
     xu_process_attr_t attr = {0};
     if (detach) attr.flags |= XU_PROCESS_FLAG_DETACH;
     for (i = 0; i < 10; i++)
-        xu_process_init(argv[1], (xu_char_t const**)(argv + 1), &attr);
+    {
+        xu_process_ref_t process = xu_process_init(argv[1], (xu_char_t const**)(argv + 1), &attr);
+        if (process) {
+            xu_trace_i("run xu_process command (%s)", argv[1]);
+            xu_char_t const ** argv_copy = (xu_char_t const**)(argv + 1);
+            while (*argv_copy != NULL) {
+                xu_trace_i("    %s", *argv_copy);
+                argv_copy++;
+            }
+        }
+    }
 
     // we attempt to enter or do ctrl+c and see process list in process monitor
+    // 通过 getchar 让程序阻塞住， 可以通过回车或者 ctrl+c 退出程序
     xu_getchar();
 }
 
@@ -153,6 +196,10 @@ xu_int_t xu_ut_platform_process_main(xu_int_t argc, xu_char_t** argv)
 #endif
 
 #if 1
+    xu_demo_process_test_kill();
+#endif
+
+#if 0
     // we can run `xxx.bat` or `xxx.sh` shell command to test it
     // @see https://github.com/xmake-io/xmake/issues/719
     xu_demo_process_test_exit(argv, xu_false);

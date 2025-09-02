@@ -42,10 +42,11 @@ process.close       = nil
 process._subprocess = _subprocess
 
 -- new an subprocess
-function _subprocess.new(program, proc)
+function _subprocess.new(program, proc, argv)
     local subprocess = table.inherit(_subprocess)
     subprocess._PROGRAM = program
     subprocess._PROC    = proc
+    subprocess._ARGV    = argv or {}
     setmetatable(subprocess, _subprocess)
     return subprocess
 end
@@ -61,6 +62,11 @@ end
 -- get the process program
 function _subprocess:program()
     return self._PROGRAM
+end
+
+-- get the process arguments
+function _subprocess:desc()
+    return string.format("%s %s", self:program(), os.args(self._ARGV))
 end
 
 -- get cdata of process
@@ -265,7 +271,8 @@ function process.openv(program, argv, opt)
     -- open subprocess
     local proc = process._openv(program, argv, opt)
     if proc then
-        return _subprocess.new(program, proc)
+        -- 创建一个子进程
+        return _subprocess.new(program, proc, argv)
     else
         return nil, string.format("openv process(%s, %s) failed!", program, os.args(argv))
     end

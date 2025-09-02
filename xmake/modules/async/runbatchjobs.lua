@@ -41,7 +41,7 @@ function main(name, jobs, opt)
 
                 -- start this job
                 index = index + 1
-                local co = scheduler.co_start_withopt({name = group_name .. '/' .. tostring(i)}, function(i)
+                local co = scheduler.co_start_withopt({name = group_name .. '/' .. jobname}, function(i)
                     try {
                         function()
                             if stop then
@@ -67,10 +67,15 @@ function main(name, jobs, opt)
                                     scheduler.co_group_waitobjs(group_name)
                                 if waitobjs:size() > 0 then
                                     for _, obj in waitobjs:keys() do
+                                        -- 目前无法 kill 掉子进程的子进程, 所以我们选择和 cmake 一样 wait 所有并发任务结束, 如果用户 ctrl +c 也可能退干净
+                                        -- 主要是 gcc 进程会创建子进程, 如果 xmake 编译出错这里 kill 只能杀掉 gcc 进程, 无法杀掉 gcc 进程创建的子进程
+                                        -- @see https://github.com/xmake-io/xmake/issues/719
+                                        utils.cprint("${bright yellow}Encountered some errors, waiting for unfinished jobs [%s] (press Ctrl+C to abort)${clear}", obj:desc())
+                                        
                                         -- TODO: kill pipe is not supported now
-                                        if obj.kill then
-                                            obj:kill()
-                                        end
+                                        -- if obj.kill then
+                                        --      obj:kill()
+                                        -- end
                                     end
                                 end
                             end
