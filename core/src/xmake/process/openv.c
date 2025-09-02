@@ -51,6 +51,7 @@ xu_int_t xm_process_openv(lua_State* lua)
     xu_assert_and_check_return_val(lua, 0);
 
     // check argv
+    // 检查第二个参数 argv 类型为 table
     if (!lua_istable(lua, 2))
     {
         // error
@@ -60,6 +61,7 @@ xu_int_t xm_process_openv(lua_State* lua)
     }
 
     // get shellname
+    // 获取 shellname (第一个参数)
     xu_char_t const* shellname = lua_tostring(lua, 1);
     xu_check_return_val(shellname, 0);
 
