@@ -45,6 +45,8 @@ function help_info() {
   echo ""
 }
 
+
+
 function docker_run() {
   docker exec -it ${DOCKER_CONTAINER} /bin/bash -c "source /home/${USER}/.profile && /bin/bash"
 }
