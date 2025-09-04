@@ -1,0 +1,50 @@
+FROM ubuntu:latest
+
+# ubuntu2204 映射宿主机 user 会出现问题
+# @see https://github.com/devcontainers/images/issues/1056
+RUN userdel -r ubuntu || true
+
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
+    && apt-get update \
+    && apt install -y ruby ruby-dev rubygems build-essential llvm \
+    && apt install -y libgl1-mesa-dev libglu1-mesa-dev \
+    && apt install -y ccache \
+    && apt install -y libc++-dev libc++abi-dev
+
+RUN apt install -y sudo git vim curl wget
+
+RUN cat <<'EOF' >> /etc/bash.bashrc
+
+# add proxy
+export hostip="host.docker.internal"
+export socks_hostport=7890
+export http_hostport=7890
+alias proxy='
+    export https_proxy="http://${hostip}:${http_hostport}"
+    export http_proxy="http://${hostip}:${http_hostport}"
+    export ALL_PROXY="socks5://${hostip}:${socks_hostport}"
+    export all_proxy="socks5://${hostip}:${socks_hostport}"
+'
+alias unproxy='
+    unset ALL_PROXY
+    unset https_proxy
+    unset http_proxy
+    unset all_proxy
+'
+alias echoproxy='
+    echo $ALL_PROXY
+    echo $all_proxy
+    echo $https_proxy
+    echo $http_proxy
+'
+#end proxy
+EOF
+
+ARG USER_NAME
+RUN useradd -m ${USER_NAME}
+RUN echo "root:0000" | chpasswd
+RUN echo "${USER_NAME}:0000" | chpasswd
+RUN echo "${USER_NAME} ALL=NOPASSWD: ALL" >> /etc/sudoers
+USER ${USER_NAME}
+
+ENV PATH=${PATH}:/home/${USER_NAME}/.local/bin

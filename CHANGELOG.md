@@ -15,6 +15,7 @@
 * [#217](https://github.com/TOMO-CAT/xmake/issues/217): 如果获取文件锁失败, 打印持有文件锁的进程信息
 * [#223](https://github.com/TOMO-CAT/xmake/issues/223): 更新 repo 时使用 git fetch + git reset 的方式, 避免 pull -f 失败
 * [#216](https://github.com/TOMO-CAT/xmake/issues/216): 出错退出时等待后台子进程结束, 支持用户 ctrl + c 主动中断
+* [#234](https://github.com/TOMO-CAT/xmake/issues/234): 支持 ubuntu:latest docker container
 
 ### Bugs 修复
 
