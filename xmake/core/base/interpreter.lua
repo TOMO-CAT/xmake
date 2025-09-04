@@ -1223,7 +1223,7 @@ function interpreter:api_register_add_values(scope_kind, ...)
         -- includes rules / toolchains / options / ... dispatched by repo
         -- @see https://github.com/TOMO-CAT/xmake/issues/181
         for _, value in ipairs(values) do
-
+            -- 如果用户调用了了 add_repositories, 那么会自动 include 其 rules / toolchains / options / ... 下的目录
             if name == "repositories" then
                 local repoinfo = value:split('%s')
                 if #repoinfo <= 3 then

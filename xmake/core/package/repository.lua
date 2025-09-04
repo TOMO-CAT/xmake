@@ -187,10 +187,14 @@ function repository.load(name, url, branch, is_global)
         return nil, string.format("invalid repo(%s): url not found!", name)
     end
 
+
+    -- 本地仿真下 current-project 和 source-embed-project 可能有同名的 repo, 所以我们需要组合一下 key
+    local repo_key = name .. ":" .. url
+
     -- get it directly from cache first
     repository._REPOS = repository._REPOS or {}
-    if repository._REPOS[name] then
-        return repository._REPOS[name]
+    if repository._REPOS[repo_key] then
+        return repository._REPOS[repo_key]
     end
 
     -- the repository directory
@@ -203,7 +207,7 @@ function repository.load(name, url, branch, is_global)
     end
 
     -- save instance to the cache
-    repository._REPOS[name] = instance
+    repository._REPOS[repo_key] = instance
     return instance
 end
 
