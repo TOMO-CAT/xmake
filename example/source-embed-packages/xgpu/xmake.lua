@@ -1,5 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
+add_repositories("cat-repo https://github.com/zxmake/cat-zxmake-repo.git")
+
 set_languages("c++17")
 add_cxxflags("-Wall", "-Wextra", "-Werror")
 add_includedirs(".")

@@ -112,12 +112,30 @@ function _update()
             local repodir = repo:directory()
             if not pulled[repodir] then
                 if os.isdir(repodir) then
-                    -- only update the local repository with the remote url
+                    local need_pulled = false
                     if not os.isdir(repo:url()) then
+                        -- update the local repository with the remote url
+                        need_pulled = true
+                    else
+                        -- 修复 source-embed-packages 的问题
+                        -- @see https://github.com/TOMO-CAT/xmake/issues/228
+                        -- 以本地仿真场景为例, 假设 xgpu 引用了 xmath 作为本地库, 那么回到 xmath 本地编译的时候会使用 xgpu 里
+                        -- .xmake/linux/x86_64/repositories 的 packages / rules / toolchains, 但是此时在 xmath 里调用
+                        -- `xmake repo -uv` 并不会更新 xgpu 的 remote-repo, 这是因为在 xgpu 里编译 xmath 时会传递一个命令：
+                        -- `xmake repo --verbose --yes --add cat-repo /home/k/github/xmake/example/source-embed-packages/xgpu/.xmake/linux/x86_64/repositories/cat-repo`
+                        -- 这个命令里将 xgpu 的 remote repo 当作 local repo 传递给了 xmath, xmath 自然不会去更新 xgpu 的 remote repo
+                        --
+                        -- 为了修复这个问题, 我们需要检查所有没有 url 的 repo 是不是一个 git 仓库, 然后强制更新一下
+                        if os.isdir(path.join(repo:url(), ".git")) then
+                            need_pulled = true
+                        end
+                    end
+                    if need_pulled then
                         vprint("pulling repository(%s): %s to %s ..", repo:name(), repo:url(), repodir)
                         if project.policy("package.local_repo.force_update") then
                             git.fetch({verbose = option.get("verbose"), branch = repo:branch(), repodir = repodir})
                             git.reset({verbose = option.get("verbose"), repodir = repodir, hard = true})
+                            -- 因为 reset --hard 时暂时不清楚默认的 remote branch, 所以加一步 pull -f
                             git.pull({verbose = option.get("verbose"), branch = repo:branch(), repodir = repodir, force = true})
                         else
                             git.pull({verbose = option.get("verbose"), branch = repo:branch(), repodir = repodir, force = true})

@@ -1,5 +1,13 @@
 add_rules("mode.debug", "mode.release")
 
+add_repositories("cat-repo https://github.com/zxmake/cat-zxmake-repo.git")
+-- 新版本的 builtin rules
+add_rules("cat.release_mode")
+
+-- 老版本的 package rules
+-- add_requires("cat", {system = false})
+-- add_rules("@cat/release_mode")
+
 set_languages("c++17")
 add_cxxflags("-Wall", "-Wextra", "-Werror")
 add_includedirs(".")

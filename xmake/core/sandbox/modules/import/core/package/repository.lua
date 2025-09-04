@@ -64,6 +64,7 @@ end
 function sandbox_core_package_repository.repositories(is_global)
 
     -- load repositories from repository cache
+    -- 比如从 .xmake/linux/x86_64/cache/repository 目录读取到缓存
     local repositories = {}
     for name, repoinfo in pairs(table.wrap(repository.repositories(is_global))) do
         local url = repoinfo
