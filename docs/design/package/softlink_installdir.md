@@ -16,7 +16,7 @@ bazel 创建了软链，会显得相对路径简短很多：
 
 ## 设计
 
-首先新增一个 `package.enable_softlink_installdir` policy，默认所有的 required-package（即 top level）都开启软链功能。注意只包含通过 `add_packages `直接引入的 package（即 top-level package），而不包含间接 package，原因在于现在不太好处理。
+首先新增一个 `package.enable_softlink_installdir` policy，默认所有的 required-package（即 top level）都开启软链功能。注意只包含通过 `add_packages` 直接引入的 package（即 top-level package），而不包含间接 package，原因在于现在不太好处理。
 
 软链链接路径是 `build/.pkg/${pkg_name}`。
 
@@ -56,7 +56,7 @@ end
 
 ### 2. softlink installdir package 禁用 -isystem
 
-> 讨论可见 https://github.com/TOMO-CAT/xmake/issues/98。
+> 讨论可见 <https://github.com/TOMO-CAT/xmake/issues/98>。
 
 因为如果我们使用 -isystem 且使用软链的话，那么 xmake 是不会去检测头文件是否变动的，那么即使我们更改了 package 的版本也不会触发重新编译。
 
