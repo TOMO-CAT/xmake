@@ -1,17 +1,21 @@
 {
-    "diagnostics": {
-        "disable": [
-            "undefined-global",
-            "missing-parameter",
-            "param-type-not-match",
-            "need-check-nil"
-        ]
-    },
-    "workspace": {
-        "ignoreDir": [
-            "xmake/templates",
-            "tests",
-            "core"
-        ]
-    }
+  "diagnostics": {
+    "disable": [
+      "undefined-global",
+      "missing-parameter",
+      "param-type-not-match",
+      "need-check-nil",
+      "need-check-nil",
+      "undefined-field",
+      "unnecessary-if",
+      "redundant-parameter"
+    ]
+  },
+  "workspace": {
+    "ignoreDir": [
+      "xmake/templates",
+      "tests",
+      "core"
+    ]
+  }
 }
