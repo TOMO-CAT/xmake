@@ -271,7 +271,8 @@ end
 function main._limit_root()
     -- return not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
     local limit_root = not option.get("root") and os.getenv("XMAKE_ROOT") ~= 'y' and os.host() ~= 'haiku'
-    if limit_root then
+    -- 修复非 root 下打印 warning 的问题
+    if limit_root and os.isroot() then
         utils.cprint("${bright yellow}[warning]${clear} running xmake as root is extremely dangerous, all build scripts would have unrestricted access to your system.")
     end
     return false
