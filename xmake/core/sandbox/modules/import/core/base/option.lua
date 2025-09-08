@@ -27,8 +27,8 @@ local option = require("base/option")
 local raise  = require("sandbox/modules/raise")
 
 -- get the option value
-function sandbox_core_base_option.get(name)
-    return option.get(name)
+function sandbox_core_base_option.get(name, opt)
+    return option.get(name, opt)
 end
 
 -- set the option value

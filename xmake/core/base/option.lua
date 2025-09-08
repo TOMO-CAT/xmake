@@ -366,20 +366,43 @@ function option.taskmenu(task)
 end
 
 -- get the given option value for the current task
-function option.get(name)
+function option.get(name, opt)
+    opt = opt or {}
 
     -- check
     assert(name)
 
-    -- the options
-    local options = option.options()
-    if options then
-        local value = options[name]
-        if value == nil then
-            value = option.default(name)
+    -- local package 支持从 option._context 里搜索配置
+    -- @see https://github.com/TOMO-CAT/xmake/issues/229
+    if opt.deepseek then
+        local option_ctxs = option._CONTEXTS
+        -- 从后往前找第一个命中的 option
+        for i = #option_ctxs, 1, -1 do
+            if option_ctxs[i] then
+                local options = option_ctxs[i].options
+                if options then
+                    local value = options[name]
+                    if value then
+                        return value
+                    end
+                end
+            end
         end
-        return value
+        -- 查找不到返回默认值
+        return option.default(name)
+    else
+        -- the options
+        local options = option.options()
+        if options then
+            local value = options[name]
+            if value == nil then
+                value = option.default(name)
+            end
+            return value
+        end
     end
+
+
 end
 
 -- set the given option for the current task
