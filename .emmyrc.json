@@ -8,7 +8,9 @@
       "need-check-nil",
       "undefined-field",
       "unnecessary-if",
-      "redundant-parameter"
+      "redundant-parameter",
+      "duplicate-set-field",
+      "access-invisible"
     ]
   },
   "workspace": {

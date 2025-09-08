@@ -479,6 +479,9 @@ function install(package, configs, opt)
     local envs = opt.envs or buildenvs(package)
 
     -- pass local repositories
+    -- 这一步可能会导致 source-embed-package 重新 clone repo, source-embed-package 的场景比较少暂时不解决
+    -- 后续可以在 source-embed-package 里判断 repository 的 meta 信息校验 add 时要不要删除 repo 目录重新拉取
+    -- @see https://github.com/TOMO-CAT/xmake/issues/237
     for _, repo in ipairs(repository.repositories()) do
         local repo_argv = {"repo"}
         _set_builtin_argv(package, repo_argv)
@@ -525,9 +528,15 @@ function install(package, configs, opt)
     end
     argv = {"build"}
     _set_builtin_argv(package, argv)
-    local njob = opt.jobs or option.get("jobs")
+    local njob = opt.jobs or option.get("jobs", {deepseek = true})
     if njob then
         table.insert(argv, "--jobs=" .. njob)
+    end
+    -- source-embed-package 支持传递 rebuild 参数
+    -- @see https://github.com/TOMO-CAT/xmake/issues/229
+    local rebuild = opt.rebuild or option.get("rebuild", {deepseek = true})
+    if rebuild then
+        table.insert(argv, "--rebuild")
     end
     if opt.target then
         table.insert(argv, opt.target)
