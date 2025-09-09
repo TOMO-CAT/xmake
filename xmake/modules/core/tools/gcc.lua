@@ -341,11 +341,31 @@ function nf_syslink(self, lib)
     return nf_link(self, lib)
 end
 
+-- 由于 package 静态库转成 fullpath 了, 这里需要转化成 fullpath 否则会报错
+-- @see https://github.com/TOMO-CAT/xmake/issues/241
+-- 后续可以考虑迁移到 target 里作为一个成员函数, 方便缓存起来不必反复求值
+function _transform_lib(lib, target)
+    -- 遍历 target 短路返回第一个满足的静态库 fullpath
+    for _, pkg in pairs(target:pkgs()) do
+        for _, libfile in ipairs(table.wrap(pkg:libraryfiles())) do
+            local libfile_name = path.filename(libfile)
+            if libfile_name == "lib" .. lib .. ".a" then
+                return libfile
+            end
+        end
+    end
+
+    -- 没找到的话也返回, 可能是系统库
+    return lib
+end
+
 -- make the link group flag
 function nf_linkgroup(self, linkgroup, opt)
     local linkflags = {}
+    local target = opt.target
     for _, lib in ipairs(linkgroup) do
-        table.insert(linkflags, nf_link(self, lib))
+        local transformed_lib = _transform_lib(lib, target)
+        table.insert(linkflags, nf_link(self, transformed_lib))
     end
     local flags = {}
     local extra = opt.extra

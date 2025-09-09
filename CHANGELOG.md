@@ -27,6 +27,7 @@
 * [#220](https://github.com/TOMO-CAT/xmake/issues/220): 修复依赖 shared target 时以全路径链接该动态库导致运行时难以加载动态库的问题
 * [#225](https://github.com/TOMO-CAT/xmake/issues/225): 包含动态库的 package 禁用 fullpath
 * [#229](https://github.com/TOMO-CAT/xmake/issues/229): 修复 local package 无法透传 rebuild / jobs 参数的问题
+* [#241](https://github.com/TOMO-CAT/xmake/issues/241): 修复 package fullpath 导致的 linkgroups 等配置的 bug
 
 ## v3.0.6
 
