@@ -1152,6 +1152,9 @@ function os.get_process_info()
             if os.isfile(exe_path) then
                 os._PROCESS_INFO["exe"] = os.readlink(exe_path)
             end
+            local timestamp = os.time()
+            os._PROCESS_INFO["time"] = timestamp
+            os._PROCESS_INFO["time_formatted"] = os.date("%Y-%m-%d_%H:%M:%S", timestamp)
         end
     end
     return os._PROCESS_INFO
