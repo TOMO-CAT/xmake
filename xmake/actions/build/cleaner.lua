@@ -36,7 +36,7 @@ function cleanup()
         return
     end
 
-    -- mark as posted first, avoid posting it repeatly
+    -- mark as posted first, avoid posting it repeatedly
     io.writefile(markfile, "ok")
 
     -- init argument list

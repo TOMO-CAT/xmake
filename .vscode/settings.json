@@ -279,6 +279,7 @@
         "ncsh",
         "ncursesw",
         "NDEBUG",
+        "ndkbuild",
         "ndkver",
         "newenvs",
         "njob",
