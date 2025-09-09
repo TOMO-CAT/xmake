@@ -4,6 +4,17 @@
 
 ### 新特性
 
+* [#219](https://github.com/TOMO-CAT/xmake/issues/219): 支持配置自动删除 cache 和 packages 的轮转时间
+  * package 文件锁迁移到 `~/.xmake/filelock` 目录下
+
+### Bugs 修复
+
+* [#241](https://github.com/TOMO-CAT/xmake/issues/241): 修复 package fullpath 导致的 linkgroups 等配置的 bug
+
+## v3.0.7
+
+### 新特性
+
 * [#179](https://github.com/TOMO-CAT/xmake/issues/179): 简化普通模式下的编译输出信息
 * [#181](https://github.com/TOMO-CAT/xmake/issues/181): 支持自动引用 xrepo 里内置的 toolchains、options 和 rules
 * [#189](https://github.com/TOMO-CAT/xmake/issues/189): 默认使用 package full linkpath，避免库重名导致的问题
@@ -27,7 +38,6 @@
 * [#220](https://github.com/TOMO-CAT/xmake/issues/220): 修复依赖 shared target 时以全路径链接该动态库导致运行时难以加载动态库的问题
 * [#225](https://github.com/TOMO-CAT/xmake/issues/225): 包含动态库的 package 禁用 fullpath
 * [#229](https://github.com/TOMO-CAT/xmake/issues/229): 修复 local package 无法透传 rebuild / jobs 参数的问题
-* [#241](https://github.com/TOMO-CAT/xmake/issues/241): 修复 package fullpath 导致的 linkgroups 等配置的 bug
 
 ## v3.0.6
 

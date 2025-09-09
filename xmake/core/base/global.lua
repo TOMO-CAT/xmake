@@ -97,17 +97,16 @@ function global.directory()
         local name = "." .. xmake._NAME
         local rootdir = os.getenv("XMAKE_GLOBALDIR")
         if not rootdir then
-            -- compatible with the old `%appdata%/.xmake` directory if it exists
-            local appdata = (os.host() == "windows") and os.getenv("APPDATA")
-            if appdata and os.isdir(path.join(appdata, name)) then
-                rootdir = appdata
-            else
-                rootdir = path.translate("~")
-            end
+            rootdir = path.translate("~")
         end
         global._DIRECTORY = path.join(rootdir, name)
     end
     return global._DIRECTORY
+end
+
+-- get the global filelock directory
+function global.filelockdir()
+    return global.get("filelockdir") or path.join(global.directory(), "filelock")
 end
 
 -- get the global cache directory

@@ -703,7 +703,13 @@ end
 function _instance:filelock()
     local filelock = self._FILELOCK
     if filelock == nil then
-        filelock = io.openlock(path.join(self:cachedir(), "package.lock"))
+        local name = self:displayname():lower():gsub("::", "_"):gsub("#", "_")
+        local version_str = self:version_str()
+        if self:is_thirdparty() then
+            -- strip `>= <=`
+            version_str = version_str:gsub("[>=<]", "")
+        end
+        filelock = io.openlock(path.join(self:filelockdir(), string.format("%s-%s-%s.lock", name:sub(1, 1):lower(), name, version_str)))
         if not filelock then
             os.raise("cannot create filelock for package(%s)!", self:name())
         end
@@ -757,6 +763,23 @@ function _instance:buildir()
         self._BUILDIR = buildir
     end
     return buildir
+end
+
+-- get the filelock directory of this package
+function _instance:filelockdir()
+    local filelockdir = self._FILELOCKDIR
+    if not filelockdir then
+        if self:is_source_embed() then
+            filelockdir = path.join(self:buildir(), ".packages")
+        elseif self:is_local() then
+            filelockdir = path.join(config.buildir({absolute = true}), ".packages", "filelock")
+        else
+            -- 这里将 package filelock 打平方便后续删除文件锁 (否则需要处理文件夹的删除问题)
+            filelockdir = package.filelockdir()
+        end
+        self._FILELOCKDIR = filelockdir
+    end
+    return filelockdir
 end
 
 -- get the cached directory of this package
@@ -2739,6 +2762,17 @@ function package.apis()
         ,   { "is_arch", package._api_is_arch }
         }
     }
+end
+
+-- the filelock directory
+function package.filelockdir(opt)
+    opt = opt or {}
+    local filelockdir = package._FILELOCKDIR
+    if not filelockdir then
+        filelockdir = path.join(global.filelockdir(), "packages")
+        package._FILELOCKDIR = filelockdir
+    end
+    return filelockdir
 end
 
 -- the cache directory
