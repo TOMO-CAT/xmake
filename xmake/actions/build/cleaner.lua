@@ -31,12 +31,14 @@ import("core.platform.platform")
 function cleanup()
 
     -- has been cleaned up today?
+    -- 每天执行一次, 判断是否执行过了
     local markfile = path.join(os.tmpdir(), "cleanup", os.date("%y%m%d") .. ".mark")
     if os.isfile(markfile) then
         return
     end
 
     -- mark as posted first, avoid posting it repeatedly
+    -- 标记当前小时已经执行过了, 避免重复执行
     io.writefile(markfile, "ok")
 
     -- init argument list
@@ -51,6 +53,7 @@ function cleanup()
     end
 
     -- try to post it in background
+    -- 尝试后台运行, 不要干扰主线程, 而且日志会写到 xmake tmp 目录的 cleaner.log 里
     try
     {
         function ()
