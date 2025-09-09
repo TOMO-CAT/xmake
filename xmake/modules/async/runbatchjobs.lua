@@ -78,9 +78,10 @@ function main(name, jobs, opt)
                                         --      obj:kill()
                                         -- end
 
-                                        if option.get("verbose") or option.get("diagnosis") then
-                                            utils.cprint("${bright yellow}Unfinished jobs${clear} [%s]", obj:desc())
-                                        end
+                                        -- 线上机器编译参数比较复杂, 核数比较多, 打印的日志太多了暂时关闭
+                                        -- if option.get("verbose") or option.get("diagnosis") then
+                                        --     utils.cprint("${bright yellow}Unfinished jobs${clear} [%s]", obj:desc())
+                                        -- end
                                     end
                                 end
                             end
