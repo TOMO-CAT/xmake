@@ -10,7 +10,8 @@
       "unnecessary-if",
       "redundant-parameter",
       "duplicate-set-field",
-      "access-invisible"
+      "access-invisible",
+      "undefined-field"
     ]
   },
   "workspace": {

@@ -551,7 +551,7 @@ end
 
 -- finish requireinfo
 function _finish_requireinfo(requireinfo, package)
-    -- we need to synchronise the plat/arch inherited from the parent package as early as possible
+    -- we need to synchronize the plat/arch inherited from the parent package as early as possible
     if requireinfo.plat then
         package:plat_set(requireinfo.plat)
     end
