@@ -454,6 +454,7 @@ function _install_packages(packages_install, packages_download, installdeps)
                     end
                 end
             end
+
             if instance == nil and #packages_pending > 0 then
                 os.sleep(100)
             end
@@ -483,6 +484,10 @@ function _install_packages(packages_install, packages_download, installdeps)
                     packages_in_group[group] = 0
                 end
 
+                -- 对整个 download 和 install 一起加锁, 避免出现死锁的问题
+                -- @see https://github.com/TOMO-CAT/xmake/issues/244
+                instance:lock()
+
                 -- download this package first
                 local downloaded = true
                 if packages_download[tostring(instance)] then
@@ -504,6 +509,8 @@ function _install_packages(packages_install, packages_download, installdeps)
                         action_install(instance)
                     end
                 end
+
+                instance:unlock()
 
                 -- reset package status cache
                 _g.package_status_cache = nil

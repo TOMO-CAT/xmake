@@ -252,9 +252,6 @@ function _enter_workdir(package)
     -- get working directory of this package
     local workdir = package:cachedir()
 
-    -- lock this package
-    package:lock()
-
     -- enter directory
     local oldir = nil
     local sourcedir = package:sourcedir()
@@ -306,9 +303,6 @@ function _leave_workdir(package, oldir)
     -- clean source directory if it is no longer needed
     -- 删除 source 目录后再解锁, 否则并发安装同一个 package 时可能出问题
     _clear_sourcedir(package)
-
-    -- unlock this package
-    package:unlock()
 end
 
 -- enter package install environments
