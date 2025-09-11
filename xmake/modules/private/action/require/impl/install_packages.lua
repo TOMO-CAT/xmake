@@ -683,9 +683,11 @@ function main(requires, opt)
     opt = opt or {}
 
     -- load packages
+    -- 加载所有的 package 实例
     local packages = package.load_packages(requires, opt)
 
     -- get package installation dependencies
+    -- 获取每个 package 的 deps
     local installdeps = _get_package_installdeps(packages)
 
     -- sort packages for installdeps

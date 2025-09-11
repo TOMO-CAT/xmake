@@ -324,7 +324,7 @@ end
 -- add some builtin configurations to package
 function _add_package_configurations(package)
     -- we can define configs to override it and it's default value in package()
-    -- 如果 package 中没配置 buildit configurations, 我们需要给其加上默认值
+    -- 如果 package 中没配置 builtin configurations, 我们需要给其加上默认值
     if package:extraconf("configs", "debug", "default") == nil then
         local default = _get_default_config_value_of("debug")
         package:add("configs", "debug", {builtin = true, description = "Enable debug symbols.", default = default, type = "boolean"})
@@ -1028,10 +1028,15 @@ end
 -- Of course, conflicts caused by `add_packages("foo", "ddd")`
 -- cannot be detected at present and can only be resolved by the user
 --
+-- 以上面的例子为例, 就是说当前只能针对 top_level 的 require 检测是否存在依赖冲突 (比如 foo 同时依赖 zlib 1.2.10 和 zlib 1.2.11)
+-- 这样会导致依赖 foo package 的 target 在链接时只能链接到一个 zlib 库
+--
+-- 不过如果不同的 top_level require 有依赖冲突目前是检测不出来的
 function _check_package_depconflicts(package)
     local packagekeys = {}
     for _, dep in ipairs(package:librarydeps()) do
         local key = _get_packagekey(dep:name(), dep:requireinfo())
+        -- package 已经出现过则标记成冲突
         local prevkey = packagekeys[dep:name()]
         if prevkey then
             assert(key == prevkey, "package(%s): conflict dependencies with package(%s) in %s!", key, prevkey, package:name())
