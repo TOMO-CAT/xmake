@@ -11,6 +11,7 @@ add_requires("gzip-hpp v0.1.0", {system = false})
 add_requireconfs("ixwebsocket.zlib", {override = true, version = "v1.3.1", system = false})
 add_requireconfs("gzip-hpp.zlib", {override = true, version = "v1.3.1", system = false})
 
+-- 拷贝 example/features/package-cleaner, 用于测试并发
 target("main", function()
     set_kind("binary")
     add_files("main.cc")

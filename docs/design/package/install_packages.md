@@ -69,7 +69,7 @@ end
 * 继承 parent-package 的 configs
 * 将 requireinfo 设置到 package 的 `self._REQUIREINFO` 中
 * 调用 `package:on_source` 方法
-* 选择 package 合适的 version（会收到 locked—requireinfo 影响）
+* 选择 package 合适的 version（会受到 locked—requireinfo 影响）
 * 基于 package 的 requireinfo 和 version 构造出一个 packagekey
 * 构造 displayname（pakcagename + packageid）并设置 `package:_DISPLAYNAME`
 * 如果 package 的 cachedirs 冲突则关闭 parallelize

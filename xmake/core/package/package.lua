@@ -723,7 +723,7 @@ function _instance:lock(opt)
     if self:filelock():trylock(opt) then
         return true
     else
-        utils.cprint("${color.warning}package(%s) is being accessed by other process:", self:name())
+        utils.cprint("${color.warning}package(%s %s) is being accessed by other process:", self:name(), self:version_str())
         local other_process_info = io.load(self:filelock():path())
         utils.dump(other_process_info)
         io.flush()

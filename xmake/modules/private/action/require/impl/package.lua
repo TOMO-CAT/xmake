@@ -312,11 +312,11 @@ end
 -- get builtin configuration default values
 function _get_default_config_value_of(name)
     local defaults = {
-        debug = false,
-        shared = false,
-        pic = true,
-        lto = false,
-        asan = false
+        debug = false,   -- 是否开启调试模式
+        shared = false,  -- 是否生成动态库
+        pic = true,      -- 是否生成位置无关代码 (Position Independent Code, PIC)
+        lto = false,     -- 是否启用链接时优化 (Link Time Optimization, LTO)
+        asan = false     -- 是否启用内存错误检测工具 (Address Sanitizer, ASan)
     }
     return defaults[name]
 end
@@ -324,6 +324,7 @@ end
 -- add some builtin configurations to package
 function _add_package_configurations(package)
     -- we can define configs to override it and it's default value in package()
+    -- 如果 package 中没配置 buildit configurations, 我们需要给其加上默认值
     if package:extraconf("configs", "debug", "default") == nil then
         local default = _get_default_config_value_of("debug")
         package:add("configs", "debug", {builtin = true, description = "Enable debug symbols.", default = default, type = "boolean"})
@@ -768,6 +769,8 @@ function _load_package(packagename, requireinfo, opt)
     --
     -- if package A requires package B, and package B requires package A, it is a circular dependency
     -- requirepath would be A.B.A.B
+    --
+    -- 检查是否存在循环依赖, 存在的话直接 panic 退出
     opt = opt or {}
     if opt.requirepath then
         local splitinfo = opt.requirepath:split(".", {plain = true})
@@ -793,10 +796,11 @@ function _load_package(packagename, requireinfo, opt)
     requireinfo.requirekey = requirekey
 
     -- get locked requireinfo
-    -- https://xmake.io/#/package/remote_package?id=dependent-package-lock-and-upgrade
+    -- set_policy("package.requires_lock", true) 功能, 类似于 cargo 的 cargo.lock, 可以通过 xmake require --upgrade 升级
     local locked_requireinfo = get_locked_requireinfo(requireinfo)
 
     -- load package from project first
+    -- 优先从 project 里加载 package 的描述信息
     local package
     if os.isfile(os.projectfile()) then
         package = _load_package_from_project(packagename)
@@ -851,7 +855,7 @@ function _load_package(packagename, requireinfo, opt)
     -- save require info
     package:requireinfo_set(requireinfo)
 
-    -- init urls source
+    -- init urls source (调用 package:on_source 脚本)
     package:_init_source()
 
     -- select package version
@@ -890,6 +894,7 @@ function _load_package(packagename, requireinfo, opt)
     package:displayname_set(displayname)
 
     -- disable parallelize if the package cache directory conflicts
+    -- 如果不同的 package 使用相同的 cachedir, 那么应该禁用 parallelize
     local cachedirs = _memcache():get2("cachedirs", package:cachedir())
     if cachedirs then
         package:set("parallelize", false)
@@ -918,7 +923,7 @@ function _load_package(packagename, requireinfo, opt)
         end
     end
 
-    -- do load
+    -- do load (注意用户可能会在 package:on_load() 里加锁)
     package:_load()
 
     -- load all components
@@ -935,6 +940,7 @@ function _load_package(packagename, requireinfo, opt)
 end
 
 -- load all required packages
+-- 从用户的 add_requires("zlib v1.2.10") 文本中加载所有的 package 实例
 function _load_packages(requires, opt)
 
     -- no requires?
@@ -945,9 +951,10 @@ function _load_packages(requires, opt)
     -- load packages
     local packages = {}
     local packages_nodeps = {}
-    for _, requireitem in ipairs(load_requires(requires, opt.requires_extra, opt)) do
+    local loaded_requires = load_requires(requires, opt.requires_extra, opt)
+    for _, requireitem in ipairs(loaded_requires) do
 
-        -- load package
+        -- load package (加载 package 实例)
         local requireinfo = requireitem.info
         local requirepath = opt.requirepath and (opt.requirepath .. "." .. requireitem.name) or requireitem.name
         local package     = _load_package(requireitem.name, requireinfo, table.join(opt, {requirepath = requirepath}))
@@ -1271,7 +1278,8 @@ function load_packages(requires, opt)
     opt = opt or {}
     local unique = {}
     local packages = {}
-    for _, package in ipairs((_load_packages(requires, opt))) do
+    local loaded_packages = _load_packages(requires, opt)
+    for _, package in ipairs(loaded_packages) do
         if package:is_toplevel() then
             _check_package_depconflicts(package)
         end

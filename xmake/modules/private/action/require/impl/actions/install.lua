@@ -267,7 +267,18 @@ function _enter_workdir(package)
         if not os.isfile(anchorfile) and #filedirs == 1 and os.isdir(filedirs[1]) then
             oldir = os.cd(filedirs[1])
         else
-            oldir = os.cd(path.join(workdir, "source"))
+            local installdir = package:installdir()
+            if os.emptydir(installdir) then
+                -- 安装 package 时会加锁进入到 source 目录
+                -- 但是如果多个进程并发安装同一个 package 时, 第二个进程进来时 source 目录
+                -- @see https://github.com/TOMO-CAT/xmake/issues/244
+                -- 通过 os.emptydir(installdir) 来判断 package 还没安装, 如果非空标识已经安装完了
+                oldir = os.cd(path.join(workdir, "source"))
+            else
+                -- trace
+                tty.erase_line_to_start().cr()
+                cprint("${yellow}  => ${clear}other process install %s %s .. ${color.success}${text.success}", package:displayname(), package:version_str() or "")
+            end
         end
     end
     if not oldir then
@@ -287,16 +298,17 @@ function _leave_workdir(package, oldir)
         os.tryrm(installdir)
     end
 
-    -- unlock this package
-    package:unlock()
-
     -- leave source codes directory
     if oldir then
         os.cd(oldir)
     end
 
     -- clean source directory if it is no longer needed
+    -- 删除 source 目录后再解锁, 否则并发安装同一个 package 时可能出问题
     _clear_sourcedir(package)
+
+    -- unlock this package
+    package:unlock()
 end
 
 -- enter package install environments
