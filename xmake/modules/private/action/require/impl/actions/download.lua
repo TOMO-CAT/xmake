@@ -300,9 +300,6 @@ function main(package, opt)
     -- enter the working directory
     local oldir = os.cd(workdir)
 
-    -- lock this package
-    package:lock()
-
     -- get urls
     local urls = _urls(package)
     assert(#urls > 0, "cannot get url of package(%s)", package:name())
@@ -430,9 +427,6 @@ function main(package, opt)
             break
         end
     end
-
-    -- unlock this package
-    package:unlock()
 
     -- leave working directory
     os.cd(oldir)

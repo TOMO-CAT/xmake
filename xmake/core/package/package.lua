@@ -703,7 +703,15 @@ end
 function _instance:filelock()
     local filelock = self._FILELOCK
     if filelock == nil then
-        filelock = io.openlock(path.join(self:cachedir(), "package.lock"))
+        -- local name = self:displayname():lower():gsub("::", "_"):gsub("#", "_")
+        local name = self:name():lower():gsub("::", "_")
+        local version_str = self:version_str()
+        if self:is_thirdparty() then
+            -- strip `>= <=`
+            version_str = version_str:gsub("[>=<]", "")
+        end
+        -- 使用两个 _ 作为分隔符, 避免版本号或 name 中特殊符号的影响
+        filelock = io.openlock(path.join(self:filelockdir(), string.format("%s__%s__%s.lock", name:sub(1, 1):lower(), name, version_str)))
         if not filelock then
             os.raise("cannot create filelock for package(%s)!", self:name())
         end
@@ -717,7 +725,7 @@ function _instance:lock(opt)
     if self:filelock():trylock(opt) then
         return true
     else
-        utils.cprint("${color.warning}package(%s) is being accessed by other process:", self:name())
+        utils.cprint("${color.warning}package(%s %s) filelock [%s] is being accessed by other process:", self:name(), self:version_str(), self:filelock():path())
         local other_process_info = io.load(self:filelock():path())
         utils.dump(other_process_info)
         io.flush()
@@ -759,6 +767,23 @@ function _instance:buildir()
     return buildir
 end
 
+-- get the filelock directory of this package
+function _instance:filelockdir()
+    local filelockdir = self._FILELOCKDIR
+    if not filelockdir then
+        if self:is_source_embed() then
+            filelockdir = path.join(self:buildir(), ".packages")
+        elseif self:is_local() then
+            filelockdir = path.join(config.buildir({absolute = true}), ".packages", "filelock")
+        else
+            -- 这里将 package filelock 打平方便后续删除文件锁 (否则需要处理文件夹的删除问题)
+            filelockdir = package.filelockdir()
+        end
+        self._FILELOCKDIR = filelockdir
+    end
+    return filelockdir
+end
+
 -- get the cached directory of this package
 function _instance:cachedir()
     local cachedir = self._CACHEDIR
@@ -776,7 +801,10 @@ function _instance:cachedir()
             -- lock elfutils /home/runner/.xmake/cache/packages/2403/e/elfutils/0.189
             -- package(elfutils) is being accessed by other processes, please wait!
             --
-            local name = self:displayname():lower():gsub("::", "_"):gsub("#", "_")
+            -- local name = self:displayname():lower():gsub("::", "_"):gsub("#", "_")
+
+            -- 和 _instance:installdir() 一样, 统一用 name + version 加锁
+            local name = self:name():lower():gsub("::", "_")
             local version_str = self:version_str()
             if self:is_thirdparty() then
                 -- strip `>= <=`
@@ -1538,6 +1566,7 @@ end
 
 -- get the configurations of package for buildhash
 -- @note on_test still need these configs
+-- 获取用户计算 buildhash 的配置
 function _instance:_configs_for_buildhash()
     local configs = self._CONFIGS_FOR_BUILDHASH
     if configs == nil then
@@ -1634,39 +1663,9 @@ function _instance:buildhash()
             return path.join(dir, ...)
         end
 
-        -- we need to be compatible with the hash value string for the previous xmake version
-        -- without builtin pic configuration (< 2.5.1).
-        if self:_config_for_buildhash("pic") then
-            local configs = table.copy(self:_configs_for_buildhash())
-            configs.pic = nil
-            buildhash = _get_buildhash(configs, {sourcehash = false, toolchains = false})
-            if not os.isdir(_get_installdir(buildhash)) then
-                buildhash = nil
-            end
-        end
-
-        -- we need to be compatible with the hash value string for the previous xmake version
-        -- without sourcehash (< 2.5.2)
-        if not buildhash then
-            buildhash = _get_buildhash(self:_configs_for_buildhash(), {sourcehash = false, toolchains = false})
-            if not os.isdir(_get_installdir(buildhash)) then
-                buildhash = nil
-            end
-        end
-
-        -- we need to be compatible with the previous xmake version
-        -- without toolchains (< 2.6.4)
-        if not buildhash then
-            buildhash = _get_buildhash(self:_configs_for_buildhash(), {toolchains = false})
-            if not os.isdir(_get_installdir(buildhash)) then
-                buildhash = nil
-            end
-        end
-
         -- get build hash for current version
-        if not buildhash then
-            buildhash = _get_buildhash(self:_configs_for_buildhash())
-        end
+        buildhash = _get_buildhash(self:_configs_for_buildhash())
+
         self._BUILDHASH = buildhash
     end
     return buildhash
@@ -2739,6 +2738,17 @@ function package.apis()
         ,   { "is_arch", package._api_is_arch }
         }
     }
+end
+
+-- the filelock directory
+function package.filelockdir(opt)
+    opt = opt or {}
+    local filelockdir = package._FILELOCKDIR
+    if not filelockdir then
+        filelockdir = path.join(global.filelockdir(), "packages")
+        package._FILELOCKDIR = filelockdir
+    end
+    return filelockdir
 end
 
 -- the cache directory

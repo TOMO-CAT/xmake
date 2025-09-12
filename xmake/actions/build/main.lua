@@ -31,6 +31,7 @@ import("utils.progress")
 import("build")
 import("build_files")
 import("cleaner")
+import("hourly_cleaner")
 import("check", {alias = "check_targets"})
 import("private.tools.ccache")
 import("private.cache.build_cache")
@@ -201,6 +202,9 @@ function main()
 
     -- clean up temporary files once a day
     cleaner.cleanup()
+
+    -- 每小时的清理任务
+    hourly_cleaner.cleanup()
 
     -- build targets
     local build_time = os.mclock()

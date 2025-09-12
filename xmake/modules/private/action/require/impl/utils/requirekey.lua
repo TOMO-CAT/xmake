@@ -23,6 +23,7 @@ import("core.base.hashset")
 
 -- get require key from requireinfo
 function main(requireinfo, opt)
+    -- 根据 requireinfo 拼接出 key 的字符串
     opt = opt or {}
     local key = ""
     if opt.name then
@@ -68,6 +69,7 @@ function main(requireinfo, opt)
         if key == "" then
             key = "_" -- we need to generate a fixed hash value
         end
+        -- 生成 32 位 hash 值 (转成 8 个 16 进制数字)
         return hash.strhash32(key)
     else
         return key

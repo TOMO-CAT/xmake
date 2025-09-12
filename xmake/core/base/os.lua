@@ -1126,7 +1126,8 @@ function os.getpid(...)
 end
 
 -- get_process_info
-function os.get_process_info()
+function os.get_process_info(opt)
+    local opt = opt or {}
     local process_info = os._PROCESS_INFO
     if process_info == nil then
         os._PROCESS_INFO = {}
@@ -1152,9 +1153,14 @@ function os.get_process_info()
             if os.isfile(exe_path) then
                 os._PROCESS_INFO["exe"] = os.readlink(exe_path)
             end
-            local timestamp = os.time()
-            os._PROCESS_INFO["time"] = timestamp
-            os._PROCESS_INFO["time_formatted"] = os.date("%Y-%m-%d_%H:%M:%S", timestamp)
+
+            -- 默认都是记录时间戳的, 只有用户指定 {opt.dump_timestamp = false} 才会跳过
+            -- 这是因为后面要根据 filelock 来判断是否删除对应保护的对象, 所以 cleaner 持有这把锁时不应该更新时间戳
+            if opt.dump_timestamp ~= false then
+                local timestamp = os.time()
+                os._PROCESS_INFO["time"] = timestamp
+                os._PROCESS_INFO["time_formatted"] = os.date("%Y-%m-%d_%H:%M:%S", timestamp)
+            end
         end
     end
     return os._PROCESS_INFO

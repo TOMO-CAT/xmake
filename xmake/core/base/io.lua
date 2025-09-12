@@ -370,7 +370,7 @@ function _filelock:lock(opt)
     -- lock it
     if self._LOCKED_NUM > 0 or io.filelock_lock(self:cdata(), opt) then
         self._LOCKED_NUM = self._LOCKED_NUM + 1
-        io.save(self:path(), os.get_process_info())
+        io.save(self:path(), os.get_process_info(opt))
         return true
     else
         return false, string.format("%s: lock failed!", self)
@@ -394,7 +394,7 @@ function _filelock:trylock(opt)
     -- try lock it
     if self._LOCKED_NUM > 0 or io.filelock_trylock(self:cdata(), opt) then
         self._LOCKED_NUM = self._LOCKED_NUM + 1
-        io.save(self:path(), os.get_process_info())
+        io.save(self:path(), os.get_process_info(opt))
         return true
     else
         return false, string.format("%s: trylock failed!", self)
