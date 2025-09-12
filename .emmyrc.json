@@ -11,6 +11,7 @@
       "redundant-parameter",
       "duplicate-set-field",
       "access-invisible",
+      "undefined-field",
       "undefined-field"
     ]
   },
