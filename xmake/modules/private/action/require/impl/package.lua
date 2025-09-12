@@ -923,8 +923,13 @@ function _load_package(packagename, requireinfo, opt)
         end
     end
 
-    -- do load (注意用户可能会在 package:on_load() 里加锁)
+    -- do load
+    -- 注意用户可能会在 package:on_load() 里加锁
+    -- 目前 filelock 实现的是可递归的锁 (通过 _LOCKED_NUM 判断当前进程内加锁次数)
+    -- 这里加锁是为了刷新 filelock 里的 time 时间戳, 用于避免常使用的 package 被错误删除
+    package:lock()
     package:_load()
+    package:unlock()
 
     -- load all components
     for _, component in pairs(package:components()) do

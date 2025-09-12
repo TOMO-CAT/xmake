@@ -7,7 +7,7 @@
 * [#219](https://github.com/TOMO-CAT/xmake/issues/219): 支持配置自动删除 cache 和 packages 的轮转时间
   * filelock 里增加时间戳和格式化时间戳字段, 用于判断是否长时间没人用
   * package 文件锁迁移到 `~/.xmake/filelock` 目录下
-  * 每天清理一次, 日志会写到 xmake tmp 目录下的 cleaner.log 里
+  * 每小时清理一次, 日志会写到 xmake tmp 目录下的 hourly-cleaner.log 里
 
 ### Bugs 修复
 
