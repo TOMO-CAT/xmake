@@ -303,66 +303,6 @@ end
 
 -- get values from target packages with {interface|public = ...}
 function _instance:_get_from_packages(name, result_values, result_sources, opt)
-    -- 基于 links 来过滤 libfiles
-    -- eg. add_packages("xxx", {links = "xxx"}), 那么需要从 libfiles 里筛选出 libxxx.so / libxxx.a
-    local function _filter_libfiles(libfiles, links, pkg_name)
-        local result = {}
-        for _, link in ipairs(table.wrap(links)) do
-            local find = false
-            for _, libfile in ipairs(table.wrap(libfiles)) do
-                local libfile_name = path.filename(libfile)
-
-                -- 优先使用动态库
-                if libfile_name == "lib" .. link .. ".so" then
-                    -- 动态库不使用绝对路径, 否则迁移起来很麻烦
-                    table.insert(result, link)
-                    find = true
-                    break
-                elseif libfile_name == "lib" .. link .. ".a" then
-                    table.insert(result, libfile)
-                    find = true
-                    break
-                elseif libfile_name == "lib" .. link .. ".dylib" then
-                    -- Mac 动态库
-                    table.insert(result, link)
-                    find = true
-                    break
-                end
-            end
-            if not find then
-                -- 有一些 package links 会包含 deps 的 links, 但是 libfiles 却没有, 这里查找不到的话当作系统库 -l 处理
-                table.insert(result, link)
-            end
-        end
-        return table.unwrap(result)
-    end
-
-    -- use full link path instead of links
-    -- 默认使用 package 中静态/动态库的绝对路径, 避免库重名导致的问题
-    -- @see https://github.com/xmake-io/xmake/issues/5066
-    -- @see https://github.com/TOMO-CAT/xmake/issues/189
-    local function _modify_pkg_linkflags(config, libfiles, config_key, config_value, pkg_name)
-        local all_static_lib = true
-        for _, libfile in ipairs(table.wrap(libfiles)) do
-            local libfile_name = path.filename(libfile)
-            if not (libfile_name:startswith("lib") and libfile_name:endswith(".a")) then
-                all_static_lib = false
-                break
-            end
-        end
-
-        -- 允许用户通过 add_packages("xxx", {linkpath = false}) 来禁用使用绝对路径
-        if not config or config.linkpath ~= false then
-            -- 使用绝对路径且都是静态库时 linkdirs 应该返回 nil, 避免引入多余的 -L 库搜索路径
-            if config_key == "linkdirs" and all_static_lib then
-                config_value = nil
-            elseif config_key == "links" then
-                config_value = _filter_libfiles(libfiles, config_value, pkg_name)
-            end
-        end
-        return config_value
-    end
-
     -- use softlink installdir?
     -- @see https://github.com/TOMO-CAT/xmake/issues/62
     local function _transform_softlink_installdir(paths, installdir, softlink_installdir)
@@ -398,7 +338,7 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
                     local info = components[component_name]
                     if info then
                         local compvalues = info[name]
-                        compvalues =_modify_pkg_linkflags(configinfo, info.libfiles, name, compvalues, pkg:name() .. "::" .. component_name)
+                        compvalues = pkg:transform_to_link_fullpath(compvalues)
                         table.join2(values, compvalues)
                     else
                         local components_str = table.concat(table.wrap(configinfo.components), ", ")
@@ -416,7 +356,7 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
             local values = configinfo[name]
             -- 注意这种 `add_packages("xx", {links = "xxx"})` 写法我们也需要默认转换成绝对路径
             if name == "links" then
-                values = _modify_pkg_linkflags(configinfo, pkg:libraryfiles(), name, values, pkg:name())
+                values = pkg:transform_to_link_fullpath(values)
             end
             if values ~= nil then
                 table.insert(result_values, values)
@@ -425,7 +365,15 @@ function _instance:_get_from_packages(name, result_values, result_sources, opt)
         else
             -- get values from the builtin package configs
             local values = pkg:get(name)
-            values = _modify_pkg_linkflags(configinfo, pkg:libraryfiles(), name, values, pkg:name())
+            if name == "links" or name == "linkdirs" then
+                -- use full link path instead of links
+                -- 默认使用 package 中静态/动态库的绝对路径, 避免库重名导致的问题
+                -- @see https://github.com/xmake-io/xmake/issues/5066
+                -- @see https://github.com/TOMO-CAT/xmake/issues/189
+                values = pkg:get_linkflags(name, {
+                    linkpath = configinfo and configinfo.linkpath
+                })
+            end
 
             -- use softlink installdir for top-level package to make brief __FILE__ symbol
             -- @see https://github.com/TOMO-CAT/xmake/issues/129
