@@ -8,6 +8,7 @@
   * filelock 里增加时间戳和格式化时间戳字段, 用于判断是否长时间没人用
   * package 文件锁迁移到 `~/.xmake/filelock` 目录下
   * 每小时清理一次, 日志会写到 xmake tmp 目录下的 hourly-cleaner.log 里
+* [#245](https://github.com/TOMO-CAT/xmake/issues/245): inherit links 性能提升五倍
 
 ### Bugs 修复
 
