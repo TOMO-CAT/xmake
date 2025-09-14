@@ -2,6 +2,8 @@
 
 ## VSCode 调试
 
+> 注意事项: 需要注意的是如果想用 emmylua 调试, 必须禁用 luajit。后续可以考虑一下看看能否修改 xmake-repo 里 emmylua-debugger 的 package 描述来支持 luajit。
+
 安装 VSCode 的 EmmyLua 扩展：
 
 > <https://github.com/EmmyLua/VSCode-EmmyLua>
