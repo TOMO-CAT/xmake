@@ -29,15 +29,16 @@ local platform  = require("platform/platform")
 local raise     = require("sandbox/modules/raise")
 
 -- export some readonly interfaces
-sandbox_core_base_global.get       = global.get
-sandbox_core_base_global.set       = global.set
-sandbox_core_base_global.readonly  = global.readonly
-sandbox_core_base_global.dump      = global.dump
-sandbox_core_base_global.clear     = global.clear
-sandbox_core_base_global.options   = global.options
-sandbox_core_base_global.filepath  = global.filepath
-sandbox_core_base_global.directory = global.directory
-sandbox_core_base_global.cachedir  = global.cachedir
+sandbox_core_base_global.get         = global.get
+sandbox_core_base_global.set         = global.set
+sandbox_core_base_global.readonly    = global.readonly
+sandbox_core_base_global.dump        = global.dump
+sandbox_core_base_global.clear       = global.clear
+sandbox_core_base_global.options     = global.options
+sandbox_core_base_global.filepath    = global.filepath
+sandbox_core_base_global.directory   = global.directory
+sandbox_core_base_global.cachedir    = global.cachedir
+sandbox_core_base_global.filelockdir = global.filelockdir
 
 -- save the configure
 function sandbox_core_base_global.save()

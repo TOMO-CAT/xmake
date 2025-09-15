@@ -51,7 +51,7 @@ end
 -- the traffic info in github (just be approximate numbers):
 --
 -- Clones:          the number of projects which build using xmake everyday
--- Unique cloners:  the number of users everyday
+-- Unique clones:   the number of users everyday
 --
 function post()
 
@@ -68,7 +68,7 @@ function post()
         return
     end
 
-    -- mark as posted first, avoid posting it repeatly
+    -- mark as posted first, avoid posting it repeatedly
     io.writefile(markfile, "ok")
 
     -- init argument list

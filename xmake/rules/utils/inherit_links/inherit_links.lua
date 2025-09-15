@@ -108,7 +108,16 @@ function main(target)
             for _, name in ipairs({"rpathdirs", "frameworkdirs", "frameworks", "linkdirs", "links", "syslinks", "ldflags", "shflags"}) do
                 local values = _get_values_from_target(target, name)
                 if values and #values > 0 then
-                    _add_export_values(target, name, values)
+                    -- 为了实现 interface 属性, 会浪费大量性能
+                    -- @see https://github.com/TOMO-CAT/xmake/issues/245
+                    -- 我们统一将 links、syslinks 等 linkflags 都设置成 public 即可
+                    --
+                    -- * private: 默认配置, 当前 target 的私有配置, 不会被依赖的其他 target 所继承
+                    -- * public: 公有配置, 当前 target 依赖的子 target 都会被设置
+                    -- * interface: 接口设置, 仅被依赖的子 target 所继承设置, 当前 target 不参与
+                    --
+                    -- _add_export_values(target, name, values)
+                    target:add(name, values, table.join(target:extraconf(name, value) or {}, {public = true}))
                 end
             end
         end

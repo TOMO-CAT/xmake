@@ -52,6 +52,8 @@ function _instance:clear()
         end
     end
     self._COMPONENT_DEPS = nil
+    self._LINK_TO_FULLPATH = nil
+    self._LINKFLAG_CACHE = {}
 end
 
 -- dump this package
@@ -67,6 +69,11 @@ end
 -- get the package name (with alias name)
 function _instance:name()
     return self._NAME
+end
+
+-- get the package linkflag caache
+function _instance:linkflag_cache()
+    return self._LINKFLAG_CACHE
 end
 
 -- get the package version
@@ -85,6 +92,104 @@ function _instance:version()
     end
     self._VERSION = version or false
     return version
+end
+
+-- 获取 package version 字符串
+function _instance:version_str()
+    return tostring(self:version())
+end
+
+-- 存储每个 link 及其对应的绝对路径
+-- * 静态库返回绝对路径
+-- * 未搜索到的静态库或者动态库返回原值
+function _instance:link2fullpath()
+    -- get it from cache first
+    if self._LINK_TO_FULLPATH ~= nil then
+        return self._LINK_TO_FULLPATH
+    end
+
+    -- 构造 link to path
+    local link2path = {}
+    for _, link in ipairs(table.wrap(self:get("links"))) do
+        -- 默认情况下 (动态库或者没找到) 用 link
+        local fullpath = link
+        for _, libfile in ipairs(table.wrap(self:libraryfiles())) do
+            local libfile_name = path.filename(libfile)
+            if libfile_name == "lib" .. link .. ".a" then
+                fullpath = libfile
+            end
+        end
+        link2path[link] = fullpath
+    end
+    self._LINK_TO_FULLPATH = link2path
+    return link2path
+end
+
+
+-- 目前是给 target:_get_from_packages 接口调用的, 用于构造 link fullpath 和隐藏 linkdir
+-- name 只能是 links 或者 linkdirs
+function _instance:get_linkflags(name, opt)
+    local opt = opt or {}
+    local linkflag_cache = self:linkflag_cache()
+
+    -- 构造 cachekey, 该接口存在性能问题所以需要缓存结果
+    local cachekey = self:name() .. "_GET_V2_" .. name
+    -- 允许用户通过 add_packages("xxx", {linkpath = false) 来禁用绝对路径
+    -- 默认禁用 fullpath (因为存在性能问题)
+    -- if opt.linkpath == true then
+    --     cachekey = cachekey .. "_WITH_LINKPATH"
+    -- end
+    if opt.linkpath ~= false then
+        cachekey = cachekey .. "_WITHOUT_LINKPATH"
+    end
+    if opt.values then
+        cachekey = cachekey .. "_" .. table.concat(opt.values, "_")
+    end
+
+    if linkflag_cache[cachekey] ~= nil then
+        return linkflag_cache[cachekey]
+    end
+
+    -- 避免 values 为 nil, 否则 cache 会持续无法命中
+    local values = opt.values or self:get(name) or {}
+    if name == "links" or name == "linkdirs" then
+        -- if opt.linkpath then
+        if opt.linkpath ~= false then
+            if self:only_static_lib() and name == "linkdirs" then
+                values = {}
+            elseif name == "links" then
+                values = self:transform_to_link_fullpath(values)
+            end
+        end
+    end
+
+    -- 写入缓存
+    linkflag_cache[cachekey] = values
+    return values
+end
+
+-- 将 links 转换成绝对路径, 指向性更明确一些
+-- * 目前只支持静态库
+-- * 动态库使用绝对路径会导致移动二进制后无法运行 (依赖的动态库必须在编译时的绝对路径下)
+-- @see https://github.com/xmake-io/xmake/issues/5066
+-- @see https://github.com/TOMO-CAT/xmake/issues/189
+function _instance:transform_to_link_fullpath(links)
+    if not links then
+        return nil
+    end
+
+    local fullpaths = {}
+    local link2fullpath = self:link2fullpath()
+    for _, link in ipairs(table.wrap(links)) do
+        local fp = link2fullpath[link]
+        if fp then
+            table.insert(fullpaths, fp)
+        else
+            -- 有一些 package links 会包含 deps 的 links, 但是 libfiles 却没有, 这里查找不到的话当作系统库 -l 处理
+            table.insert(fullpaths, link)
+        end
+    end
+    return fullpaths
 end
 
 -- get the package license
@@ -138,6 +243,11 @@ end
 -- get library files
 function _instance:libraryfiles()
     return self:get("libfiles")
+end
+
+-- 判断 package 是否只包含静态库
+function _instance:only_static_lib()
+    return self:has_static() and (not self:has_shared())
 end
 
 -- get components
@@ -358,6 +468,7 @@ function package.load_withinfo(name, info)
     local instance = table.inherit(_instance)
     instance._INFO = info
     instance._NAME = name
+    instance._LINKFLAG_CACHE = {}
     return instance
 end
 
