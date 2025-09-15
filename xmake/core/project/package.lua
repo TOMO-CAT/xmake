@@ -109,20 +109,19 @@ function _instance:link2fullpath()
     end
 
     -- 构造 link to path
-    local link2path = {}
-    for _, link in ipairs(table.wrap(self:get("links"))) do
-        -- 默认情况下 (动态库或者没找到) 用 link
-        local fullpath = link
-        for _, libfile in ipairs(table.wrap(self:libraryfiles())) do
-            local libfile_name = path.filename(libfile)
-            if libfile_name == "lib" .. link .. ".a" then
-                fullpath = libfile
-            end
+    -- 注意使用 self:get("links") 是没有 self:libraryfiles() 全的, 因为 links 是用于自定义的
+    local link2fullpath = {}
+    for _, libfile in ipairs(table.wrap(self:libraryfiles())) do
+        local libfile_name = path.filename(libfile)
+        if libfile_name:startswith("lib") and libfile_name:endswith(".a") then
+            -- 剔除 lib 前缀和 .a 后缀, 取出 link
+            local link = libfile_name:sub(4, #libfile_name - 2)
+            link2fullpath[link] = libfile
         end
-        link2path[link] = fullpath
     end
-    self._LINK_TO_FULLPATH = link2path
-    return link2path
+
+    self._LINK_TO_FULLPATH = link2fullpath
+    return link2fullpath
 end
 
 
