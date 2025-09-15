@@ -50,7 +50,7 @@ function main(opt)
     -- 指定 git 目录, 防止误操作外层 git 仓库
     if opt.repodir then
         table.insert(argv, "--git-dir")
-        table.insert(argv, path.join(opt.repodir, ".git"))
+        table.insert(argv, path.absolute(path.join(opt.repodir, ".git")))
     end
 
     if opt.fsmonitor then
