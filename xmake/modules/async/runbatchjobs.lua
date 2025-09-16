@@ -13,6 +13,7 @@ function main(name, jobs, opt)
     local stop = false
     local abort = false
     local abort_errors
+    local printed_abort_errors = false
     local progress_wrapper = {}
     progress_wrapper.current = function() return count end
     progress_wrapper.total = function() return total end
@@ -70,8 +71,12 @@ function main(name, jobs, opt)
                                     -- 目前无法 kill 掉子进程的子进程, 所以我们选择和 cmake 一样 wait 所有并发任务结束, 如果用户 ctrl +c 也可能退干净
                                     -- 主要是 gcc 进程会创建子进程, 如果 xmake 编译出错这里 kill 只能杀掉 gcc 进程, 无法杀掉 gcc 进程创建的子进程
                                     -- @see https://github.com/xmake-io/xmake/issues/719
+                                    if not printed_abort_errors then
+                                        utils.cprint(abort_errors)
+                                        printed_abort_errors = true
+                                    end
                                     utils.cprint("${bright yellow}Encountered some errors, waiting for [%d] unfinished jobs (press Ctrl+C to abort)${clear}", waitobjs:size())
-
+                                    
                                     for _, obj in waitobjs:keys() do
                                         -- TODO: kill pipe is not supported now
                                         -- if obj.kill then
