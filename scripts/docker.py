@@ -298,16 +298,28 @@ if __name__ == "__main__":
     docker_container = f"xmake-dev-{args.arch}-container"
     docker_file = f"Dockerfile.{args.arch}"
 
-    match args.command:
-        case "build":
-            docker_build(docker_image, docker_container, docker_file)
-        case "run":
-            docker_run(args.arch, docker_container)
-        case "clear":
-            docker_clear(docker_image, docker_container)
-        case "rebuild":
-            docker_clear(docker_image, docker_container)
-            docker_build(docker_image, docker_container, docker_file)
-        case _:
-            logger.error(f"invalid command [{args.command}]")
-            exit(1)
+    # match args.command:
+    #     case "build":
+    #         docker_build(docker_image, docker_container, docker_file)
+    #     case "run":
+    #         docker_run(args.arch, docker_container)
+    #     case "clear":
+    #         docker_clear(docker_image, docker_container)
+    #     case "rebuild":
+    #         docker_clear(docker_image, docker_container)
+    #         docker_build(docker_image, docker_container, docker_file)
+    #     case _:
+    #         logger.error(f"invalid command [{args.command}]")
+    #         exit(1)
+    if args.command == "build":
+        docker_build(docker_image, docker_container, docker_file)
+    elif args.command == "run":
+        docker_run(args.arch, docker_container)
+    elif args.command == "clear":
+        docker_clear(docker_image, docker_container)
+    elif args.command == "rebuild":
+        docker_clear(docker_image, docker_container)
+        docker_build(docker_image, docker_container, docker_file)
+    else:
+        logger.error(f"invalid command [{args.command}]")
+        exit(1)
