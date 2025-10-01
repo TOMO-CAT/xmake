@@ -43,6 +43,7 @@ function main()
     cprint("    ${color.dump.string}packagedir${clear}: %s", package.installdir())
     cprint("    ${color.dump.string}packagedir(cache)${clear}: %s", package.cachedir())
     cprint("    ${color.dump.string}gitsource${clear}: %s", xmake.gitsource())
+    cprint("    ${color.dump.string}luajit${clear}: %s", xmake.luajit() and "yes" or "no")
     print("")
 
     local projectfile = os.projectfile()
