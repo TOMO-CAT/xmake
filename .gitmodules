@@ -1,6 +1,3 @@
-[submodule "core/src/lua-cjson/lua-cjson"]
-	path = core/src/lua-cjson/lua-cjson
-	url = ../../xmake-io/xmake-core-lua-cjson.git
 [submodule "core/src/lz4/lz4"]
 	path = core/src/lz4/lz4
 	url = ../../xmake-io/xmake-core-lz4.git
