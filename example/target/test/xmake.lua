@@ -17,8 +17,10 @@ end)
 -- * 默认 set_default(false), 避免默认编译和安装
 -- * 默认 add_tests("default")
 -- * 没调用 add_testfiles() 时默认设置 rundir 为 "$(projectdir)"
+-- * set_test_timeout 设置单测超时时间, 单位为 ms
 target("foo_test", function()
     set_kind("test")
+    set_test_timeout(20*1000) -- 20 秒
     add_files("src/foo_test.cc")
     add_packages("gtest")
 
