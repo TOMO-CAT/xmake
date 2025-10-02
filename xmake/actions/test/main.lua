@@ -59,7 +59,8 @@ function _do_test_target(target, opt)
     local runargs = table.wrap(opt.runargs or target:get("runargs"))
     local outfile = os.tmpfile()
     local errfile = os.tmpfile()
-    local run_timeout = opt.run_timeout or 60000  -- set default run_timeout to 60 seconds
+    -- 优先使用 set_test_timeout 设置的超时时间
+    local run_timeout = target:test_timeout() or opt.run_timeout or 60000  -- set default run_timeout to 60 seconds
     local ok, syserrors = os.execv(targetfile, runargs, {try = true, timeout = run_timeout,
         curdir = rundir, envs = envs, stdout = outfile, stderr = errfile})
     local outdata = os.isfile(outfile) and io.readfile(outfile) or ""

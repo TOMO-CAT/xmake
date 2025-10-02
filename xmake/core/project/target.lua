@@ -1633,6 +1633,11 @@ function _instance:prefixdir()
     return self:get("prefixdir")
 end
 
+-- get test timeout
+function _instance:test_timeout()
+    return self:get("test_timeout")
+end
+
 -- get the installed binary directory
 function _instance:bindir()
     local bindir = self:extraconf("prefixdir", self:prefixdir(), "bindir")
@@ -2779,6 +2784,7 @@ function target.apis()
         ,   "target.set_exceptions"
         ,   "target.set_encodings"
         ,   "target.set_prefixdir"
+        ,   "target.set_test_timeout"
             -- target.add_xxx
         ,   "target.add_deps"
         ,   "target.add_rules"

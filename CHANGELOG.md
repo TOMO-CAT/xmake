@@ -9,6 +9,7 @@
   * package 文件锁迁移到 `~/.xmake/filelock` 目录下
   * 每小时清理一次, 日志会写到 xmake tmp 目录下的 hourly-cleaner.log 里
 * [#245](https://github.com/TOMO-CAT/xmake/issues/245): inherit links 性能提升五倍
+* [#250](https://github.com/TOMO-CAT/xmake/issues/250): test target 支持设置全局超时时间
 
 ### Bugs 修复
 
