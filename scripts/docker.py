@@ -260,7 +260,7 @@ def docker_clear(
         execute_shell_command_with_stdout(' '.join(remove_container_cmd))
     else:
         logger.warning(f"docker container [{docker_container}] don't exist")
-    
+
     if if_docker_image_exist(docker_image):
         logger.info(f"remove docker image [{docker_image}]")
         remove_image_cmd = [
@@ -269,7 +269,7 @@ def docker_clear(
         execute_shell_command_with_stdout(' '.join(remove_image_cmd))
     else:
         logger.warning(f"docker image [{docker_image}] don't exist")
-    
+
 
 if __name__ == "__main__":
     init_logger()

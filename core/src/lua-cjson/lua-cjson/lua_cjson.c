@@ -64,7 +64,7 @@
 #ifndef isnan
 #   define isnan _isnan
 #endif
-#ifndef isinf 
+#ifndef isinf
 #   define isinf(x) (!isnan(x) && isnan((x) - (x)))
 #endif
 #endif

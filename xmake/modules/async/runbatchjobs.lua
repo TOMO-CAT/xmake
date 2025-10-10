@@ -76,7 +76,7 @@ function main(name, jobs, opt)
                                         printed_abort_errors = true
                                     end
                                     utils.cprint("${bright yellow}Encountered some errors, waiting for [%d] unfinished jobs (press Ctrl+C to abort)${clear}", waitobjs:size())
-                                    
+
                                     for _, obj in waitobjs:keys() do
                                         -- TODO: kill pipe is not supported now
                                         -- if obj.kill then

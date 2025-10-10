@@ -33,7 +33,7 @@ void check_file_content(const std::string& file_path, const std::string& expecte
 
 } // namespace
 
-TEST(FooTest, Test1) { 
+TEST(FooTest, Test1) {
     EXPECT_EQ(1, 1);
 
     check_file_content("foo.txt", "foo", this);

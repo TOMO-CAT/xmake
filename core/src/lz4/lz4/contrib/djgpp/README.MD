@@ -3,7 +3,7 @@ This file details on how to compile lz4.exe, and liblz4.a for use on DOS/djgpp u
 Andrew Wu's build-djgpp cross compilers ([GH][0], [Binaries][1]) on OSX, Linux.
 
 ## Setup
-* Download a djgpp tarball [binaries][1] for your platform.  
+* Download a djgpp tarball [binaries][1] for your platform.
 * Extract and install it (`tar jxvf djgpp-linux64-gcc492.tar.bz2`).  Note the path.  We'll assume `/home/user/djgpp`.
 * Add the `bin` folder to your `PATH`.  In bash, do `export PATH=/home/user/djgpp/bin:$PATH`.
 * The `Makefile` in `contrib/djgpp/` sets up `CC`, `AR`, `LD` for you.  So, `CC=i586-pc-msdosdjgpp-gcc`, `AR=i586-pc-msdosdjgpp-ar`, `LD=i586-pc-msdosdjgpp-gcc`.
