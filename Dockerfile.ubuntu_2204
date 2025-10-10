@@ -41,17 +41,22 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
     gdb \
     vim
 
-# install xmake master
+# install xmake
 ENV XMAKE_ROOT=y
 ENV XMAKE_STATS=n
 ENV XMAKE_PROGRAM_DIR=/usr/local/share/xmake
 
-RUN mkdir /software && cd /software \
-    && git clone --progress -v --recursive https://gitee.com/tomocat/xmake.git \
-    && cd xmake \
+# RUN mkdir /software && cd /software \
+#     && git clone --progress -v --recursive https://gitee.com/tomocat/xmake.git \
+#     && cd xmake \
+#     && bash scripts/install.sh \
+#     && xmake --version \
+#     && cd / && rm -r software
+
+COPY . /software/xmake
+RUN cd /software/xmake \
     && bash scripts/install.sh \
-    && xmake --version \
-    && cd / && rm -r software
+    && xmake --version
 
 # pre-commit lua 格式化依赖 luarocks
 RUN apt-get install -y \
