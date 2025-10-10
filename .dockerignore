@@ -1,0 +1,56 @@
+# MacOS Cache
+.DS_Store
+
+# Xmake cache
+.xmake/
+build/
+makefile
+
+# gcc cache
+gcm.cache
+
+# for vim
+*.swp
+*.swo
+tags
+!tags/
+
+# Ignore packaging files
+*.exe
+*.zip
+*.gz
+*.bz2
+*.xz
+*.7z
+*.run
+
+# for compiler
+compile_commands.json
+.cache/
+
+# Makefile generation
+/core/xmake.config.h
+/core/.config.mak
+/core/**/*.o
+/core/**/*.b
+/core/**/*.a
+/core/**/*.obj
+/core/**/*.lib
+/core/**/*.exe
+
+# for fortran
+/tests/**/*.mod
+
+!/xmake/actions/build/
+
+# for linux driver
+*.o
+*.ko
+*.mod
+.*.cmd
+*.mod.c
+Module.symvers
+modules.order
+
+# log
+*.ansi

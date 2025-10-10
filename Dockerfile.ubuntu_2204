@@ -41,6 +41,18 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
     gdb \
     vim
 
+# pre-commit lua 格式化依赖 luarocks
+RUN apt-get install -y \
+    python3-pip \
+    luarocks
+
+# 安装其他的 apt 包
+RUN apt-get install -y --fix-missing \
+    g++-aarch64-linux-gnu \
+    apt-file \
+    protobuf-compiler \
+    libgflags-dev
+
 # install xmake
 ENV XMAKE_ROOT=y
 ENV XMAKE_STATS=n
@@ -53,20 +65,16 @@ ENV XMAKE_PROGRAM_DIR=/usr/local/share/xmake
 #     && xmake --version \
 #     && cd / && rm -r software
 
-COPY . /software/xmake
+COPY ./core /software/xmake/core
+COPY ./scripts/install.sh /software/xmake/scripts/install.sh
+COPY ./scripts/common.sh /software/xmake/scripts/common.sh
+COPY ./scripts/xrepo.sh /software/xmake/scripts/xrepo.sh
+COPY ./xmake /software/xmake/xmake
+COPY ./configure /software/xmake/configure
+
 RUN cd /software/xmake \
     && bash scripts/install.sh \
     && xmake --version
-
-# pre-commit lua 格式化依赖 luarocks
-RUN apt-get install -y \
-    python3-pip \
-    luarocks
-
-# 安装其他的 apt 包
-RUN apt-get install -y --fix-missing \
-    g++-aarch64-linux-gnu \
-    apt-file
 
 RUN cat <<'EOF' >> /etc/bash.bashrc
 
