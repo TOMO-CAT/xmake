@@ -31,7 +31,7 @@ info "start installing xmake ..."
 
 rm -rf build
 
-git submodule update --init || exit 1
+# git submodule update --init || exit 1
 
 if [[ $verbose -eq 1 ]]; then
     ./configure --verbose --runtime="${runtime}" --mode="${mode}" || exit 1
