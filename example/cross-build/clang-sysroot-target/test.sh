@@ -19,9 +19,8 @@ function ok() {
 }
 
 # 安装交叉编译工具链
-sudo apt install g++-aarch64-linux-gnu -y || exit 1
-
-sudo apt install -y protobuf-compiler
+# sudo apt install g++-aarch64-linux-gnu -y || exit 1
+# sudo apt install -y protobuf-compiler
 
 # --toolchain=aarch64-clang: 指定 toolchain, 只能在最外层 includes
 # --verbose: 详细信息

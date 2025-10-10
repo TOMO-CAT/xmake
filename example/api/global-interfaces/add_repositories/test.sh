@@ -21,7 +21,7 @@ function ok() {
 rm ./.xmake -rf
 rm ./build -rf
 
-sudo apt install g++-aarch64-linux-gnu -y || exit 1
+# sudo apt install g++-aarch64-linux-gnu -y || exit 1
 
 xmake f --toolchain=cat.aarch64 --arch=armv8-a
 xmake build -v --all

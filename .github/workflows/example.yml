@@ -25,6 +25,8 @@ jobs:
           sudo apt install -y build-essential lcov
           sudo apt install -y ccache
           sudo apt install -y g++-aarch64-linux-gnu
+          sudo apt install -y protobuf-compiler
+          sudo apt install -y libgflags-dev
       - name: Run Examples
         env:
           XMAKE_ROOT: y

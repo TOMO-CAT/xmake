@@ -16,6 +16,6 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
-sudo apt install -y libgflags-dev
+# sudo apt install -y libgflags-dev
 
 xmake f -cvD

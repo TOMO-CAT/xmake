@@ -19,7 +19,7 @@ function ok() {
 }
 
 # 安装交叉编译工具链
-sudo apt install g++-aarch64-linux-gnu -y || exit 1
+# sudo apt install g++-aarch64-linux-gnu -y || exit 1
 
 # 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 aarch64-none-linux-gnu-g++ 等二进制)
 xmake config --yes -p cross --cross=aarch64-linux-gnu- --arch=armv8-a --sdk=/usr
