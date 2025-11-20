@@ -88,3 +88,9 @@ XMAKE_TMPDIR            Set the temporary directory.
 XMAKE_COLORTERM         Set the color terminal environment.
                         truecolor
 ```
+
+## Json 格式导出
+
+```bash
+$ xmake show -l packages --json
+```
