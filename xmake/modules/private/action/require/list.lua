@@ -21,6 +21,8 @@
 -- imports
 import("core.project.project")
 import("core.base.task")
+import("core.base.option")
+import("core.base.json")
 import("private.action.require.impl.package")
 import("private.action.require.impl.repository")
 import("private.action.require.impl.environment")
@@ -55,15 +57,22 @@ end
 
 -- list packages
 function main()
-
-    -- list all requires
-    print("The package dependencies of project:")
-
     -- get requires
     local requires, requires_extra = project.requires_str()
     if not requires or #requires == 0 then
         return
     end
+
+    if option.get("json") then
+        local data = {
+            requires = json.mark_as_array(requires)
+        }
+        print(json.encode(data))
+        return
+    end
+
+    -- list all requires
+    print("The package dependencies of project:")
 
     -- enter environment
     environment.enter()
