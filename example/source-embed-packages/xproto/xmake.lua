@@ -3,7 +3,7 @@ add_rules("mode.debug", "mode.release")
 set_languages("c++17")
 add_cxxflags("-Wall", "-Wextra", "-Werror")
 
-add_requires("protobuf-cpp 3.19.4")
+add_requires("protobuf-cpp 3.19.4", {system = false})
 
 target("xproto", function()
     set_kind("static")

@@ -11,6 +11,7 @@
 * [#245](https://github.com/TOMO-CAT/xmake/issues/245): inherit links 性能提升五倍
 * [#250](https://github.com/TOMO-CAT/xmake/issues/250): test target 支持设置全局超时时间
 * [#251](https://github.com/TOMO-CAT/xmake/issues/252): 支持 json 格式导出 `xmake show -l packages`
+* [#254](https://github.com/TOMO-CAT/xmake/issues/254): 基于 package.lua 文本信息来计算 package hash
 
 ### Bugs 修复
 

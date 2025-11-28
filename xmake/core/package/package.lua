@@ -1586,6 +1586,12 @@ function _instance:_configs_for_buildhash()
                     configs[name] = value
                 end
             end
+
+            local package_lua_file = path.join(self:scriptdir(), "xmake.lua")
+            if os.isfile(package_lua_file) then
+                local package_lua_content = io.readfile(package_lua_file)
+                configs["__script_content"] = hash.strhash128(package_lua_content)
+            end
         else
             configs = false
         end
