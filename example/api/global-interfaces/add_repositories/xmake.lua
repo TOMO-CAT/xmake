@@ -18,7 +18,14 @@ includes("@cat-repo/rules/*.lua")
 
 add_rules("my-repo.mode.release")
 
+add_requires("zlib-test", {system = false})
+
 target("test", function()
     set_kind("binary")
     add_files("src/main.cc")
+    add_packages("zlib-test")
+    on_load(function(target)
+        local zlib_installdir = target:pkg("zlib-test"):installdir()
+        print(zlib_installdir)
+    end)
 end)
