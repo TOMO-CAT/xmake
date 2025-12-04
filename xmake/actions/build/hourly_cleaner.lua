@@ -50,10 +50,15 @@ end
 function _cleanup_impl()
     -- 没设置的话默认清理 30 天未用到的 package / cache
     local pkg_retain_hours = os.getenv("XMAKE_PKG_RETAIN_HOURS") or (30 * 24)
-    _log_info("start hourly cleaner with XMAKE_PKG_RETAIN_HOURS [%d] ...", pkg_retain_hours)
+    _log_info("start hourly cleaner with pkg_retain_hours [%d] ...", pkg_retain_hours)
+
+    -- repo 清理时长
+    local repo_retain_hours = 7 * 24
+    _log_info("start hourly cleaner with repo_retain_hours [%d] ...", repo_retain_hours)
 
     -- 遍历所有的 package filelock, 会自动删除超过 pkg_retain_hours 的目录
     local pkg_filelock_dir = package.filelockdir()
+    _log_info("start to process package filelock dir [%s] ...", pkg_filelock_dir)
     for _, filelock_path in ipairs(os.files(path.join(pkg_filelock_dir, "*.lock"))) do
         if not os.isfile(filelock_path) then
             -- 清理掉异常的 filelock 文件
@@ -103,12 +108,56 @@ function _cleanup_impl()
             end
         end
     end
+
+    -- 清理所有的 repo filelock
+    local repo_filelock_dir = path.join(global.filelockdir(), "repositories")
+    _log_info("start to process repo filelock dir [%s] ...", repo_filelock_dir)
+    for _, filelock_path in ipairs(os.files(path.join(repo_filelock_dir, "*.lock"))) do
+        if not os.isfile(filelock_path) then
+            -- 清理掉异常的 filelock 文件
+            _log_warn("invalid filelock file [%s]", filelock_path)
+            _cleanup_file(filelock_path)
+        else
+            _log_info("process filelock [%s]", filelock_path)
+            
+            -- if _filelock_expired(filelock_path, repo_retain_hours) then
+            if true then
+                local filelock = io.openlock(filelock_path)
+                if not filelock then
+                    _log_warn("cannot create filelock for [%s]", filelock_path)
+                    _cleanup_file(filelock_path)
+                else
+                    -- 可以通过 lsof 查看谁在占用 filelock
+                    -- 尝试加锁准备删除过期 filelock
+                    if not filelock:trylock({dump_timestamp = false}) then
+                        -- 加锁失败说明有人在用, 不应该删除该文件锁
+                        _log_info("lock file [%s] is still in use", filelock_path)
+                    else
+                        _log_info("try lock file [%s] success", filelock_path)
+                        -- 加锁后 double check 文件锁是否过期, 避免出现临界区访问
+                        if not _filelock_expired(filelock_path, repo_retain_hours) then
+                            _log_warn("double check filelock [%s], this filelock still in use", filelock_path)
+                        else
+                            _log_info("filelock [%s] expired, need to do some cleanup jobs", filelock_path)
+                            -- 删除自身文件锁 (删除后再解锁是可以的, 文件锁是绑定到 inode 的)
+                            _cleanup_file(filelock_path)
+                        end
+                        -- 释放锁
+                        filelock:unlock()
+                        _log_info("release filelock [%s]", filelock_path)
+                    end
+                end
+            end
+                
+        end
+    end
 end
 
 function cleanup()
     local this_hour = os.date("%y%m%d%H")
 
     -- 每个小时执行一次, 判断是否执行过了
+    -- /tmp/.xmake1000/yymmdd/cleanup/yymmddHH.mark
     local markfile = path.join(os.tmpdir(), "cleanup",  this_hour .. ".mark")
     if os.isfile(markfile) then
         return
@@ -134,11 +183,13 @@ function cleanup()
     {
         function ()
             print(argv)
+            -- /tmp/.xmake1000/yymmdd/yymmddHH-hourly-cleaner.log
             process.openv(os.programfile(), argv, {stdout = path.join(os.tmpdir(), this_hour .. "-hourly-cleaner.log"), detach = true}):close()
         end
     }
 end
 
+-- 调试: xmake lua -D xmake/actions/build/hourly_cleaner.lua
 function main()
     _cleanup_impl()
 end
