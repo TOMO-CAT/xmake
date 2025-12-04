@@ -19,6 +19,7 @@
 --
 
 -- imports
+import("core.base.global")
 import("core.base.option")
 import("core.project.config")
 import("core.project.project")
@@ -88,6 +89,23 @@ function _remove(name, is_global)
 
 end
 
+function _lock(repo_name, filelock)
+    if filelock:trylock() then
+        return true
+    else
+        cprint("${color.warning}repository(%s) filelock [%s] is being accessed by other process:", 
+            repo_name, filelock:path())
+        local other_process_info = io.load(filelock:path())
+        utils.dump(other_process_info)
+        io.flush()
+    end
+    filelock:lock()
+end
+
+function _unlock(filelock)
+    filelock:unlock()
+end
+
 -- update repositories
 function _update()
 
@@ -111,6 +129,10 @@ function _update()
         for _, repo in ipairs(repos) do
             local repodir = repo:directory()
             if not pulled[repodir] then
+                local repo_file_lock_path = path.join(global.filelockdir(), "repositories", repodir:gsub("/", "__").. ".lock")
+                local repo_lock = io.openlock(repo_file_lock_path)
+                _lock(repo:name(), repo_lock)
+
                 if os.isdir(repodir) then
                     local need_pulled = false
                     if not os.isdir(repo:url()) then
@@ -149,6 +171,7 @@ function _update()
                     io.save(path.join(repodir, "updated"), {})
                 end
                 pulled[repodir] = true
+                _unlock(repo_lock)
             end
         end
 

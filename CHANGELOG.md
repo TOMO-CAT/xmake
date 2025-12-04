@@ -17,6 +17,7 @@
 
 * [#241](https://github.com/TOMO-CAT/xmake/issues/241): 修复 package fullpath 导致的 linkgroups 等配置的 bug
 * [#244](https://github.com/TOMO-CAT/xmake/issues/244): 修复并发安装同一个 package 会 panic 的问题
+* [#256](https://github.com/TOMO-CAT/xmake/issues/256): 修复并发更新 global repo 时出现的竞态问题
 
 ## v3.0.7
 
