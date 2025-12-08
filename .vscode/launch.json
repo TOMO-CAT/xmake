@@ -4,7 +4,7 @@
         {
             "type": "emmylua_new",
             "request": "launch",
-            "name": "EmmyLua New Debug",
+            "name": "EmmyLua Debug With Specific Port",
             "host": "localhost",
             "port": "${input:port}",
             "ext": [
