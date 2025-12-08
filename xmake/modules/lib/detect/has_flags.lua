@@ -140,7 +140,7 @@ function main(name, flags, opt)
         io.write(opt.flagskey)
         cprint("${dim}) ... %s", result and "${color.success}${text.success}" or "${color.nothing}${text.nothing}")
         if option.get("diagnosis") then
-            cprint("${dim}> %s \"%s\"", path.filename(tool.program), table.concat(checkflags, "\" \""))
+            cprint("${dim}> %s | \"%s\" | \"%s\"", path.filename(tool.program), table.concat(opt.sysflags, "\" \""), table.concat(flags, "\" \""))
             if errors and #tostring(errors) > 0 then
                 cprint("${color.warning}checkinfo:${clear dim} %s", tostring(errors):trim())
             end
