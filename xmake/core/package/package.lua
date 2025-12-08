@@ -2025,11 +2025,14 @@ end
 
 -- fetch library dependencies
 function _instance:fetch_librarydeps()
-    local fetchinfo = self:fetch()
-    if not fetchinfo then
+    local sef_fetchinfo = self:fetch()
+    if not sef_fetchinfo then
         return
     end
-    fetchinfo = table.copy(fetchinfo) -- avoid the cached fetchinfo be modified
+    -- 深拷贝 table, 避免修改了 self._FETCH_INFO
+    -- 修复 detectcache.find_package 里 libfiles、linkdirs 等无限膨胀的问题
+    -- @see https://github.com/TOMO-CAT/xmake/issues/259
+    local fetchinfo = table.clone(sef_fetchinfo, 2) -- avoid the cached fetchinfo be modified
     local librarydeps = self:librarydeps()
     if librarydeps then
         for _, dep in ipairs(librarydeps) do

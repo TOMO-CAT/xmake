@@ -190,6 +190,7 @@ function main(name, opt)
     opt.require_version = require_version or opt.require_version
 
     -- find package
+    local result = nil
     local found_manager_name = nil
     result, found_manager_name = _find_package(manager_name, package_name, opt)
 
