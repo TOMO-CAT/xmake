@@ -40,3 +40,16 @@ xrepo env -b emmylua_debugger -v -- xmake b -vrD
 ![VSCode Debug Tag](image/vscode-debugger-tab.png)
 
 ![VSCode Emmylua New Debugger](image/vscode-emmylua-new-debugger.png)
+
+## gdb 调试 xmake core
+
+```bash
+# xmake 运行时 coredump
+$ xmake run -vD foo.unittest
+Segmentation fault
+
+# gdb 调试
+$ gdb --args xmake run -vD foo.unittest
+(gdb) r
+(gdb) bt
+```

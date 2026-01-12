@@ -52,3 +52,12 @@ target("foo_test_with_testfiles", function()
     -- 不使用软链, 直接拷贝
     add_testfiles("copy_foo.txt", {src_path = "foo.txt", softlink = false})
 end)
+
+-- 没有任何 testfiles 但是依然希望有沙盒模式, 因为要往相对路径里写文件
+-- @see https://github.com/TOMO-CAT/xmake/issues/267
+target("foo_test_sandbox", function()
+    set_kind("test")
+    set_sandbox(true)
+    add_files("src/foo_test_sandbox.cc")
+    add_packages("gtest")
+end)

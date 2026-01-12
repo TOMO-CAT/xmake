@@ -12,6 +12,7 @@
 * [#250](https://github.com/TOMO-CAT/xmake/issues/250): test target 支持设置全局超时时间
 * [#251](https://github.com/TOMO-CAT/xmake/issues/252): 支持 json 格式导出 `xmake show -l packages`
 * [#254](https://github.com/TOMO-CAT/xmake/issues/254): 基于 package.lua 文本信息来计算 package hash
+* [#267](https://github.com/TOMO-CAT/xmake/issues/267): test target 新增 `set_sandbox` 接口，支持在没有 testfiles 时使用沙盒
 
 ### Bugs 修复
 
@@ -19,6 +20,7 @@
 * [#244](https://github.com/TOMO-CAT/xmake/issues/244): 修复并发安装同一个 package 会 panic 的问题
 * [#256](https://github.com/TOMO-CAT/xmake/issues/256): 修复并发更新 global repo 时出现的竞态问题
 * [#259](https://github.com/TOMO-CAT/xmake/issues/259): 修复 detectcache.find_package 里 libfiles 等参数无限膨胀的问题
+* [#266](https://github.com/TOMO-CAT/xmake/issues/266): 修复 test target 在 testfiles 目录冲突时无法建立软链的问题
 
 ## v3.0.7
 

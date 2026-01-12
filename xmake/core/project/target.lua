@@ -1638,6 +1638,11 @@ function _instance:test_timeout()
     return self:get("test_timeout")
 end
 
+-- get sandbox
+function _instance:is_sandbox()
+    return self:get("sandbox") == true
+end
+
 -- get the installed binary directory
 function _instance:bindir()
     local bindir = self:extraconf("prefixdir", self:prefixdir(), "bindir")
@@ -2785,6 +2790,7 @@ function target.apis()
         ,   "target.set_encodings"
         ,   "target.set_prefixdir"
         ,   "target.set_test_timeout"
+        ,   "target.set_sandbox"
             -- target.add_xxx
         ,   "target.add_deps"
         ,   "target.add_rules"
