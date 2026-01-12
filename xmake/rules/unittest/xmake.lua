@@ -17,7 +17,7 @@ rule("unittest", function()
 
         -- 没有调用 add_testfiles 时默认运行环境在 os.projectdir(), 相对路径引用单测文件
         if not target:get("rundir") then
-            if target:get("testfiles") then
+            if target:get("testfiles") or target:is_sandbox() then
                 local ori_rundir = path.absolute(target:rundir())
                 local sandbox_rundir = path.join(ori_rundir,
                                                  target:name() .. ".rundir")
