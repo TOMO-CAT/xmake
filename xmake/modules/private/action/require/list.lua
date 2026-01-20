@@ -65,9 +65,11 @@ function main()
 
     if option.get("json") then
         local data = {
-            requires = json.mark_as_array(requires)
+            requires = json.mark_as_array(requires),
+            requires_extra = json.mark_as_array(requires_extra)
         }
-        print(json.encode(data))
+        -- io.write 支持 xmake --quiet 的时候也输出到控制台
+        io.write(json.encode(data))
         return
     end
 
