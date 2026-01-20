@@ -21,6 +21,7 @@
 * [#256](https://github.com/TOMO-CAT/xmake/issues/256): 修复并发更新 global repo 时出现的竞态问题
 * [#259](https://github.com/TOMO-CAT/xmake/issues/259): 修复 detectcache.find_package 里 libfiles 等参数无限膨胀的问题
 * [#266](https://github.com/TOMO-CAT/xmake/issues/266): 修复 test target 在 testfiles 目录冲突时无法建立软链的问题
+* [#268](https://github.com/TOMO-CAT/xmake/issues/268): 修复 `xmake show -l packages` 后控制台内容不干净的问题
 
 ## v3.0.7
 
