@@ -867,27 +867,27 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
 
     -- compile it
     local depfile = dependinfo and os.tmpfile() or nil
+
+    -- support `-MMD -MF depfile.d`? some old gcc does not support it at same time
+    if depfile and _g._HAS_MMD_MF == nil then
+        _g._HAS_MMD_MF = self:has_flags({"-MMD", "-MF", os.nuldev()}, "cxflags", { flagskey = "-MMD -MF" }) or false
+    end
+
+    -- generate includes file
+    local compflags = flags
+    if depfile and _g._HAS_MMD_MF then
+        compflags = table.join(compflags, "-MMD", "-MF", depfile)
+    end
+
+    -- has color diagnostics? enable it
+    local colors_diagnostics = _has_color_diagnostics(self)
+    if colors_diagnostics then
+        compflags = table.join(compflags, colors_diagnostics)
+    end
+
     try
     {
         function ()
-
-            -- support `-MMD -MF depfile.d`? some old gcc does not support it at same time
-            if depfile and _g._HAS_MMD_MF == nil then
-                _g._HAS_MMD_MF = self:has_flags({"-MMD", "-MF", os.nuldev()}, "cxflags", { flagskey = "-MMD -MF" }) or false
-            end
-
-            -- generate includes file
-            local compflags = flags
-            if depfile and _g._HAS_MMD_MF then
-                compflags = table.join(compflags, "-MMD", "-MF", depfile)
-            end
-
-            -- has color diagnostics? enable it
-            local colors_diagnostics = _has_color_diagnostics(self)
-            if colors_diagnostics then
-                compflags = table.join(compflags, colors_diagnostics)
-            end
-
             -- do compile
             if ccache.is_enabled() then
                 local program, argv = _compargv_ccache(self, sourcefile, objectfile, compflags)
@@ -934,7 +934,14 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
                 local results = #lines > 0 and table.concat(lines, "\n") or ""
                 if not option.get("verbose") then
                     results = results .. "\n  ${yellow}> in ${bright}" .. sourcefile
+
+                    -- 编译错误无论是否开启 --verbose 都打印编译参数到控制台
+                    -- @see https://github.com/TOMO-CAT/xmake/issues/263
+                    local program, argv = compargv(self, sourcefile, objectfile, compflags, opt)
+                    local compile_cmd =  os.args(table.join(program, argv))
+                    results = results .. "\n${dim}" .. compile_cmd .. "${clear}"
                 end
+
                 raise(results)
             end
         },
