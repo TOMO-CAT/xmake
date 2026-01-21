@@ -1243,7 +1243,9 @@ function interpreter:api_register_add_values(scope_kind, ...)
                                             "git clone %s -c core.fsmonitor=false -c core.autocrlf=false %s",
                                             url, repo_dir)
                             utils.cprint("${color.warning}%s${clear}", cmd)
-                            os.exec(cmd)
+                            -- os.exec(cmd)
+                            -- 安静地运行命令
+                            os.run(cmd)
                         end
                     else
                         -- local repo
