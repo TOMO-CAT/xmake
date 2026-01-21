@@ -22,6 +22,7 @@ import("core.base.option")
 import("core.base.global")
 import("core.tool.toolchain")
 import("core.project.project")
+import("core.project.config")
 import("core.package.repository")
 import("private.action.require.impl.package", {alias = "require_package"})
 import("private.utils.toolchain", {alias = "toolchain_utils"})
@@ -203,8 +204,19 @@ function _get_configs(package, configs, opt)
     table.insert(configs, "--plat=" .. package:plat())
     table.insert(configs, "--arch=" .. package:arch())
     if configs.mode == nil then
-        table.insert(configs,
-                     "--mode=" .. (package:is_debug() and "debug" or "release"))
+        -- 对于 local repo 而言, 要透传 --mode 参数
+        -- @see https://github.com/TOMO-CAT/xmake/issues/272
+        if package:is_source_embed() then
+            local mode = opt.mode or option.get("mode", {deepseek = true}) or "release"
+            if mode == "auto" then
+                -- 在宿主项目里调用 xmake build 时, local repo 获取不到 mode
+                mode = config.get("mode")
+            end
+            table.insert(configs, "--mode=" .. mode)
+        else
+            table.insert(configs,
+                         "--mode=" .. (package:is_debug() and "debug" or "release"))
+        end
     end
     if configs.kind == nil then
         table.insert(configs, "--kind=" ..
@@ -507,7 +519,7 @@ function install(package, configs, opt)
     end
 
     -- do configure
-    if option.get("verbose") or option.get("diagnosis") or package:is_source_embed() then
+    if option.get("verbose") and package:is_source_embed() then
         cprint(format(
             "${bright blue}[package][tools][xmake] start configure package:${clear} [%s]",
             package:name()))
@@ -521,7 +533,7 @@ function install(package, configs, opt)
     end
 
     -- do build
-    if option.get("verbose") or option.get("diagnosis") or package:is_source_embed() then
+    if option.get("verbose") and package:is_source_embed() then
         cprint(format(
                 "${bright blue}[package][tools][xmake] start build package:${clear} [%s]",
                 package:name()))
@@ -550,7 +562,7 @@ function install(package, configs, opt)
     end
 
     -- do install
-    if option.get("verbose") or option.get("diagnosis") or package:is_source_embed() then
+    if option.get("verbose") and package:is_source_embed() then
         cprint(format(
             "${bright blue}[package][tools][xmake] start install package:${clear} [%s]",
             package:name()))
