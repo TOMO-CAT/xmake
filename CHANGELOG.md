@@ -13,6 +13,7 @@
 * [#251](https://github.com/TOMO-CAT/xmake/issues/252): 支持 json 格式导出 `xmake show -l packages`
 * [#254](https://github.com/TOMO-CAT/xmake/issues/254): 基于 package.lua 文本信息来计算 package hash
 * [#267](https://github.com/TOMO-CAT/xmake/issues/267): test target 新增 `set_sandbox` 接口，支持在没有 testfiles 时使用沙盒
+* [#263](https://github.com/TOMO-CAT/xmake/issues/263): 即使是没开启 --verbose 选项时, 也会打印编译错误到控制台
 
 ### Bugs 修复
 
