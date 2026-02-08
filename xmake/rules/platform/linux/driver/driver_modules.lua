@@ -208,7 +208,7 @@ function config(target)
     assert(target:has_tool("cc", "gcc"), "we must use gcc compiler!")
 
     -- check rules
-    for _, rulename in ipairs({"mode.release", "mode.debug", "mode.releasedbg", "mode.minsizerel", "mode.asan", "mode.tsan"}) do
+    for _, rulename in ipairs({"mode.release", "mode.debug", "mode.releasedbg", "mode.minsizerel"}) do
         assert(not target:rule(rulename), "target(%s) is linux driver module, it need not rule(%s)!", target:name(), rulename)
     end
 

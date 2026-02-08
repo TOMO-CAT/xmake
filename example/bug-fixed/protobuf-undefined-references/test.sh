@@ -1,3 +1,3 @@
 #!/bin/bash
 
-xmake build -r
+xmake build -r -y

@@ -19,7 +19,7 @@
 --
 
 -- define rule: debug mode
-rule("mode.debug")
+rule("mode.debug", function()
     on_config(function (target)
 
         -- is debug mode now? xmake f -m debug
@@ -36,9 +36,10 @@ rule("mode.debug")
             end
         end
     end)
+end)
 
 -- define rule: release mode
-rule("mode.release")
+rule("mode.release", function()
     on_config(function (target)
 
         -- is release mode now? xmake f -m release
@@ -67,9 +68,10 @@ rule("mode.release")
             target:add("cxflags", "-DNDEBUG")
         end
     end)
+end)
 
 -- define rule: release with debug symbols mode
-rule("mode.releasedbg")
+rule("mode.releasedbg", function()
     on_config(function (target)
 
         -- is releasedbg mode now? xmake f -m releasedbg
@@ -98,9 +100,10 @@ rule("mode.releasedbg")
             target:add("cxflags", "-DNDEBUG")
         end
     end)
+end)
 
 -- define rule: release with minsize mode
-rule("mode.minsizerel")
+rule("mode.minsizerel", function()
     on_config(function (target)
 
         -- is minsizerel mode now? xmake f -m minsizerel
@@ -125,9 +128,10 @@ rule("mode.minsizerel")
             target:add("cxflags", "-DNDEBUG")
         end
     end)
+end)
 
 -- define rule: profile mode
-rule("mode.profile")
+rule("mode.profile", function()
     on_config(function (target)
 
         -- is profile mode now? xmake f -m profile
@@ -156,9 +160,10 @@ rule("mode.profile")
             target:add("cxflags", "-DNDEBUG")
         end
     end)
+end)
 
 -- define rule: coverage mode
-rule("mode.coverage")
+rule("mode.coverage", function()
     on_config(function (target)
 
         -- is coverage mode now? xmake f -m coverage
@@ -181,156 +186,10 @@ rule("mode.coverage")
             target:add("shflags", "--coverage")
         end
     end)
-
--- define rule: asan mode
-rule("mode.asan")
-
-    -- we use after_load because c++.build.sanitizer rule/on_config need it
-    after_load(function (target)
-
-        -- is asan mode now? xmake f -m asan
-        if is_mode("asan") then
-
-            -- enable the debug symbols
-            if not target:get("symbols") then
-                target:set("symbols", "debug")
-            end
-
-            -- enable optimization
-            if not target:get("optimize") then
-                if target:is_plat("android", "iphoneos") then
-                    target:set("optimize", "smallest")
-                else
-                    target:set("optimize", "fastest")
-                end
-            end
-
-            -- enable asan checker
-            target:set("policy", "build.sanitizer.address", true)
-
-            -- we should use "build.sanitizer.address" instead of it.
-            wprint("deprecated: please use set_policy(\"build.sanitizer.address\", true) instead of \"mode.asan\".")
-        end
-    end)
-
--- define rule: tsan mode
-rule("mode.tsan")
-    after_load(function (target)
-
-        -- is tsan mode now? xmake f -m tsan
-        if is_mode("tsan") then
-
-            -- enable the debug symbols
-            if not target:get("symbols") then
-                target:set("symbols", "debug")
-            end
-
-            -- enable optimization
-            if not target:get("optimize") then
-                if target:is_plat("android", "iphoneos") then
-                    target:set("optimize", "smallest")
-                else
-                    target:set("optimize", "fastest")
-                end
-            end
-
-            -- enable tsan checker
-            target:set("policy", "build.sanitizer.thread", true)
-
-            -- we should use "build.sanitizer.thread" instead of it.
-            wprint("deprecated: please use set_policy(\"build.sanitizer.thread\", true) instead of \"mode.tsan\".")
-        end
-    end)
-
--- define rule: msan mode
-rule("mode.msan")
-    after_load(function (target)
-
-        -- is msan mode now? xmake f -m msan
-        if is_mode("msan") then
-
-            -- enable the debug symbols
-            if not target:get("symbols") then
-                target:set("symbols", "debug")
-            end
-
-            -- enable optimization
-            if not target:get("optimize") then
-                if target:is_plat("android", "iphoneos") then
-                    target:set("optimize", "smallest")
-                else
-                    target:set("optimize", "fastest")
-                end
-            end
-
-            -- enable msan checker
-            target:set("policy", "build.sanitizer.memory", true)
-
-            -- we should use "build.sanitizer.memory" instead of it.
-            wprint("deprecated: please use set_policy(\"build.sanitizer.memory\", true) instead of \"mode.msan\".")
-        end
-    end)
-
--- define rule: lsan mode
-rule("mode.lsan")
-    after_load(function (target)
-
-        -- is lsan mode now? xmake f -m lsan
-        if is_mode("lsan") then
-
-            -- enable the debug symbols
-            if not target:get("symbols") then
-                target:set("symbols", "debug")
-            end
-
-            -- enable optimization
-            if not target:get("optimize") then
-                if target:is_plat("android", "iphoneos") then
-                    target:set("optimize", "smallest")
-                else
-                    target:set("optimize", "fastest")
-                end
-            end
-
-            -- enable lsan checker
-            target:set("policy", "build.sanitizer.leak", true)
-
-            -- we should use "build.sanitizer.leak" instead of it.
-            wprint("deprecated: please use set_policy(\"build.sanitizer.leak\", true) instead of \"mode.lsan\".")
-        end
-    end)
-
--- define rule: ubsan mode
-rule("mode.ubsan")
-    after_load(function (target)
-
-        -- is ubsan mode now? xmake f -m ubsan
-        if is_mode("ubsan") then
-
-            -- enable the debug symbols
-            if not target:get("symbols") then
-                target:set("symbols", "debug")
-            end
-
-            -- enable optimization
-            if not target:get("optimize") then
-                if target:is_plat("android", "iphoneos") then
-                    target:set("optimize", "smallest")
-                else
-                    target:set("optimize", "fastest")
-                end
-            end
-
-            -- enable ubsan checker
-            target:set("policy", "build.sanitizer.undefined", true)
-
-            -- we should use "build.sanitizer.undefined" instead of it.
-            wprint("deprecated: please use set_policy(\"build.sanitizer.undefined\", true) instead of \"mode.ubsan\".")
-        end
-    end)
+end)
 
 -- define rule: valgrind mode
-rule("mode.valgrind")
+rule("mode.valgrind", function()
     on_config(function (target)
 
         -- is valgrind mode now? xmake f -m valgrind
@@ -351,30 +210,4 @@ rule("mode.valgrind")
             end
         end
     end)
-
--- define rule: check mode (deprecated)
-rule("mode.check")
-    on_config(function (target)
-
-        -- is check mode now? xmake f -m check
-        if is_mode("check") then
-
-            -- enable the debug symbols
-            if not target:get("symbols") then
-                target:set("symbols", "debug")
-            end
-
-            -- disable optimization
-            if not target:get("optimize") then
-                target:set("optimize", "none")
-            end
-
-            -- attempt to enable some checkers for pc
-            if is_mode("check") and is_arch("i386", "x86_64") then
-                target:add("cxflags", "-fsanitize=address", "-ftrapv")
-                target:add("mxflags", "-fsanitize=address", "-ftrapv")
-                target:add("ldflags", "-fsanitize=address")
-                target:add("shflags", "-fsanitize=address")
-            end
-        end
-    end)
+end)

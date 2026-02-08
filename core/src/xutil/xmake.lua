@@ -48,7 +48,7 @@ end
 
 -- add build modes
 add_rules("mode.release", "mode.debug", "mode.profile", "mode.coverage",
-          "mode.valgrind", "mode.asan", "mode.tsan", "mode.ubsan")
+          "mode.valgrind")
 if is_mode("debug") then
     add_defines("__xu_debug__", {public = true})
 end
