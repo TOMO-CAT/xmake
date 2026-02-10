@@ -103,7 +103,8 @@ function _check_sourcefile(clang_tidy, sourcefile, opt)
         sourcefile = path.absolute(sourcefile, projectdir)
     end
     table.insert(argv, sourcefile)
-    os.execv(clang_tidy, argv, {curdir = projectdir})
+    os.vexecv(clang_tidy, argv, {curdir = projectdir})
+    cprint("${color.success}checking %s ... %s", sourcefile, "${text.success}")
 end
 
 -- do check
