@@ -1,6 +1,6 @@
 #!/bin/bash
 
-runtime="lua"
+runtime="luajit"  # or lua
 mode="release"
 verbose=0
 
