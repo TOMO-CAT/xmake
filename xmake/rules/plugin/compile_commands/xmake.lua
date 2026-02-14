@@ -49,14 +49,20 @@ rule("plugin.compile_commands.autoupdate", function()
         local lockfile = io.openlock(tmpfile .. ".lock")
         if lockfile:trylock() then
             local outputdir
-            local lsp
+            -- 默认使用 clangd lsp, 可以使用 -isystem 参数屏蔽三方库头文件 warning
+            -- @see https://github.com/xmake-io/xmake/issues/3020
+            local lsp = "clangd"
             local sourcefiles = {}
             for _, target in pairs(project.targets()) do
                 table.join2(sourcefiles, target:sourcefiles(), (target:headerfiles()))
                 local extraconf = target:extraconf("rules", "plugin.compile_commands.autoupdate")
                 if extraconf then
-                    outputdir = extraconf.outputdir
-                    lsp = extraconf.lsp
+                    if extraconf.lsp then
+                        lsp = extraconf.lsp
+                    end
+                    if extraconf.outputdir then
+                        outputdir = extraconf.outputdir
+                    end
                 end
             end
             table.sort(sourcefiles)
