@@ -174,7 +174,7 @@ end
 
 -- make the sysincludedir flag
 function nf_sysincludedir(self, dir)
-    return nf_includedir(self, dir)
+    return {"-isystem", path.translate(dir)}
 end
 
 -- make the link flag

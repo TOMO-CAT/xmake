@@ -93,8 +93,8 @@ function load(target, sourcekind)
         local sourcefile_cx = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename })
         local sourcefile_dir = prefixdir and path.join(rootdir, prefixdir) or path.directory(sourcefile_cx)
 
-        -- add includedirs
-        target:add("includedirs", sourcefile_dir, { public = public })
+        -- 使用 sysincludedirs 避免 clangd 和 clang-tidy 的 warning
+        target:add("sysincludedirs", sourcefile_dir, { public = public })
 
         -- add objectfile, @see https://github.com/xmake-io/xmake/issues/5426
         local objectfile_grpc
@@ -294,8 +294,8 @@ function build_cxfile_objects(target, batchjobs, opt, sourcekind)
             sourcefile_cx_grpc = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename_grpc })
         end
 
-        -- add includedirs
-        target:add("includedirs", sourcefile_dir, { public = public })
+        -- 使用 sysincludedirs 避免 clangd 和 clang-tidy 的 warning
+        target:add("sysincludedirs", sourcefile_dir, { public = public })
 
         -- add objectfile
         local objectfile = target:objectfile(sourcefile_cx)
@@ -340,8 +340,8 @@ function build_cxfile(target, sourcefile_proto, opt, sourcekind)
         sourcefile_cx_grpc = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename_grpc })
     end
 
-    -- add includedirs
-    target:add("includedirs", sourcefile_dir, { public = public })
+    -- 使用 sysincludedirs 避免 clangd 和 clang-tidy 的 warning
+    target:add("sysincludedirs", sourcefile_dir, { public = public })
 
     -- build objectfile
     local objectfile = target:objectfile(sourcefile_cx)
