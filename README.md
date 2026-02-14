@@ -5,7 +5,7 @@
 ## Install
 
 ```bash
-bash scripts/install.sh --runtime=luajit
+bash scripts/install.sh
 ```
 
 ## Docker dev environment
