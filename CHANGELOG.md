@@ -25,6 +25,7 @@
 * [#266](https://github.com/TOMO-CAT/xmake/issues/266): 修复 test target 在 testfiles 目录冲突时无法建立软链的问题
 * [#268](https://github.com/TOMO-CAT/xmake/issues/268): 修复 `xmake show -l packages` 后控制台内容不干净的问题
 * [#277](https://github.com/TOMO-CAT/xmake/issues/277): 修复 compile_commands.json 编译参数不一致的问题
+* [#278](https://github.com/TOMO-CAT/xmake/issues/278): 修复包含动态库的间接 package 丢失 linkdir 的问题
 
 ## v3.0.7
 

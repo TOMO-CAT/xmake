@@ -13,7 +13,7 @@ function main(t)
 
         -- -y for package with "package.install_always" policy
         -- @see https://github.com/TOMO-CAT/xmake/issues/108
-        os.exec("xmake -y")
+        os.exec("xmake -y -D")
         os.exec("xmake p -D -y")
 
         os.exec("xmake install -o $(tmpdir) -a -D")

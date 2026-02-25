@@ -128,6 +128,28 @@ end
 -- 目前是给 target:_get_from_packages 接口调用的, 用于构造 link fullpath 和隐藏 linkdir
 -- name 只能是 links 或者 linkdirs
 function _instance:get_linkflags(name, opt)
+    -- 将 linkdirs 中只包含静态库的 linkdir 剔除掉, 让整个
+    local function _skip_all_static_linkdirs(linkdirs)
+        if not linkdirs then
+            return {}
+        end
+        local new_linkdirs = {}
+        for _, linkdir in ipairs(table.wrap(linkdirs)) do
+            local all_static = true
+            local libfiles = os.files(path.join(linkdir, "*"))
+            for _, libfile in ipairs(table.wrap(libfiles)) do
+                if libfile:endswith(".so") or libfile:find("%.so%.") then
+                    all_static = false
+                    break
+                end
+            end
+            if not all_static then
+                table.insert(new_linkdirs, linkdir)
+            end
+        end
+        return new_linkdirs
+    end
+
     local opt = opt or {}
     local linkflag_cache = self:linkflag_cache()
 
@@ -152,11 +174,13 @@ function _instance:get_linkflags(name, opt)
     -- 避免 values 为 nil, 否则 cache 会持续无法命中
     local values = opt.values or self:get(name) or {}
     if name == "links" or name == "linkdirs" then
-        -- if opt.linkpath then
         if opt.linkpath ~= false then
-            if self:only_static_lib() and name == "linkdirs" then
-                values = {}
-            elseif name == "links" then
+            if name == "linkdirs" then
+                -- 剔除只有静态库的 linkdirs
+                values = _skip_all_static_linkdirs(values)
+            end
+            if name == "links" then
+                -- 将 links 转换成绝对路径
                 values = self:transform_to_link_fullpath(values)
             end
         end
