@@ -15,6 +15,7 @@
 * [#267](https://github.com/TOMO-CAT/xmake/issues/267): test target 新增 `set_sandbox` 接口，支持在没有 testfiles 时使用沙盒
 * [#263](https://github.com/TOMO-CAT/xmake/issues/263): 即使是没开启 --verbose 选项时, 也会打印编译错误到控制台
 * [#272](https://github.com/TOMO-CAT/xmake/issues/272): local repo 时透传 mode 参数, 方便实现 sanitizer 等功能
+* [#249](https://github.com/TOMO-CAT/xmake/issues/249): 动态库使用 fullpath, 避免库重名问题
 
 ### Bugs 修复
 
