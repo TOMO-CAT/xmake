@@ -151,7 +151,8 @@ function main(packages)
         if not instance:is_system() and not instance:is_thirdparty() then
             local installdir = instance:installdir({readonly = true})
             if os.isdir(installdir) then
-                table.insert(references, installdir)
+                -- 记录每个 packages 及其对应的 installdir, 用于构造 softlink
+                references[instance:name()] = installdir
             end
         end
     end

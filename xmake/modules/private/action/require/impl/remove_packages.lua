@@ -52,9 +52,10 @@ function _has_reference_from_project(projectdir, packagedir)
     if os.isfile(project_references_file) then
         local references = io.load(project_references_file)
         if references and references.packages then
-            local packages = hashset.from(references.packages)
-            if packages:has(packagedir) then
-                return true
+            for _, installdir in pairs(table.wrap(references.packages)) do
+                if installdir == packagedir then
+                    return true
+                end
             end
         end
     end
