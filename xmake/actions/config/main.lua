@@ -123,7 +123,7 @@ function _need_check(changed)
 
         -- if package:installdir is broken, we need to delete installdir to trigger a forced reinstallation.
         local need_delete_package_dirs = {}
-        for _, pkg_dir in ipairs(package_dirs) do
+        for _, pkg_dir in pairs(package_dirs) do
             for _, broken_path in ipairs(package_broken_path) do
                 if broken_path:startswith(pkg_dir) then
                     -- cprint("${color.warning} pkg dir [%s] is broken", broken_path)
@@ -528,6 +528,11 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
                 -- @see https://github.com/TOMO-CAT/xmake/issues/62
                 local requires = project.required_packages()
                 if requires then
+                    -- 直接依赖的 package
+                    local direct_pkgs = {}
+
+                    -- 为所有直接依赖的 package 创建软链
+                    -- 应该合入后面的 pkg_name2pkg_installdir 逻辑, 这里是为了避免出现不兼容问题暂时保留两种逻辑
                     for requirename, require in pairs(requires) do
                         local pkg_softlink_installdir = path.join(
                                                             config.buildir(),
@@ -540,7 +545,24 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
                             -- remove previous softlink to force update the symbolic link of package installdir
                             os.rm(pkg_softlink_installdir)
                             os.ln(pkg_installdir, pkg_softlink_installdir)
+                            table.insert(direct_pkgs, requirename)
                         end
+                    end
+
+                    local pkg_name2pkg_installdir = localcache.cache("references")
+                    pkg_name2pkg_installdir = pkg_name2pkg_installdir and pkg_name2pkg_installdir:data()
+                    pkg_name2pkg_installdir = pkg_name2pkg_installdir and pkg_name2pkg_installdir.packages
+
+                    -- 遍历所有 packages 创建对应的软链 (主要是给间接依赖的 package 也创建软链)
+                    -- @see https://github.com/TOMO-CAT/xmake/issues/255
+                    for pkg_name, pkg_installdir in pairs(table.wrap(pkg_name2pkg_installdir)) do
+                        -- 如果已经作为直接依赖创建了软链则跳过
+                        if not table.contains(direct_pkgs, pkg_name) then
+                            local pkg_softlink_installdir = path.join(config.buildir(), ".pkg", pkg_name)
+                            os.rm(pkg_softlink_installdir)
+                            os.ln(pkg_installdir, pkg_softlink_installdir)
+                            table.insert(direct_pkgs, pkg_name)
+                        end                        
                     end
                 end
             end
