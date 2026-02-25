@@ -109,13 +109,24 @@ function _instance:link2fullpath()
     end
 
     -- 构造 link to path
-    -- 注意使用 self:get("links") 是没有 self:libraryfiles() 全的, 因为 links 是用于自定义的
+    -- * 注意使用 self:get("links") 是没有 self:libraryfiles() 全的, 因为 links 是用于自定义的
+    -- * 和 ld 链接器一样, 优先使用动态库而非静态库
     local link2fullpath = {}
-    for _, libfile in ipairs(table.wrap(self:libraryfiles())) do
+    local libfiles = table.wrap(self:libraryfiles())
+    for _, libfile in ipairs(libfiles) do
         local libfile_name = path.filename(libfile)
         if libfile_name:startswith("lib") and libfile_name:endswith(".a") then
             -- 剔除 lib 前缀和 .a 后缀, 取出 link
             local link = libfile_name:sub(4, #libfile_name - 2)
+            link2fullpath[link] = libfile
+        end
+    end
+    for _, libfile in ipairs(libfiles) do
+        local libfile_name = path.filename(libfile)
+        if libfile_name:startswith("lib") and libfile_name:endswith(".so") then
+            -- 剔除 lib 前缀和 .so 后缀, 取出 link
+            -- 这里会覆盖掉前面的静态库, 从而实现优先使用动态库的功能
+            local link = libfile_name:sub(4, #libfile_name - 3)
             link2fullpath[link] = libfile
         end
     end
@@ -128,7 +139,7 @@ end
 -- 目前是给 target:_get_from_packages 接口调用的, 用于构造 link fullpath 和隐藏 linkdir
 -- name 只能是 links 或者 linkdirs
 function _instance:get_linkflags(name, opt)
-    -- 将 linkdirs 中只包含静态库的 linkdir 剔除掉, 让整个
+    -- 将 linkdirs 中只包含静态库的 linkdir 剔除掉
     local function _skip_all_static_linkdirs(linkdirs)
         if not linkdirs then
             return {}
@@ -177,7 +188,10 @@ function _instance:get_linkflags(name, opt)
         if opt.linkpath ~= false then
             if name == "linkdirs" then
                 -- 剔除只有静态库的 linkdirs
-                values = _skip_all_static_linkdirs(values)
+                -- values = _skip_all_static_linkdirs(values)
+                
+                -- 不使用任何 linkdir, 因为我们将全部动态库和静态库都使用 fullpath 了, 避免库重名导致的问题
+                values = {}
             end
             if name == "links" then
                 -- 将 links 转换成绝对路径
