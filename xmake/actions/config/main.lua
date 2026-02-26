@@ -519,7 +519,8 @@ force to build in current directory via run `xmake -P .`]], os.projectdir())
         -- load targets
         project.load_targets({recheck = recheck})
 
-        if project.policy("package.enable_softlink_installdir") then
+        -- 默认开启软链功能, `package.enable_softlink_installdir` policy 只用于控制是否将 -isystem 绝对路径转化成 -I 软链
+        if true or project.policy("package.enable_softlink_installdir") then
             -- after install xrepo packages, we will call `os.tryrm()` to delete `package:data("cleanable_sourcedir")`,
             -- and deleting the sourcedir will remove the installdir of the dependent packages that
             -- are symlibked in `${sourcedir}/build/.pkg`, so we choose not to create softlink in XREPO

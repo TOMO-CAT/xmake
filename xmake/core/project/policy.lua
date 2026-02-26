@@ -136,7 +136,7 @@ function policy.policies()
             -- It will force cmake package use ninja for build
             ["package.cmake_generator.ninja"]     = {description = "Set cmake package use ninja for build", default = false, type = "boolean"},
             -- Enable required-package softlink installdir
-            ["package.enable_softlink_installdir"] = {description = "Enable required-package softlink installdir.", default = true, type = "boolean"},
+            ["package.enable_softlink_installdir"] = {description = "Enable required-package softlink installdir.", default = false, type = "boolean"},
             -- It will force update the local repository
             ["package.local_repo.force_update"] = {description = "It will force update the local repository", default = true, type = "boolean"},
             -- Stop to test on the first failure
