@@ -370,7 +370,7 @@ function _filelock:lock(opt)
     -- lock it
     if self._LOCKED_NUM > 0 or io.filelock_lock(self:cdata(), opt) then
         self._LOCKED_NUM = self._LOCKED_NUM + 1
-        io.save(self:path(), os.get_process_info(opt))
+        io.save(self:path(), self:get_filelock_info(opt))
         return true
     else
         return false, string.format("%s: lock failed!", self)
@@ -394,11 +394,32 @@ function _filelock:trylock(opt)
     -- try lock it
     if self._LOCKED_NUM > 0 or io.filelock_trylock(self:cdata(), opt) then
         self._LOCKED_NUM = self._LOCKED_NUM + 1
-        io.save(self:path(), os.get_process_info(opt))
+        io.save(self:path(), self:get_filelock_info(opt))
         return true
     else
         return false, string.format("%s: trylock failed!", self)
     end
+end
+
+function _filelock:get_filelock_info(opt)
+    local opt = opt or {}
+    local process_info = table.clone(os.get_process_info(opt))
+
+    -- 默认都需要更新时间戳, 只有用户指定  {opt.dump_timestamp = false} 才会跳过
+    -- 这是因为后面要根据 filelock 来判断是否删除对应保护的对象, 所以 cleaner 持有这把锁时不应该更新时间戳
+    if opt.dump_timestamp ~= false then
+        local timestamp = os.time()
+        process_info["time"] = timestamp
+        process_info["time_formatted"] = os.date("%Y-%m-%d_%H:%M:%S", timestamp)
+    else
+        -- 不更新时间戳的话需要用之前 filelock 记录的时间戳
+        local origin_content = io.load(self:path())
+        if origin_content then
+            process_info["time"] = origin_content["time"]
+            process_info["time_formatted"] = origin_content["time_formatted"]
+        end
+    end
+    return process_info
 end
 
 -- unlock file

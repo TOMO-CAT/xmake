@@ -15,11 +15,11 @@ end
 function _log_warn(format, ...)
     assert(format)
     local message = string.tryformat(format, ...)
-    print("[%s][HOURLY-CLEANER][WARN] %s", os.date("%Y-%m-%d_%H:%M:%S", os.time()), message)
+    cprint("${bright yellow}[%s][HOURLY-CLEANER]${clear}${yellow}[WARN] %s${clear}", os.date("%Y-%m-%d_%H:%M:%S", os.time()), message)
 end
 
 function _cleanup_file(filepath)
-    print("cleanup [%s] ...", filepath)
+    cprint("${bright red}cleanup${clear} [%s] ...", filepath)
     os.tryrm(filepath)
 end
 
@@ -182,7 +182,9 @@ function cleanup()
     try
     {
         function ()
-            print(argv)
+            if option.get("verbose") then
+                print(argv)
+            end
             -- /tmp/.xmake1000/yymmdd/yymmddHH-hourly-cleaner.log
             process.openv(os.programfile(), argv, {stdout = path.join(os.tmpdir(), this_hour .. "-hourly-cleaner.log"), detach = true}):close()
         end
