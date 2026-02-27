@@ -129,9 +129,15 @@ function _update()
         for _, repo in ipairs(repos) do
             local repodir = repo:directory()
             if not pulled[repodir] then
-                local repo_file_lock_path = path.join(global.filelockdir(), "repositories", repodir:gsub("/", "__").. ".lock")
-                local repo_lock = io.openlock(repo_file_lock_path)
-                _lock(repo:name(), repo_lock)
+                local repo_file_lock_path
+                local repo_lock
+                    
+                -- 只有 global repo 需要加锁保护
+                if repodir:startswith(global.directory()) then
+                    repo_file_lock_path = path.join(global.filelockdir(), "repositories", repodir:gsub("/", "__").. ".lock")
+                    repo_lock = io.openlock(repo_file_lock_path)
+                    _lock(repo:name(), repo_lock)
+                end
 
                 if os.isdir(repodir) then
                     local need_pulled = false
@@ -171,7 +177,9 @@ function _update()
                     io.save(path.join(repodir, "updated"), {})
                 end
                 pulled[repodir] = true
-                _unlock(repo_lock)
+                if repodir:startswith(global.directory()) then
+                    _unlock(repo_lock)
+                end
             end
         end
 
