@@ -1312,8 +1312,12 @@ function _instance:orderpkgs(opt)
                 if pkg and pkg:enabled() then
                     table.insert(packages, pkg)
                 else
-                    local sourceinfo = self:sourceinfo("packages", packagename) or {}
-                    utils.warning("%s:%d:${clear} unknown package(%s)", sourceinfo.file or "", sourceinfo.line or -1, packagename)
+                    -- 如果没设置 --all 时, 应该跳过非 default target 的 warning
+                    -- 这种做法比较粗糙, 但是基本能满足功能, 更合适的方法是动态检测 target 是否启用
+                    if baseoption.get("all") or self:get("default") ~= false then
+                        local sourceinfo = self:sourceinfo("packages", packagename) or {}
+                        utils.warning("%s:%d:${clear} unknown package(%s)", sourceinfo.file or "", sourceinfo.line or -1, packagename)
+                    end
                 end
             end
         end
