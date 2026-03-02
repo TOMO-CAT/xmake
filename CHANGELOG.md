@@ -18,6 +18,7 @@
 * [#249](https://github.com/TOMO-CAT/xmake/issues/249): 动态库使用 fullpath, 避免库重名问题
 * [#255](https://github.com/TOMO-CAT/xmake/issues/255): 为间接依赖的 package 也生成软链
 * [#258](https://github.com/TOMO-CAT/xmake/issues/258): 屏蔽掉误报的 warning
+* [#285](https://github.com/TOMO-CAT/xmake/issues/285): 支持 xmake repo 动态下发 plugins 
 
 ### Bugs 修复
 
