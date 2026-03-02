@@ -1257,7 +1257,7 @@ function interpreter:api_register_add_values(scope_kind, ...)
                         end
                         repo_dir = path.absolute(url)
                     end
-                    local repo_builtin_dirs = {"rules", "toolchains", "options"}
+                    local repo_builtin_dirs = {"rules", "toolchains", "options", "plugins"}
                     for _, repo_builtin_dir in ipairs(repo_builtin_dirs) do
                         local pattern = path.join(repo_dir, repo_builtin_dir,
                                                   "*.lua")
