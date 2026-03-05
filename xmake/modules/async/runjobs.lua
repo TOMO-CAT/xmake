@@ -61,6 +61,7 @@ function main(name, jobs, opt)
     local comax = opt.comax or math.min(total, 4)
     local distcc = opt.distcc
     local timeout = opt.timeout or 500
+    local wait = opt.wait -- 是否等待未完成的任务执行结束再退出
     local group_name = name
     local jobs_cb = type(jobs) == "function" and jobs or nil
     assert(timeout < 60000, "runjobs: invalid timeout!")
@@ -156,6 +157,7 @@ function main(name, jobs, opt)
     local count = 0
     local abort = false
     local abort_errors
+    local printed_abort_errors = false
     local progress_wrapper = {}
     local job_pending
     progress_wrapper.current = function ()
@@ -262,13 +264,30 @@ function main(name, jobs, opt)
                                 end
 
                                 -- kill all waited objects in this group
-                                local waitobjs = scheduler.co_group_waitobjs(group_name)
+                                local waitobjs =
+                                    scheduler.co_group_waitobjs(group_name)
                                 if waitobjs:size() > 0 then
-                                    for _, obj in waitobjs:keys() do
-                                        -- TODO, kill pipe is not supported now
-                                        if obj.kill then
-                                            obj:kill()
+                                    if wait ~= false then
+                                        -- 等待所有任务结束 (默认行为)
+                                        -- 目前无法 kill 掉子进程的子进程, 所以我们选择和 cmake 一样 wait 所有并发任务结束, 如果用户 ctrl +c 也可能退干净
+                                        -- 主要是 gcc 进程会创建子进程, 如果 xmake 编译出错这里 kill 只能杀掉 gcc 进程, 无法杀掉 gcc 进程创建的子进程
+                                        -- @see https://github.com/xmake-io/xmake/issues/719
+                                        if not printed_abort_errors then
+                                            utils.cprint(abort_errors)
+                                            printed_abort_errors = true
                                         end
+                                        utils.cprint("${bright yellow}Encountered some errors, waiting for [%d] unfinished jobs (press Ctrl+C to abort)${clear}", waitobjs:size())
+
+                                        for _, obj in waitobjs:keys() do
+                                            -- TODO: kill pipe is not supported now
+                                            -- if obj.kill then
+                                            --      obj:kill()
+                                            -- end
+                                        end
+                                    else
+                                        -- 给当前进程发信号 9, 直接强制结束, 不等待未完成任务
+                                        utils.cprint("${bright yellow}Aborting [%d] unfinished jobs${clear}", waitobjs:size())
+                                        os.exec("kill -9 -" .. os.getpid())
                                     end
                                 end
                             end
