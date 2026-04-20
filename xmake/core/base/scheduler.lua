@@ -289,7 +289,12 @@ function scheduler:_co_curdir_update(curdir)
     co_curdirs[running] = {curdir_hash, curdir}
 end
 
--- update the current environments hash of current coroutine
+-- update the current environments version of current coroutine
+--
+-- we use a monotonically increasing version counter instead of hashing all
+-- environment variables. this avoids the O(n^2) string concatenation,
+-- key sorting, and uuid4 computation on every environment change.
+-- see tests/benchmark/bench_co_curenvs_update.lua for benchmark results.
 function scheduler:_co_curenvs_update(envs)
 
     -- get running coroutine
@@ -298,22 +303,18 @@ function scheduler:_co_curenvs_update(envs)
         return
     end
 
-    -- save the current directory hash
-    local envs_hash = ""
-    envs = envs or os.getenvs()
-    for _, key in ipairs(table.orderkeys(envs)) do
-        envs_hash = envs_hash .. key:upper() .. envs[key]
-    end
-    envs_hash = hash.uuid4(envs_hash):sub(1, 8)
-    self._CO_CURENVS_HASH = envs_hash
+    -- bump the global version counter
+    local envs_version = (self._CO_CURENVS_VERSION or 0) + 1
+    self._CO_CURENVS_VERSION = envs_version
 
-    -- save the current directory for each coroutine
+    -- save the current version and envs snapshot for each coroutine
+    envs = envs or os.getenvs()
     local co_curenvs = self._CO_CURENVS
     if not co_curenvs then
         co_curenvs = {}
         self._CO_CURENVS = co_curenvs
     end
-    co_curenvs[running] = {envs_hash, envs}
+    co_curenvs[running] = {envs_version, envs}
 end
 
 -- resume it's waiting coroutine if all coroutines are dead in group
@@ -453,9 +454,9 @@ function scheduler:co_resume(co, ...)
         end
 
         -- has the current environments been changed? restore it
-        local curenvs = self._CO_CURENVS_HASH
+        local curenvs = self._CO_CURENVS_VERSION
         local oldenvs = self._CO_CURENVS and self._CO_CURENVS[running] or nil
-        if oldenvs and curenvs ~= oldenvs[1] and running:is_isolated() then -- hash changed?
+        if oldenvs and curenvs ~= oldenvs[1] and running:is_isolated() then -- version changed?
             os.setenvs(oldenvs[2])
         end
     end
@@ -478,9 +479,9 @@ function scheduler:co_suspend(...)
     end
 
     -- has the current environments been changed? restore it
-    local curenvs = self._CO_CURENVS_HASH
+    local curenvs = self._CO_CURENVS_VERSION
     local oldenvs = self._CO_CURENVS and self._CO_CURENVS[running] or nil
-    if oldenvs and curenvs ~= oldenvs[1] and running:is_isolated() then -- hash changed?
+    if oldenvs and curenvs ~= oldenvs[1] and running:is_isolated() then -- version changed?
         os.setenvs(oldenvs[2])
     end
 

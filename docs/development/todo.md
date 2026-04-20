@@ -100,3 +100,21 @@ end)
 ## build/.pkg 也能存储非直接依赖三方库的软链
 
 目前 `build/.pkg` 只有直接依赖三方库的软链，对于一些场景不好调试。
+
+## 性能与代码质量优化（按优先级排序）
+
+### `co_lock` 基于 500ms 轮询的锁机制
+
+`scheduler:co_lock` 的实现是每 500ms 轮询一次锁状态，锁释放后等待的协程最多要等 500ms 才能被唤醒。在包安装等高频加锁场景下延迟会累积。建议在 `co_unlock` 时主动唤醒等待队列中的协程（类似条件变量的 notify 机制），实现零延迟的锁传递。
+
+### `_traceback` 函数三处几乎完全重复
+
+`sandbox._traceback`、`interpreter._traceback`、`sandbox_try._traceback` 三个函数实现几乎一模一样（遍历调用栈、格式化 `src_file`、处理 `@` 前缀），只有极小差异（`xpcall` 终止条件和 `diagnosis` 判断）。建议抽取公共的 `traceback_utils` 模块，三处通过参数差异化调用。
+
+### `poller_waitproc` 和 `poller_waitfs` 代码高度重复
+
+`scheduler.lua` 中这两个函数除了 `OT_PROC` vs `OT_FWATCHER` 的类型检查不同，其余逻辑完全一致（分配 pollerdata、检查 pending、插入 poller、注册 timer、suspend）。建议合并为通用的 `_poller_wait_object(obj, timeout, expected_otype)` 内部方法，减少约 60 行重复代码。
+
+### `prune_redundant_edges` 被注释掉，构建图存在冗余边
+
+`build.lua` 中 `batchjobs:prune_redundant_edges()` 被注释掉了。当前构建图在大型项目中可能包含大量冗余依赖边，导致调度器做不必要的等待判断。`jobpool.lua` 中的实现用了 DFS + ancestors 追踪，但 `table.contains` 是线性扫描，对大图效率不高。建议用 hashset 替代 table 做 ancestors 查找，修复后重新启用。
