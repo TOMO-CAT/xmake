@@ -344,6 +344,25 @@ static xu_pointer_t xu_native_large_allocator_ralloc(xu_allocator_ref_t self, xu
         removed = xu_true;
 
         // ralloc data
+        //
+        // NOTE: when migrating between native heap and mmap-based virtual memory
+        // (i.e. crossing the XU_VIRTUAL_MEMORY_DATA_MINN threshold in either
+        // direction), we must copy the *whole* old block including its
+        // xu_native_large_data_head_t header, not just `base_head->size` bytes.
+        //
+        // `data_head` points at the start of the old block and the header occupies
+        // `sizeof(xu_native_large_data_head_t)` bytes there, so the user payload
+        // sits at `data_head + 1` and has `base_head->size` bytes. If we only copy
+        // `base_head->size` bytes from `data_head`, the trailing
+        // `sizeof(xu_native_large_data_head_t)` bytes of the user payload are
+        // silently lost (replaced with whatever the new region's initial contents
+        // are, which is zero for fresh mmap regions). That manifested as user
+        // strings whose tail bytes near the 128KB boundary turned into NULs.
+        //
+        // For the shrink direction we still must clamp the copy length by `size`
+        // so we never overrun the freshly allocated (smaller) destination buffer.
+        xu_size_t copy_payload = base_head->size < size ? base_head->size : size;
+        xu_size_t copy_total   = sizeof(xu_native_large_data_head_t) + copy_payload;
         if (size >= XU_VIRTUAL_MEMORY_DATA_MINN)
         {
             if (base_head->size >= XU_VIRTUAL_MEMORY_DATA_MINN)
@@ -353,7 +372,7 @@ static xu_pointer_t xu_native_large_allocator_ralloc(xu_allocator_ref_t self, xu
                 data = (xu_byte_t*)xu_virtual_memory_malloc(need);
                 if (data)
                 {
-                    xu_memcpy_(data, data_head, base_head->size);
+                    xu_memcpy_(data, data_head, copy_total);
                     xu_native_memory_free(data_head);
                 }
             }
@@ -367,7 +386,7 @@ static xu_pointer_t xu_native_large_allocator_ralloc(xu_allocator_ref_t self, xu
                 data = (xu_byte_t*)xu_native_memory_malloc(need);
                 if (data)
                 {
-                    xu_memcpy_(data, data_head, base_head->size);
+                    xu_memcpy_(data, data_head, copy_total);
                     xu_virtual_memory_free(data_head);
                 }
             }

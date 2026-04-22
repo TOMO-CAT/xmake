@@ -1,5 +1,11 @@
 # 更新日志
 
+## master
+
+### Bugs 修复
+
+* [#291](https://github.com/TOMO-CAT/xmake/issues/291): 修复 io.readfile 读 >128KB 文件异常问题
+
 ## v3.0.8
 
 ### 新特性
