@@ -21,4 +21,4 @@ function ok() {
 rm ./.xmake -rf
 rm ./build -rf
 
-xmake build -v --all
+xmake build --all

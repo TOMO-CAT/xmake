@@ -18,5 +18,5 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
-xmake f -cvyD
-xmake b -yvrD
+xmake f --yes --clean
+xmake b --yes --rebuild --all

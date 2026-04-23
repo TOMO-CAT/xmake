@@ -36,7 +36,7 @@ else
     set +x
 fi
 
-xmake b -yrD
+xmake b --rebuild --all
 
 output=`file build/android/arm64-v8a/release/android-cross` || exit -1
 if [[ "$output" =~ "ARM" || "$output" =~ "aarch64" ]]; then

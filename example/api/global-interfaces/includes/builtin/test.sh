@@ -1,4 +1,4 @@
 #!/bin/bash
 
-xmake config --verbose --clean
-xmake build --verbose
+xmake config --clean
+xmake build

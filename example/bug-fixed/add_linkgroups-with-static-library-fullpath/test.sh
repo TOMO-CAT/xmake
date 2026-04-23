@@ -2,4 +2,4 @@
 
 set -e
 
-xmake build -v -r -a -y || exit 1
+xmake build -r -a -y || exit 1

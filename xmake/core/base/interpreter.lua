@@ -1239,13 +1239,41 @@ function interpreter:api_register_add_values(scope_kind, ...)
                                              repo_name)
                         -- pull repo first if not exists
                         if not os.isdir(repo_dir) then
-                            local cmd = string.format(
-                                            "git clone %s -c core.fsmonitor=false -c core.autocrlf=false %s",
-                                            url, repo_dir)
-                            utils.cprint("${color.warning}%s${clear}", cmd)
-                            -- os.exec(cmd)
-                            -- 安静地运行命令
-                            os.run(cmd)
+                            local argv = {
+                                "clone", url,
+                                "-c", "core.fsmonitor=false",
+                                "-c", "core.autocrlf=false",
+                                repo_dir
+                            }
+                            if branch then
+                                table.insert(argv, "-b")
+                                table.insert(argv, branch)
+                            end
+                            -- 打印真实命令，方便复现
+                            utils.cprint(
+                                "${color.warning}git %s${clear}",
+                                table.concat(argv, " "))
+                            -- 半成品目录会让下次 os.isdir 误判，先清掉
+                            if os.isdir(repo_dir) then
+                                os.rm(repo_dir)
+                            end
+                            -- 用 iorunv 捕获 stdout/stderr，失败时把真错误回显出来
+                            local ok, outdata, errdata, errors =
+                                os.iorunv("git", argv)
+                            if not ok then
+                                local msg = errors
+                                if errdata and #errdata > 0 then
+                                    msg = errdata
+                                elseif outdata and #outdata > 0 then
+                                    msg = outdata
+                                end
+                                utils.cprint(
+                                    "${color.error}git clone %s failed:${clear}\n%s",
+                                    url, tostring(msg or ""):trim())
+                                os.raise(
+                                    "add_repositories(\"%s\"): git clone failed",
+                                    value)
+                            end
                         end
                     else
                         -- local repo

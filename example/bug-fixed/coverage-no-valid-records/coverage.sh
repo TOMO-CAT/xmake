@@ -16,7 +16,12 @@ xmake test -v
 rm -rf coverage
 mkdir -p coverage
 
-# apt install lcov
+# 没有 lcov 就自动安装
+if ! command -v lcov >/dev/null 2>&1; then
+    echo "lcov not found, installing..."
+    sudo apt update && sudo apt install -y lcov
+fi
+
 lcov --rc lcov_branch_coverage=1 --directory build/.objs --base-directory . --gcov-tool "${BASE_DIR}/llvm-gcov.sh" --capture -o coverage/coverage.info
 lcov --rc lcov_branch_coverage=1 --extract coverage/coverage.info "${BASE_DIR}/src/*" --output-file coverage/filtered_coverage.info
 
