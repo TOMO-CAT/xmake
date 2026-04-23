@@ -1,7 +1,7 @@
 add_repositories("my-repo my-repo")
 add_requires("bar")
 
-target("foo")
+target("foo", function()
     set_kind("binary")
     add_files("src/*.cpp")
 
@@ -15,3 +15,4 @@ target("foo")
              }
          ]]}, {configs = {languages = "c++17"}}))
     end)
+end)
