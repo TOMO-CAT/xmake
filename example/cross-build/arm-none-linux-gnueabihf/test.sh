@@ -34,8 +34,8 @@ else
 fi
 
 # 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 arm-none-linux-gnueabihf-g++ 等二进制)
-xmake f -yD -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf
-xmake b -yvrD
+xmake f -y -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf
+xmake b --rebuild --all
 
 output=`file build/cross/arm/release/arm-none-linux-gnueabihf-cross` || exit -1
 if [[ "$output" =~ "ARM" && "$output" =~ "ELF 32-bit" ]]; then
@@ -46,8 +46,8 @@ else
 fi
 
 # 编译 host 版本
-xmake f -cvyD
-xmake b -yvrD
+xmake f --yes --clean
+xmake b --yes --rebuild --all
 output=`file build/linux/x86_64/release/arm-none-linux-gnueabihf-cross` || exit -1
 if [[ "$output" =~ "x86-64" ]]; then
     ok "output file is x86_64"

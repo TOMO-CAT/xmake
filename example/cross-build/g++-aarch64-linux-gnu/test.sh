@@ -23,7 +23,7 @@ function ok() {
 
 # 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 aarch64-none-linux-gnu-g++ 等二进制)
 xmake config --yes -p cross --cross=aarch64-linux-gnu- --arch=armv8-a --sdk=/usr
-xmake build --verbose --all
+xmake build --all
 
 output=`file build/cross/armv8-a/release/g++-aarch64-linux-gnu` || exit -1
 if [[ "$output" =~ "ARM" && "$output" =~ "aarch64" ]]; then
@@ -34,8 +34,8 @@ else
 fi
 
 # 编译 host 版本
-xmake config --yes --verbose --clean
-xmake build --verbose --all --rebuild
+xmake config --yes --clean
+xmake build --all --rebuild
 output=`file build/linux/x86_64/release/g++-aarch64-linux-gnu` || exit -1
 if [[ "$output" =~ "x86-64" ]]; then
     ok "output file is x86_64"

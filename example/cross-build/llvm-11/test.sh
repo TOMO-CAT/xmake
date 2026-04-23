@@ -28,4 +28,4 @@ else
     exit 0
 fi
 
-xmake build --yes --verbose --rebuild --all
+xmake build --yes --rebuild --all

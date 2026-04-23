@@ -16,7 +16,7 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
-# xmake build --yes --all --verbose || exit 1
+# xmake build --yes --all || exit 1
 
 if [ -z "${GITHUB_ACTIONS+x}" ]; then
     info "not running in github actions"

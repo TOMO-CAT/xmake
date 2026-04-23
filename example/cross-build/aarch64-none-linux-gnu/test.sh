@@ -34,8 +34,8 @@ else
 fi
 
 # 编译交叉编译版本 (必须用绝对路径, 否则 cmake 会报错找不到 aarch64-none-linux-gnu-g++ 等二进制)
-xmake f -yD -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu
-xmake b -yvrD
+xmake f -y -p cross --sdk=`pwd`/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu
+xmake b -yr
 
 output=`file build/cross/arm64/release/aarch64-none-linux-gnu-cross` || exit -1
 if [[ "$output" =~ "ARM" && "$output" =~ "aarch64" ]]; then
@@ -46,8 +46,8 @@ else
 fi
 
 # 编译 host 版本
-xmake f -cyD
-xmake b -yvrD
+xmake f --clean --yes
+xmake b --rebuild --all
 output=`file build/linux/x86_64/release/aarch64-none-linux-gnu-cross` || exit -1
 if [[ "$output" =~ "x86-64" ]]; then
     ok "output file is x86_64"

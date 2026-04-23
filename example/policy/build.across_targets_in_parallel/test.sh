@@ -2,4 +2,4 @@
 
 rm -rf build
 rm -rf .xmake
-xmake build -r --all -v || exit 1
+xmake build -r --all || exit 1
