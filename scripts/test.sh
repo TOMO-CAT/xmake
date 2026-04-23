@@ -21,7 +21,10 @@ export XMAKE_ROOT="y"
 # configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
 #
 # https://github.com/python/cpython/issues/80183
-export LLVM_PROFDATA="/usr/lib/llvm-14/bin/llvm-profdata"
+# export LLVM_PROFDATA="/usr/lib/llvm-14/bin/llvm-profdata"
+
+# libc++ 头文件 / 运行库, 用于处理 --runtimes=c++_shared
+sudo apt install -y libc++-dev libc++abi-dev
 
 # /usr/bin/ld: cannot find /usr/lib/llvm-14/lib/clang/14.0.6/lib/linux/libclang_rt.profile-x86_64.a: No such file or directory
 #
