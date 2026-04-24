@@ -4,20 +4,33 @@ FROM ubuntu:latest
 # @see https://github.com/devcontainers/images/issues/1056
 RUN userdel -r ubuntu || true
 
-RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list \
+RUN sed -i -e 's@//.*archive\.ubuntu\.com@//mirrors.aliyun.com@g' \
+           -e 's@//security\.ubuntu\.com@//mirrors.aliyun.com@g' \
+           /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null \
     && apt-get update \
     && apt install -y ruby ruby-dev rubygems build-essential llvm \
-    && apt install -y libgl1-mesa-dev libglu1-mesa-dev \
-    && apt install -y ccache \
-    && apt install -y libc++-dev libc++abi-dev
+    && apt install -y libgl1-mesa-dev libglu1-mesa-dev
 
+# 工具库
 RUN apt install -y sudo git vim curl wget
+RUN apt install -y iputils-ping iproute2 dnsutils
+RUN apt install -y file unzip zip xz-utils
+
+# 三方库
 RUN apt install -y protobuf-compiler libgflags-dev
+
+# 编译工具
+RUN apt install -y clang lld \
+    libc++-dev libc++abi-dev \
+    ccache \
+    gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+    binutils-aarch64-linux-gnu \
+    libc6-dev-arm64-cross linux-libc-dev-arm64-cross
 
 RUN cat <<'EOF' >> /etc/bash.bashrc
 
 # add proxy
-export hostip="host.docker.internal"
+export hostip="127.0.0.1"
 export socks_hostport=7890
 export http_hostport=7890
 alias proxy='

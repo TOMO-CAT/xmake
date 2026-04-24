@@ -2,11 +2,11 @@ name: Ubuntu (Arm)
 
 # disable workflow with multiarch/qemu-user-static:register because it's too slow
 on:
-  pull_request:
-  push:
-    branches: [ master ]
-  release:
-    types: [published]
+  # pull_request:
+  # push:
+  #   branches: [ master ]
+  # release:
+  #   types: [published]
 
 jobs:
   build:

@@ -1,7 +1,6 @@
 export module foo;
 
 export namespace foo {
-  #ifdef FOO_EXPORT
-    void say(const char *);
-  #endif
+    void say(const char *msg) {
+    }
 }

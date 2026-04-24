@@ -164,7 +164,8 @@ def docker_build(
                 "."
             ]
         )
-        execute_shell_command_with_stdout(' '.join(docker_build_cmd))
+        if not execute_shell_command_with_stdout(' '.join(docker_build_cmd)):
+            raise SystemExit(f"docker build [{docker_image}] failed")
 
     if if_docker_container_exist(docker_container):
         logger.info(f"docker container [{docker_container}] already exists")
@@ -228,7 +229,7 @@ def docker_run(
             "docker", "exec", "-it",
             docker_container,
             "/bin/bash", "-c",
-            f"source /home/{USER_NAME}/.profile && /bin/bash"
+            f"source /home/{USER_NAME}/.profile && (which xmake > /dev/null 2>&1 || (cd {PROJECT_BASE_DIR} && bash scripts/install.sh)) && exec /bin/bash"
         ]
     else:
         # 以 root 用户进入

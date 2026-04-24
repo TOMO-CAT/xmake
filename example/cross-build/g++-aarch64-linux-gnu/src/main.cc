@@ -2,7 +2,7 @@
 
 #include "header.pb.h"
 
-int main(int argc, char** argv) {
+int main() {
     std::cout << "hello world!" << std::endl;
     ::github::tomocat::proto::End2EndSource e2e_src;
     e2e_src.set_module_name("cat");
