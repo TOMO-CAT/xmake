@@ -18,6 +18,25 @@ function ok() {
   (>&2 printf "[\e[32m\e[1m OK \e[0m] $*\n")
 }
 
+function skip() {
+  (>&2 printf "[\e[35m\e[1mSKIP\e[0m] $*\n")
+}
+
+# 检查 protoc 版本，不为 3.12.4 则跳过（与 xmake.lua 中 protobuf-cpp 版本严格匹配）
+REQUIRED_PROTOC_VERSION="3.12.4"
+if ! command -v protoc >/dev/null 2>&1; then
+  skip "protoc not found, skip this test (required ${REQUIRED_PROTOC_VERSION})"
+  exit 0
+fi
+PROTOC_VERSION="$(protoc --version 2>/dev/null | awk '{print $2}')"
+if [ "${PROTOC_VERSION}" != "${REQUIRED_PROTOC_VERSION}" ]; then
+  skip "protoc version [${PROTOC_VERSION}] != required [${REQUIRED_PROTOC_VERSION}], skip this test"
+  exit 0
+fi
+
+rm -rf ./.xmake
+rm -rf ./build
+
 # 安装交叉编译工具链
 # sudo apt install g++-aarch64-linux-gnu -y || exit 1
 # sudo apt install -y protobuf-compiler

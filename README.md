@@ -11,23 +11,15 @@ bash scripts/install.sh
 ## Docker dev environment
 
 ```bash
-# default: ubuntu_2204
-# python3 scripts/docker.py --command clear
-python3 scripts/docker.py --command build
-python3 scripts/docker.py --command run
-
-# ubuntu_latest
-# python3 scripts/docker.py --arch ubuntu_latest --command clear
-python3 scripts/docker.py --arch ubuntu_latest --command build
-python3 scripts/docker.py --arch ubuntu_latest --command run
+just docker ubuntu_2204
 ```
 
 ## Run xmake tests && examples
 
 ```bash
 # run all tests
-bash scripts/test.sh
+just test
 
 # run all examples
-bash scripts/example.sh
+just example
 ```

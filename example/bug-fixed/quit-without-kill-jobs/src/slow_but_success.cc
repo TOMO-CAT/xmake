@@ -55,8 +55,9 @@ struct ComplexType {
 // --- Strategy 3: Extreme Macro Generation and Recursive Macro Abuse ---
 // This is pure preprocessor torture. It generates a massive amount of
 // text that the compiler has to parse.
+// 这一步太慢了所以我们减少一些, 多增加一些 `+x` 可以将编译速度拖慢十几倍
 #define HUGE_EXPRESSION(x) \
-    x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x
+    x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x+x
 
 #define EXPAND(x) HUGE_EXPRESSION(HUGE_EXPRESSION(HUGE_EXPRESSION(x)))
 
@@ -97,13 +98,14 @@ int main() {
     // For now, I'll just show the first few to demonstrate the fix.
     // To get a huge time, you'll want to have 100+ calls to INSTANTIATE_TYPES.
 
+    // 最慢的一行:
     // Let's create an extreme amount of code to be parsed.
     int dummy = 10;
     int result = EXPAND(dummy); // This macro call will expand into a massive expression.
     std::cout << "Result of huge expression: " << result << std::endl;
 
     // Use a very large vector to force the compiler to do more work.
-    std::vector<long long> v(1000000);
+    std::vector<long long> v(10000);
     for (size_t i = 0; i < v.size(); ++i) {
         v[i] = i;
     }
