@@ -26,6 +26,11 @@ import("net.http")
 import("devel.git")
 import("net.fasturl")
 
+-- check if a string looks like a git commit hash (7-40 hex chars)
+function _is_commit(str)
+    return str and str:match("^[0-9a-fA-F]+$") and #str >= 7 and #str <= 40
+end
+
 -- get version and url of provided xmakever
 function main(xmakever)
 
@@ -33,6 +38,9 @@ function main(xmakever)
     xmakever = xmakever or "latest"
 
     -- parse url and commit
+    -- * custom_url
+    --   * `xmake update -v github:TOMO-CAT/xmake#master` 解析出来 `github:TOMO-CAT/xmake`
+    --   * `xmake update -v https://github.com/TOMO-CAT/xmake.git#dev` 解析出来 `https://github.com/TOMO-CAT/xmake.git`
     local commitish = nil
     local custom_url = nil
     local seg = xmakever:split('#', { plain = true, limit = 2, strict = true })
@@ -52,16 +60,17 @@ function main(xmakever)
     local urls = nil
     if custom_url then
         urls = { git.asgiturl(custom_url) or custom_url }
-        vprint("using custom source: %s ..", urls[1] )
+        cprint("${dim}[fetch_version]${clear} using custom source: ${green}%s${clear}", urls[1])
     else
         if xmake.gitsource() == "github.com" then
             urls = {"https://github.com/TOMO-CAT/xmake.git"}
         else
             urls = {"https://gitee.com/tomocat/xmake.git"}
         end
-
     end
     commitish = (commitish and #commitish > 0) and commitish or "latest"
+    cprint("${dim}[fetch_version]${clear} url: ${green}%s${clear}, commitish: ${green}%s${clear}, runtime: ${green}%s${clear}",
+        urls[1], commitish, option.get("runtime") or "luajit")
 
     -- sort urls
     if #urls > 1 then
@@ -69,15 +78,26 @@ function main(xmakever)
         urls = fasturl.sort(urls)
     end
 
+    -- if commitish looks like a git commit hash, use it directly
+    if _is_commit(commitish) then
+        return {url = urls[1], version = commitish, is_commit = true}
+    end
+
     -- get version
     local version = nil
     local tags, branches
+    local matched_url = urls[1]
     for _, url in ipairs(urls) do
         tags, branches = git.refs(url)
+        if option.get("verbose") then
+            cprint("${dim}[fetch_version]${clear} git.refs url: ${green}%s${clear}, tags: ${green}%s${clear}, branches: ${green}%s${clear}",
+                url, table.concat(tags or {}, ", "), table.concat(branches or {}, ", "))
+        end
         if tags or branches then
+            matched_url = url
             version = semver.select(commitish, tags or {}, tags or {}, branches or {})
             break
         end
     end
-    return {is_official = true, urls = urls, version = (version or "master"), tags = tags, branches = branches}
+    return {url = matched_url, version = (version or "master"), tags = tags, branches = branches}
 end

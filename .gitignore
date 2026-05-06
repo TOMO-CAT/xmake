@@ -60,3 +60,4 @@ modules.order
 
 # ai
 .claude
+.codex

@@ -39,58 +39,39 @@ import("lib.detect.find_tool")
 -- run program with privilege
 function _sudo_v(program, params)
 
-    -- attempt to install directly
-    return try
-    {
-        function ()
-            os.vrunv(program, params)
-            return true
-        end,
+    -- already root?
+    if os.isroot() then
+        os.vrunv(program, params)
+        return true
+    end
 
-        catch
+    -- try get privilege
+    if privilege.get() then
+        local ok = try
         {
-            -- failed or not permission? request administrator permission and run it again
-            function (errors)
-
-                -- trace
-                vprint(errors)
-
-                -- try get privilege
-                if privilege.get() then
-                    local ok = try
-                    {
-                        function ()
-                            os.vrunv(program, params)
-                            return true
-                        end
-                    }
-
-                    -- release privilege
-                    privilege.store()
-
-                    -- ok?
-                    if ok then
-                        return true
-                    end
-                end
-
-                -- show tips
-                local command = program .. " " ..os.args(params)
-                cprint("\r${bright color.error}error: ${clear}run `%s` failed, may permission denied!", command)
-
-                -- continue to install with administrator permission?
-                if sudo.has() then
-
-                    -- confirm to install?
-                    local confirm = utils.confirm({ default = true, description = format("try continue to run `%s` with administrator permission again", command) })
-                    if confirm then
-                        sudo.vrunv(program, params)
-                        return true
-                    end
-                end
+            function ()
+                os.vrunv(program, params)
+                return true
             end
         }
-    }
+        privilege.store()
+        if ok then
+            return true
+        end
+    end
+
+    -- show tips
+    local command = program .. " " .. os.args(params)
+
+    -- continue to install with administrator permission?
+    if sudo.has() then
+        local confirm = utils.confirm({ default = true, description = format("try continue to run `%s` with administrator permission again", command) })
+        if confirm then
+            sudo.vrunv(program, params)
+            return true
+        end
+    end
+    return false
 end
 
 -- do install
@@ -102,22 +83,16 @@ function _install(sourcedir)
         -- get the install directory
         local installdir = "/usr/local/bin"
 
-        -- trace
-        tty.erase_line_to_start().cr()
-        cprintf("${yellow}  => ${clear}installing to %s .. ", installdir)
         local ok = try
         {
             function ()
-
-                -- install it
                 os.cd(sourcedir)
-                if os.isfile("./configure") then
-                    os.vrun("./configure", {"--mode=release", "--runtime=lua"})
+                if not os.isfile("./scripts/install.sh") then
+                    raise("scripts/install.sh not found in %s", sourcedir)
                 end
-                os.vrunv("make", {"-j4"})
-                -- an error will be reported: cannot create regular file '/usr/local/bin/xmake': Text file busy
-                -- _sudo_v("make", {"install", "VERBOSE=1", "PREFIX=/usr/local"})
-                process.openv("make", {"install", "VERBOSE=1", "PREFIX=/usr/local"}, {stdout = os.tmpfile(), stderr = os.tmpfile(), detach = true}):close()
+
+                local runtime = option.get("runtime") or "luajit"
+                os.vrunv("bash", {"./scripts/install.sh", "--runtime=" .. runtime})
                 return true
             end,
             catch
@@ -128,11 +103,10 @@ function _install(sourcedir)
             }
         }
 
-        -- trace
         if ok then
-            tty.erase_line_to_start().cr()
             cprint("${yellow}  => ${clear}install to %s .. ${color.success}${text.success}", installdir)
         else
+            cprint("${yellow}  => ${clear}install to %s .. ${color.failure}${text.failure}", installdir)
             raise("install failed!")
         end
     end
@@ -147,81 +121,17 @@ end
 
 -- do install script
 function _install_script(sourcedir)
-
-    -- trace
-    cprintf("\r${yellow}  => ${clear}install script to %s .. ", os.programdir())
-
     local source = path.join(sourcedir, "xmake")
-    local dirname = path.filename(os.programdir())
-    if dirname ~= "xmake" then
-        local target = path.join(sourcedir, dirname)
-        os.mv(source, target)
-        source = target
-    end
+    local program_dir = "/usr/local/share/xmake"
 
     local ok = try
     {
         function ()
-            local script = path.join(os.programdir(), "scripts", "update-script.sh")
-            return _sudo_v("sh", { script, os.programdir(), source })
-        end,
-        catch
-        {
-            function (errors)
-                vprint(errors)
+            local script = path.join(program_dir, "scripts", "update-script.sh")
+            cprint("${dim}[update]${clear} sh %s %s %s", script, program_dir, source)
+            if not option.get("dry-run") then
+                return _sudo_v("sh", { script, program_dir, source })
             end
-        }
-    }
-    -- trace
-    if ok then
-        cprint("${color.success}${text.success}")
-    else
-        cprint("${color.failure}${text.failure}")
-    end
-end
-
--- initialize shells
-function _initialize_shell()
-
-    local target, command
-
-    target = "~/.profile"
-    local shell = os.shell()
-    if shell:endswith("bash") then target = (is_host("macosx") and "~/.bash_profile" or "~/.bashrc")
-    elseif shell:endswith("zsh") then target = "~/.zshrc"
-    elseif shell:endswith("ksh") then target = "~/.kshrc"
-    elseif shell:endswith("fish") then target = "~/.config/fish/config.fish"
-    end
-    local profile_home = path.absolute("~/.xmake/profile")
-    command = ("test -f \"%s\" && source \"%s\""):format(profile_home, profile_home)
-
-    -- write home profile
-    local profile = "$XMAKE_PROGRAM_DIR/scripts/profile-unix.sh"
-    local profile_fish = "$XMAKE_PROGRAM_DIR/scripts/profile-unix.fish"
-    local bridge_command = format([[export XMAKE_ROOTDIR="%s"
-export XMAKE_PROGRAM_DIR="%s"
-# export PATH="$XMAKE_ROOTDIR:$PATH"
-test $FISH_VERSION && test -f "%s" && source "%s" && exit 0
-test -f "%s" && source "%s"
-]], path.directory(os.programfile()), os.programdir(), profile_fish, profile_fish, profile, profile)
-    io.writefile(profile_home, bridge_command)
-
-    -- trace
-    cprintf("\r${yellow}  => ${clear}installing shell integration to %s .. ", target)
-
-    local ok = try
-    {
-        function ()
-            local file = ""
-            if os.isfile(target) then
-                file = io.readfile(target)
-                file = file:gsub("# >>> xmake >>>.-# <<< xmake <<<", "")
-                if file ~= "" and not file:endswith("\n") then
-                    file = file .. "\n"
-                end
-            end
-            file = file .. "# >>> xmake >>>\n" .. command .. "\n# <<< xmake <<<"
-            io.writefile(target, file)
             return true
         end,
         catch
@@ -231,13 +141,12 @@ test -f "%s" && source "%s"
             end
         }
     }
-    -- trace
+    
     if ok then
-        cprint("${color.success}${text.success}")
-        print("Reload shell profile by running the following command now!")
-        cprint("${bright}source ~/.xmake/profile${clear}")
+        cprint("${yellow}  => ${clear}install script to %s .. ${color.success}${text.success}", program_dir)
     else
-        cprint("${color.failure}${text.failure}")
+        cprint("${yellow}  => ${clear}install script to %s .. ${color.failure}${text.failure}", program_dir)
+        raise("install script failed!")
     end
 end
 
@@ -250,21 +159,15 @@ end
 
 -- main
 function main()
-    -- initialize for shell interaction
-    if option.get("integrate") then
-        _initialize_shell()
-        return
-    end
-
     -- enter environment
     environment.enter()
 
     -- has been installed?
     local fetchinfo   = assert(fetch_version(option.get("xmakever")), "cannot fetch xmake version info!")
-    local is_official = fetchinfo.is_official
-    local mainurls    = fetchinfo.urls
+    local mainurl     = fetchinfo.url
     local version     = fetchinfo.version
-    if is_official and xmake.version():eq(version) and not option.get("force") then
+    local is_commit   = fetchinfo.is_commit
+    if not is_commit and xmake.version():eq(version) and not option.get("force") then
         cprint("${bright}xmake %s has been installed!", version)
         return
     end
@@ -272,48 +175,48 @@ function main()
     local script_only = option.get("scriptonly")
 
     -- trace
-    if is_official then
-        cprint("update version ${green}%s${clear} from official source ..", version)
-    else
-        cprint("update version ${green}%s${clear} from ${underline}%s${clear} ..", version, mainurls[1])
-    end
+    cprint("${dim}[update]${clear} url: ${green}%s${clear}, version: ${green}%s${clear}, force: ${green}%s${clear}, scriptonly: ${green}%s${clear}",
+        mainurl, version, tostring(option.get("force") or false), tostring(option.get("scriptonly") or false))
 
     -- get the temporary source directory without ramdisk (maybe too large)
     local sourcedir = path.join(os.tmpdir({ramdisk = false}), "xmakesrc", version)
     vprint("prepared to download to temp dir %s ..", sourcedir)
 
     -- all user provided urls are considered as git url since check has been performed in fetch_version
-    local install_from_git = not is_official or git.checkurl(mainurls[1])
+    local install_from_git = git.checkurl(mainurl)
 
     -- the download task
     local download_task = function ()
-        for idx, url in ipairs(mainurls) do
-            tty.erase_line_to_start().cr()
-            cprintf("${yellow}  => ${clear}downloading %s .. ", url)
-            local ok = try
-            {
-                function ()
-                    os.tryrm(sourcedir)
-                    git.clone(url, {depth = 1, recurse_submodules = not script_only, branch = version, outputdir = sourcedir})
+        tty.erase_line_to_start().cr()
+        cprintf("${yellow}  => ${clear}downloading %s .. ", mainurl)
+        local ok = try
+        {
+            function ()
+                if option.get("dry-run") then
                     return true
-                end,
-                catch
-                {
-                    function (errors)
-                        vprint(errors)
-                    end
-                }
+                end
+                os.tryrm(sourcedir)
+                if is_commit then
+                    git.clone(mainurl, {recurse_submodules = not script_only, outputdir = sourcedir})
+                    git.checkout(version, {repodir = sourcedir})
+                else
+                    git.clone(mainurl, {depth = 1, recurse_submodules = not script_only, branch = version, outputdir = sourcedir})
+                end
+                return true
+            end,
+            catch
+            {
+                function (errors)
+                    vprint(errors)
+                end
             }
-            tty.erase_line_to_start().cr()
-            if ok then
-                cprint("${yellow}  => ${clear}download %s .. ${color.success}${text.success}", url)
-                break
-            else
-                cprint("${yellow}  => ${clear}download %s .. ${color.failure}${text.failure}", url)
-            end
-            if not ok and idx == #mainurls then
-                raise("download failed!")
-            end
+        }
+        tty.erase_line_to_start().cr()
+        if ok then
+            cprint("${yellow}  => ${clear}download %s .. ${color.success}${text.success}", mainurl)
+        else
+            cprint("${yellow}  => ${clear}download %s .. ${color.failure}${text.failure}", mainurl)
+            raise("download failed!")
         end
     end
 
@@ -327,7 +230,7 @@ function main()
     -- leave environment
     environment.leave()
 
-    if install_from_git then
+    if install_from_git and not option.get("dry-run") then
         _check_repo(sourcedir)
     end
 

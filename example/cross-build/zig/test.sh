@@ -28,6 +28,10 @@ fi
 # https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager
 # sudo apt install snapd -y || exit 1
 # sudo snap install zig --classic --beta || exit 1
+if [ -n "${GITHUB_ACTIONS+x}" ]; then
+    info "running in github actions, skipping"
+    exit 0
+fi
 
 # 通过官方 tar 包安装 zig（已存在则跳过）
 if command -v zig >/dev/null 2>&1; then

@@ -40,16 +40,20 @@ task("update", function()
                 {
                     {                                                                                              }
                 ,   {'s', "scriptonly",  "k",   nil,    "Update scripts only."                                     }
-                ,   {nil, "integrate",   "k",   nil,    "Integrate xmake with default shell."                      }
+                ,   {'n', "dry-run",     "k",   nil,    "Dry run, do not actually update."                         }
                 ,   {'f', "force",       "k",   nil,    "Force to update and reinstall the given version."         }
-                ,   {nil, "xmakever",    "v",   nil,    "The given xmake version, or a git source (and branch). ",
+                ,   {nil, "runtime",     "kv",  "luajit","Set the Lua runtime (luajit or lua)."                    }
+                ,   {nil, "xmakever",    "v",   nil,    "The given xmake version, or a git source (and branch/commit). ",
                                                         "e.g.",
-                                                        "    from official source: ",
-                                                        "        latest, ~2.2.3, dev, master",
+                                                        "    from git tag:",
+                                                        "        v2.9.7",
+                                                        "    from git branch:",
+                                                        "        master, dev",
+                                                        "    from git commit:",
+                                                        "        a1b2c3d, a1b2c3d4e5f6",
                                                         "    from custom source:",
-                                                        "        https://github.com/xmake-io/xmake",
-                                                        "        github:xmake-io/xmake#~2.2.3",
-                                                        "        git://github.com/xmake-io/xmake.git#master",
+                                                        "        github:TOMO-CAT/xmake#dev",
+                                                        "        https://github.com/TOMO-CAT/xmake.git#v3.0.8",
                                                         values = function (complete)
                                                             if not complete then
                                                                 return
