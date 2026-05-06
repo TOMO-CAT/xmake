@@ -41,6 +41,9 @@ else
     make || exit 1
 fi
 
+# Q: cannot create regular file '/usr/local/bin/xmake': Text file busy
+# A: rm before cp
+sudo rm -f -v /usr/local/bin/xmake || exit 1
 sudo make install PREFIX=/usr/local || exit 1
 
 ok "install xmake successfully!"

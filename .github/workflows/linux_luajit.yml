@@ -25,10 +25,7 @@ jobs:
 
       - name: Installation
         run: |
-          ./configure --runtime=luajit
-          make -j`nproc`
-          ./scripts/get.sh __local__ __install_only__
-          source ~/.xmake/profile
+          bash scripts/install.sh --runtime=luajit
           xmake --version
 
       - name: Prepare

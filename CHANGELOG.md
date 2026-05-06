@@ -2,6 +2,10 @@
 
 ## master
 
+### 新特性
+
+* [#296](https://github.com/TOMO-CAT/xmake/issues/296): xmake 自更新功能
+
 ### Bugs 修复
 
 * [#291](https://github.com/TOMO-CAT/xmake/issues/291): 修复 io.readfile 读 >128KB 文件异常问题
