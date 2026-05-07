@@ -58,7 +58,8 @@ rule("cuda.env")
             end
         end
         if not cudart then
-            target:add("syslinks", "cudart_static")
+            -- target:add("syslinks", "cudart_static")
+            target:add("syslinks", "cudart")
         end
         if target:is_plat("linux") then
             target:add("syslinks", "rt", "pthread", "dl")
