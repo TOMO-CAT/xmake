@@ -353,6 +353,11 @@ function main(package)
                 local force_reinstall = package:policy("package.install_always") or package:data("force_reinstall") or option.get("force")
                 if force_reinstall or not package:manifest_load() then
 
+                    -- show start message in non-tty environments (e.g. CI)
+                    if not io.isatty() and not option.get("verbose") and not option.get("diagnosis") then
+                        cprint("${yellow}  => ${clear}install %s %s ..", package:displayname(), package:version_str() or "")
+                    end
+
                     -- clear install directory
                     _clear_installdir(package)
 

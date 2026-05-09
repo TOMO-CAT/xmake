@@ -28,17 +28,18 @@ fi
 # https://github.com/ziglang/zig/wiki/Install-Zig-from-a-Package-Manager
 # sudo apt install snapd -y || exit 1
 # sudo snap install zig --classic --beta || exit 1
-if [ -n "${GITHUB_ACTIONS+x}" ]; then
-    info "running in github actions, skipping"
-    exit 0
-fi
+# if [ -n "${GITHUB_ACTIONS+x}" ]; then
+#     info "running in github actions, skipping"
+#     exit 0
+# fi
 
 # 通过官方 tar 包安装 zig（已存在则跳过）
 if command -v zig >/dev/null 2>&1; then
   info "zig already installed: $(command -v zig) ($(zig version))"
 else
   ZIG_VER=0.13.0
-  curl -LO https://ziglang.org/download/${ZIG_VER}/zig-linux-x86_64-${ZIG_VER}.tar.xz
+  # curl -LO https://ziglang.org/download/${ZIG_VER}/zig-linux-x86_64-${ZIG_VER}.tar.xz
+  wget "https://github.com/TOMO-CAT/zxmake-mirror/releases/download/20260510.1/zig-linux-x86_64-${ZIG_VER}.tar.xz" -O zig-linux-x86_64-${ZIG_VER}.tar.xz
   sudo tar -C /opt -xf zig-linux-x86_64-${ZIG_VER}.tar.xz
   sudo ln -sf /opt/zig-linux-x86_64-${ZIG_VER}/zig /usr/local/bin/zig
   zig version
