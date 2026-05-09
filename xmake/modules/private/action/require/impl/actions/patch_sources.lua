@@ -97,7 +97,8 @@ function _patch(package, patchinfo)
 
         -- check hash
         if patch_hash and not _check_sha256(patch_hash, patch_file) then
-            raise("patch(%s): unmatched checksum!", patch_url)
+            raise("patch(%s): unmatched checksum, expected(%s), actual(%s)!",
+                patch_url, patch_hash, hash.sha256(patch_file))
         end
     end
 

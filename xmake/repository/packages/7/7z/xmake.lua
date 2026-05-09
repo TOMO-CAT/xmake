@@ -1,4 +1,4 @@
-package("7z")
+package("7z", function()
 
     set_kind("binary")
     set_homepage("https://www.7-zip.org/")
@@ -7,7 +7,7 @@ package("7z")
     set_urls("https://github.com/xmake-mirror/7zip/archive/refs/tags/$(version).tar.gz",
                 "https://github.com/xmake-mirror/7zip.git")
     add_versions("21.02", "b2a4c5bec8207508b26f94507f62f5a79c57ae9ab77dbf393f3b2fc8eef2e382")
-    add_patches("21.02", path.join(os.scriptdir(), "patches", "21.02", "backport-21.03-fix-for-GCC-10.patch"), "f1d8fa0bbb25123b28e9b2842da07604238b77e51b918260a369f97c2f694c89")
+    add_patches("21.02", path.join(os.scriptdir(), "patches", "21.02", "backport-21.03-fix-for-GCC-10.patch"), "c0ce7de7a4999c186dfdd8f44c11c7c8c26f56a82fa8386459a95172aaa7aa6e")
 
     on_install("macosx", "linux", function (package)
         -- Clang has some indentation warnings that fails compilation using -Werror, remove it
@@ -24,3 +24,4 @@ package("7z")
     on_test(function (package)
         os.vrun("7z --help")
     end)
+end)

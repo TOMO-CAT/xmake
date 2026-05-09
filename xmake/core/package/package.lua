@@ -1451,12 +1451,7 @@ function _instance:version_set(version, source)
     end
 
     -- save version string
-    if source == "commit" then
-        -- we strip it to avoid long paths
-        self._VERSION_STR = version:sub(1, 8)
-    else
-        self._VERSION_STR = version
-    end
+    self._VERSION_STR = version
 end
 
 -- get branch version
