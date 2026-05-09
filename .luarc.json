@@ -1,6 +1,4 @@
-// config description: https://github.com/LuaLS/lua-language-server/blob/master/doc/zh-cn/config.md
 {
-    // https://github.com/LuaLS/lua-language-server/issues/28
     "workspace.ignoreDir": [
         "xmake/templates",
         "core"
@@ -9,7 +7,6 @@
         "xmake/templates",
         "core"
     ],
-    // https://github.com/LuaLS/lua-language-server/issues/2548
     "diagnostics.libraryFiles": "Disable",
     "diagnostics.disable": [
         "unknown-symbol",
@@ -19,13 +16,15 @@
         "need-check-nil",
         "lowercase-global",
         "inject-field",
-        "redundant-parameter",
+        "undefined-global",
+        "undefined-field",
+        "iter-variable-reassign",
+        "call-non-callable",
+        "unnecessary-assert",
+        "unnecessary-if",
         "param-type-mismatch",
-        "discard-returns",
-        "deprecated",
-        "duplicate-index",
-        "missing-parameter",
-        "cast-local-type",
-        "unbalanced-assignments"
+        "assign-type-mismatch",
+        "global-in-non-module",
+        "access-invisible"
     ]
 }
