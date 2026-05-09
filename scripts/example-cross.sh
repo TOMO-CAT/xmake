@@ -6,7 +6,8 @@ original_dir=$(pwd)
 
 export XMAKE_PROGRAM_DIR="${PWD}/xmake"
 
-mapfile -t test_scripts < <(find example -type f -name "test.sh" | grep -v "^example/cross-build/")
+# debug to speedup cross examples actions
+mapfile -t test_scripts < <(find example/cross-build/ -type f -name "test.sh")
 
 if [ -z "${GITHUB_ACTIONS+x}" ]; then
     info "not running in github actions"
@@ -64,4 +65,4 @@ for timing in $(printf "%s\n" "${timings[@]}" | sort -nr); do
 done
 echo "-----------------------------------------------------------------"
 
-ok "Run all examples successfully!"
+ok "Run all cross-build examples successfully!"

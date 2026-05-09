@@ -8,90 +8,36 @@ add_cxxflags("-Wno-unused-parameter")
 
 set_languages("c++17")
 
--- 这种修改 clang 编译参数的必须要依赖本地 protoc
--- sudo apt install protobuf-compiler
+if os.getenv("GITHUB_ACTIONS") then
+    -- 在 github action 时跑一下比较简单的版本, 避免流水线耗时过长
+    target("clang-sysroot-target", function()
+        set_kind("binary")
+        add_files("src/main.cc")
+    end)
+else
+    -- 编译出 host 版本的 protoc, 用于生成 *.pb.h 和 *.pb.cc
+    -- * 方案 1: 源码编译, 指定 host = true 就只会编译 host 版本的 protoc
+    -- add_requires("protobuf-cpp~host 3.19.4", {host = true, alias = "protoc"})
+    -- * 方案 2: 直接使用 protoc 预编译好的二进制, 节省编译速度
+    add_requires("protoc 3.19.4")
 
--- 编译出 cross 版本的 protobuf 库, 用于构造交叉编译成品库
--- 注意 protobuf 版本要和 protoc 版本一致: 3.12.4
-package("protobuf-cpp", function()
+    -- 编译出 cross 版本的 protobuf 库, 用于构造交叉编译成品库
+    -- `protoc = false` 会跳过编译 protoc, 因为交叉编译时本身就只需要 host protoc, 可以优化编译速度
+    add_requires("protobuf-cpp 3.19.4", {configs = {protoc = false}})
 
-    set_homepage("https://developers.google.com/protocol-buffers/")
-    set_description("Google's data interchange format for cpp")
-
-    add_urls(
-        "https://github.com/protocolbuffers/protobuf/releases/download/v$(version)",
-        {
-            version = function(version)
-                return version .. "/protobuf-cpp-" .. version .. ".zip"
-            end
-        })
-
-    add_versions("3.12.4",
-                 "5ad4cf085cfd866043dc1035c8f8e97e6968573a2d117e054e2a890eb19259d1")
-
-    add_deps("cmake")
-
-    add_links("protobuf", "protoc", "utf8_range", "utf8_validity")
-
-    if is_plat("linux") then
-        add_syslinks("pthread")
-    end
-
-    on_load(function(package)
-        package:addenv("PATH", "bin")
+    target("proto", function()
+        set_kind("object")
+        add_files("pb/*.proto", {proto_public = true})
+        add_rules("protobuf.cpp")
+        add_packages("protobuf-cpp", {public = true})
+        -- 使用 package 的 protoc 而不是系统目录下的 protoc
+        add_packages("protoc", {links = {}, linkdirs = {}})
+        set_policy('build.fence', true)
     end)
 
-    on_install(function(package)
-        os.cd("cmake")
-        io.replace("CMakeLists.txt", "set(protobuf_DEBUG_POSTFIX \"d\"",
-                   "set(protobuf_DEBUG_POSTFIX \"\"", {plain = true})
-
-        local configs = {
-            "-Dprotobuf_BUILD_TESTS=OFF", "-Dprotobuf_BUILD_PROTOC_BINARIES=ON",
-            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-        }
-        table.insert(configs, "-DCMAKE_BUILD_TYPE=" ..
-                         (package:is_debug() and "Debug" or "Release"))
-        table.insert(configs, "-DBUILD_SHARED_LIBS=" ..
-                         (package:config("shared") and "ON" or "OFF"))
-
-        local packagedeps = {}
-
-        import("package.tools.cmake").install(package, configs, {
-            buildir = "build",
-            packagedeps = packagedeps
-        })
+    target("clang-sysroot-target", function()
+        set_kind("binary")
+        add_files("src/proto_main.cc")
+        add_deps("proto")
     end)
-
-    on_test(function(package)
-        if package:is_cross() then
-            return
-        end
-        io.writefile("test.proto", [[
-            syntax = "proto3";
-            package test;
-            message TestCase {
-                string name = 4;
-            }
-            message Test {
-                repeated TestCase case = 1;
-            }
-        ]])
-        os.vrun("protoc test.proto --cpp_out=.")
-    end)
-end)
-add_requires("protobuf-cpp 3.12.4")
-
-target("proto", function()
-    set_kind("object")
-    add_files("pb/*.proto", {proto_public = true})
-    add_rules("protobuf.cpp")
-    add_packages("protobuf-cpp", {public = true})
-    set_policy('build.fence', true)
-end)
-
-target("clang-sysroot-target", function()
-    set_kind("binary")
-    add_files("src/*.cc")
-    add_deps("proto")
-end)
+end
