@@ -265,11 +265,13 @@ function _enter_workdir(package)
             oldir = os.cd(filedirs[1])
         else
             local installdir = package:installdir()
-            if os.emptydir(installdir) then
+            local force_reinstall = package:policy("package.install_always") or package:data("force_reinstall") or option.get("force")
+            if os.emptydir(installdir) or force_reinstall then
                 -- 安装 package 时会加锁进入到 source 目录
-                -- 但是如果多个进程并发安装同一个 package 时, 第二个进程进来时 source 目录
+                -- 但是如果多个进程并发安装同一个 package 时, 第二个进程进来时还是尝试 source 目录, 但是此时 source 目录已经被删除了
                 -- @see https://github.com/TOMO-CAT/xmake/issues/244
                 -- 通过 os.emptydir(installdir) 来判断 package 还没安装, 如果非空标识已经安装完了
+                -- force 模式下始终进入 source 目录, 因为后续会清空 installdir 并重新执行 on_install
                 oldir = os.cd(path.join(workdir, "source"))
             else
                 -- trace
