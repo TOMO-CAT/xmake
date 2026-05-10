@@ -10,6 +10,7 @@
 
 * [#291](https://github.com/TOMO-CAT/xmake/issues/291): 修复 io.readfile 读 >128KB 文件异常问题
 * [#299](https://github.com/TOMO-CAT/xmake/issues/299): 修复截断 package 的 commit version 导致无法拉取代码库的问题
+* [#301](https://github.com/TOMO-CAT/xmake/issues/301): 修复 force reinstall package 时安装失败的问题
 
 ## v3.0.8
 
