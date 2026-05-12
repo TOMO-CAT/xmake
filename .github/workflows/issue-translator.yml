@@ -1,9 +1,11 @@
 name: 'issue-translator'
+
 on:
-  issue_comment:
-    types: [created]
-  issues:
-    types: [opened]
+  workflow_dispatch:
+  # issue_comment:
+  #   types: [created]
+  # issues:
+  #   types: [opened]
 
 jobs:
   build:

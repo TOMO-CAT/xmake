@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        # os: [ubuntu-latest, macos-13]
+        # os: [ubuntu-latest, macos-15-intel]
         os: [ubuntu-latest]
         arch: [x86_64]
 
@@ -48,7 +48,7 @@ jobs:
           clang --version
 
       - name: Prepare (macOS)
-        if: matrix.os == 'macos-13'
+        if: matrix.os == 'macos-15-intel'
         run: |
           brew install dmd
           brew install dub
@@ -78,5 +78,5 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: core/build/xmake
-          asset_name: xmake-bundle-${{ steps.tagName.outputs.tag }}.cosmocc.x86_64
+          asset_name: xmake-bundle-${{ github.event.release.tag_name }}.cosmocc.x86_64
           asset_content_type: application/zip

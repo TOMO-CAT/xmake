@@ -2,18 +2,18 @@ name: macOS (x86_64)
 
 on:
   workflow_dispatch:
-  # pull_request:
-  # push:
-  #   branches: [ master ]
-  # release:
-  #   types: [published]
+  pull_request:
+  push:
+    branches: [ master ]
+  release:
+    types: [published]
 
 jobs:
   build:
 
     strategy:
       matrix:
-        os: [macos-13]
+        os: [macos-15-intel]
         arch: [x86_64]
 
     runs-on: ${{ matrix.os }}

@@ -100,8 +100,8 @@ function _instance:version_str()
 end
 
 -- 存储每个 link 及其对应的绝对路径
--- * 静态库返回绝对路径
--- * 未搜索到的静态库或者动态库返回原值
+-- * 静态库和动态库返回绝对路径
+-- * 未搜索到的 link 返回原值
 function _instance:link2fullpath()
     -- get it from cache first
     if self._LINK_TO_FULLPATH ~= nil then
@@ -111,22 +111,29 @@ function _instance:link2fullpath()
     -- 构造 link to path
     -- * 注意使用 self:get("links") 是没有 self:libraryfiles() 全的, 因为 links 是用于自定义的
     -- * 和 ld 链接器一样, 优先使用动态库而非静态库
+    local function _linkname_from_libfile(libfile_name, opt)
+        local opt = opt or {}
+        if opt.shared then
+            return libfile_name:match("^lib(.+)%.so$")
+                or libfile_name:match("^lib(.+)%.dylib$")
+        else
+            return libfile_name:match("^lib(.+)%.a$")
+        end
+    end
     local link2fullpath = {}
     local libfiles = table.wrap(self:libraryfiles())
     for _, libfile in ipairs(libfiles) do
         local libfile_name = path.filename(libfile)
-        if libfile_name:startswith("lib") and libfile_name:endswith(".a") then
-            -- 剔除 lib 前缀和 .a 后缀, 取出 link
-            local link = libfile_name:sub(4, #libfile_name - 2)
+        local link = _linkname_from_libfile(libfile_name)
+        if link then
             link2fullpath[link] = libfile
         end
     end
     for _, libfile in ipairs(libfiles) do
         local libfile_name = path.filename(libfile)
-        if libfile_name:startswith("lib") and libfile_name:endswith(".so") then
-            -- 剔除 lib 前缀和 .so 后缀, 取出 link
+        local link = _linkname_from_libfile(libfile_name, {shared = true})
+        if link then
             -- 这里会覆盖掉前面的静态库, 从而实现优先使用动态库的功能
-            local link = libfile_name:sub(4, #libfile_name - 3)
             link2fullpath[link] = libfile
         end
     end
@@ -206,8 +213,8 @@ function _instance:get_linkflags(name, opt)
 end
 
 -- 将 links 转换成绝对路径, 指向性更明确一些
--- * 目前只支持静态库
--- * 动态库使用绝对路径会导致移动二进制后无法运行 (依赖的动态库必须在编译时的绝对路径下)
+-- * 支持静态库和动态库
+-- * 动态库运行时路径仍由 rpath/install_name 等机制决定
 -- @see https://github.com/xmake-io/xmake/issues/5066
 -- @see https://github.com/TOMO-CAT/xmake/issues/189
 function _instance:transform_to_link_fullpath(links)
