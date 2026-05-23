@@ -1,5 +1,6 @@
-﻿target("b")
+target("b", function()
     add_deps("a")
     set_kind("moduleonly")
     add_files("b.mpp")
     set_languages("cxxlatest")
+end)

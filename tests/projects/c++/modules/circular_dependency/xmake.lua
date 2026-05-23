@@ -1,6 +1,7 @@
 add_rules("mode.release", "mode.debug")
 set_languages("c++20")
 
-target("circular_dependency")
+target("circular_dependency", function()
     set_kind("binary")
     add_files("src/*.cpp", "src/*.mpp")
+end)

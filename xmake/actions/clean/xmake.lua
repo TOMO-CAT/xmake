@@ -18,7 +18,7 @@
 -- @file        xmake.lua
 --
 
-task("clean")
+task("clean", function()
     set_category("action")
     on_run("main")
 
@@ -36,3 +36,4 @@ task("clean")
                                                     , values = function (complete, opt) return import("private.utils.complete_helper.targets")(complete, opt) end }
                 }
             }
+end)

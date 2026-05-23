@@ -19,7 +19,7 @@
 --
 
 -- define rule: c++.build.modules
-rule("c++.build.modules")
+rule("c++.build.modules", function()
 
     -- @note common.contains_modules() need it
     set_extensions(".cppm", ".ccm", ".cxxm", ".c++m", ".mpp", ".mxx", ".ixx")
@@ -62,9 +62,10 @@ rule("c++.build.modules")
             end
         end
     end)
+end)
 
 -- build modules
-rule("c++.build.modules.builder")
+rule("c++.build.modules.builder", function()
     set_sourcekinds("cxx")
     set_extensions(".mpp", ".mxx", ".cppm", ".ixx")
 
@@ -212,9 +213,10 @@ rule("c++.build.modules.builder")
             end
         end
     end)
+end)
 
 -- install modules
-rule("c++.build.modules.install")
+rule("c++.build.modules.install", function()
     set_extensions(".mpp", ".mxx", ".cppm", ".ixx")
 
     before_install(function (target)
@@ -237,3 +239,4 @@ rule("c++.build.modules.install")
             compiler_support.add_installfiles_for_modules(target)
         end
     end)
+end)

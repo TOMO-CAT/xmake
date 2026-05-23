@@ -1,7 +1,8 @@
 add_rules("mode.debug", "mode.release")
 add_requires("zig")
 
-target("test")
+target("test", function()
     set_kind("binary")
     add_files("src/*.cpp")
     set_toolchains("@zig")
+end)

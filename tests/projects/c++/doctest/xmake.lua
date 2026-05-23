@@ -2,7 +2,7 @@ add_rules("mode.debug", "mode.release")
 
 add_requires("doctest")
 
-target("doctest")
+target("doctest", function()
     set_kind("binary")
     add_files("src/*.cpp")
     for _, testfile in ipairs(os.files("tests/*.cpp")) do
@@ -13,8 +13,9 @@ target("doctest")
             packages = "doctest",
             defines = "DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN"})
     end
+end)
 
-target("doctest_shared")
+target("doctest_shared", function()
     set_kind("shared")
     add_files("src/foo.cpp")
     for _, testfile in ipairs(os.files("tests/*.cpp")) do
@@ -25,3 +26,4 @@ target("doctest_shared")
             packages = "doctest",
             defines = "DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN"})
     end
+end)

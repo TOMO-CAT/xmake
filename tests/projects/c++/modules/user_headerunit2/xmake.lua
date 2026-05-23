@@ -1,4 +1,5 @@
-﻿includes("a", "b")
-target("test")
+includes("a", "b")
+target("test", function()
     add_deps("a", "b")
     set_kind("phony")
+end)

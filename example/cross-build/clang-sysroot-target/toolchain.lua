@@ -18,7 +18,7 @@ toolchain("aarch64-clang", function()
     --             "-Wl,-rpath=/opt/toolchain/orin/lib")
 
     -- 设置交叉编译参数
-    -- FIXME: 不要使用 --sysroot, 会导致 compile_commands.json 查找不到头文件, 我们这里的 --sysroot 有问题
+    -- * 不使用 --sysroot, 会导致 compile_commands.json 查找不到头文件
     -- add_cxflags("-m64", "-fPIC", "--sysroot=/", "--target=aarch64-linux-gnu",
     --             "-march=armv8-a")
     -- add_ldflags("-m64", "--sysroot=/", "--target=aarch64-linux-gnu",
@@ -30,7 +30,7 @@ toolchain("aarch64-clang", function()
     add_shflags("-m64", "-fPIC", "--target=aarch64-linux-gnu", "-march=armv8-a")
 
     -- 添加编译参数控制
-    -- FIXME: 不指定 --sysroot 自然就不需要添加 sysincludedirs 了
+    -- * 不指定 --sysroot 自然就不需要添加 sysincludedirs 了
     -- add_sysincludedirs("/usr/aarch64-linux-gnu/include",
     --                    "/usr/aarch64-linux-gnu/include/c++/11",
     --                    "/usr/aarch64-linux-gnu/include/c++/11/aarch64-linux-gnu")
