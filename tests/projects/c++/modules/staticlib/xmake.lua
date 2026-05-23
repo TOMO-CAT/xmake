@@ -1,12 +1,14 @@
 add_rules("mode.release", "mode.debug")
 set_languages("c++20")
 
-target("mod")
+target("mod", function()
     set_kind("static")
     add_files("src/mod.mpp", {public = true})
     add_files("src/mod.cpp")
+end)
 
-target("hello")
+target("hello", function()
     set_kind("binary")
     add_deps("mod")
     add_files("src/main.cpp")
+end)

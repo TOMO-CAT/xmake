@@ -4,7 +4,7 @@ import("utils.ci.is_running", {alias = "ci_is_running"})
 
 function _build()
     if ci_is_running() then
-        os.run("xmake -rvD")
+        os.run("xmake -r")
     else
         os.run("xmake -r")
     end
@@ -20,11 +20,8 @@ end
 function can_build()
     if is_host("linux") then
         local gcc = find_tool("gcc", {version = true})
-        -- FIXME: 迁移到 xutil 后 module 单测挂掉, 暂时跳过
-        if false then
-            if gcc and gcc.version and semver.compare(gcc.version, "11.0") >= 0 then
-                return true
-            end
+        if gcc and gcc.version and semver.compare(gcc.version, "11.0") >= 0 then
+            return true
         end
         local clang = find_tool("clang", {version = true})
         if clang and clang.version and semver.compare(clang.version, "14.0") >=
@@ -37,20 +34,19 @@ end
 function main(t)
     if is_host("linux") then
         local gcc = find_tool("gcc", {version = true})
-        -- FIXME: 迁移到 xutil 后 module 单测挂掉, 暂时跳过
-        if false then
-            if gcc and gcc.version and semver.compare(gcc.version, "11.0") >= 0 then
-                os.exec("xmake f -c --yes")
-                _build()
-            end
+        if gcc and gcc.version and semver.compare(gcc.version, "11.0") >= 0 then
+            cprint("${bright cyan}[test] ====== gcc %s ======${reset}", gcc.version)
+            os.exec("xmake f -c --yes")
+            _build()
         end
         local clang = find_tool("clang", {version = true})
         if clang and clang.version and semver.compare(clang.version, "14.0") >=
             0 then
-            os.exec("xmake clean -a")
+            cprint("${bright magenta}[test] ====== clang %s ======${reset}", clang.version)
             os.exec("xmake f --toolchain=clang -c --yes")
             _build()
-            os.exec("xmake clean -a")
+            -- apt install -y libc++-dev libc++abi-dev
+            cprint("${bright yellow}[test] ====== clang %s + c++_shared ======${reset}", clang.version)
             os.exec("xmake f --toolchain=clang --runtimes=c++_shared -c --yes")
             _build()
         end

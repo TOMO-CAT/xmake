@@ -45,7 +45,7 @@ if get_config("dev") then
     set_plat("cross")
     set_arch("arm64-v8a")
 
-    -- FIXME: 尽管设置了 toolchain.set_cross, 但是并没有切换到 /usr/bin/aarch64-linux-gnu-, 我们选择用 xmake config 命令来设置, 后续再调试
+    -- 尽管设置了 toolchain.set_cross, 但是并没有切换到 /usr/bin/aarch64-linux-gnu-, 我们选择用 xmake config 命令来设置, 后续再调试
     --        xmake config -p cross -a arm64-v8a --sdk=/usr --cross=aarch64-linux-gnu-
     -- set_toolchains("aarch64")
 end

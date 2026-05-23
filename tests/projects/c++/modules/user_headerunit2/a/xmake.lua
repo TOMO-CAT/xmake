@@ -1,5 +1,6 @@
-﻿target("a")
+target("a", function()
     set_kind("moduleonly")
     add_headerfiles("*.hpp")
     add_files("a.mpp")
     set_languages("cxxlatest")
+end)

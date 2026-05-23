@@ -1,4 +1,5 @@
 add_rules("mode.debug", "mode.release")
-target("test")
+target("test", function()
     set_kind("binary")
     add_files("src/*.cpp")
+end)

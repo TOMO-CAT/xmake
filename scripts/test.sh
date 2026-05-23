@@ -24,7 +24,8 @@ export XMAKE_ROOT="y"
 # export LLVM_PROFDATA="/usr/lib/llvm-14/bin/llvm-profdata"
 
 # libc++ 头文件 / 运行库, 用于处理 --runtimes=c++_shared
-sudo apt install -y libc++-dev libc++abi-dev
+# 修复错误: fatal error: 'cstdio' file not found
+# sudo apt install -y libc++-dev libc++abi-dev
 
 # /usr/bin/ld: cannot find /usr/lib/llvm-14/lib/clang/14.0.6/lib/linux/libclang_rt.profile-x86_64.a: No such file or directory
 #
