@@ -66,6 +66,7 @@ bash scripts/test.sh tests/projects/c++/shared_library/xmake.lua
 bash scripts/test.sh projects/c++/shared_library/xmake.lua
 bash scripts/test.sh projects/c++/shared_library/test.lua
 bash scripts/test.sh projects/c++/shared_library
+cd tests/projects/c++/shared_library && xmake l -vD test.lua
 
 # 以 Lua 的方式运行某个单测
 xmake lua tests/modules/scheduler/runjobs.lua

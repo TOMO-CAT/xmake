@@ -49,7 +49,7 @@ end
 
 function _cleanup_impl()
     -- 没设置的话默认清理 30 天未用到的 package / cache
-    local pkg_retain_hours = os.getenv("XMAKE_PKG_RETAIN_HOURS") or (30 * 24)
+    local pkg_retain_hours = tonumber(os.getenv("XMAKE_PKG_RETAIN_HOURS")) or (30 * 24)
     _log_info("start hourly cleaner with pkg_retain_hours [%d] ...", pkg_retain_hours)
 
     -- repo 清理时长
@@ -120,8 +120,7 @@ function _cleanup_impl()
         else
             _log_info("process filelock [%s]", filelock_path)
             
-            -- if _filelock_expired(filelock_path, repo_retain_hours) then
-            if true then
+            if _filelock_expired(filelock_path, repo_retain_hours) then
                 local filelock = io.openlock(filelock_path)
                 if not filelock then
                     _log_warn("cannot create filelock for [%s]", filelock_path)
