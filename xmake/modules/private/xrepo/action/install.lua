@@ -144,7 +144,7 @@ function _install_packages(packages)
     end
 
     -- disable xmake-stats
-    os.setenv("XMAKE_STATS", "false")
+    os.setenv("XMAKE_STATISTICS", "false")
 
     -- do configure first
     local config_argv = {"f", "-c", "--require=n"}

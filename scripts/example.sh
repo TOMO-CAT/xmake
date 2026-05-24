@@ -5,6 +5,7 @@ source "scripts/common.sh"
 original_dir=$(pwd)
 
 export XMAKE_PROGRAM_DIR="${PWD}/xmake"
+# export XMAKE_STATISTICS="false"
 
 mapfile -t test_scripts < <(find example -type f -name "test.sh" | grep -v "^example/cross-build/")
 

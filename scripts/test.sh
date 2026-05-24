@@ -5,7 +5,7 @@ set -e
 # bash scripts/busted.sh
 
 export XMAKE_PROGRAM_DIR="${PWD}/xmake"
-
+# export XMAKE_STATISTICS="false"
 export XMAKE_ROOT="y"
 
 # export CPP="clang++ -E"
