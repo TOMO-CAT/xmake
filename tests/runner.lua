@@ -11,7 +11,7 @@ function main(script)
     assert(os.isfile(script), "should be a file")
 
     -- disable statistics
-    os.setenv("XMAKE_STATS", "false")
+    -- os.setenv("XMAKE_STATISTICS", "false")
 
     -- init test context
     local context = test_context(script)

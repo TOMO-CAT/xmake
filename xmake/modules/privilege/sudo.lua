@@ -24,7 +24,7 @@ import("detect.tools.find_sudo")
 
 -- some inherited environment variables
 function _envars(escape)
-    local names  = {"PATH", "XMAKE_STATS", "COLORTERM"}
+    local names  = {"PATH", "XMAKE_STATISTICS", "COLORTERM"}
     local envars = {"env"}
     for _, name in ipairs(names) do
         local value = os.getenv(name)
