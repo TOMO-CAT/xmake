@@ -1,6 +1,7 @@
 #pragma once
 
 // interface headers
+#include "xutil/container/vector.h"
 #include "xutil/algorithm/binary_find.h"
 #include "xutil/algorithm/find.h"
 #include "xutil/algorithm/for_if.h"
@@ -9,13 +10,11 @@
 #include "xutil/algorithm/rfor_if.h"
 #include "xutil/charset/charset.h"
 #include "xutil/container/bloom_filter.h"
-#include "xutil/container/circle_queue.h"
 #include "xutil/container/hash_set.h"
 #include "xutil/container/heap.h"
 #include "xutil/container/list.h"
 #include "xutil/container/list_entry.h"
 #include "xutil/container/single_list_entry.h"
-#include "xutil/container/stack.h"
 #include "xutil/hash/adler32.h"
 #include "xutil/hash/ap.h"
 #include "xutil/hash/bkdr.h"

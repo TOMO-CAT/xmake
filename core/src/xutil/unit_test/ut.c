@@ -38,7 +38,6 @@ static xu_ut_t g_ut[] = {
 
     // container
     XU_UT_MAIN_ITEM(container_bloom_filter),
-    XU_UT_MAIN_ITEM(container_circle_queue),
     XU_UT_MAIN_ITEM(container_hash_map),
     XU_UT_MAIN_ITEM(container_hash_set),
     XU_UT_MAIN_ITEM(container_heap),
@@ -47,7 +46,6 @@ static xu_ut_t g_ut[] = {
     XU_UT_MAIN_ITEM(container_queue),
     XU_UT_MAIN_ITEM(container_single_list_entry),
     XU_UT_MAIN_ITEM(container_single_list),
-    XU_UT_MAIN_ITEM(container_stack),
     XU_UT_MAIN_ITEM(container_vector),
 
     // hash
