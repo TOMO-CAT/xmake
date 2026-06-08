@@ -176,9 +176,6 @@ function main()
         return
     end
 
-    -- post statistics before locking project
-    statistics.post()
-
     -- do action for remote?
     if remote_build_action.enabled() then
         return remote_build_action()
@@ -196,6 +193,9 @@ function main()
         targetname = option.get("target")
     end
     task.run("config", {}, {disable_dump = true})
+
+    -- post statistics before locking project
+    statistics.post()
 
     -- enter project directory
     local oldir = os.cd(project.directory())
