@@ -42,7 +42,6 @@ local config                = require("project/config")
 local option                = require("project/option")
 local policy                = require("project/policy")
 local project_package       = require("project/package")
-local deprecated_project    = require("project/deprecated/project")
 local package               = require("package/package")
 local platform              = require("platform/platform")
 local toolchain             = require("tool/toolchain")
@@ -675,9 +674,6 @@ function project.interpreter()
     interp:deduplication_policy_set("links", "toleft")
     interp:deduplication_policy_set("syslinks", "toleft")
     interp:deduplication_policy_set("frameworks", "toleft")
-
-    -- register api: deprecated
-    deprecated_project.api_register(interp)
 
     -- set filter
     interp:filter():register("project", function (variable)
