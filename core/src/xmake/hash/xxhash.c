@@ -65,7 +65,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
         xu_assert_static(sizeof(lua_Integer) >= sizeof(xu_pointer_t));
 
         // compute hash
-        xu_byte_t const* buffer;
+        xu_byte_t const* buffer = xu_null;
         XXH64_hash_t     value64;
         XXH128_hash_t    value128;
         if (mode == 64)
@@ -73,8 +73,9 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             value64 = XM_XXH3_64bits(data, size);
             buffer  = (xu_byte_t const*)&value64;
         }
-        else if (mode == 128)
+        else
         {
+            xu_assert(mode == 128);
             value128 = XM_XXH3_128bits(data, size);
             buffer   = (xu_byte_t const*)&value128;
         }
@@ -141,7 +142,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             }
 
             // compute hash
-            xu_byte_t const* buffer;
+            xu_byte_t const* buffer = xu_null;
             XXH64_hash_t     value64;
             XXH128_hash_t    value128;
             if (mode == 64)
@@ -151,6 +152,7 @@ xu_int_t xm_hash_xxhash(lua_State* lua)
             }
             else
             {
+                xu_assert(mode == 128);
                 value128 = XM_XXH3_128bits_digest(state);
                 buffer   = (xu_byte_t const*)&value128;
             }
