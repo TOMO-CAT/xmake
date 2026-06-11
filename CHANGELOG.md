@@ -5,6 +5,7 @@
 ### 新特性
 
 * [#296](https://github.com/TOMO-CAT/xmake/issues/296): xmake 自更新功能
+* [#307](https://github.com/TOMO-CAT/xmake/issues/307): 在 package installdir 中写入 buildhash 字段
 
 ### Bugs 修复
 

@@ -1025,6 +1025,16 @@ function _instance:manifest_save()
     if not ok then
         os.raise(errors)
     end
+
+    -- save buildhash debug info
+    local buildhash_info = self:buildhash_info()
+    io.save(path.join(self:installdir(), "buildhash.txt"), buildhash_info, { orderkeys = true })
+
+    -- save package description script
+    local package_lua_file = path.join(self:scriptdir(), "xmake.lua")
+    if os.isfile(package_lua_file) then
+        os.cp(package_lua_file, path.join(self:installdir(), "package_desc.txt"))
+    end
 end
 
 -- get the source configuration set
@@ -1615,10 +1625,11 @@ function _instance:buildhash()
             if label then
                 str = str .. label
             end
+            local configs_order
             if configs then
                 -- since luajit v2.1, the key order of the table is random and undefined.
                 -- We cannot directly deserialize the table, so the result may be different each time
-                local configs_order = {}
+                configs_order = {}
                 for k, v in pairs(table.wrap(configs)) do
                     if type(v) == "table" then
                         v = string.serialize(v, {strip = true, indent = false, orderkeys = true})
@@ -1632,6 +1643,7 @@ function _instance:buildhash()
                 configs_str = configs_str:gsub("\"", "")
                 str = str .. configs_str
             end
+            local sorted_sourcehashs
             if opt.sourcehash ~= false then
                 local sourcehashs = hashset.new()
                 for _, url in ipairs(self:urls()) do
@@ -1642,17 +1654,22 @@ function _instance:buildhash()
                     end
                 end
                 if not sourcehashs:empty() then
-                    local hashs = sourcehashs:to_array()
-                    table.sort(hashs)
-                    str = str .. "_" .. table.concat(hashs, "_")
+                    sorted_sourcehashs = sourcehashs:to_array()
+                    table.sort(sorted_sourcehashs)
+                    str = str .. "_" .. table.concat(sorted_sourcehashs, "_")
                 end
             end
+            local sorted_toolchains
             local toolchains = self:_config_for_buildhash("toolchains")
             if opt.toolchains ~= false and toolchains then
-                toolchains = table.copy(table.wrap(toolchains))
-                table.sort(toolchains)
-                str = str .. "_" .. table.concat(toolchains, "_")
+                sorted_toolchains = table.copy(table.wrap(toolchains))
+                table.sort(sorted_toolchains)
+                str = str .. "_" .. table.concat(sorted_toolchains, "_")
             end
+            self._BUILDHASH_CONFIGS = configs_order
+            self._BUILDHASH_SOURCEHASHS = sorted_sourcehashs
+            self._BUILDHASH_TOOLCHAINS = sorted_toolchains
+            self._BUILDHASH_SOURCE_STR = str
             return hash.strhash128(str)
         end
         local function _get_installdir(...)
@@ -1670,6 +1687,21 @@ function _instance:buildhash()
         self._BUILDHASH = buildhash
     end
     return buildhash
+end
+
+-- get the build hash debug info
+function _instance:buildhash_info()
+    local buildhash = self:buildhash()
+    return {
+        plat = self:plat(),
+        arch = self:arch(),
+        label = self:label() or nil,
+        configs = self._BUILDHASH_CONFIGS,
+        sourcehashs = self._BUILDHASH_SOURCEHASHS,
+        toolchains = self._BUILDHASH_TOOLCHAINS,
+        buildhash_source_str = self._BUILDHASH_SOURCE_STR,
+        buildhash = buildhash
+    }
 end
 
 -- get the group name
