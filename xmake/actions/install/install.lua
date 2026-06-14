@@ -19,9 +19,11 @@
 --
 
 -- imports
+import("core.base.option")
 import("core.base.task")
 import("core.project.rule")
 import("core.project.project")
+import("private.action.require.impl.package", {alias = "require_package"})
 import("target.action.install", {alias = "_do_install_target"})
 
 -- on install target
@@ -105,6 +107,28 @@ function _install_targets(targets)
     end
 end
 
+function _export_package_dep_buildhashes()
+    -- 只对子构建场景生效
+    if not option.get("nopkgs") then
+        return
+    end
+    local installdir = option.get("installdir")
+    if not installdir then
+        return
+    end
+    local depinfos = {}
+    local requires_str, requires_extra = project.requires_str()
+    for _, pkg in ipairs(require_package.load_packages(requires_str or {}, {requires_extra = requires_extra})) do
+        depinfos[pkg:name()] = {
+            version = pkg:version_str(),
+            buildhash = pkg:buildhash()
+        }
+    end
+    if not table.empty(depinfos) then
+        io.save(path.join(installdir, "dep_buildhashes.txt"), depinfos, {orderkeys = true})
+    end
+end
+
 -- install targets
 function main(targetname, group_pattern)
     local targets = {}
@@ -120,6 +144,8 @@ function main(targetname, group_pattern)
         end
     end
     if #targets > 0 then
-        _install_targets(table.unique(targets))
+        targets = table.unique(targets)
+        _install_targets(targets)
+        _export_package_dep_buildhashes()
     end
 end

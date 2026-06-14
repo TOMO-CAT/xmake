@@ -34,6 +34,12 @@ import("devel.git")
 import("private.action.require.impl.repository")
 import("private.action.require.impl.utils.requirekey", {alias = "_get_requirekey"})
 
+local function _buildhash_from_installdir(installdir)
+    if installdir then
+        return path.filename(path.translate(installdir))
+    end
+end
+
 -- get memcache
 function _memcache()
     return memcache.cache("require.impl.package")
@@ -1085,9 +1091,10 @@ function _compatible_with_previous_librarydeps(package, opt)
     local depinfos_curr = {}
     for _, dep in ipairs(package:librarydeps()) do
         if strict_compatibility or dep:policy("package.strict_compatibility") then
+            local fetchinfo = dep:fetch()
             depinfos_curr[dep:name()] = {
                 version = dep:version_str(),
-                buildhash = dep:buildhash()
+                buildhash = _buildhash_from_installdir(fetchinfo and fetchinfo.installdir) or dep:buildhash()
             }
             depnames:insert(dep:name())
         end

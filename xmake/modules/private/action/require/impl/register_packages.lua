@@ -87,7 +87,8 @@ end
 -- register the base info of required package
 function _register_required_package_base(instance, required_package)
     if not instance:is_system() and not instance:is_thirdparty() then
-        required_package:set("installdir", instance:installdir())
+        local fetchinfo = instance:fetch()
+        required_package:set("installdir", fetchinfo and fetchinfo.installdir or instance:installdir())
     end
 end
 
@@ -149,7 +150,8 @@ function main(packages)
     _g.references = references
     for _, instance in ipairs(packages) do
         if not instance:is_system() and not instance:is_thirdparty() then
-            local installdir = instance:installdir({readonly = true})
+            local fetchinfo = instance:fetch()
+            local installdir = fetchinfo and fetchinfo.installdir or instance:installdir({readonly = true})
             if os.isdir(installdir) then
                 -- 记录每个 packages 及其对应的 installdir, 用于构造 softlink
                 references[instance:name()] = installdir

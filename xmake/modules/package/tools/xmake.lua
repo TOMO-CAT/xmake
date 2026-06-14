@@ -273,7 +273,9 @@ function _get_configs(package, configs, opt)
         table.insert(configs, "--policies=" .. policies)
     end
     if package:config("pic") ~= false then
-        table.insert(cxflags, "-fPIC")
+        if not table.contains(cxflags, "-fPIC") then
+            table.insert(cxflags, "-fPIC")
+        end
     end
     if cflags and #cflags > 0 then
         table.insert(configs, "--cflags=" .. table.concat(cflags, ' '))

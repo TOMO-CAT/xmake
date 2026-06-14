@@ -75,7 +75,7 @@ function _find_package_from_repo(name, opt)
     local installdir = path.directory(manifest_file)
 
     -- save includedirs to result (maybe only include and no links)
-    local result = {}
+    local result = {installdir = installdir}
     local includedirs = {}
     for _, includedir in ipairs(vars.includedirs) do
         table.insert(includedirs, path.join(installdir, includedir))
