@@ -6,6 +6,7 @@
 
 * [#296](https://github.com/TOMO-CAT/xmake/issues/296): xmake 自更新功能
 * [#307](https://github.com/TOMO-CAT/xmake/issues/307): 在 package installdir 中写入 buildhash 字段
+* [#309](https://github.com/TOMO-CAT/xmake/issues/309): 增加 package buildhash 的组成元素
 
 ### Bugs 修复
 

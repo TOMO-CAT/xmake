@@ -8,6 +8,10 @@ export XMAKE_PROGRAM_DIR="${PWD}/xmake"
 # export XMAKE_STATISTICS="false"
 export XMAKE_ROOT="y"
 
+export C_INCLUDE_PATH=""
+export CPLUS_INCLUDE_PATH=""
+export CPATH=""
+
 # export CPP="clang++ -E"
 # export CC="clang"
 # export CXX="clang++"

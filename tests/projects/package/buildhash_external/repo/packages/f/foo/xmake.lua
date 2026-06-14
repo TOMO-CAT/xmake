@@ -1,0 +1,7 @@
+package("foo", function()
+    on_install(function (package)
+        local output = path.join(package:installdir(), "flags.txt")
+        local cxxflags = table.concat(table.wrap(package:build_getenv("cxxflags")), " ")
+        io.writefile(output, cxxflags)
+    end)
+end)

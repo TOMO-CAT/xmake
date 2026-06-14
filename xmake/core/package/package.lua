@@ -925,6 +925,10 @@ function _instance:manifest_load()
     return manifest
 end
 
+function _instance:dep_buildhashes_file()
+    return path.join(self:installdir({readonly = true}), "dep_buildhashes.txt")
+end
+
 -- save the manifest file of this package
 function _instance:manifest_save()
 
@@ -953,12 +957,21 @@ function _instance:manifest_save()
     end
 
     -- save deps
+    local actual_depinfos = nil
+    if self:is_source_embed() and os.isfile(self:dep_buildhashes_file()) then
+        local errors = nil
+        actual_depinfos, errors = io.load(self:dep_buildhashes_file())
+        if not actual_depinfos then
+            os.raise(errors)
+        end
+    end
     if self:librarydeps() then
         manifest.deps = {}
         for _, dep in ipairs(self:librarydeps()) do
+            local depinfo = actual_depinfos and actual_depinfos[dep:name()] or nil
             manifest.deps[dep:name()] = {
-                version = dep:version_str(),
-                buildhash = dep:buildhash()
+                version = depinfo and depinfo.version or dep:version_str(),
+                buildhash = depinfo and depinfo.buildhash or dep:buildhash()
             }
         end
     end
@@ -1514,6 +1527,8 @@ end
 function _instance:_invalidate_configs()
     self._CONFIGS = nil
     self._CONFIGS_FOR_BUILDHASH = nil
+    self._EXTERNAL_BUILD_INPUTS_FOR_BUILDHASH = nil
+    self._COLLECTED_BUILD_INPUT_VALUES_FOR_BUILDHASH = nil
 end
 
 -- get the given configuration value of package
@@ -1569,6 +1584,78 @@ function _instance:_config_for_buildhash(name)
     return value
 end
 
+-- get the external build input keys of package for buildhash
+--
+-- these are the global build flags set via `xmake config` (e.g. `xmake config --cxxflags=-flto=full`).
+-- they change how a package is compiled/linked but are not otherwise part of the buildhash, so without
+-- them a flag change would wrongly reuse a stale package build (same hash, different flags).
+--
+-- @note we keep only pure flag keys here: no tool/sdk/include/link paths (they would bake absolute
+-- paths into the buildhash) and no platform-selection keys (already covered by plat/arch/toolchain name).
+function _instance:_external_build_input_keys_for_buildhash()
+    return {"cflags", "cxflags", "cxxflags", "asflags", "arflags", "ldflags", "shflags", "defines"}
+end
+
+-- collect build input values from xmake config for buildhash/debug info
+--
+-- @note we only read the values from `xmake config` (config.get) and never resolve the toolchain
+-- tools/flags (toolchain:tool()/toolconfig()/build_getenv()). the buildhash already includes the
+-- toolchain name, and resolving tools here would also prematurely load (and freeze) a cross toolchain
+-- provided by a not-yet-installed package (e.g. set_toolchains("my_muslcc@muslcc")) before its cross
+-- prefix is resolved, making the later real build reuse a frozen host toolchain.
+function _instance:_collect_build_input_values_for_buildhash()
+    local values = self._COLLECTED_BUILD_INPUT_VALUES_FOR_BUILDHASH
+    if values == nil then
+        if self:is_headeronly() or (self:is_binary() and not self:is_cross()) then
+            values = false
+        else
+            values = {}
+            for _, key in ipairs(self:_external_build_input_keys_for_buildhash()) do
+                local config_value = config.get(key)
+                if config_value ~= nil then
+                    values[key] = {
+                        from_xmake_config = config_value,
+                        effective = config_value
+                    }
+                end
+            end
+            local policies = config.get("policies")
+            if policies ~= nil then
+                values.policies = {
+                    from_xmake_config = policies,
+                    effective = policies
+                }
+            end
+            if table.empty(values) then
+                values = false
+            end
+        end
+        self._COLLECTED_BUILD_INPUT_VALUES_FOR_BUILDHASH = values
+    end
+    return values and values or nil
+end
+
+-- get the effective external build inputs of package for buildhash
+function _instance:_external_build_inputs_for_buildhash()
+    local inputs = self._EXTERNAL_BUILD_INPUTS_FOR_BUILDHASH
+    if inputs == nil then
+        local values = self:_collect_build_input_values_for_buildhash()
+        if values then
+            inputs = {}
+            for key, item in pairs(values) do
+                inputs[key] = item.effective
+            end
+            if table.empty(inputs) then
+                inputs = false
+            end
+        else
+            inputs = false
+        end
+        self._EXTERNAL_BUILD_INPUTS_FOR_BUILDHASH = inputs
+    end
+    return inputs and inputs or nil
+end
+
 -- get the configurations of package for buildhash
 -- @note on_test still need these configs
 -- 获取用户计算 buildhash 的配置
@@ -1618,7 +1705,7 @@ function _instance:buildhash()
         if not self._BUILDHASH_PREPRARED then
             os.raise("package:buildhash() must be called after loading package")
         end
-        local function _get_buildhash(configs, opt)
+        local function _get_buildhash(configs, external_inputs, opt)
             opt = opt or {}
             local str = self:plat() .. self:arch()
             local label = self:label()
@@ -1626,6 +1713,10 @@ function _instance:buildhash()
                 str = str .. label
             end
             local configs_order
+            local external_inputs_order
+            if configs and table.empty(configs) then
+                configs = nil
+            end
             if configs then
                 -- since luajit v2.1, the key order of the table is random and undefined.
                 -- We cannot directly deserialize the table, so the result may be different each time
@@ -1642,6 +1733,20 @@ function _instance:buildhash()
                 local configs_str = string.serialize(configs_order, true)
                 configs_str = configs_str:gsub("\"", "")
                 str = str .. configs_str
+            end
+            if external_inputs then
+                external_inputs_order = {}
+                for k, v in pairs(external_inputs) do
+                    if type(v) == "table" then
+                        v = string.serialize(v, {strip = true, indent = false, orderkeys = true})
+                    end
+                    table.insert(external_inputs_order, k .. "=" .. tostring(v))
+                end
+                table.sort(external_inputs_order)
+
+                local external_inputs_str = string.serialize(external_inputs_order, true)
+                external_inputs_str = external_inputs_str:gsub("\"", "")
+                str = str .. external_inputs_str
             end
             local sorted_sourcehashs
             if opt.sourcehash ~= false then
@@ -1667,6 +1772,7 @@ function _instance:buildhash()
                 str = str .. "_" .. table.concat(sorted_toolchains, "_")
             end
             self._BUILDHASH_CONFIGS = configs_order
+            self._BUILDHASH_EXTERNAL_INPUTS = external_inputs_order
             self._BUILDHASH_SOURCEHASHS = sorted_sourcehashs
             self._BUILDHASH_TOOLCHAINS = sorted_toolchains
             self._BUILDHASH_SOURCE_STR = str
@@ -1682,7 +1788,9 @@ function _instance:buildhash()
         end
 
         -- get build hash for current version
-        buildhash = _get_buildhash(self:_configs_for_buildhash())
+        local configs = table.copy(self:_configs_for_buildhash() or {})
+        local external_inputs = self:_external_build_inputs_for_buildhash()
+        buildhash = _get_buildhash(configs, external_inputs)
 
         self._BUILDHASH = buildhash
     end
@@ -1692,11 +1800,14 @@ end
 -- get the build hash debug info
 function _instance:buildhash_info()
     local buildhash = self:buildhash()
+    local external_build_inputs_by_source = self:_collect_build_input_values_for_buildhash()
     return {
         plat = self:plat(),
         arch = self:arch(),
         label = self:label() or nil,
         configs = self._BUILDHASH_CONFIGS,
+        external_build_inputs = self._BUILDHASH_EXTERNAL_INPUTS,
+        external_build_inputs_by_source = external_build_inputs_by_source,
         sourcehashs = self._BUILDHASH_SOURCEHASHS,
         toolchains = self._BUILDHASH_TOOLCHAINS,
         buildhash_source_str = self._BUILDHASH_SOURCE_STR,
@@ -1776,6 +1887,76 @@ function _instance:_fetch_tool(opt)
         end
     end
     return fetchinfo or nil
+end
+
+function _instance:_installdir_with_buildhash(buildhash, opt)
+    opt = opt or {}
+    local installdir = self:get("installdir")
+    if not installdir then
+        local name = self:name():lower():gsub("::", "_")
+        if self:is_source_embed() then
+            installdir = path.join(self:buildir(), ".packages")
+        elseif self:is_local() then
+            installdir = path.join(config.buildir({absolute = true}), ".packages", name:sub(1, 1):lower(), name)
+        else
+            installdir = path.join(package.installdir(), name:sub(1, 1):lower(), name)
+        end
+        local version_str = opt.version or self:version_str()
+        if version_str then
+            if self:is_thirdparty() then
+                version_str = version_str:gsub("[>=<]", "")
+            end
+            installdir = path.join(installdir, version_str)
+        end
+        installdir = path.join(installdir, buildhash)
+    end
+    return installdir
+end
+
+function _instance:_fetch_from_parent_manifests(opt)
+    for _, parent in ipairs(self:parents() or {}) do
+        local manifest = parent:manifest_load()
+        local depinfo = manifest and manifest.deps and manifest.deps[self:name()] or nil
+        if depinfo and depinfo.buildhash then
+            local installdir = self:_installdir_with_buildhash(depinfo.buildhash, {version = depinfo.version})
+            local fetchinfo = self:_fetch_fetchinfo_from_installdir(installdir, {
+                require_version = opt and opt.require_version or depinfo.version,
+                external = opt and opt.external
+            })
+            if fetchinfo then
+                return fetchinfo
+            end
+        end
+    end
+end
+
+-- fetch fetchinfo from a given installdir by reading its manifest
+function _instance:_fetch_fetchinfo_from_installdir(installdir, opt)
+    opt = opt or {}
+    local manifest_file = path.join(installdir, "manifest.txt")
+    if not os.isfile(manifest_file) then
+        return
+    end
+    local manifest = io.load(manifest_file)
+    if not manifest then
+        return
+    end
+    self._find_package = self._find_package or sandbox_module.import("lib.detect.find_package", {anonymous = true})
+    local fetchinfo = self._find_package("xmake::" .. self:name(), {
+        installdir = installdir,
+        buildhash = path.filename(installdir),
+        require_version = opt.require_version or manifest.version,
+        version = true,
+        mode = self:mode(),
+        plat = self:plat(),
+        arch = self:arch(),
+        configs = self:configs(),
+        components = self:components_orderlist(),
+        cachekey = "fetch_package_xmake_fallback",
+        external = opt.external,
+        force = true
+    })
+    return fetchinfo
 end
 
 -- do fetch library
@@ -1858,6 +2039,9 @@ function _instance:_fetch_library(opt)
                                            cachekey = "fetch_package_xmake",
                                            external = external,
                                            force = opt.force})
+            if not fetchinfo then
+                fetchinfo = self:_fetch_from_parent_manifests({require_version = opt.require_version, external = external})
+            end
         end
     end
     return fetchinfo or nil
@@ -2066,7 +2250,7 @@ function _instance:fetch_librarydeps()
             local depinfo = dep:fetch()
             if depinfo then
                 for name, values in pairs(depinfo) do
-                    if name ~= "license" and name ~= "version" then
+                    if name ~= "license" and name ~= "version" and name ~= "installdir" then
                         fetchinfo[name] = table.wrap(fetchinfo[name])
                         table.join2(fetchinfo[name], values)
                     end
