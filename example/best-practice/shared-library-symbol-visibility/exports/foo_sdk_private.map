@@ -1,0 +1,11 @@
+FOO_SDK_1.0 {
+      global:
+          foo_sdk_version;
+          foo_sdk_create;
+          foo_sdk_destroy;
+          foo_sdk_send;
+          foo_sdk_last_error;
+
+      local:
+          *;
+  };
