@@ -52,6 +52,16 @@ local sandbox        = require("sandbox/sandbox")
 local sandbox_os     = require("sandbox/modules/os")
 local sandbox_module = require("sandbox/modules/import/core/sandbox/module")
 
+local _build_flag_names = {
+    arflags = true,
+    asflags = true,
+    cflags = true,
+    cxflags = true,
+    cxxflags = true,
+    ldflags = true,
+    shflags = true
+}
+
 -- new an instance
 function _instance.new(name, info, opt)
     opt = opt or {}
@@ -1207,6 +1217,9 @@ function _instance:build_envs(lazy_loading)
         build_envs = {}
         setmetatable(build_envs, { __index = function (tbl, key)
             local value = config.get(key)
+            if type(value) == "string" and _build_flag_names[key] then
+                value = os.argv(value)
+            end
             if value == nil then
                 value = self:tool(key)
             end
