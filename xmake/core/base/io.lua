@@ -22,6 +22,7 @@
 local io        = io or {}
 local _file     = _file or {}
 local _filelock = _filelock or {}
+local _filelock_info_saveid = 0
 
 -- load modules
 local path      = require("base/path")
@@ -343,6 +344,29 @@ function _filelock:path()
     return self._PATH
 end
 
+-- get the filelock information path
+--
+-- The lock path is reserved for the native file lock itself. Do not write
+-- metadata to it: on POSIX systems, closing another descriptor for the same
+-- file releases process-associated fcntl locks.
+function _filelock:infopath()
+    if not self._INFOPATH then
+        self._INFOPATH = self:path() .. ".info"
+    end
+    return self._INFOPATH
+end
+
+-- load the filelock information, best effort
+function _filelock:loadinfo()
+    local infopath = self:infopath()
+    if os.isfile(infopath) then
+        local info = io.load(infopath)
+        if info then
+            return info
+        end
+    end
+end
+
 -- get the cdata
 function _filelock:cdata()
     return self._LOCK
@@ -370,7 +394,9 @@ function _filelock:lock(opt)
     -- lock it
     if self._LOCKED_NUM > 0 or io.filelock_lock(self:cdata(), opt) then
         self._LOCKED_NUM = self._LOCKED_NUM + 1
-        io.save(self:path(), self:get_filelock_info(opt))
+        -- Keep the lock inode untouched. Metadata is diagnostic only and is
+        -- written to a separate sidecar file.
+        self:_saveinfo(self:get_filelock_info(opt))
         return true
     else
         return false, string.format("%s: lock failed!", self)
@@ -394,7 +420,9 @@ function _filelock:trylock(opt)
     -- try lock it
     if self._LOCKED_NUM > 0 or io.filelock_trylock(self:cdata(), opt) then
         self._LOCKED_NUM = self._LOCKED_NUM + 1
-        io.save(self:path(), self:get_filelock_info(opt))
+        -- Keep the lock inode untouched. Metadata is diagnostic only and is
+        -- written to a separate sidecar file.
+        self:_saveinfo(self:get_filelock_info(opt))
         return true
     else
         return false, string.format("%s: trylock failed!", self)
@@ -413,13 +441,48 @@ function _filelock:get_filelock_info(opt)
         process_info["time_formatted"] = os.date("%Y-%m-%d_%H:%M:%S", timestamp)
     else
         -- 不更新时间戳的话需要用之前 filelock 记录的时间戳
-        local origin_content = io.load(self:path())
+        local origin_content = self:loadinfo()
         if origin_content then
             process_info["time"] = origin_content["time"]
             process_info["time_formatted"] = origin_content["time_formatted"]
         end
     end
     return process_info
+end
+
+-- save filelock information to a sidecar file atomically
+--
+-- The sidecar is intentionally not the file used by the native lock. The
+-- rename makes readers see either the old complete table or the new complete
+-- table, never a partially written Lua chunk.
+function _filelock:_saveinfo(info)
+    assert(info)
+
+    _filelock_info_saveid = _filelock_info_saveid + 1
+    local infopath = self:infopath()
+    local tmpfile = string.format("%s.%s.%d.tmp", infopath, tostring(os.getpid()), _filelock_info_saveid)
+    local ok, errors = io.save(tmpfile, info)
+    if ok then
+        -- POSIX rename replaces the old sidecar atomically. Windows may not
+        -- allow replacing an existing file, so fall back to remove + rename;
+        -- metadata is best effort and never affects lock acquisition.
+        ok = os.rename(tmpfile, infopath)
+        if not ok then
+            if os.isfile(infopath) then
+                os.rmfile(infopath)
+            end
+            ok = os.rename(tmpfile, infopath)
+        end
+        if not ok and not errors then
+            errors = string.format("cannot replace filelock info %s, %s", infopath, os.strerror())
+        end
+    end
+
+    -- Do not leave a temporary sidecar behind after a failed write.
+    if os.isfile(tmpfile) then
+        os.rmfile(tmpfile)
+    end
+    return ok, errors
 end
 
 -- unlock file
