@@ -94,3 +94,53 @@ function test_write(t)
 
     os.tryrm("temp")
 end
+
+function test_filelock_info(t)
+    local lockfile = os.tmpfile() .. ".lock"
+    local infopath = lockfile .. ".info"
+    local helper = os.tmpfile() .. ".lua"
+    local resultfile = os.tmpfile()
+
+    io.writefile(helper, [[
+function main(lockfile, resultfile)
+    local lock = io.openlock(lockfile)
+    local ok = lock:trylock()
+    io.writefile(resultfile, ok and "acquired" or "blocked")
+    if ok then
+        lock:unlock()
+    end
+    lock:close()
+end
+]])
+
+    local lock = io.openlock(lockfile)
+    t:require(lock:trylock())
+    t:are_equal(lock:infopath(), infopath)
+
+    local info = lock:loadinfo()
+    t:require(info ~= nil)
+    t:require(info.pid ~= nil)
+    t:require(info.time ~= nil)
+
+    -- Writing metadata must not release the native lock.
+    os.execv(os.programfile(), {"lua", helper, lockfile, resultfile})
+    t:are_equal(io.readfile(resultfile), "blocked")
+
+    lock:unlock()
+    lock:close()
+    t:are_equal(io.readfile(lockfile, {encoding = "binary"}), "")
+
+    -- A corrupt diagnostic file must be recoverable and must not abort a lock.
+    io.writefile(infopath, "{broken")
+    local lock2 = io.openlock(lockfile)
+    t:are_equal(lock2:loadinfo(), nil)
+    t:require(lock2:trylock())
+    t:require(lock2:loadinfo() ~= nil)
+    lock2:unlock()
+    lock2:close()
+
+    os.tryrm(lockfile)
+    os.tryrm(infopath)
+    os.tryrm(helper)
+    os.tryrm(resultfile)
+end

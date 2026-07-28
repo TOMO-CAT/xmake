@@ -95,8 +95,10 @@ function _lock(repo_name, filelock)
     else
         cprint("${color.warning}repository(%s) filelock [%s] is being accessed by other process:", 
             repo_name, filelock:path())
-        local other_process_info = io.load(filelock:path())
-        utils.dump(other_process_info)
+        local other_process_info = filelock:loadinfo()
+        if other_process_info then
+            utils.dump(other_process_info)
+        end
         io.flush()
     end
     filelock:lock()

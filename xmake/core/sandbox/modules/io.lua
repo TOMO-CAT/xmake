@@ -168,6 +168,16 @@ function sandbox_io_filelock.close(lock)
     end
 end
 
+-- get the filelock information path
+function sandbox_io_filelock.infopath(lock)
+    return lock:_infopath()
+end
+
+-- load filelock information, best effort
+function sandbox_io_filelock.loadinfo(lock)
+    return lock:_loadinfo()
+end
+
 -- gsub the given file and return replaced data
 function sandbox_io.gsub(filepath, pattern, replace, opt)
     assert(filepath)

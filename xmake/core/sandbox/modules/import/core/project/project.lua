@@ -223,8 +223,10 @@ function sandbox_core_project.lock(opt)
         return true
     else
         utils.cprint("${color.warning}the current project is being accessed by other process:")
-        local other_process_info = io.load(sandbox_core_project.filelock():path())
-        utils.dump(other_process_info)
+        local other_process_info = sandbox_core_project.filelock():loadinfo()
+        if other_process_info then
+            utils.dump(other_process_info)
+        end
         io.flush()
     end
     local ok, errors = sandbox_core_project.filelock():lock(opt)

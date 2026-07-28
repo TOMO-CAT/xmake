@@ -23,16 +23,49 @@ function _cleanup_file(filepath)
     os.tryrm(filepath)
 end
 
+function _filelock_infopath(filelock_path)
+    return filelock_path .. ".info"
+end
+
+function _cleanup_filelock(filelock_path)
+    -- The lock path is removed only after trylock + double check succeeds.
+    -- It is best effort: some platforms may refuse to remove an opened lock.
+    _cleanup_file(_filelock_infopath(filelock_path))
+    _cleanup_file(filelock_path)
+end
+
+-- Read diagnostic metadata from the sidecar. A stale or malformed diagnostic
+-- file must never abort the build.
+function _load_filelock_info(filelock_path)
+    local infopath = _filelock_infopath(filelock_path)
+    if os.isfile(infopath) then
+        local content
+        try
+        {
+            function ()
+                content = io.load(infopath)
+            end,
+            catch
+            {
+                function (errors)
+                    _log_warn("cannot load filelock info [%s]: %s", infopath, tostring(errors))
+                end
+            }
+        }
+        return content
+    end
+
+end
+
 -- 检查 filelock 是否过期, 这意味着我们可以删除对应的 package 和 cache 目录
 function _filelock_expired(filelock_path, pkg_retain_hours)
     assert(filelock_path)
     assert(pkg_retain_hours)
 
-    local content = io.load(filelock_path)
+    local content = _load_filelock_info(filelock_path)
     if content then
         if not content.time then
-            _log_warn("missed `time` field in filelock file [%s]:", filelock_path)
-            print(io.readfile(filelock_path))
+            _log_warn("missed `time` field in filelock info [%s]", _filelock_infopath(filelock_path))
             return false
         else
             local passed_hours = ((os.time() - content.time) / 3600)
@@ -61,28 +94,26 @@ function _cleanup_impl()
     _log_info("start to process package filelock dir [%s] ...", pkg_filelock_dir)
     for _, filelock_path in ipairs(os.files(path.join(pkg_filelock_dir, "*.lock"))) do
         if not os.isfile(filelock_path) then
-            -- 清理掉异常的 filelock 文件
+            -- 跳过异常的 filelock 文件，不能删除可能正在使用的锁 inode
             _log_warn("invalid filelock file [%s]", filelock_path)
-            _cleanup_file(filelock_path)
         else
             local filelock_name = path.basename(filelock_path)
             local splitinfo = filelock_name:split("__", {plain = true, strict = true})
             if #splitinfo ~= 3 then
                 _log_warn("invalid filelock pattern [%s]", filelock_name)
-                _cleanup_file(filelock_path)
             else
                 _log_info("process filelock [%s]", filelock_path)
                 if _filelock_expired(filelock_path, pkg_retain_hours) then
                     local filelock = io.openlock(filelock_path)
                     if not filelock then
                         _log_warn("cannot create filelock for [%s]", filelock_path)
-                        _cleanup_file(filelock_path)
                     else
                         -- 可以通过 lsof 查看谁在占用 filelock
                         -- 尝试加锁准备删除过期 package
                         if not filelock:trylock({dump_timestamp = false}) then
                             -- 加锁失败说明有人在用, 不应该删除该文件锁
                             _log_info("lock file [%s] is still in use", filelock_path)
+                            filelock:close()
                         else
                             _log_info("try lock file [%s] success", filelock_path)
                             -- 加锁后 double check 文件锁是否过期, 避免出现临界区访问
@@ -96,11 +127,12 @@ function _cleanup_impl()
                                 -- 再删除 cacahedir
                                 local cachedir = path.join(package.cachedir(), splitinfo[1], splitinfo[2], splitinfo[3])
                                 _cleanup_file(cachedir)
-                                -- 最后删除自身文件锁 (删除后再解锁是可以的, 文件锁是绑定到 inode 的)
-                                _cleanup_file(filelock_path)
+                                -- 最后删除过期 filelock 元数据和锁文件本体
+                                _cleanup_filelock(filelock_path)
                             end
                             -- 释放锁
                             filelock:unlock()
+                            filelock:close()
                             _log_info("release filelock [%s]", filelock_path)
                         end
                     end
@@ -109,14 +141,13 @@ function _cleanup_impl()
         end
     end
 
-    -- 清理所有的 repo filelock
+    -- 清理所有过期的 repo filelock
     local repo_filelock_dir = path.join(global.filelockdir(), "repositories")
     _log_info("start to process repo filelock dir [%s] ...", repo_filelock_dir)
     for _, filelock_path in ipairs(os.files(path.join(repo_filelock_dir, "*.lock"))) do
         if not os.isfile(filelock_path) then
-            -- 清理掉异常的 filelock 文件
+            -- 跳过异常的 filelock 文件，不能删除可能正在使用的锁 inode
             _log_warn("invalid filelock file [%s]", filelock_path)
-            _cleanup_file(filelock_path)
         else
             _log_info("process filelock [%s]", filelock_path)
             
@@ -124,13 +155,13 @@ function _cleanup_impl()
                 local filelock = io.openlock(filelock_path)
                 if not filelock then
                     _log_warn("cannot create filelock for [%s]", filelock_path)
-                    _cleanup_file(filelock_path)
                 else
                     -- 可以通过 lsof 查看谁在占用 filelock
                     -- 尝试加锁准备删除过期 filelock
                     if not filelock:trylock({dump_timestamp = false}) then
                         -- 加锁失败说明有人在用, 不应该删除该文件锁
                         _log_info("lock file [%s] is still in use", filelock_path)
+                        filelock:close()
                     else
                         _log_info("try lock file [%s] success", filelock_path)
                         -- 加锁后 double check 文件锁是否过期, 避免出现临界区访问
@@ -138,11 +169,12 @@ function _cleanup_impl()
                             _log_warn("double check filelock [%s], this filelock still in use", filelock_path)
                         else
                             _log_info("filelock [%s] expired, need to do some cleanup jobs", filelock_path)
-                            -- 删除自身文件锁 (删除后再解锁是可以的, 文件锁是绑定到 inode 的)
-                            _cleanup_file(filelock_path)
+                            -- 删除过期 filelock 元数据和锁文件本体
+                            _cleanup_filelock(filelock_path)
                         end
                         -- 释放锁
                         filelock:unlock()
+                        filelock:close()
                         _log_info("release filelock [%s]", filelock_path)
                     end
                 end
