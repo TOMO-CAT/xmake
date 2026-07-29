@@ -35,6 +35,7 @@ local platform      = require("platform/platform")
 local language      = require("language/language")
 local is_cross      = require("base/private/is_cross")
 local import        = require("sandbox/modules/import")
+local scheduler     = require("sandbox/modules/import/core/base/scheduler")
 
 -- new an instance
 function _instance.new(kind, name, program, plat, arch, toolchain_inst)
@@ -176,16 +177,30 @@ end
 
 -- load tool only once
 function _instance:_load_once()
+    if self._LOADED then
+        return true
+    end
+
+    local lockname
+    if scheduler.co_running() then
+        lockname = "tool.load_once." .. tostring(self)
+        scheduler.co_lock(lockname)
+    end
+
+    local ok, errors = true
     if not self._LOADED then
         if self.load then
-            local ok, errors = sandbox.load(self.load, self)
-            if not ok then
-                return false, errors
-            end
+            ok, errors = sandbox.load(self.load, self)
         end
-        self._LOADED = true
+        if ok then
+            self._LOADED = true
+        end
     end
-    return true
+
+    if lockname then
+        scheduler.co_unlock(lockname)
+    end
+    return ok, errors
 end
 
 -- get system flags from toolchains
