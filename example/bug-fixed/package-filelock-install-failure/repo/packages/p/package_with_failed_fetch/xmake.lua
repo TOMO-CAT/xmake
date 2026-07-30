@@ -1,0 +1,12 @@
+package("package_with_failed_fetch", function()
+    add_versions("1.0.0", "0000000000000000000000000000000000000000000000000000000000000000")
+
+    on_fetch(function(package)
+        local marker_dir = assert(os.getenv("FILELOCK_MARKER_DIR"))
+        os.mkdir(marker_dir)
+        io.writefile(path.join(marker_dir, "failed-fetch-started"), tostring(os.getpid()))
+        os.sleep(1000)
+        io.writefile(path.join(marker_dir, "failed-fetch-ready"), tostring(os.getpid()))
+        raise("intentional package_with_failed_fetch failure")
+    end)
+end)

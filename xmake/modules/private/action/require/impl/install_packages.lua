@@ -257,6 +257,22 @@ function _show_upgraded_packages(packages)
     cprint("${bright}%d packages are upgraded!", upgraded_count)
 end
 
+-- run cleanup and return errors without interrupting other cleanup operations
+function _try_cleanup(func)
+    local cleanup_errors
+    try
+    {
+        func,
+        catch
+        {
+            function(errors)
+                cleanup_errors = errors
+            end
+        }
+    }
+    return cleanup_errors
+end
+
 -- fetch packages
 function _fetch_packages(packages_fetch, installdeps)
 
@@ -274,6 +290,7 @@ function _fetch_packages(packages_fetch, installdeps)
     local packages_pending = table.copy(packages_fetch)
     local working_count = 0
     local fetching_count = 0
+    local fetching_nonparallel_count = 0
     local parallelize = true
     runjobs("fetch_packages", function (index)
 
@@ -313,45 +330,84 @@ function _fetch_packages(packages_fetch, installdeps)
         end
         if instance then
 
+            local oldenvs = os.getenvs()
+            local fetching = false
+            local nonparallel_registered = false
+
             -- update working count
             working_count = working_count + 1
 
-            -- disable parallelize?
-            if not instance:is_parallelize() then
-                parallelize = false
-            end
-            if not parallelize then
-                while fetching_count > 0 do
-                    os.sleep(100)
-                end
-            end
-            fetching_count = fetching_count + 1
+            -- track the package lock for exception-safe cleanup
+            local package_locked = false
+            try
+            {
+                function()
 
-            -- fetch this package
-            packages_fetching[index] = instance
-            local oldenvs = os.getenvs()
-            instance:envs_enter()
-            instance:lock()
-            instance:fetch()
-            instance:unlock()
-            os.setenvs(oldenvs)
+                    -- disable parallelize?
+                    if not instance:is_parallelize() then
+                        fetching_nonparallel_count = fetching_nonparallel_count + 1
+                        nonparallel_registered = true
+                        parallelize = false
+                        while fetching_count > 0 do
+                            os.sleep(100)
+                        end
+                    else
+                        while not parallelize do
+                            os.sleep(100)
+                        end
+                    end
+                    fetching_count = fetching_count + 1
+                    fetching = true
 
-            -- fix terminal mode to avoid some subprocess to change it
-            --
-            -- @see https://github.com/xmake-io/xmake/issues/1924
-            -- https://github.com/xmake-io/xmake/issues/2329
-            if term_mode_stdout ~= tty.term_mode("stdout") then
-                tty.term_mode("stdout", term_mode_stdout)
-            end
-
-            -- next
-            parallelize = true
-            fetching_count = fetching_count - 1
-            packages_fetching[index] = nil
-            packages_fetched[tostring(instance)] = true
-
-            -- update working count
-            working_count = working_count - 1
+                    -- fetch this package
+                    packages_fetching[index] = instance
+                    instance:envs_enter()
+                    instance:lock()
+                    package_locked = true
+                    instance:fetch()
+                    instance:unlock()
+                    package_locked = false
+                    packages_fetched[tostring(instance)] = true
+                end,
+                finally
+                {
+                    function(ok, try_errors)
+                        local cleanup_errors
+                        if package_locked then
+                            cleanup_errors = _try_cleanup(function()
+                                instance:unlock()
+                            end)
+                        end
+                        local cleanup_step_errors = _try_cleanup(function()
+                            os.setenvs(oldenvs)
+                        end)
+                        cleanup_errors = cleanup_errors or cleanup_step_errors
+                        cleanup_step_errors = _try_cleanup(function()
+                            if term_mode_stdout ~= tty.term_mode("stdout") then
+                                tty.term_mode("stdout", term_mode_stdout)
+                            end
+                        end)
+                        cleanup_errors = cleanup_errors or cleanup_step_errors
+                        if fetching then
+                            fetching_count = fetching_count - 1
+                        end
+                        if nonparallel_registered then
+                            fetching_nonparallel_count = fetching_nonparallel_count - 1
+                            parallelize = fetching_nonparallel_count == 0
+                        end
+                        packages_fetching[index] = nil
+                        working_count = working_count - 1
+                        if not ok then
+                            if cleanup_errors then
+                                wprint("package(%s) cleanup failed: %s", instance:displayname(), cleanup_errors)
+                            end
+                            raise(try_errors)
+                        elseif cleanup_errors then
+                            raise(cleanup_errors)
+                        end
+                    end
+                }
+            }
         end
         packages_fetching[index] = nil
 
@@ -409,6 +465,7 @@ function _install_packages(packages_install, packages_download, installdeps)
     local packages_in_group = {}
     local working_count = 0
     local installing_count = 0
+    local installing_nonparallel_count = 0
     local parallelize = true
     runjobs("install_packages", function (index)
 
@@ -466,77 +523,119 @@ function _install_packages(packages_install, packages_download, installdeps)
 
             -- only install the first package in same group
             local group = instance:group()
-            if not group or not packages_in_group[group] then
+            local installing = false
+            local nonparallel_registered = false
 
-                -- disable parallelize?
-                if not instance:is_parallelize() then
-                    parallelize = false
-                end
-                if not parallelize then
-                    while installing_count > 0 do
-                        os.sleep(100)
+            -- track the package lock for exception-safe cleanup
+            local package_locked = false
+            try
+            {
+                function()
+                    if not group or not packages_in_group[group] then
+
+                        -- disable parallelize?
+                        if not instance:is_parallelize() then
+                            installing_nonparallel_count = installing_nonparallel_count + 1
+                            nonparallel_registered = true
+                            parallelize = false
+                            while installing_count > 0 do
+                                os.sleep(100)
+                            end
+                        else
+                            while not parallelize do
+                                os.sleep(100)
+                            end
+                        end
+                        installing_count = installing_count + 1
+                        installing = true
+
+                        -- mark this group as 'installing'
+                        if group then
+                            packages_in_group[group] = 0
+                        end
+
+                        -- 对整个 download 和 install 一起加锁, 避免出现死锁的问题
+                        -- @see https://github.com/TOMO-CAT/xmake/issues/244
+                        instance:lock()
+                        package_locked = true
+
+                        -- download this package first
+                        local downloaded = true
+                        if packages_download[tostring(instance)] then
+                            packages_downloading[index] = instance
+                            action_check(instance)
+                            downloaded = action_download(instance)
+                            packages_downloading[index] = nil
+                        end
+
+                        -- install this package
+                        packages_installing[index] = instance
+                        if downloaded then
+                            if not action_install(instance) then
+                                assert(instance:is_precompiled(), "package(%s) should be precompiled", instance:name())
+                                -- we need to disable built and re-download and re-install it
+                                instance:fallback_build()
+                                action_check(instance)
+                                action_download(instance)
+                                action_install(instance)
+                            end
+                        end
+
+                        instance:unlock()
+                        package_locked = false
+
+                        -- reset package status cache
+                        _g.package_status_cache = nil
+
+                        -- register it to local cache if it is root required package
+                        --
+                        -- @note we need to register the package in time,
+                        -- because other packages may be used, e.g. toolchain/packages
+                        if instance:is_toplevel() then
+                            register_packages({instance})
+                        end
+
+                        -- mark this group as 'installed' or 'failed'
+                        if group then
+                            packages_in_group[group] = instance:exists() and 1 or -1
+                        end
+
+                        packages_installed[tostring(instance)] = true
                     end
-                end
-                installing_count = installing_count + 1
-
-                -- mark this group as 'installing'
-                if group then
-                    packages_in_group[group] = 0
-                end
-
-                -- 对整个 download 和 install 一起加锁, 避免出现死锁的问题
-                -- @see https://github.com/TOMO-CAT/xmake/issues/244
-                instance:lock()
-
-                -- download this package first
-                local downloaded = true
-                if packages_download[tostring(instance)] then
-                    packages_downloading[index] = instance
-                    action_check(instance)
-                    downloaded = action_download(instance)
-                    packages_downloading[index] = nil
-                end
-
-                -- install this package
-                packages_installing[index] = instance
-                if downloaded then
-                    if not action_install(instance) then
-                        assert(instance:is_precompiled(), "package(%s) should be precompiled", instance:name())
-                        -- we need to disable built and re-download and re-install it
-                        instance:fallback_build()
-                        action_check(instance)
-                        action_download(instance)
-                        action_install(instance)
+                end,
+                finally
+                {
+                    function(ok, try_errors)
+                        local cleanup_errors
+                        if package_locked then
+                            cleanup_errors = _try_cleanup(function()
+                                instance:unlock()
+                            end)
+                        end
+                        if group and installing and packages_in_group[group] == 0 then
+                            packages_in_group[group] = -1
+                        end
+                        if installing then
+                            installing_count = installing_count - 1
+                        end
+                        if nonparallel_registered then
+                            installing_nonparallel_count = installing_nonparallel_count - 1
+                            parallelize = installing_nonparallel_count == 0
+                        end
+                        packages_installing[index] = nil
+                        packages_downloading[index] = nil
+                        working_count = working_count - 1
+                        if not ok then
+                            if cleanup_errors then
+                                wprint("package(%s) cleanup failed: %s", instance:displayname(), cleanup_errors)
+                            end
+                            raise(try_errors)
+                        elseif cleanup_errors then
+                            raise(cleanup_errors)
+                        end
                     end
-                end
-
-                instance:unlock()
-
-                -- reset package status cache
-                _g.package_status_cache = nil
-
-                -- register it to local cache if it is root required package
-                --
-                -- @note we need to register the package in time,
-                -- because other packages may be used, e.g. toolchain/packages
-                if instance:is_toplevel() then
-                    register_packages({instance})
-                end
-
-                -- mark this group as 'installed' or 'failed'
-                if group then
-                    packages_in_group[group] = instance:exists() and 1 or -1
-                end
-
-                -- next
-                parallelize = true
-                installing_count = installing_count - 1
-                packages_installing[index] = nil
-                packages_installed[tostring(instance)] = true
-            end
-
-            -- update working count
-            working_count = working_count - 1
+                }
+            }
         end
         packages_installing[index] = nil
         packages_downloading[index] = nil

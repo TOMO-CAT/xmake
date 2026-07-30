@@ -16,6 +16,7 @@
 * [#312](https://github.com/TOMO-CAT/xmake/issues/312): 修复 cmake 错误识别 xmake config 携带的 cxxflags 参数
 * [#315](https://github.com/TOMO-CAT/xmake/issues/315): 修复 repo/package filelock 元数据写入锁文件导致 Linux 锁失效及并发反序列化失败的问题
 * [#259](https://github.com/TOMO-CAT/xmake/issues/259): 修复并行构建中的工具初始化竞态
+* [#317](https://github.com/TOMO-CAT/xmake/issues/317): 修复 install package 时未及时释放文件锁的问题
 
 ## v3.0.8
 

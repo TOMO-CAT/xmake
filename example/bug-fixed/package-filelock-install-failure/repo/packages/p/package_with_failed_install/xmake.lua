@@ -1,0 +1,11 @@
+package("package_with_failed_install", function()
+    add_versions("1.0.0", "0000000000000000000000000000000000000000000000000000000000000000")
+
+    on_install(function(package)
+        local marker_dir = assert(os.getenv("FILELOCK_MARKER_DIR"))
+        os.mkdir(marker_dir)
+        io.writefile(path.join(marker_dir, "failed-started"), tostring(os.getpid()))
+        os.sleep(1000)
+        raise("intentional package_with_failed_install failure")
+    end)
+end)

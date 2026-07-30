@@ -1,0 +1,12 @@
+/*.log
+/.markers/
+/.xmake/
+/.xmake-global/
+/project-a/.xmake/
+/project-a/build/
+/project-b/.xmake/
+/project-b/build/
+/project-fetch-a/.xmake/
+/project-fetch-a/build/
+/project-fetch-b/.xmake/
+/project-fetch-b/build/
