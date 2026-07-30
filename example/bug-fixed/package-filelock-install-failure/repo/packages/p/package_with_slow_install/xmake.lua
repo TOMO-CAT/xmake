@@ -1,0 +1,12 @@
+package("package_with_slow_install", function()
+    add_versions("1.0.0", "0000000000000000000000000000000000000000000000000000000000000000")
+
+    on_install(function(package)
+        local marker_dir = assert(os.getenv("FILELOCK_MARKER_DIR"))
+        os.mkdir(marker_dir)
+        io.writefile(path.join(marker_dir, "slow-started"), tostring(os.getpid()))
+        os.sleep(3000)
+        os.mkdir(package:installdir("include"))
+        io.writefile(path.join(package:installdir(), "include", "package_with_slow_install.h"), "#pragma once\n")
+    end)
+end)
