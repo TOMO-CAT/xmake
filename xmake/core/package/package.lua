@@ -1928,11 +1928,24 @@ function _instance:_installdir_with_buildhash(buildhash, opt)
     return installdir
 end
 
+function _instance:_match_manifest_dep_version(depversion, require_version)
+    if not require_version or require_version == "latest" then
+        return true
+    end
+    if depversion == require_version then
+        return true
+    end
+    if depversion and semver.new(depversion) and semver.satisfies(depversion, require_version) then
+        return true
+    end
+    return false
+end
+
 function _instance:_fetch_from_parent_manifests(opt)
     for _, parent in ipairs(self:parents() or {}) do
         local manifest = parent:manifest_load()
         local depinfo = manifest and manifest.deps and manifest.deps[self:name()] or nil
-        if depinfo and depinfo.buildhash then
+        if depinfo and depinfo.buildhash and self:_match_manifest_dep_version(depinfo.version, opt and opt.require_version) then
             local installdir = self:_installdir_with_buildhash(depinfo.buildhash, {version = depinfo.version})
             local fetchinfo = self:_fetch_fetchinfo_from_installdir(installdir, {
                 require_version = opt and opt.require_version or depinfo.version,
