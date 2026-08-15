@@ -25,6 +25,8 @@ jobs:
           sudo apt install -y build-essential lcov
           sudo apt install -y ccache
           sudo apt install -y protobuf-compiler
+          sudo apt install -y protobuf-compiler-grpc
+          sudo apt install -y libgrpc++-dev
           sudo apt install -y libgflags-dev
           sudo apt install -y g++-aarch64-linux-gnu
       - name: Run Examples
