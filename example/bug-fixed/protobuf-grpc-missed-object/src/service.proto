@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package regression;
+
+message Request {
+  string value = 1;
+}
+
+message Reply {
+  string value = 1;
+}
+
+service RegressionService {
+  rpc Get(Request) returns (Reply);
+}

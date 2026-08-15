@@ -334,9 +334,10 @@ function build_cxfile(target, sourcefile_proto, opt, sourcekind)
     local filename = path.basename(sourcefile_proto) .. ".pb" .. (sourcekind == "cxx" and ".cc" or "-c.c")
     local sourcefile_cx = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename })
     local sourcefile_dir = prefixdir and path.join(rootdir, prefixdir) or path.directory(sourcefile_cx)
+    local sourcefile_cx_grpc
     if grpc_cpp_plugin then
-        grpc_cpp_plugin_bin = _get_grpc_cpp_plugin(target, sourcekind)
-        filename_grpc = path.basename(sourcefile_proto) .. ".grpc.pb.cc"
+        _get_grpc_cpp_plugin(target, sourcekind)
+        local filename_grpc = path.basename(sourcefile_proto) .. ".grpc.pb.cc"
         sourcefile_cx_grpc = target:autogenfile(sourcefile_proto, { rootdir = rootdir, filename = filename_grpc })
     end
 
@@ -353,8 +354,10 @@ function build_cxfile(target, sourcefile_proto, opt, sourcekind)
     end
 
     local objectfile_grpc
+    local dependfile_grpc
     if grpc_cpp_plugin then
         objectfile_grpc = target:objectfile(sourcefile_cx_grpc)
+        dependfile_grpc = target:dependfile(sourcefile_cx_grpc)
         if not table.contains(target:objectfiles(), objectfile_grpc) then
             table.insert(target:objectfiles(), objectfile_grpc)
         end
@@ -364,6 +367,10 @@ function build_cxfile(target, sourcefile_proto, opt, sourcekind)
 
     local build_opt = table.join({ objectfile = objectfile, dependfile = dependfile, sourcekind = sourcekind }, opt)
     import("private.action.build.object").build_object(target, sourcefile_cx, build_opt)
+    if grpc_cpp_plugin then
+        local build_opt_grpc = table.join({ objectfile = objectfile_grpc, dependfile = dependfile_grpc, sourcekind = sourcekind }, opt)
+        import("private.action.build.object").build_object(target, sourcefile_cx_grpc, build_opt_grpc)
+    end
 end
 
 --  get all dependency .proto files of a given .proto file hierarchically
