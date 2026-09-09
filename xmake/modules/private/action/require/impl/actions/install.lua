@@ -232,6 +232,15 @@ function _get_installdir_failed(package)
     return path.join(package:cachedir(), "installdir.failed")
 end
 
+-- get install error log file
+function _get_install_errorfile(package)
+    local name = package:name():lower():gsub("[^%w%._%-]", "_")
+    local version = (package:version_str() or "unknown"):gsub("[^%w%._%-]", "_")
+    local logdir = path.join("/tmp", "xmake-package-errors", name, version, package:buildhash())
+    os.mkdir(logdir)
+    return path.join(logdir, "install-" .. os.date("%Y%m%d-%H%M%S") .. ".txt")
+end
+
 -- clear install directory
 function _clear_installdir(package)
     os.tryrm(package:installdir())
@@ -433,7 +442,7 @@ function main(package)
             function (errors)
 
                 -- show or save the last errors
-                local errorfile = path.join(package:installdir("logs"), "install.txt")
+                local errorfile = _get_install_errorfile(package)
                 if errors then
                     if (option.get("verbose") or option.get("diagnosis")) then
                         cprint("${dim color.error}error: ${clear}%s", errors)
@@ -456,7 +465,6 @@ function main(package)
                     if not os.isdir(installdir_failed) then
                         os.cp(installdir, installdir_failed)
                     end
-                    errorfile = path.join(installdir_failed, "logs", "install.txt")
                 end
                 os.tryrm(installdir)
 
