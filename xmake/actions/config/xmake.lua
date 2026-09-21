@@ -225,6 +225,7 @@ task("config")
                     {category = "Other Configuration"},
                     {nil, "debugger",   "kv", "auto"    , "Set debugger"},
                     {nil, "ccache",     "kv", true      , "Enable or disable the c/c++ compiler ccache."},
+                    {nil, "sccache",    "kv", true      , "Enable or disable the c/c++ compiler sccache."},
                     {nil, "xcache",     "kv", true      , "Enable or disable the c/c++ compiler xmake cache."},
                     {nil, "xcachedir",  "kv", nil       , "Set the xcache directory."},
                     {nil, "trybuild",   "kv", nil       , "Enable try-build mode and set the third-party buildsystem tool.",

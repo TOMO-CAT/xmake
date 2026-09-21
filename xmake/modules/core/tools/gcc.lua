@@ -31,7 +31,7 @@ import("core.language.language")
 import("utils.progress")
 import("private.cache.build_cache")
 import("private.service.distcc_build.client", {alias = "distcc_build_client"})
-import("private.tools.ccache")
+import("private.tools.compiler_cache")
 
 function init(self)
 
@@ -849,13 +849,13 @@ function compargv(self, sourcefile, objectfile, flags, opt)
 end
 
 -- make the compile arguments list
-function _compargv_ccache(self, sourcefile, objectfile, flags)
+function _compargv_cache(self, sourcefile, objectfile, flags, cache_tool)
     -- precompiled header?
     local extension = path.extension(sourcefile)
     if (extension:startswith(".h") or extension == ".inl") then
         return _compargv_pch(self, sourcefile, objectfile, flags)
     end
-    return ccache.cmdargv(self:program(), table.join("-c", flags, "-o", objectfile, sourcefile))
+    return cache_tool.cmdargv(self:program(), table.join("-c", flags, "-o", objectfile, sourcefile))
 end
 
 -- compile the source file
@@ -889,12 +889,14 @@ function compile(self, sourcefile, objectfile, dependinfo, flags, opt)
     {
         function ()
             -- do compile
-            if ccache.is_enabled() then
-                local program, argv = _compargv_ccache(self, sourcefile, objectfile, compflags)
+            local cache_tool = compiler_cache.get(opt.target)
+            if cache_tool then
+                local program, argv = _compargv_cache(self, sourcefile, objectfile, compflags, cache_tool)
                 local compile_start_time = os.mclock()
                 local outdata, errdata = os.iorunv(program, argv)
-                local compile_time = os.mclock() - compile_start_time
-                ccache.report_metrics(sourcefile, compile_time)
+                if cache_tool.report_metrics then
+                    cache_tool.report_metrics(sourcefile, os.mclock() - compile_start_time)
+                end
                 return outdata, errdata
             else
                 return _compile(self, sourcefile, objectfile, compflags, opt)

@@ -24,7 +24,7 @@ import("core.theme.theme")
 import("core.tool.compiler")
 import("core.project.depend")
 import("private.cache.build_cache")
-import("private.tools.ccache")
+import("private.tools.compiler_cache")
 import("async.runjobs")
 import("utils.progress")
 import("private.service.distcc_build.client", {alias = "distcc_build_client"})
@@ -66,11 +66,12 @@ function _do_build_file(target, sourcefile, opt)
     -- is verbose?
     local verbose = option.get("verbose")
 
-    -- exists ccache or distcc?
+    -- exists ccache, sccache or distcc?
     -- we just show cache/distc to avoid confusion with third-party ccache/distcc
     local prefix = ""
-    if ccache.is_enabled(target) then
-        prefix = "ccache "
+    local cache_tool, cache_name = compiler_cache.get(target)
+    if cache_tool then
+        prefix = cache_name .. " "
     elseif build_cache.is_enabled(target) and build_cache.is_supported(sourcekind) then
         prefix = "xcache "
     end

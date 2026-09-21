@@ -36,6 +36,7 @@ task("global")
                                                            end},
                     {nil, "debugger",       "kv", "auto"    , "The debugger program path."                                },
                     {nil, "ccache",         "kv", nil       , "Enable or disable the c/c++ compiler ccache."              },
+                    {nil, "sccache",        "kv", nil       , "Enable or disable the c/c++ compiler sccache."             },
                     {nil, "xcache",         "kv", nil       , "Enable or disable the c/c++ compiler xmake cache."         },
                     {category = "Build Configuration"},
                     {nil, "xachedir",       "kv", nil       , "The global xache directory."                               },
