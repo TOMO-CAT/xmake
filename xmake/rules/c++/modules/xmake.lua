@@ -39,12 +39,13 @@ rule("c++.build.modules", function()
             -- maybe we will have a more fine-grained configuration strategy to disable it in the future.
             target:set("policy", "build.across_targets_in_parallel", false)
 
-            -- disable ccache && xcache for this target
+            -- disable ccache, sccache && xcache for this target
             --
             -- Caching can affect incremental compilation, for example
             --
             -- @see https://github.com/xmake-io/xmake/issues/3000
             target:set("policy", "build.ccache", false)
+            target:set("policy", "build.sccache", false)
             target:set("policy", "build.xcache", false)
 
             -- load compiler support

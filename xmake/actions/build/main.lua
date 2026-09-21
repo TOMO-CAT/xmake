@@ -33,7 +33,7 @@ import("build_files")
 import("cleaner")
 import("hourly_cleaner")
 import("check", {alias = "check_targets"})
-import("private.tools.ccache")
+import("private.tools.compiler_cache")
 import("private.cache.build_cache")
 import("private.service.remote_build.action", {alias = "remote_build_action"})
 import("private.utils.statistics")
@@ -133,8 +133,8 @@ function build_targets(targetnames, opt)
             -- dump cache stats
             local verbose = option.get("verbose") or option.get("diagnosis")
             if verbose then
-                if ccache.is_enabled() then
-                    ccache.dump_stats()
+                if compiler_cache.get() then
+                    compiler_cache.dump_stats()
                 elseif build_cache.is_enabled() then
                     build_cache.dump_stats()
                 end

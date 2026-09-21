@@ -52,6 +52,8 @@ function policy.policies()
             ["build.merge_archive"]               = {description = "Enable merge archive instead of linking for all dependent targets.", default = false, type = "boolean"},
             -- C/C++ build cache
             ["build.ccache"]                      = {description = "Enable C/C++ build ccache.", type = "boolean"},
+            -- C/C++ build sccache
+            ["build.sccache"]                     = {description = "Enable C/C++ build sccache.", type = "boolean"},
             -- C/C++ build xmake cache
             ["build.xcache"]                      = {description = "Enable C/C++ build xmake ccache.", type = "boolean"},
             -- Use global storage if build.xcache is enabled
