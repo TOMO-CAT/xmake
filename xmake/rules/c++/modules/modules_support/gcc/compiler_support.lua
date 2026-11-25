@@ -246,6 +246,23 @@ function get_depstargetflag(target)
     return depoutputflag or nil
 end
 
+function get_gcc_version(target)
+    local gcc_version = _g.gcc_version
+    if not gcc_version then
+        local program, toolname = target:tool("cxx")
+        if program and toolname then
+            local gcc = find_tool(toolname, {program = program, version = true,
+                envs = os.getenvs(), cachekey = "modules_support_gcc_" .. toolname})
+            if gcc then
+                gcc_version = gcc.version
+            end
+        end
+        gcc_version = gcc_version or false
+        _g.gcc_version = gcc_version
+    end
+    return gcc_version or nil
+end
+
 function get_cppversionflag(target)
     local cppversionflag = _g.cppversionflag
     if cppversionflag == nil then

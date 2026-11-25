@@ -21,8 +21,9 @@ function main(t)
         local gcc = find_tool("gcc", {version = true})
         if gcc and gcc.version and semver.compare(gcc.version, "11.0") >= 0 and
             os.arch() ~= "arm64" then -- gcc/arm64: internal compiler error: in core_vals, at cp/module.cc:6108
-            -- gcc dependency detection doesn't support header units atm
-            os.exec("xmake f --policies=build.c++.gcc.fallbackscanner -c --yes")
+            local policy = semver.compare(gcc.version, "15.0") < 0 and
+                " --policies=build.c++.gcc.fallbackscanner" or ""
+            os.exec("xmake f%s -c --yes", policy)
             _build()
         end
         local clang = find_tool("clang", {version = true})
