@@ -182,7 +182,7 @@ function toolchain_includedirs(target)
                 runtime_flag = "-stdlib=libstdc++"
             end
         end
-        local _, result = try {function () return os.iorunv(clang, table.join({"-E", "-Wp,-v", "-xc", os.nuldev()}, runtime_flag or {})) end}
+        local _, result = try {function () return os.iorunv(clang, table.join({"-E", "-Wp,-v", "-xc++", os.nuldev()}, runtime_flag or {})) end}
         if result then
             for _, line in ipairs(result:split("\n", {plain = true})) do
                 line = line:trim()
@@ -272,7 +272,11 @@ function get_stdmodules(target)
                         if not path.is_absolute(std_module_directory) then
                             std_module_directory = path.join(path.directory(modules_json_path), std_module_directory)
                         end
-                        return {path.join(std_module_directory, "std.cppm"), path.join(std_module_directory, "std.compat.cppm")}
+                        local std_module = path.join(std_module_directory, "std.cppm")
+                        local std_compat_module = path.join(std_module_directory, "std.compat.cppm")
+                        if os.isfile(std_module) and os.isfile(std_compat_module) then
+                            return {std_module, std_compat_module}
+                        end
                     end
                 end
             elseif cpplib == "stdc++" then

@@ -27,6 +27,34 @@ import("compiler_support")
 import("builder")
 import(".dependency_scanner", {inherit = true})
 
+-- does the source file import a header unit? e.g. `import <iostream>;`
+function _source_imports_headerunit(sourcefile)
+    local content = io.readfile(sourcefile)
+    if not content then
+        return false
+    end
+    content = content:gsub("//.-\n", "\n")
+    content = content:gsub("/%*.-%*/", "")
+    return content:find('import%s*[<"]') ~= nil
+end
+
+-- gcc >= 15 can no longer scan `import <header>;` before the header unit has
+-- been built, it fails with:
+--   failed to read compiled module: No such file or directory
+--   note: imports must be built before being imported
+-- the fallback scanner strips all -fmodule* flags and parses the imports from
+-- the preprocessed source, so use it for sources importing header units.
+function _need_fallback_scanner(target, sourcefile)
+    if target:policy("build.c++.gcc.fallbackscanner") then
+        return true
+    end
+    local gcc_version = compiler_support.get_gcc_version(target)
+    if gcc_version and semver.compare(gcc_version, "15.0") >= 0 and _source_imports_headerunit(sourcefile) then
+        return true
+    end
+    return false
+end
+
 -- generate dependency files
 function generate_dependency_for(target, sourcefile, opt)
     local compinst = target:compiler("cxx")
@@ -45,7 +73,7 @@ function generate_dependency_for(target, sourcefile, opt)
         local outputdir = compiler_support.get_outputdir(target, sourcefile)
         local jsonfile = path.translate(path.join(outputdir, path.filename(sourcefile) .. ".json"))
         local has_depsflags = depsformatflag and depsfileflag and depstargetflag
-        if has_depsflags and not target:policy("build.c++.gcc.fallbackscanner") then
+        if has_depsflags and not _need_fallback_scanner(target, sourcefile) then
             local ifile = path.translate(path.join(outputdir, path.filename(sourcefile) .. ".i"))
             local dfile = path.translate(path.join(outputdir, path.filename(sourcefile) .. ".d"))
             local compflags = compinst:compflags({sourcefile = sourcefile, target = target})
