@@ -27,6 +27,15 @@ import("compiler_support")
 import("builder")
 import(".dependency_scanner", {inherit = true})
 
+function _need_fallback_scanner(target)
+    if target:policy("build.c++.gcc.fallbackscanner") then
+        return true
+    end
+    local gcc_version = compiler_support.get_gcc_version(target)
+    -- gcc >= 15 needs the fallback scanner, which is slower than p1689 scanning
+    return gcc_version ~= nil and semver.compare(gcc_version, "15.0") >= 0
+end
+
 -- generate dependency files
 function generate_dependency_for(target, sourcefile, opt)
     local compinst = target:compiler("cxx")
@@ -45,7 +54,7 @@ function generate_dependency_for(target, sourcefile, opt)
         local outputdir = compiler_support.get_outputdir(target, sourcefile)
         local jsonfile = path.translate(path.join(outputdir, path.filename(sourcefile) .. ".json"))
         local has_depsflags = depsformatflag and depsfileflag and depstargetflag
-        if has_depsflags and not target:policy("build.c++.gcc.fallbackscanner") then
+        if has_depsflags and not _need_fallback_scanner(target) then
             local ifile = path.translate(path.join(outputdir, path.filename(sourcefile) .. ".i"))
             local dfile = path.translate(path.join(outputdir, path.filename(sourcefile) .. ".d"))
             local compflags = compinst:compflags({sourcefile = sourcefile, target = target})
